@@ -1,0 +1,487 @@
+[2017-09-18 01:26:06.949] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /
+request client ip:  ::ffff:127.0.0.1
+request query:  {}
+response time: 244
+response status: 200
+response body: 
+"<!DOCTYPE html><html><head><title>Hello Koa 2!</title><link rel=\"stylesheet\" href=\"/stylesheets/style.css\"></head><body><h1>Hello Koa 2!</h1><p>Welcome to Hello Koa 2!</p></body></html>"
+*************** response log end ***************
+
+[2017-09-18 01:26:07.023] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::ffff:127.0.0.1
+request query:  {}
+response time: 0
+response status: 404
+response body: 
+undefined
+*************** response log end ***************
+
+[2017-09-18 01:32:16.762] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /index
+request client ip:  ::ffff:127.0.0.1
+request query:  {}
+response time: 0
+response status: 404
+response body: 
+undefined
+*************** response log end ***************
+
+[2017-09-18 01:32:44.961] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /string
+request client ip:  ::ffff:127.0.0.1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+"koa2 string"
+*************** response log end ***************
+
+[2017-09-18 01:40:26.461] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /string
+request client ip:  ::ffff:127.0.0.1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+"koa2 string"
+*************** response log end ***************
+
+[2017-09-18 01:40:31.896] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /string
+request client ip:  ::ffff:127.0.0.1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+"koa2 string"
+*************** response log end ***************
+
+[2017-09-18 01:41:29.684] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /string
+request client ip:  ::ffff:127.0.0.1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+"koa2 string"
+*************** response log end ***************
+
+[2017-09-18 01:41:47.978] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /string
+request client ip:  ::ffff:127.0.0.1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+"koa2 string"
+*************** response log end ***************
+
+[2017-09-18 01:42:28.150] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /string
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+"koa2 string"
+*************** response log end ***************
+
+[2017-09-18 01:42:34.101] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /string
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+"koa2 string"
+*************** response log end ***************
+
+[2017-09-18 01:42:34.121] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::1
+request query:  {}
+response time: 0
+response status: 404
+response body: 
+undefined
+*************** response log end ***************
+
+[2017-09-18 01:46:29.770] [INFO] resLogger - 
+*************** response log start ***************
+request method: OPTIONS
+request originalUrl:  /string
+request client ip:  ::1
+request body: 
+{}
+response time: 0
+response status: 404
+response body: 
+undefined
+*************** response log end ***************
+
+[2017-09-18 01:46:39.295] [INFO] resLogger - 
+*************** response log start ***************
+request method: OPTIONS
+request originalUrl:  /string
+request client ip:  ::1
+request body: 
+{}
+response time: 0
+response status: 404
+response body: 
+undefined
+*************** response log end ***************
+
+[2017-09-18 01:47:20.354] [INFO] resLogger - 
+*************** response log start ***************
+request method: OPTIONS
+request originalUrl:  /string
+request client ip:  ::ffff:127.0.0.1
+request body: 
+{}
+response time: 0
+response status: 404
+response body: 
+undefined
+*************** response log end ***************
+
+[2017-09-18 01:47:28.704] [INFO] resLogger - 
+*************** response log start ***************
+request method: OPTIONS
+request originalUrl:  /string
+request client ip:  ::ffff:127.0.0.1
+request body: 
+{}
+response time: 0
+response status: 404
+response body: 
+undefined
+*************** response log end ***************
+
+[2017-09-18 01:48:58.331] [INFO] resLogger - 
+*************** response log start ***************
+request method: OPTIONS
+request originalUrl:  /string
+request client ip:  ::ffff:192.168.0.109
+request body: 
+{}
+response time: 0
+response status: 404
+response body: 
+undefined
+*************** response log end ***************
+
+[2017-09-18 01:49:11.351] [INFO] resLogger - 
+*************** response log start ***************
+request method: OPTIONS
+request originalUrl:  /string
+request client ip:  ::ffff:192.168.0.109
+request body: 
+{}
+response time: 1
+response status: 404
+response body: 
+undefined
+*************** response log end ***************
+
+[2017-09-18 01:49:23.734] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /string
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+"koa2 string"
+*************** response log end ***************
+
+[2017-09-18 01:49:23.757] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 0
+response status: 404
+response body: 
+undefined
+*************** response log end ***************
+
+[2017-09-18 01:49:34.004] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /string
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+"koa2 string"
+*************** response log end ***************
+
+[2017-09-18 01:49:35.106] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /string
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+"koa2 string"
+*************** response log end ***************
+
+[2017-09-18 01:49:37.835] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /string
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+"koa2 string"
+*************** response log end ***************
+
+[2017-09-18 01:49:42.270] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /string
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+"koa2 string"
+*************** response log end ***************
+
+[2017-09-18 01:49:56.434] [INFO] resLogger - 
+*************** response log start ***************
+request method: OPTIONS
+request originalUrl:  /string
+request client ip:  ::ffff:192.168.0.109
+request body: 
+{}
+response time: 0
+response status: 404
+response body: 
+undefined
+*************** response log end ***************
+
+[2017-09-18 01:54:58.633] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /string
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 4
+response status: 200
+response body: 
+"koa2 string"
+*************** response log end ***************
+
+[2017-09-18 01:55:54.972] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /string
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+"koa2 string"
+*************** response log end ***************
+
+[2017-09-18 01:57:16.432] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"title":"koa2 json"}
+*************** response log end ***************
+
+[2017-09-18 01:57:20.693] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"title":"koa2 json"}
+*************** response log end ***************
+
+[2017-09-18 01:57:22.996] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"title":"koa2 json"}
+*************** response log end ***************
+
+[2017-09-18 01:57:35.508] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"title":"koa2 json"}
+*************** response log end ***************
+
+[2017-09-18 01:58:52.335] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"title":"koa2 json"}
+*************** response log end ***************
+
+[2017-09-18 01:59:20.250] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"title":"koa2 json"}
+*************** response log end ***************
+
+[2017-09-18 01:59:22.093] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"title":"koa2 json"}
+*************** response log end ***************
+
+[2017-09-18 01:59:22.966] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"title":"koa2 json"}
+*************** response log end ***************
+
+[2017-09-18 01:59:23.728] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"title":"koa2 json"}
+*************** response log end ***************
+
+[2017-09-18 01:59:24.482] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"title":"koa2 json"}
+*************** response log end ***************
+
+[2017-09-18 01:59:25.245] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"title":"koa2 json"}
+*************** response log end ***************
+
+[2017-09-18 01:59:26.002] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"title":"koa2 json"}
+*************** response log end ***************
+
+[2017-09-18 01:59:26.766] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"title":"koa2 json"}
+*************** response log end ***************
+
+[2017-09-18 01:59:27.681] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"title":"koa2 json"}
+*************** response log end ***************
+
