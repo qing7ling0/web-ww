@@ -8,11 +8,13 @@ const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 const cors = require('koa-cors')
+const koaGraphql = require('koa-graphql')
 
 const index = require('./routes/index')
 const users = require('./routes/users')
 
 const logUtil = require('./lib/utils/log-utils');
+const responseFormatter = require('./middlewares/response-formatter');
 
 // error handler
 onerror(app)
@@ -29,6 +31,8 @@ app.use(require('koa-static')(__dirname + '/public'))
 app.use(views(__dirname + '/views', {
   extension: 'pug'
 }))
+
+app.use(responseFormatter('^/api'))
 
 // logger
 app.use(async (ctx, next) => {

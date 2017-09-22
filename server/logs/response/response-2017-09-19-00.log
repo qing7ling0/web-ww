@@ -1,0 +1,224 @@
+[2017-09-19 00:32:43.386] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 2
+response status: 200
+response body: 
+{"title":"koa2 json2"}
+*************** response log end ***************
+
+[2017-09-19 00:32:45.011] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"title":"koa2 json3"}
+*************** response log end ***************
+
+[2017-09-19 00:32:45.622] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"title":"koa2 json4"}
+*************** response log end ***************
+
+[2017-09-19 00:32:46.055] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"title":"koa2 json5"}
+*************** response log end ***************
+
+[2017-09-19 00:32:46.247] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"title":"koa2 json6"}
+*************** response log end ***************
+
+[2017-09-19 00:32:46.437] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"title":"koa2 json7"}
+*************** response log end ***************
+
+[2017-09-19 00:32:46.681] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"title":"koa2 json8"}
+*************** response log end ***************
+
+[2017-09-19 00:32:46.899] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 1
+response status: 200
+response body: 
+{"title":"koa2 json9"}
+*************** response log end ***************
+
+[2017-09-19 00:32:47.162] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"title":"koa2 json10"}
+*************** response log end ***************
+
+[2017-09-19 00:32:47.397] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"title":"koa2 json11"}
+*************** response log end ***************
+
+[2017-09-19 00:32:48.156] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"title":"koa2 json12"}
+*************** response log end ***************
+
+[2017-09-19 00:32:48.985] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"title":"koa2 json13"}
+*************** response log end ***************
+
+[2017-09-19 00:32:49.389] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 0
+response status: 200
+response body: 
+{"title":"koa2 json14"}
+*************** response log end ***************
+
+[2017-09-19 00:34:35.081] [ERROR] errorLogger - 
+*************** error log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 2
+err name: ReferenceError
+err message: testValue is not defined
+err stack: ReferenceError: testValue is not defined
+    at Function.test (/home/wuqingqing/Projects/web-ww/server/lib/utils/db-utils.js:22:5)
+    at router.get (/home/wuqingqing/Projects/web-ww/server/routes/index.js:19:34)
+    at dispatch (/home/wuqingqing/Projects/web-ww/server/node_modules/koa-compose/index.js:44:32)
+    at next (/home/wuqingqing/Projects/web-ww/server/node_modules/koa-compose/index.js:45:18)
+    at /home/wuqingqing/Projects/web-ww/server/node_modules/koa-router/lib/router.js:345:16
+    at dispatch (/home/wuqingqing/Projects/web-ww/server/node_modules/koa-compose/index.js:44:32)
+    at /home/wuqingqing/Projects/web-ww/server/node_modules/koa-compose/index.js:36:12
+    at dispatch (/home/wuqingqing/Projects/web-ww/server/node_modules/koa-router/lib/router.js:350:31)
+    at dispatch (/home/wuqingqing/Projects/web-ww/server/node_modules/koa/node_modules/koa-compose/index.js:42:32)
+    at next (/home/wuqingqing/Projects/web-ww/server/node_modules/koa/node_modules/koa-compose/index.js:43:18)
+    at app.use (/home/wuqingqing/Projects/web-ww/server/app.js:44:11)
+    at dispatch (/home/wuqingqing/Projects/web-ww/server/node_modules/koa/node_modules/koa-compose/index.js:42:32)
+    at next (/home/wuqingqing/Projects/web-ww/server/node_modules/koa/node_modules/koa-compose/index.js:43:18)
+    at /home/wuqingqing/Projects/web-ww/server/middlewares/response-formatter.js:30:13
+    at dispatch (/home/wuqingqing/Projects/web-ww/server/node_modules/koa/node_modules/koa-compose/index.js:42:32)
+    at next (/home/wuqingqing/Projects/web-ww/server/node_modules/koa/node_modules/koa-compose/index.js:43:18)
+*************** error log end ***************
+
+[2017-09-19 00:34:36.147] [ERROR] errorLogger - 
+*************** error log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 0
+err name: ReferenceError
+err message: testValue is not defined
+err stack: ReferenceError: testValue is not defined
+    at Function.test (/home/wuqingqing/Projects/web-ww/server/lib/utils/db-utils.js:22:5)
+    at router.get (/home/wuqingqing/Projects/web-ww/server/routes/index.js:19:34)
+    at dispatch (/home/wuqingqing/Projects/web-ww/server/node_modules/koa-compose/index.js:44:32)
+    at next (/home/wuqingqing/Projects/web-ww/server/node_modules/koa-compose/index.js:45:18)
+    at /home/wuqingqing/Projects/web-ww/server/node_modules/koa-router/lib/router.js:345:16
+    at dispatch (/home/wuqingqing/Projects/web-ww/server/node_modules/koa-compose/index.js:44:32)
+    at /home/wuqingqing/Projects/web-ww/server/node_modules/koa-compose/index.js:36:12
+    at dispatch (/home/wuqingqing/Projects/web-ww/server/node_modules/koa-router/lib/router.js:350:31)
+    at dispatch (/home/wuqingqing/Projects/web-ww/server/node_modules/koa/node_modules/koa-compose/index.js:42:32)
+    at next (/home/wuqingqing/Projects/web-ww/server/node_modules/koa/node_modules/koa-compose/index.js:43:18)
+    at app.use (/home/wuqingqing/Projects/web-ww/server/app.js:44:11)
+    at dispatch (/home/wuqingqing/Projects/web-ww/server/node_modules/koa/node_modules/koa-compose/index.js:42:32)
+    at next (/home/wuqingqing/Projects/web-ww/server/node_modules/koa/node_modules/koa-compose/index.js:43:18)
+    at /home/wuqingqing/Projects/web-ww/server/middlewares/response-formatter.js:30:13
+    at dispatch (/home/wuqingqing/Projects/web-ww/server/node_modules/koa/node_modules/koa-compose/index.js:42:32)
+    at next (/home/wuqingqing/Projects/web-ww/server/node_modules/koa/node_modules/koa-compose/index.js:43:18)
+*************** error log end ***************
+
+[2017-09-19 00:34:53.884] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.109
+request query:  {}
+response time: 3
+response status: 200
+response body: 
+{"title":"koa2 json1"}
+*************** response log end ***************
+
