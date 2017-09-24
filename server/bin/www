@@ -3,6 +3,7 @@
 /**
  * Module dependencies.
  */
+require('babel-core/register');
 
 var app = require('../app');
 var debug = require('debug')('demo:server');
@@ -41,19 +42,19 @@ server.on('listening', onListening);
  */
 
 function normalizePort(val) {
-  var port = parseInt(val, 10);
+    var port = parseInt(val, 10);
 
-  if (isNaN(port)) {
-    // named pipe
-    return val;
-  }
+    if (isNaN(port)) {
+        // named pipe
+        return val;
+    }
 
-  if (port >= 0) {
-    // port number
-    return port;
-  }
+    if (port >= 0) {
+        // port number
+        return port;
+    }
 
-  return false;
+    return false;
 }
 
 /**
@@ -61,27 +62,27 @@ function normalizePort(val) {
  */
 
 function onError(error) {
-  if (error.syscall !== 'listen') {
-    throw error;
-  }
+    if (error.syscall !== 'listen') {
+        throw error;
+    }
 
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+    var bind = typeof port === 'string' ?
+        'Pipe ' + port :
+        'Port ' + port;
 
-  // handle specific listen errors with friendly messages
-  switch (error.code) {
-    case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
-      process.exit(1);
-      break;
-    case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
-      process.exit(1);
-      break;
-    default:
-      throw error;
-  }
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+        case 'EACCES':
+            console.error(bind + ' requires elevated privileges');
+            process.exit(1);
+            break;
+        case 'EADDRINUSE':
+            console.error(bind + ' is already in use');
+            process.exit(1);
+            break;
+        default:
+            throw error;
+    }
 }
 
 /**
@@ -89,35 +90,35 @@ function onError(error) {
  */
 
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+    var addr = server.address();
+    var bind = typeof addr === 'string' ?
+        'pipe ' + addr :
+        'port ' + addr.port;
+    debug('Listening on ' + bind);
 }
 
 /**
  * 确定目录是否存在，如果不存在则创建目录
  */
 function confirmPath(pathStr) {
-  if(!fs.existsSync(pathStr)){
-      fs.mkdirSync(pathStr);
-      console.log('createPath: ' + pathStr);
+    if (!fs.existsSync(pathStr)) {
+        fs.mkdirSync(pathStr);
+        console.log('createPath: ' + pathStr);
     }
 }
 
 /**
  * 初始化log相关目录
  */
-function initLogPath(){
-  //创建log的根目录'logs'
-  if(logConfig.baseLogPath){
-    confirmPath(logConfig.baseLogPath)
-    //根据不同的logType创建不同的文件目录
-    for(var i = 0, len = logConfig.appenders.length; i < len; i++){
-      if(logConfig.appenders[i].path){
-        confirmPath(logConfig.baseLogPath + logConfig.appenders[i].path);
-      }
+function initLogPath() {
+    //创建log的根目录'logs'
+    if (logConfig.baseLogPath) {
+        confirmPath(logConfig.baseLogPath)
+            //根据不同的logType创建不同的文件目录
+        for (var i = 0, len = logConfig.appenders.length; i < len; i++) {
+            if (logConfig.appenders[i].path) {
+                confirmPath(logConfig.baseLogPath + logConfig.appenders[i].path);
+            }
+        }
     }
-  }
 }
