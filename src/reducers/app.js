@@ -15,7 +15,7 @@ const app = (state = initialState, action) => {
     switch (action.type) {
         case ActionTypes.LOAD:
             if (action.state === States.Fulfilled) {
-                return Object.assign({}, state, { testString: result.data.hello });
+                return Object.assign({}, state, { testString: result.data.data.hello });
             } else {
                 return Object.assign({}, state, { testString: 'loading' });
             }

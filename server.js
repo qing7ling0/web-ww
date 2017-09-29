@@ -9,7 +9,6 @@ const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 const cors = require('koa-cors')
 const router = require('koa-router')
-const conver = require('koa-convert')
 
 
 const _router = new router();
@@ -39,10 +38,17 @@ const graphqlModule = graphqlHTTP((request) => ({
 _router.all('/api', graphqlModule);
 
 // middlewares
-app.use(cors());
+app.use(cors())
     // app.use(json())
+app.use(logger())
+    // app.use(require('koa-static')(__dirname + '/public'))
 
-app.use(logger());
+// app.use(bodyparser({
+//     enableTypes: ['json', 'form', 'text']
+// }))
+
+app.use(responseFormatter('^/api'))
+
 // logger
 app.use(async(ctx, next) => {
     //响应开始时间
@@ -63,8 +69,7 @@ app.use(async(ctx, next) => {
         //记录异常日志
         logUtil.logError(ctx, error, ms);
     }
-});
-app.use(responseFormatter('^/api'));
+})
 
 // // routes
 // app.use(index.routes(), index.allowedMethods())

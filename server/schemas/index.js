@@ -6,6 +6,7 @@ import {
     GraphQLObjectType,
     GraphQLString
 } from 'graphql';
+import DB from '../lib/db/DB'
 
 var schema = new GraphQLSchema({
     query: new GraphQLObjectType({
@@ -13,8 +14,9 @@ var schema = new GraphQLSchema({
         fields: {
             hello: {
                 type: GraphQLString,
-                resolve() {
-                    return 'world';
+                async resolve() {
+                    let a = await DB.queryTest();
+                    return 'world' + a.name + a.id;
                 }
             }
         }

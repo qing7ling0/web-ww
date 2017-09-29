@@ -8,10 +8,11 @@ var ApiError = require('../lib/error/api-errors');
 var responseFormatter = (ctx) => {
   //如果有返回数据，将返回数据添加到data中
   if (ctx.body) {
+    let body = ctx.body;
     ctx.body = {
       code: 0,
       message: 'success',
-      data: ctx.body
+      data: JSON.parse(ctx.body)
     }
   } else {
     ctx.body = {
