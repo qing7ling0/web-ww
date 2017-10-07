@@ -1,0 +1,87 @@
+[2017-09-23 22:36:44.435] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.117
+request query:  {}
+response time: 2
+response status: 200
+response body: 
+{"title":"koa2 json"}
+*************** response log end ***************
+
+[2017-09-23 22:36:44.508] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::ffff:192.168.0.117
+request query:  {}
+response time: 0
+response status: 404
+response body: 
+undefined
+*************** response log end ***************
+
+[2017-09-23 22:36:44.541] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /favicon.ico
+request client ip:  ::ffff:192.168.0.117
+request query:  {}
+response time: 0
+response status: 404
+response body: 
+undefined
+*************** response log end ***************
+
+[2017-09-23 22:37:16.164] [INFO] resLogger - 
+*************** response log start ***************
+request method: GET
+request originalUrl:  /json
+request client ip:  ::ffff:192.168.0.117
+request query:  {}
+response time: 2
+response status: 200
+response body: 
+{"title":"koa2 json"}
+*************** response log end ***************
+
+[2017-09-23 22:39:04.203] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /graphql
+request client ip:  ::ffff:127.0.0.1
+request body: 
+"query {hello}"
+response time: 1
+response status: 404
+response body: 
+undefined
+*************** response log end ***************
+
+[2017-09-23 22:39:12.568] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /graphql
+request client ip:  ::ffff:127.0.0.1
+request body: 
+"query {hello}"
+response time: 0
+response status: 404
+response body: 
+undefined
+*************** response log end ***************
+
+[2017-09-23 22:41:08.603] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /graphql
+request client ip:  ::ffff:127.0.0.1
+request body: 
+"query {hello}"
+response time: 1
+response status: 404
+response body: 
+undefined
+*************** response log end ***************
+

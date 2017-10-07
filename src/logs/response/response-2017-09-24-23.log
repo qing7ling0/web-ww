@@ -1,0 +1,52 @@
+[2017-09-24 23:05:40.142] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 15
+response status: 200
+response body: 
+"{\"data\":{\"hello\":\"world\"}}"
+*************** response log end ***************
+
+[2017-09-24 23:06:00.242] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 3
+response status: 200
+response body: 
+"{\"data\":{\"hello\":\"world\"}}"
+*************** response log end ***************
+
+[2017-09-24 23:06:17.859] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api2
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 0
+response status: 404
+response body: 
+undefined
+*************** response log end ***************
+
+[2017-09-24 23:06:43.935] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 2
+response status: 200
+response body: 
+"{\"data\":{\"hello\":\"world\"}}"
+*************** response log end ***************
+

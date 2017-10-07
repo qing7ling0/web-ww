@@ -1,0 +1,104 @@
+[2017-10-06 00:32:50.817] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 50
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"hello":"testZildjian59d455629790b411feadb13f"}}}
+*************** response log end ***************
+
+[2017-10-06 00:33:03.588] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 51
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"hello":"worldZildjian59d455629790b411feadb13f"}}}
+*************** response log end ***************
+
+[2017-10-06 00:33:04.879] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 6
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"hello":"worldZildjian59d455629790b411feadb13f"}}}
+*************** response log end ***************
+
+[2017-10-06 00:33:16.109] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 51
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"hello":"testZildjian59d455629790b411feadb13f"}}}
+*************** response log end ***************
+
+[2017-10-06 00:35:40.155] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 17
+response status: 400
+response body: 
+{"code":0,"message":"success","data":{"errors":[{"type":"graphql","message":"Syntax Error GraphQL request (1:1) Unexpected Name \"query2\"\n\n1: query2 test {hello}\n   ^\n{\"method\":\"POST\",\"url\":\"/api\",\"header\":{\"host\":\"127.0.0.1:3001\",\"user-agent\":\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:56.0) Gecko/20100101 Firefox/56.0\",\"accept\":\"application/json\",\"accept-language\":\"zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3\",\"accept-encoding\":\"gzip, deflate\",\"content-type\":\"application/graphql\",\"origin\":\"http://localhost:8080\",\"referer\":\"http://localhost:8080/\",\"content-length\":\"19\",\"connection\":\"keep-alive\"}}","locations":{"line":1,"column":1}}]}}
+*************** response log end ***************
+
+[2017-10-06 00:35:42.731] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 2
+response status: 400
+response body: 
+{"code":0,"message":"success","data":{"errors":[{"type":"graphql","message":"Syntax Error GraphQL request (1:1) Unexpected Name \"query2\"\n\n1: query2 test {hello}\n   ^\n{\"method\":\"POST\",\"url\":\"/api\",\"header\":{\"host\":\"127.0.0.1:3001\",\"user-agent\":\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:56.0) Gecko/20100101 Firefox/56.0\",\"accept\":\"application/json\",\"accept-language\":\"zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3\",\"accept-encoding\":\"gzip, deflate\",\"content-type\":\"application/graphql\",\"origin\":\"http://localhost:8080\",\"referer\":\"http://localhost:8080/\",\"content-length\":\"19\",\"connection\":\"keep-alive\"}}","locations":{"line":1,"column":1}}]}}
+*************** response log end ***************
+
+[2017-10-06 00:36:22.949] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 43
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"hello":"worldZildjian59d455629790b411feadb13f"}}}
+*************** response log end ***************
+
+[2017-10-06 00:38:04.387] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 45
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"hello":"query3Zildjian59d455629790b411feadb13f"}}}
+*************** response log end ***************
+

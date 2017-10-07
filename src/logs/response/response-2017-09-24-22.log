@@ -1,0 +1,13 @@
+[2017-09-24 22:57:09.107] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /graphql
+request client ip:  ::ffff:127.0.0.1
+request body: 
+{}
+response time: 0
+response status: 404
+response body: 
+undefined
+*************** response log end ***************
+
