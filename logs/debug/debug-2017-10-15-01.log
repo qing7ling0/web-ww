@@ -1,0 +1,247 @@
+[2017-10-15 01:00:23.714] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 37
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"login":{"account":null}}}}
+*************** response log end ***************
+
+[2017-10-15 01:01:05.077] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 26
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"login":{"account":null}}}}
+*************** response log end ***************
+
+[2017-10-15 01:02:28.314] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 12
+response status: 400
+response body: 
+{"code":-2,"message":"请求错误","data":{"errors":[{"type":"graphql","message":"Argument \"account\" has invalid value adadfasdf.\nExpected type \"String\", found adadfasdf.{\"method\":\"POST\",\"url\":\"/api\",\"header\":{\"host\":\"127.0.0.1:3001\",\"connection\":\"keep-alive\",\"content-length\":\"76\",\"accept\":\"application/json\",\"origin\":\"http://localhost:8080\",\"user-agent\":\"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/53.0.2785.143 Chrome/53.0.2785.143 Safari/537.36\",\"content-type\":\"application/graphql\",\"referer\":\"http://localhost:8080/\",\"accept-encoding\":\"gzip, deflate\",\"accept-language\":\"en-US,en;q=0.8\"}}","locations":{"line":1,"column":38}},{"type":"graphql","message":"Argument \"password\" has invalid value asdfasdff.\nExpected type \"String\", found asdfasdff.{\"method\":\"POST\",\"url\":\"/api\",\"header\":{\"host\":\"127.0.0.1:3001\",\"connection\":\"keep-alive\",\"content-length\":\"76\",\"accept\":\"application/json\",\"origin\":\"http://localhost:8080\",\"user-agent\":\"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/53.0.2785.143 Chrome/53.0.2785.143 Safari/537.36\",\"content-type\":\"application/graphql\",\"referer\":\"http://localhost:8080/\",\"accept-encoding\":\"gzip, deflate\",\"accept-language\":\"en-US,en;q=0.8\"}}","locations":{"line":1,"column":57}}]}}
+*************** response log end ***************
+
+[2017-10-15 01:02:43.869] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 8
+response status: 400
+response body: 
+{"code":-2,"message":"请求错误","data":{"errors":[{"type":"graphql","message":"Argument \"account\" has invalid value account.\nExpected type \"String\", found account.{\"method\":\"POST\",\"url\":\"/api\",\"header\":{\"host\":\"127.0.0.1:3001\",\"connection\":\"keep-alive\",\"content-length\":\"73\",\"accept\":\"application/json\",\"origin\":\"http://localhost:8080\",\"user-agent\":\"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/53.0.2785.143 Chrome/53.0.2785.143 Safari/537.36\",\"content-type\":\"application/graphql\",\"referer\":\"http://localhost:8080/\",\"accept-encoding\":\"gzip, deflate\",\"accept-language\":\"en-US,en;q=0.8\"}}","locations":{"line":1,"column":38}},{"type":"graphql","message":"Argument \"password\" has invalid value password.\nExpected type \"String\", found password.{\"method\":\"POST\",\"url\":\"/api\",\"header\":{\"host\":\"127.0.0.1:3001\",\"connection\":\"keep-alive\",\"content-length\":\"73\",\"accept\":\"application/json\",\"origin\":\"http://localhost:8080\",\"user-agent\":\"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/53.0.2785.143 Chrome/53.0.2785.143 Safari/537.36\",\"content-type\":\"application/graphql\",\"referer\":\"http://localhost:8080/\",\"accept-encoding\":\"gzip, deflate\",\"accept-language\":\"en-US,en;q=0.8\"}}","locations":{"line":1,"column":55}}]}}
+*************** response log end ***************
+
+[2017-10-15 01:03:10.929] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 38
+response status: 400
+response body: 
+{"code":-2,"message":"请求错误","data":{"errors":[{"type":"graphql","message":"Argument \"account\" has invalid value account.\nExpected type \"String\", found account.{\"method\":\"POST\",\"url\":\"/api\",\"header\":{\"host\":\"127.0.0.1:3001\",\"connection\":\"keep-alive\",\"content-length\":\"73\",\"accept\":\"application/json\",\"origin\":\"http://localhost:8080\",\"user-agent\":\"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/53.0.2785.143 Chrome/53.0.2785.143 Safari/537.36\",\"content-type\":\"application/graphql\",\"referer\":\"http://localhost:8080/\",\"accept-encoding\":\"gzip, deflate\",\"accept-language\":\"en-US,en;q=0.8\"}}","locations":{"line":1,"column":38}},{"type":"graphql","message":"Argument \"password\" has invalid value password.\nExpected type \"String\", found password.{\"method\":\"POST\",\"url\":\"/api\",\"header\":{\"host\":\"127.0.0.1:3001\",\"connection\":\"keep-alive\",\"content-length\":\"73\",\"accept\":\"application/json\",\"origin\":\"http://localhost:8080\",\"user-agent\":\"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/53.0.2785.143 Chrome/53.0.2785.143 Safari/537.36\",\"content-type\":\"application/graphql\",\"referer\":\"http://localhost:8080/\",\"accept-encoding\":\"gzip, deflate\",\"accept-language\":\"en-US,en;q=0.8\"}}","locations":{"line":1,"column":55}}]}}
+*************** response log end ***************
+
+[2017-10-15 01:03:27.799] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 39
+response status: 400
+response body: 
+{"code":-2,"message":"请求错误","data":{"errors":[{"type":"graphql","message":"Argument \"account\" has invalid value account.\nExpected type \"String\", found account.{\"method\":\"POST\",\"url\":\"/api\",\"header\":{\"host\":\"127.0.0.1:3001\",\"connection\":\"keep-alive\",\"content-length\":\"73\",\"accept\":\"application/json\",\"origin\":\"http://localhost:8080\",\"user-agent\":\"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/53.0.2785.143 Chrome/53.0.2785.143 Safari/537.36\",\"content-type\":\"application/graphql\",\"referer\":\"http://localhost:8080/\",\"accept-encoding\":\"gzip, deflate\",\"accept-language\":\"en-US,en;q=0.8\"}}","locations":{"line":1,"column":38}},{"type":"graphql","message":"Argument \"password\" has invalid value password.\nExpected type \"String\", found password.{\"method\":\"POST\",\"url\":\"/api\",\"header\":{\"host\":\"127.0.0.1:3001\",\"connection\":\"keep-alive\",\"content-length\":\"73\",\"accept\":\"application/json\",\"origin\":\"http://localhost:8080\",\"user-agent\":\"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/53.0.2785.143 Chrome/53.0.2785.143 Safari/537.36\",\"content-type\":\"application/graphql\",\"referer\":\"http://localhost:8080/\",\"accept-encoding\":\"gzip, deflate\",\"accept-language\":\"en-US,en;q=0.8\"}}","locations":{"line":1,"column":55}}]}}
+*************** response log end ***************
+
+[2017-10-15 01:05:07.488] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 54
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"login":{"account":null}}}}
+*************** response log end ***************
+
+[2017-10-15 01:05:18.528] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 19
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"login":{"account":"account"}}}}
+*************** response log end ***************
+
+[2017-10-15 01:11:14.444] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 62
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"login":{"account":"account","name":"张飞","nickname":"小飞飞"}}}}
+*************** response log end ***************
+
+[2017-10-15 01:11:19.637] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 8
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"login":{"account":"account","name":"张飞","nickname":"小飞飞"}}}}
+*************** response log end ***************
+
+[2017-10-15 01:13:41.889] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 13
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"login":{"account":"account","name":"张飞","nickname":"小飞飞"}}}}
+*************** response log end ***************
+
+[2017-10-15 01:13:57.206] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 6
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"login":{"account":"account","name":"张飞","nickname":"小飞飞"}}}}
+*************** response log end ***************
+
+[2017-10-15 01:14:58.066] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 61
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"login":{"account":"account","name":"张飞","nickname":"小飞飞"}}}}
+*************** response log end ***************
+
+[2017-10-15 01:15:15.437] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 8
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"login":{"account":"account","name":"张飞","nickname":"小飞飞"}}}}
+*************** response log end ***************
+
+[2017-10-15 01:15:16.924] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 4
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"login":{"account":"account","name":"张飞","nickname":"小飞飞"}}}}
+*************** response log end ***************
+
+[2017-10-15 01:15:17.629] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 4
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"login":{"account":"account","name":"张飞","nickname":"小飞飞"}}}}
+*************** response log end ***************
+
+[2017-10-15 01:15:30.178] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 4
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"login":{"account":"account","name":"张飞","nickname":"小飞飞"}}}}
+*************** response log end ***************
+
+[2017-10-15 01:16:28.028] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 58
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"login":{"account":"account","name":"张飞","nickname":"小飞飞"}}}}
+*************** response log end ***************
+
+[2017-10-15 01:16:55.524] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 8
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"login":{"account":"account","name":"张飞","nickname":"小飞飞"}}}}
+*************** response log end ***************
+

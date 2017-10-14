@@ -1,0 +1,39 @@
+[2017-10-10 07:56:18.404] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 73
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"hello":"worldZildjian59cd78cfd37e402da969cc3e"}}}
+*************** response log end ***************
+
+[2017-10-10 07:56:36.763] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 76
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"hello":"worldZildjian59cd78cfd37e402da969cc3e"}}}
+*************** response log end ***************
+
+[2017-10-10 07:56:36.846] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 17
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"hello":"worldZildjian59cd78cfd37e402da969cc3e"}}}
+*************** response log end ***************
+

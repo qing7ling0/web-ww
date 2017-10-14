@@ -1,51 +1,29 @@
 'use strict';
 
-import {
-    graphql,
-    GraphQLSchema,
-    GraphQLObjectType,
-    GraphQLString
-} from 'graphql';
+import graphqlHTTP from 'koa-graphql'
+
 import DB from '../db/DB'
-import user from './user'
+import user from './user/index'
 
-var schema = new GraphQLSchema({
-    query: new GraphQLObjectType({
-        name: 'rootQueryType',
-        fields: {
-            hello: {
-                type: GraphQLString,
-                async resolve() {
-                    let a = await DB.queryTest();
-                    return 'world' + a.name + a.id;
-                }
-            }
-        },
-    }),
-    query: new GraphQLObjectType({
-        name: 'test',
-        fields: {
-            hello: {
-                type: GraphQLString,
-                async resolve() {
-                    let a = await DB.queryTest();
-                    return 'test' + a.name + a.id;
-                }
-            }
-        },
-    }),
-    query: new GraphQLObjectType({
-        name: 'query3',
-        fields: {
-            hello: {
-                type: GraphQLString,
-                async resolve() {
-                    let a = await DB.queryTest();
-                    return 'query3' + a.name + a.id;
-                }
-            }
-        },
-    }),
-});
+function createModule(schema) {
+    return graphqlHTTP((request) => ({
+        schema: schema,
+        graphiql: true,
+        // context: { token: request.header.authorization, platform: request.query.platform },
+        formatError: error => ({
+            type: 'graphql',
+            path: error.path,
+            message: error.message + JSON.stringify(request),
+            locations: error.locations ? error.locations[0] : null
+        })
+    }));
+}
 
-module.exports = schema
+function register() {
+    return function (router) {
+        router.all('/api', createModule(user));
+    }
+}
+
+
+module.exports = register();

@@ -16,7 +16,7 @@ var userSchema = new Schema({
   editer_name:      {type:String, default:''},
   create_time:      {type:Date, default:Date.now}
 });
-DB.addPost(userSchema, ['save', 'find']);
-DB.addPre(userSchema, ['save', 'find']);
+// DB.addPost(userSchema, ['save', 'find']);
+// DB.addPre(userSchema, ['save', 'find']);
 
-export default global.db.model('User', userSchema);
+module.exports = mongoose.model('User', userSchema);

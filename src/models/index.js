@@ -1,3 +1,5 @@
 var user = require('./user')
 
-export const user = user;
+module.exports = {
+  userModel:user
+};

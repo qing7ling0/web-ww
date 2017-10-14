@@ -1,7 +1,7 @@
 import { createAction } from 'redux-actions';
 import * as types from '../constants/ActionTypes';
 import config from '../constants/Config.js';
-import NetUtils from '../../base/utils/NetUtils'
+import netHandler from '../modules/NetHandler'
 
 const init = () => {
     let myHeaders = new Headers({
@@ -17,5 +17,12 @@ const init = () => {
     });
 }
 
-export const Load = createAction(types.LOAD,
-    () => NetUtils.graphqlJson('http://127.0.0.1:3001/api', 'query rootQueryType {hello}'));
+export const Load = createAction(types.LOAD,() => 'data');
+
+export const login = createAction(types.LOGIN, netHandler.reqLogin)
+
+export const addUser = createAction(types.USER_ADD, (params) => netHandler.mutation({add:{
+    info:{account:'111', password: '222', nickname: 'test'}
+}}));
+let list = 'list';
+export const getUserList = createAction(types.USER_LIST_GET, (params) => netHandler.query('{list}'));

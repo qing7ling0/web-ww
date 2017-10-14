@@ -1,24 +1,21 @@
 import {
   GraphQLObjectType,
-  GraphQLNonNull,
-  GraphQLString,
-  GraphQLID,
-  GraphQLInt,
-  GraphQLBoolean
+  GraphQLSchema
 } from 'graphql';
 
 import * as queries from './queries'
+import * as mutations from './mutations'
 
-const create = () => {
-  let items = [];
-  for(let key in queries) {
-    items.push({query: new GraphQLObjectType({
-      name: key,
-      fields: queries[key]
-    })});
-  }
+let schema = new GraphQLSchema({
+  query: new GraphQLObjectType({
+    name: 'userQuery',
+    fields: queries
+  }),
 
-  return items;
-}
+  mutation: new GraphQLObjectType({
+    name: 'userMutation',
+    fields: mutations
+  })
+});
 
-export default create()
+export default schema

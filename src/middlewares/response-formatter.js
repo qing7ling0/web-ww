@@ -1,6 +1,7 @@
 'use strict'
 
-var ApiError = require('../error/api-errors');
+const ApiError = require('../error/api-errors');
+const ApiErrorNames = require('../error/api-error-names');
 
 /**
  * 在app.use(router)之前调用
@@ -8,11 +9,20 @@ var ApiError = require('../error/api-errors');
 var responseFormatter = (ctx) => {
     //如果有返回数据，将返回数据添加到data中
     if (ctx.body) {
-        let body = ctx.body;
-        ctx.body = {
-            code: 0,
-            message: 'success',
-            data: JSON.parse(ctx.body)
+        let body = JSON.parse(ctx.body);
+        if (body.errors) {
+            let error = ApiErrorNames.getErrorInfo(ApiErrorNames.REQ_ERROR);
+            ctx.body = {
+                code: error.code,
+                message: error.message,
+                data: body
+            }
+        } else {
+            ctx.body = {
+                code: 0,
+                message: 'success',
+                data: body
+            }
         }
     } else {
         ctx.body = {

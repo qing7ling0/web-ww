@@ -1,17 +1,12 @@
 import {
-  GraphQLObjectType,
-  GraphQLNonNull,
-  GraphQLString,
-  GraphQLID,
-  GraphQLInt,
-  GraphQLBoolean
+  GraphQLList
 } from 'graphql';
 
 import * as types from './types';
 import { userModel } from '../../models'
 
 
-export const users = {
+export const list = {
 	type: new GraphQLList(types.user),
 	async resolve (root, params, options) {
   		var users = await userModel.find({});

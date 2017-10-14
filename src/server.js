@@ -17,24 +17,12 @@ const _router = new router();
 
 const logUtil = require('./utils/log-utils');
 const responseFormatter = require('./middlewares/response-formatter');
+const schemas = require('./schemas/index');
 
 // error handler
-onerror(app)
+onerror(app);
 
-const graphqlHTTP = require('koa-graphql');
-const Schemas = require('./schemas/index.js');
-const graphqlModule = graphqlHTTP((request) => ({
-    schema: Schemas,
-    graphiql: true,
-    // context: { token: request.header.authorization, platform: request.query.platform },
-    formatError: error => ({
-        type: 'graphql',
-        path: error.path,
-        message: error.message + JSON.stringify(request),
-        locations: error.locations ? error.locations[0] : null
-    })
-}));
-_router.all('/api', graphqlModule);
+schemas(_router);
 
 // middlewares
 app.use(cors());

@@ -6,6 +6,7 @@
 var ApiErrorNames = {};
 
 ApiErrorNames.UNKNOW_ERROR = "unknowError";
+ApiErrorNames.REQ_ERROR = "REQ_ERROR";
 ApiErrorNames.USER_NOT_EXIST = "userNotExist";
 
 /**
@@ -14,6 +15,7 @@ ApiErrorNames.USER_NOT_EXIST = "userNotExist";
 const error_map = new Map();
 
 error_map.set(ApiErrorNames.UNKNOW_ERROR, { code: -1, message: '未知错误' });
+error_map.set(ApiErrorNames.REQ_ERROR, { code: -2, message: '请求错误' });
 error_map.set(ApiErrorNames.USER_NOT_EXIST, { code: 101, message: '用户不存在' });
 
 //根据错误名称获取错误信息
