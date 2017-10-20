@@ -20,14 +20,14 @@ class DB {
     }
 
     static async test() {
-        var kitty = new Cat({ name: 'Zildjian' });
+        // var kitty = new Cat({ name: 'Zildjian' });
 
-        await kitty.save();
+        // await kitty.save();
     }
     
     static async queryTest() {
-        DB.test();
-        return await Cat.findOne({},['name']).exec();
+        // DB.test();
+        // return await Cat.findOne({},['name']).exec();
     }
 
     static addPost(schema, options) {
@@ -57,6 +57,6 @@ class DB {
 
 }
 DB.connect();
-var Cat = mongoose.model('Cat', { name: String });
+// var Cat = mongoose.model('Cat', { name: String });
 
 module.exports = DB;

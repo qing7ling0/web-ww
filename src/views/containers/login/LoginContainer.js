@@ -18,11 +18,11 @@ import {
 } from './LoginContainer.styled'
 
 import Actions from '../../actions'
-import BaseComponent from '../../components/BaseComponent'
+import BaseContainer from '../../components/BaseContainer'
 import FooterComponent from '../common/FooterComponent'
 import * as constants from '../../constants/Constants'
 
-class LoginContainer extends BaseComponent {
+class LoginContainer extends BaseContainer {
   // 构造函数，在创建组件的时候调用一次
   constructor(props) {
     super(props);
@@ -58,6 +58,7 @@ class LoginContainer extends BaseComponent {
   // 父组件发生render的时候子组件就会调用componentWillReceiveProps
   //（不管props有没有更新，也不管父子组件之间有没有数据交换）
   componentWillReceiveProps(nextProps){
+    super.componentWillReceiveProps(nextProps);
     if (nextProps.loginInfo.code === 0) {
       this.navigation.push("/main");
     }
@@ -206,7 +207,8 @@ class LoginContainer extends BaseComponent {
 
 export default connect(
   state => ({
-    loginInfo:state.app.loginInfo
+    loginInfo:state.app.loginInfo,
+    results:state.app.results
   }),
   (dispatch) => {
     return bindActionCreators({

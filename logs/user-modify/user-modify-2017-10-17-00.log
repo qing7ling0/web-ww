@@ -1,0 +1,208 @@
+[2017-10-17 00:06:48.369] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 55
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"login":{"account":"account","name":"张飞","nickname":"小飞飞"}}}}
+*************** response log end ***************
+
+[2017-10-17 00:11:01.307] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 44
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"login":{"account":"account","name":"张飞","nickname":"小飞飞"}}}}
+*************** response log end ***************
+
+[2017-10-17 00:13:28.579] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 58
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"login":{"account":"account","name":"张飞","nickname":"小飞飞"}}}}
+*************** response log end ***************
+
+[2017-10-17 00:16:28.543] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 64
+response status: 200
+response body: 
+{"data":{"errors":[{"type":"graphql","path":["login"],"name":"GraphQLError","message":"用户不存在","code":-1,"locations":{"line":1,"column":20}}],"data":{"login":null}}}
+*************** response log end ***************
+
+[2017-10-17 00:18:07.556] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 64
+response status: 200
+response body: 
+{"data":{"errors":[{"type":"graphql","path":["login"],"name":"GraphQLError","message":"用户不存在","code":-1,"locations":{"line":1,"column":20}}],"data":{"login":null}}}
+*************** response log end ***************
+
+[2017-10-17 00:20:51.376] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 66
+response status: 200
+response body: 
+{"data":{"errors":[{"type":"graphql","path":["login"],"name":"GraphQLError","message":"用户不存在","code":-1,"locations":{"line":1,"column":20}}],"data":{"login":null}}}
+*************** response log end ***************
+
+[2017-10-17 00:23:47.650] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 59
+response status: 200
+response body: 
+{"data":{"errors":[{"type":"graphql","path":["login"],"name":"GraphQLError","message":"用户不存在","code":-1,"locations":{"line":1,"column":20}}],"data":{"login":null}}}
+*************** response log end ***************
+
+[2017-10-17 00:29:26.848] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 71
+response status: 200
+response body: 
+{"data":{"errors":[{"type":"graphql","path":["login"],"name":"GraphQLError","message":"用户不存在","code":-1,"locations":{"line":1,"column":20}}],"data":{"login":null}}}
+*************** response log end ***************
+
+[2017-10-17 00:31:04.373] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 14
+response status: 200
+response body: 
+{"data":{"errors":[{"type":"graphql","path":["login"],"name":"GraphQLError","message":"用户不存在","code":-1,"locations":{"line":1,"column":20}}],"data":{"login":null}}}
+*************** response log end ***************
+
+[2017-10-17 00:31:09.947] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 6
+response status: 200
+response body: 
+{"data":{"errors":[{"type":"graphql","path":["login"],"name":"GraphQLError","message":"用户不存在","code":-1,"locations":{"line":1,"column":20}}],"data":{"login":null}}}
+*************** response log end ***************
+
+[2017-10-17 00:31:11.606] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 9
+response status: 200
+response body: 
+{"data":{"errors":[{"type":"graphql","path":["login"],"name":"GraphQLError","message":"用户不存在","code":-1,"locations":{"line":1,"column":20}}],"data":{"login":null}}}
+*************** response log end ***************
+
+[2017-10-17 00:31:17.969] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 7
+response status: 200
+response body: 
+{"data":{"errors":[{"type":"graphql","path":["login"],"name":"GraphQLError","message":"用户不存在","code":-1,"locations":{"line":1,"column":20}}],"data":{"login":null}}}
+*************** response log end ***************
+
+[2017-10-17 00:50:44.882] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 76
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"login":{"account":"account","name":"张飞","nickname":"小飞飞"}}}}
+*************** response log end ***************
+
+[2017-10-17 00:52:11.404] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 12
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"login":{"account":"account","name":"张飞","nickname":"小飞飞"}}}}
+*************** response log end ***************
+
+[2017-10-17 00:53:49.430] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 57
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"login":{"account":"account","name":"张飞","nickname":"小飞飞"}}}}
+*************** response log end ***************
+
+[2017-10-17 00:59:16.187] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 65
+response status: 200
+response body: 
+{"code":0,"message":"success","data":{"data":{"login":{"account":"account","name":"张飞","nickname":"小飞飞"}}}}
+*************** response log end ***************
+

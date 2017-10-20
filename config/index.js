@@ -7,4 +7,4 @@ module.exports = {
     development: development_env,
     test: test_env,
     production: production_env
-}[process.env.NODE_ENV || 'development']
+}[process.env.NODE_ENV || 'development'] || development_env

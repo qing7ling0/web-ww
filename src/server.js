@@ -12,20 +12,23 @@ const logger = require('koa-logger')
 const cors = require('koa-cors')
 const router = require('koa-router')
 const conver = require('koa-convert')
+const session = require('koa-session2')
 
 const _router = new router();
 
+const config = require('../config/index')
 const logUtil = require('./utils/log-utils');
 const responseFormatter = require('./middlewares/response-formatter');
 const schemas = require('./schemas/index');
 
+app.use(session(config.session))
 // error handler
 onerror(app);
 
 schemas(_router);
 
 // middlewares
-app.use(cors());
+app.use(cors({credentials:true}));
 // app.use(json())
 
 app.use(logger());

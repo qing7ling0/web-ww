@@ -1,0 +1,26 @@
+[2017-10-19 22:45:35.647] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 83
+response status: 200
+response body: 
+{"data":{"errors":[{"type":"graphql","path":["login"],"name":"GraphQLError","message":"Cannot read property 'account' of undefined","locations":{"line":1,"column":20}}],"data":{"login":null}}}
+*************** response log end ***************
+
+[2017-10-19 22:45:36.879] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 4
+response status: 200
+response body: 
+{"data":{"errors":[{"type":"graphql","path":["login"],"name":"GraphQLError","message":"Cannot read property 'account' of undefined","locations":{"line":1,"column":20}}],"data":{"login":null}}}
+*************** response log end ***************
+

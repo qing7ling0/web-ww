@@ -2,14 +2,23 @@
 
 import * as ActionTypes from '../constants/ActionTypes';
 import { States } from '../../base/modules/ReduxState'
+import results from './results'
+import baseUtils from '../../base/utils/Utils'
 
 const initialState = {
     testString: '',
-    loginInfo: {}
+    loginInfo: {logined:false},
 };
 
-function doErrors(code, result) {
-
+function doErrors(result) {
+    if (baseUtils.IsNumber(result.code)) {
+        if (result.code>0){
+            results.push(result);
+        } else if (result.code < 0) {
+            result.message = '更新失败!';
+            results.push(result);
+        }
+    }
 }
 
 function doActions(state, action) {
@@ -17,9 +26,12 @@ function doActions(state, action) {
     let data = {}
     if (action && action.payload) {
         result = action.payload;
-        if (result && result.data && result.data.data) {
-            data = result.data.data;
+        if (result && result.data) {
+            data = result.data;
         }
+    }
+    if (result) {
+        doErrors(result);
     }
     switch (action.type) {
         case ActionTypes.LOAD:
@@ -39,14 +51,14 @@ function doActions(state, action) {
                     return Object.assign({}, state, { loginInfo: info });
                 }
             } else {
-                return Object.assign({}, state, { testString: 'loading' });
+                return Object.assign({}, state, { loginInfo: {loading:true} });
             }
             break;
         break;
         default:
             break;
     }
-    return Object.assign({}, state);
+    return Object.assign({}, state, {results:results});
 }
 
 const app = (state = initialState, action) => {

@@ -1,0 +1,208 @@
+[2017-10-20 00:01:42.855] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 22307
+response status: 200
+response body: 
+{"data":{"errors":[{"type":"graphql","path":["login"],"name":"GraphQLError","message":"Cannot read property 'account' of undefined","locations":{"line":1,"column":20}}],"data":{"login":null}}}
+*************** response log end ***************
+
+[2017-10-20 00:03:02.838] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 63
+response status: 200
+response body: 
+{"data":{"errors":[{"type":"graphql","path":["login"],"name":"GraphQLError","message":"Cannot read property 'account' of undefined","locations":{"line":1,"column":20}}],"data":{"login":null}}}
+*************** response log end ***************
+
+[2017-10-20 00:06:44.248] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 45
+response status: 200
+response body: 
+{"code":-1}
+*************** response log end ***************
+
+[2017-10-20 00:06:57.386] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 6
+response status: 200
+response body: 
+{"code":-1}
+*************** response log end ***************
+
+[2017-10-20 00:08:33.879] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 43
+response status: 200
+response body: 
+{"code":-1,"message":"[{\"type\":\"graphql\",\"path\":[\"login\"],\"name\":\"GraphQLError\",\"message\":\"Cannot read property 'account' of undefined\",\"locations\":{\"line\":1,\"column\":20}}]"}
+*************** response log end ***************
+
+[2017-10-20 00:11:53.528] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 46
+response status: 200
+response body: 
+{"code":-1,"message":"[{\"type\":\"graphql\",\"path\":[\"login\"],\"name\":\"GraphQLError\",\"message\":\"Cannot read property 'account' of undefined\",\"locations\":{\"line\":1,\"column\":20}}]"}
+*************** response log end ***************
+
+[2017-10-20 00:11:56.043] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 6
+response status: 200
+response body: 
+{"code":-1,"message":"[{\"type\":\"graphql\",\"path\":[\"login\"],\"name\":\"GraphQLError\",\"message\":\"Cannot read property 'account' of undefined\",\"locations\":{\"line\":1,\"column\":20}}]"}
+*************** response log end ***************
+
+[2017-10-20 00:11:57.496] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 3
+response status: 200
+response body: 
+{"code":-1,"message":"[{\"type\":\"graphql\",\"path\":[\"login\"],\"name\":\"GraphQLError\",\"message\":\"Cannot read property 'account' of undefined\",\"locations\":{\"line\":1,\"column\":20}}]"}
+*************** response log end ***************
+
+[2017-10-20 00:12:28.361] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 49
+response status: 200
+response body: 
+{"code":-1,"message":"[{\"type\":\"graphql\",\"path\":[\"login\"],\"name\":\"GraphQLError\",\"message\":\"帐号密码错误！\",\"code\":-1,\"locations\":{\"line\":1,\"column\":20}}]"}
+*************** response log end ***************
+
+[2017-10-20 00:14:24.165] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 54
+response status: 200
+response body: 
+{"code":-1,"message":"帐号密码错误！","data":{"login":null}}
+*************** response log end ***************
+
+[2017-10-20 00:15:52.396] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 47
+response status: 200
+response body: 
+{"code":102,"message":"帐号密码错误！","data":{"login":null}}
+*************** response log end ***************
+
+[2017-10-20 00:15:55.558] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 4
+response status: 200
+response body: 
+{"code":102,"message":"帐号密码错误！","data":{"login":null}}
+*************** response log end ***************
+
+[2017-10-20 00:16:44.037] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 52
+response status: 200
+response body: 
+{"code":102,"message":"帐号密码错误！","data":{"login":null}}
+*************** response log end ***************
+
+[2017-10-20 00:16:48.951] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 5
+response status: 200
+response body: 
+{"code":102,"message":"帐号密码错误！","data":{"login":null}}
+*************** response log end ***************
+
+[2017-10-20 00:17:03.890] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 2
+response status: 200
+response body: 
+{"code":102,"message":"帐号密码错误！","data":{"login":null}}
+*************** response log end ***************
+
+[2017-10-20 00:17:21.193] [INFO] resLogger - 
+*************** response log start ***************
+request method: POST
+request originalUrl:  /api
+request client ip:  ::ffff:127.0.0.1
+request body: 
+undefined
+response time: 6
+response status: 200
+response body: 
+{"code":102,"message":"帐号密码错误！","data":{"login":null}}
+*************** response log end ***************
+

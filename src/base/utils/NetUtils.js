@@ -34,6 +34,7 @@ class NetUtils {
                 'Accept': 'application/json',
                 'Content-Type': 'application/graphql'
             },
+            credentials: 'include',
             body: data
         };
         return NetUtils.request(url, fetchOptions);

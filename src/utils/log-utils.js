@@ -129,23 +129,13 @@ var formatUserModify = function (type, data, time) {
 
 //封装调试日志
 logUtil.logDebug = function (message, time) {
-    debugLogger.info(formatDebug(message, time));
+    debugLogger.debug(formatDebug(message, time));
 };
 //格式化调试日志
 var formatDebug = function (message, time) {
     var logText = new String();
-
-    //调试日志开始
-    logText += "\n" + "*************** debug log start ***************" + "\n";
-
-    //调试时间
-    logText += "debug time: " + time + "\n";
-
     //调试内容
-    logText += "debug content: " + "\n" + message + "\n";
-
-    //调试日志结束
-    logText += "*************** debug log end ***************" + "\n";
+    logText += "debug content: " + "\n" + message + "-----" + time + "\n";
 
     return logText;
 }

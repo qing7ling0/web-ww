@@ -20,20 +20,20 @@ class NetHandler {
 
   static reqLogin(account, password) {
     
-    return netUtils.graphqlJson(config.GetServerAddress() + '/api', `mutation userMutation {login(account:"${account}",password:"${password}"){account, name, nickname}}`)
+    return netUtils.graphqlJson(config.GetServerAddress() + '/api', `mutation Mutation {login(account:"${account}",password:"${password}"){account, name, nickname}}`)
   }
 
   static query(params) {
-    return netUtils.graphqlJson(config.GetServerAddress() + '/api', `query userQuery {list{nickname}}`)
+    return netUtils.graphqlJson(config.GetServerAddress() + '/api', `query Query {list{nickname}}`)
   }
 
   static mutation(params) {
-    return netUtils.graphqlJson(config.GetServerAddress() + '/api', `mutation userMutation {
+    return netUtils.graphqlJson(config.GetServerAddress() + '/api', `mutation Mutation {
       add(info:{account:"111", password:"111", nickname:"小飞飞", name:"张飞"}) {
         nickname
       }
     }`)
-    // return netUtils.graphqlJson(config.GetServerAddress() + '/api', `mutation userMutation {${JSON.stringify(params)}}`)
+    // return netUtils.graphqlJson(config.GetServerAddress() + '/api', `mutation Mutation {${JSON.stringify(params)}}`)
   }
 }
 

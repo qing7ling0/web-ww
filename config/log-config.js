@@ -74,7 +74,9 @@ module.exports = {
         }
     },
     categories: { 
-        default: { appenders: ['res', 'userModify', 'debug'], level: 'all' },
+        default: { appenders: ['res', 'userModify'], level: 'all' },
+        userModify: { appenders: ['userModify'], level: 'all' },
+        debug: { appenders: ['debug'], level: 'debug' },
         error: { appenders:['error'], level: 'error'}
     },
     "baseLogPath": baseLogPath                  //logs根目录

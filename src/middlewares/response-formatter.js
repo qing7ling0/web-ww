@@ -1,27 +1,35 @@
 'use strict'
 
-const ApiError = require('../error/api-errors');
-const ApiErrorNames = require('../error/api-error-names');
+const {ApiError, ApiErrorNames} = require('../error/api-errors');
 
 /**
  * 在app.use(router)之前调用
  */
 var responseFormatter = (ctx) => {
     //如果有返回数据，将返回数据添加到data中
+    console.log(JSON.stringify(ctx.body));
     if (ctx.body) {
         let body = JSON.parse(ctx.body);
-        if (body.errors) {
-            let error = ApiErrorNames.getErrorInfo(ApiErrorNames.REQ_ERROR);
-            ctx.body = {
-                code: error.code,
-                message: error.message,
-                data: body
+        
+        if (body.errors ) {
+            let error = body.errors.length > 0 ? body.errors[0] : body.errors;
+            if (typeof(error.code)=="undefined") {
+                ctx.body = {
+                    code: -1,
+                    message: JSON.stringify(error)
+                }
+            } else {
+                ctx.body = {
+                    code: error.code,
+                    message: error.message,
+                    data: body.data
+                }
             }
         } else {
             ctx.body = {
                 code: 0,
                 message: 'success',
-                data: body
+                data: body.data
             }
         }
     } else {
