@@ -19,9 +19,17 @@ import Actions from '../../actions'
 import BaseComponent from '../../components/BaseComponent'
 import { BaseH1, BaseH2, BaseLoading } from '../../components/BaseComponent.styled'
 
+const HEAD_HEIGHT = '0.64rem';
+
 const Root = styled(Header)`
-  border-bottom: 1px solid #f00;
-  background: #000
+  background: #fff;
+  padding: 0 0.32rem;
+  box-shadow:0 1px 4px rgba(0, 21, 41, 0.08);
+  line-height: 0;
+`
+const HeadCol = styled(Col)`
+  height: ${HEAD_HEIGHT};
+  line-height: 0;
 `
 const UserContainer = styled.button`
   float: right;
@@ -33,14 +41,14 @@ const UserContainer = styled.button`
   &:hover {
     color: #fff;
     border:none;
-    background: rgba(255,255,255,0.3);
+    background: rgba(16,142,233,0.3);
     outline: none;
     cursor:pointer
   }
   &:active  {
     color: #fff;
     border:none;
-    background: rgba(255,255,255,0.43);
+    background: rgba(16,142,233,0.43);
     outline: none;
   }
   &:focus  {
@@ -56,24 +64,25 @@ const UserContainer = styled.button`
   }
   @media \0screen\,screen\9 {/* 只支持IE6、7、8 */
     &:hover{
-      background-color:#ffffff;
+      background-color:#108ee9;
       filter:Alpha(opacity=50);
       position:static; /* IE6、7、8只能设置position:static(默认属性) ，否则会导致子元素继承Alpha值 */
       *zoom:1; /* 激活IE6、7的haslayout属性，让它读懂Alpha */
     }
   }
-  line-height: 64px;
-  height: auto;
+  line-height: ${HEAD_HEIGHT};
+  height: ${HEAD_HEIGHT};
 `
 
-const UserName = styled.span`
+const UserName = styled.div`
+  float:right;
   border:none;
-  height: 100%;
-  font-size: 1rem;
-  color: #fff;
+  height: ${HEAD_HEIGHT};
+  font-size: 0.1rem;
+  color: #4c4f53;
   padding: 0 15px;
   &:hover, &:active, &:after, &:focus {
-    color: #fff;
+    color: #4c4f53;
     border:none;
     background: transparent;
   }
@@ -91,19 +100,10 @@ const UserAvatar = styled(Avatar)`
     position: relative;/* 设置子元素为相对定位，可让子元素不继承Alpha值 */
   }
 `
-const menu = (
-  <Menu>
-    <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">1st menu item</a>
-    </Menu.Item>
-    <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">2nd menu item</a>
-    </Menu.Item>
-    <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">3d menu item</a>
-    </Menu.Item>
-  </Menu>
-);
+const USER_MENUS = [
+  {key:'profile', title:'个人信息'},
+  {key:'logout', title:'退出'}
+];
 
 class HeaderContainer extends BaseComponent {
   // 构造函数，在创建组件的时候调用一次
@@ -114,6 +114,24 @@ class HeaderContainer extends BaseComponent {
       loading: false,
       success: true
     }
+
+    this.userMenus = (
+      <Menu onClick={(item)=>{
+        switch(item.key) {
+          case 'profile':
+          break;
+          case 'logout':
+            this.props.reqLogout();
+          break;
+        }
+      }}>
+        {
+          USER_MENUS.map((item)=>{
+            return (<Menu.Item key={item.key}>{item.title}</Menu.Item>)
+          })
+        }
+      </Menu>
+    )
   }
 
   componentWillMount(){
@@ -122,27 +140,36 @@ class HeaderContainer extends BaseComponent {
   componentDidMount() {
   }
   
+  toggleCollapsed = () => {
+    this.setState({
+      collapsed: !this.state.collapsed,
+    });
+  }
 
   onRender() {
     return (
       <Root>
         <Row>
-          <Col span={6}><BaseH1>欢迎使用Bola Family管理系统</BaseH1></Col>
-          <Col span={12}></Col>
-          <Col span={6}>
+          <HeadCol span={6} style={{height:64}}>
+            <Button type="primary" onClick={this.toggleCollapsed}>
+              <Icon type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'} />
+            </Button>
+          </HeadCol>
+          <HeadCol span={12}></HeadCol>
+          <HeadCol span={6} style={{height:64}}>
           {
             (this.props.loginInfo && this.props.loginInfo.user) ?
-            <Dropdown overlay={menu}>
+            <Dropdown overlay={this.userMenus}>
               <UserContainer>
-                <UserAvatar size="small" icon="user" />
+                <UserAvatar size="default" icon="user" />
                 <UserName ghost>
-                  {this.props.loginInfo.user.nickname} <Icon type="down" />
+                  {this.props.loginInfo.user.name} <Icon type="down" />
                 </UserName>
               </UserContainer>
             </Dropdown>
             : null
           }
-          </Col>
+          </HeadCol>
         </Row>
       </Root>
     );
@@ -157,7 +184,8 @@ export default connect(
     return bindActionCreators({
       reqLoad: Actions.Load,
       reqUserListGet: Actions.getUserList,
-      reqUserAdd: Actions.addUser
+      reqUserAdd: Actions.addUser,
+      reqLogout: Actions.logout
     }, dispatch);
   }
 )(HeaderContainer);

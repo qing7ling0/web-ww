@@ -7,7 +7,8 @@ const {ApiError, ApiErrorNames} = require('../error/api-errors');
  */
 var responseFormatter = (ctx) => {
     //如果有返回数据，将返回数据添加到data中
-    console.log(JSON.stringify(ctx.body));
+    console.log('responseFormatter' + JSON.stringify(ctx.body));
+    // console.log('responseFormatter message ' + ctx.result);
     if (ctx.body) {
         let body = JSON.parse(ctx.body);
         
@@ -28,14 +29,14 @@ var responseFormatter = (ctx) => {
         } else {
             ctx.body = {
                 code: 0,
-                message: 'success',
+                message: ctx.result || '',
                 data: body.data
             }
         }
     } else {
         ctx.body = {
             code: 0,
-            message: 'success'
+            message: ''
         }
     }
 }

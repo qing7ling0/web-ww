@@ -96,6 +96,15 @@ class Utils {
   static IsUndefined(obj) {
     return Object.prototype.toString.call(obj) === "[object Undefined]";
   }
+  
+  static ObjectIsEmpty(obj) {
+    if (!obj) return true;
+    for(let key in obj) {
+      return false;
+    }
+  
+    return true;
+  }
 
   /**
    * 删除数组元素

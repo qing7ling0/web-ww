@@ -42,7 +42,7 @@ module.exports = {
             "type": "dateFile",                   //日志类型
             "filename": errorLogPath,             //日志输出位置
             "alwaysIncludePattern":true,          //是否总是有后缀名
-            "pattern": "-yyyy-MM-dd-hh.log",      //后缀，每小时创建一个新的日志文件
+            "pattern": "-yyyy-MM-dd.log",      //后缀，每小时创建一个新的日志文件
             "path": errorPath                     //自定义属性，错误日志的根目录
         },
         //响应日志
@@ -51,7 +51,7 @@ module.exports = {
             "type": "dateFile",
             "filename": responseLogPath,
             "alwaysIncludePattern":true,
-            "pattern": "-yyyy-MM-dd-hh.log",
+            "pattern": "-yyyy-MM-dd.log",
             "path": responsePath  
         },
         //用户修改日志
@@ -60,7 +60,7 @@ module.exports = {
             "type": "dateFile",
             "filename": userModifyLogPath,
             "alwaysIncludePattern":true,
-            "pattern": "-yyyy-MM-dd-hh.log",
+            "pattern": "-yyyy-MM-dd.log",
             "path": userModifyPath  
         },
         //debug日志
@@ -69,7 +69,7 @@ module.exports = {
             "type": "dateFile",
             "filename": debugLogPath,
             "alwaysIncludePattern":true,
-            "pattern": "-yyyy-MM-dd-hh.log",
+            "pattern": "-yyyy-MM-dd.log",
             "path": debugPath  
         }
     },

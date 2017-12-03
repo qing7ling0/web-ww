@@ -28,6 +28,7 @@ class NetUtils {
     }
 
     static graphqlJson(url, data) {
+        console.log('graphqlJson url' + url + '; data=' + data);
         var fetchOptions = {
             method: 'POST',
             headers: {

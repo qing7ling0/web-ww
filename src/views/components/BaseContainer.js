@@ -74,7 +74,7 @@ class BaseContainer extends BaseComponent {
     if (!results) return;
     for(let i=0; i<results.length; i++) {
       if (!this.onHandReqResult(results[i])) {
-        if (results[i].code !== 0) {
+        if (results[i].message) {
           message.error(results[i].message);
         }
       }

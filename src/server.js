@@ -1,7 +1,4 @@
 'use strict'
-require('babel-register');
-require('babel-polyfill');
-
 const Koa = require('koa')
 const app = new Koa()
 const views = require('koa-views')
@@ -14,14 +11,17 @@ const router = require('koa-router')
 const conver = require('koa-convert')
 const session = require('koa-session2')
 
-const _router = new router();
 
-const config = require('../config/index')
+const SessionStore = require('./session-store');
+const config = require('../config/index');
 const logUtil = require('./utils/log-utils');
 const responseFormatter = require('./middlewares/response-formatter');
 const schemas = require('./schemas/index');
 
-app.use(session(config.session))
+const _router = new router();
+const _sessionStore = new SessionStore();
+
+app.use(session({...config.session, store:_sessionStore}))
 // error handler
 onerror(app);
 

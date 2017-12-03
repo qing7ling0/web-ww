@@ -21,6 +21,10 @@ export const Load = createAction(types.LOAD,() => 'data');
 
 export const login = createAction(types.LOGIN, netHandler.reqLogin)
 
+export const logout = createAction(types.LOGOUT, netHandler.reqLogout);
+
+export const selectNav = createAction(types.SELECT_NAV, (key)=>{return{code:0, message:'', data:{key:key}}})
+
 export const addUser = createAction(types.USER_ADD, (params) => netHandler.mutation({add:{
     info:{account:'111', password: '222', nickname: 'test'}
 }}));

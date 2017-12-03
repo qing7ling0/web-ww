@@ -2,18 +2,23 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import {bindActionCreators} from 'redux'
 
+import {HashRouter,Route,Link, Switch} from 'react-router-dom'
 import { Layout, Row, Col, Avatar } from 'antd';
 const { Header, Content, Sider, Footer } = Layout;
 
 import Actions from '../../actions'
-import BaseComponent from '../../components/BaseComponent'
+import Navigation from '../../modules/Navigation'
+import BaseContainer from '../../components/BaseContainer'
 import NavComponent from './components/NavComponent'
 import FooterComponent from '../common/FooterComponent'
+import HeaderComponent from '../common/HeaderComponent'
 import {
-  LeftContainer
+  ContentContainer
 } from './MainContainer.styled'
 
-class MainContainer extends BaseComponent {
+import mainRouters from './MainRouters'
+
+class MainContainer extends BaseContainer {
   // 构造函数，在创建组件的时候调用一次
   constructor(props) {
     super(props);
@@ -26,6 +31,7 @@ class MainContainer extends BaseComponent {
 
   //在组件挂载之前调用一次。如果在这个函数里面调用setState，本次的render函数可以看到更新后的state，并且只渲染一次
   componentWillMount(){
+    this.navigation = new Navigation(this.props.history);
     const {reqLogin, loginInfo} = this.props;
     if (!loginInfo.user) {
       reqLogin();
@@ -40,8 +46,14 @@ class MainContainer extends BaseComponent {
   // 父组件发生render的时候子组件就会调用componentWillReceiveProps
   //（不管props有没有更新，也不管父子组件之间有没有数据交换）
   componentWillReceiveProps(nextProps){
+    super.componentWillReceiveProps(nextProps);
+    
     if (!nextProps.loginInfo.loading && !nextProps.loginInfo.user) {
       this.navigation.replace('/login');
+    }
+
+    if (!nextProps.navKey && nextProps.navKey !== this.props.navKey) {
+      
     }
   }
 
@@ -71,21 +83,20 @@ class MainContainer extends BaseComponent {
   }
 
   onRender() {
+
     return (
       <Layout>
-        <Sider style={{overflowX: 'hidden', overflowY: 'auto', background: '#fff'}}><NavComponent /></Sider>
+        <Sider style={{overflowX: 'hidden', overflowY: 'auto', backgroundColor: '#181d20'}}><NavComponent history={this.props.history} /></Sider>
         <Layout>
+          <HeaderComponent />
           <Content>
-          <button 
-            onClick={()=>{
-              this.props.reqUserAdd();
-            }}>ADD</button>
-          <button 
-            onClick={()=>{
-              this.props.reqUserListGet();
-            }}>GET</button>
+            <ContentContainer>
+              <Switch>
+                {mainRouters}
+              </Switch>
+            </ContentContainer>
           </Content>
-            <FooterComponent/>
+          <FooterComponent/>
         </Layout>
       </Layout>
     );
@@ -95,7 +106,9 @@ class MainContainer extends BaseComponent {
 export default connect(
   state => ({
     app:state.app,
-    loginInfo:state.app.loginInfo
+    loginInfo:state.app.loginInfo,
+    navKey:state.app.navKey,
+    results:state.app.results
   }),
   (dispatch) => {
     return bindActionCreators({

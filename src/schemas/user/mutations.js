@@ -4,46 +4,196 @@ import {
   GraphQLString,
   GraphQLID,
   GraphQLInt,
-  GraphQLBoolean
+  GraphQLBoolean,
+  GraphQLInputObjectType,
+  GraphQLList
 } from 'graphql';
 
 import * as types from './types';
-import { userModel } from '../../models/index.js'
-import { ApiError, ApiErrorNames } from '../../error/api-errors'
-import utils from '../../utils/utils'
+import {userData} from '../../data/index';
 
-export const add = {
-  type: types.user,
+
+export const addUser = {
+  type: types.userType,
   args: {
     info: {
       name: 'info',
-      type: new GraphQLNonNull(types.userInput)
+      type: new GraphQLNonNull(types.userInputType)
     }
   },
   async resolve (root, params, options) {
-    if (!utils.isAccountValid(params.info.account) || !utils.isPasswordValid(params.info.password)) {
-      throw new ApiError(ApiErrorNames.ACCOUNT_PASSWORD_ERROR);
-    }
-
-    var user = await userModel.findOne({account:params.account});
-    if (user) {
-      throw new ApiError(ApiErrorNames.ACCOUNT_EXIST);
-    }
-
-    params.info.password = utils.sha1(params.info.password);
-    user = new userModel(params.info);
-    const newUser = await user.save();
-
-    if (!newUser) {
-      throw new ApiError(ApiErrorNames.UPDATE_FAIL);
-    }
-
+    const newUser = await userData.addUser(root, params);
     return newUser;
   }
 };
 
+export const addAdmin = {
+  type: types.userType,
+  args: {
+    user: {
+      name: 'user',
+      type: new GraphQLNonNull(types.adminInputType)
+    },
+    account:{
+      name: 'account',
+      type: new GraphQLNonNull(types.accountInputType)
+    }
+  },
+  async resolve (root, params, options) {
+    params.user_type = userData.types().admin;
+    const newUser = await userData.addUser(root, params);
+    return newUser;
+  }
+}
+
+export const deleteAdmin = {
+  type: new GraphQLList(GraphQLString),
+  args: {
+    ids: {type: new GraphQLList(GraphQLString)}
+  },
+  async resolve (root, params, options) {
+    params.user_type = userData.types().admin;
+    const ids = await userData.deleteUser(root, params);
+    return ids;
+  }
+}
+
+export const updateAdmin = {
+  type: types.userType,
+  args: {
+    fields: {type: types.adminInputType}
+  },
+  async resolve (root, params, options) {
+    return await userData.updateUser(userData.types().admin, params.fields);
+  }
+}
+
+export const addShopGuide = {
+  type: types.userType,
+  args: {
+    user: {
+      name: 'user',
+      type: new GraphQLNonNull(types.shopGuideInputType)
+    },
+    account:{
+      name: 'account',
+      type: new GraphQLNonNull(types.accountInputType)
+    }
+  },
+  async resolve (root, params, options) {
+    params.user_type = userData.types().shopGuide;
+    const newUser = await userData.addUser(root, params);
+    return newUser;
+  }
+}
+
+export const deleteShopGuide = {
+  type: new GraphQLList(GraphQLString),
+  args: {
+    ids: {type: new GraphQLList(GraphQLString)}
+  },
+  async resolve (root, params, options) {
+    params.user_type = userData.types().shopGuide;
+    const ids = await userData.deleteUser(root, params);
+    return ids;
+  }
+}
+
+export const updateShopGuide = {
+  type: types.userType,
+  args: {
+    fields: {type: types.shopGuideInputType}
+  },
+  async resolve (root, params, options) {
+    return await userData.updateUser(userData.types().shopGuide, params.fields);
+  }
+}
+
+export const addOperate = {
+  type: types.userType,
+  args: {
+    user: {
+      name: 'user',
+      type: new GraphQLNonNull(types.operateInputType)
+    },
+    account:{
+      name: 'account',
+      type: new GraphQLNonNull(types.accountInputType)
+    }
+  },
+  async resolve (root, params, options) {
+    params.user_type = userData.types().operate;
+    const newUser = await userData.addUser(root, params);
+    return newUser;
+  }
+}
+
+export const deleteOperate = {
+  type: new GraphQLList(GraphQLString),
+  args: {
+    ids: {type: new GraphQLList(GraphQLString)}
+  },
+  async resolve (root, params, options) {
+    params.user_type = userData.types().operate;
+    const ids = await userData.deleteUser(root, params);
+    return ids;
+  }
+}
+
+export const updateOperate = {
+  type: types.userType,
+  args: {
+    fields: {type: types.operateInputType}
+  },
+  async resolve (root, params, options) {
+    return await userData.updateUser(userData.types().operate, params.fields);
+  }
+}
+
+
+export const addProduction = {
+  type: types.userType,
+  args: {
+    user: {
+      name: 'user',
+      type: new GraphQLNonNull(types.productionInputType)
+    },
+    account:{
+      name: 'account',
+      type: new GraphQLNonNull(types.accountInputType)
+    }
+  },
+  async resolve (root, params, options) {
+    params.user_type = userData.types().production;
+    const newUser = await userData.addUser(root, params);
+    return newUser;
+  }
+}
+
+export const deleteProduction = {
+  type: new GraphQLList(GraphQLString),
+  args: {
+    ids: {type: new GraphQLList(GraphQLString)}
+  },
+  async resolve (root, params, options) {
+    params.user_type = userData.types().production;
+    const ids = await userData.deleteUser(root, params);
+    return ids;
+  }
+}
+
+export const updateProduction = {
+  type: types.userType,
+  args: {
+    fields: {type: types.productionInputType}
+  },
+  async resolve (root, params, options) {
+    return await userData.updateUser(userData.types().production, params.fields);
+  }
+}
+
 export const login = {
-  type: types.user,
+  type: types.userType,
   args: {
     account: {
       name: 'account',
@@ -54,23 +204,22 @@ export const login = {
       type: GraphQLString
     },
   },
-  async resolve (root, params, ctx) {
-    console.log(JSON.stringify(root.session))
-    console.log(JSON.stringify(params))
-    if (root.session.user){
-      console.log('login user session====' + JSON.stringify(root.session.user))
-      return root.session.user;
-    }
-
-    if (!utils.isAccountValid(params.account) || !utils.isPasswordValid(params.password)) {
-      throw new ApiError(ApiErrorNames.ACCOUNT_PASSWORD_ERROR);
-    }
-
-    const user = await userModel.findOne({account:params.account, password:utils.sha1(params.password)});
-    if (!user) {
-      throw new ApiError(ApiErrorNames.ACCOUNT_PASSWORD_ERROR);
-    }
-    root.session.user = user;
+  async resolve (ctx, params, options) {
+    let user = await userData.login(ctx, params);
     return user;
+  }
+};
+
+export const logout = {
+  type: types.logoutType,
+  args: {
+    id: {
+      name:'id',
+      type:GraphQLString
+    }
+  },
+  async resolve (ctx, params, options) {
+    let ret = await userData.logout(ctx, params);
+    return ret;
   }
 };

@@ -28,7 +28,7 @@ class FooterContainer extends BaseComponent {
 
   onRender() {
     return (
-      <Footer style={{ textAlign: 'center' }}>
+      <Footer style={{ textAlign: 'center', backgournd:'#e6e8ea' }}>
         <span>
           © 2016-2017 Bola Family.cn. All rights reserved.
         </span>

@@ -8,6 +8,11 @@ import baseUtils from '../../base/utils/Utils'
 const initialState = {
     testString: '',
     loginInfo: {logined:false},
+    menus:[],
+    routers: {},
+    routersIDMap:{},
+    currentNavKey:'0',
+    currentSelectMenu: {}
 };
 
 function doErrors(result) {
@@ -16,6 +21,8 @@ function doErrors(result) {
             results.push(result);
         } else if (result.code < 0) {
             result.message = '更新失败!';
+            results.push(result);
+        } else if (result.message) {
             results.push(result);
         }
     }
@@ -45,13 +52,46 @@ function doActions(state, action) {
             if (action.state === States.Fulfilled) {
                 if (result.code === 0) {
                     let info = {code:result.code, message:result.message, user:data.login};
-                    return Object.assign({}, state, { loginInfo: info });
+                    let _routers = {};
+                    let _routersIDMap = {};
+                    for(let _r of data.routers) {
+                        _routers[_r.url] = _r; 
+                        _routersIDMap[_r.id] = _r;
+                    }
+                    return Object.assign({}, state, { loginInfo: info, menus:data.menus, routers:_routers, routersIDMap:_routersIDMap });
                 } else {
                     let info = {code:result.code, message:result.message, user:null};
                     return Object.assign({}, state, { loginInfo: info });
                 }
             } else {
                 return Object.assign({}, state, { loginInfo: {loading:true} });
+            }
+            break;
+        break;
+        case ActionTypes.LOGOUT:
+            if (action.state === States.Fulfilled) {
+                if (result.code === 0) {
+                    let info = {code:result.code, message:result.message, user:null};
+                    return Object.assign({}, state, { loginInfo: info});
+                } else {
+                    return Object.assign({}, state);
+                }
+            } else {
+                return Object.assign({}, state);
+            }
+            break;
+        break;
+        case ActionTypes.SELECT_NAV:
+            if (action.state === States.Fulfilled) {
+                if (result.code === 0) {
+                    let key = data.key;
+
+                    return Object.assign({}, state, { currentNavKey: data.key});
+                } else {
+                    return Object.assign({}, state);
+                }
+            } else {
+                return Object.assign({}, state);
             }
             break;
         break;

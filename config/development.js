@@ -11,7 +11,7 @@ module.exports = {
 
   session: {
     key: '__LLSESSIONQQ__',
-    maxAge: 500000, // 一个小时
+    maxAge: 500000000, // 一个小时
     overwrite: false
   }
 }

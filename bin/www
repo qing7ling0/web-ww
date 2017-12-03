@@ -3,9 +3,8 @@
 /**
  * Module dependencies.
  */
-require('babel-core/register');
-
-var server = require('../src/server');
+require('babel-polyfill');
+var server = require('../lib/server');
 var debug = require('debug')('demo:server');
 var http = require('http');
 var fs = require('fs')

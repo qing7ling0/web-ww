@@ -18,6 +18,7 @@ import {
 } from './LoginContainer.styled'
 
 import Actions from '../../actions'
+import Navigation from '../../modules/Navigation'
 import BaseContainer from '../../components/BaseContainer'
 import FooterComponent from '../common/FooterComponent'
 import * as constants from '../../constants/Constants'
@@ -46,6 +47,7 @@ class LoginContainer extends BaseContainer {
 
   //在组件挂载之前调用一次。如果在这个函数里面调用setState，本次的render函数可以看到更新后的state，并且只渲染一次
   componentWillMount(){
+    this.navigation = new Navigation(this.props.history);
     // const {Load} = this.props;
     // Load();
   }
@@ -60,7 +62,7 @@ class LoginContainer extends BaseContainer {
   componentWillReceiveProps(nextProps){
     super.componentWillReceiveProps(nextProps);
     if (nextProps.loginInfo.code === 0) {
-      this.navigation.push("/main");
+      this.navigation.push("/home");
     }
   }
 

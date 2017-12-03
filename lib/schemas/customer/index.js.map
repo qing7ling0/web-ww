@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../src/schemas/customer/index.js"],"names":["queries","mutations"],"mappings":";;;;;;AACA;;IAAYA,O;;AACZ;;;;;;;;kBAEe,EAACA,gBAAD,EAAUC,8BAAV,E","file":"index.js","sourcesContent":["\r\nimport * as queries from './queries'\r\nimport mutations from './mutations'\r\n\r\nexport default {queries, mutations}"]}

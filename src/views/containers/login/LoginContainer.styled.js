@@ -27,11 +27,11 @@ export const Container = styled.div`
 export const LoginCard = styled(Card)`
   width: 350px;
   padding: 30px 20px;
-  margin-bottom: 10rem;
+  margin-bottom: 1rem;
 `
 
 export const LoginInput = styled(Input)`
-  margin: 6px 0;
+  margin: 0.06rem 0;
   border-radius: 0;
   > input {
     border-radius: 0;
@@ -39,7 +39,7 @@ export const LoginInput = styled(Input)`
 `
 
 export const BtnLogin = styled(Button)`
-  margin: 15px 0 10px 0;
+  margin: 0.15rem 0 0.1rem 0;
   width: 100%;
   border-radius: 0;
 `

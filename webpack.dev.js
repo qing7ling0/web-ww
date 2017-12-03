@@ -16,8 +16,9 @@ module.exports = merge(BaseConfig, {
   },
   devtool: 'source-map',
   devServer: {
-    contentBase: path.join(__dirname, 'src'),
-    hot: true
+    contentBase: 'http://localhost:8080/',
+    hot: true,
+    inline:true,
   },
   plugins: [
     new CleanWebpackPlugin(['public']),

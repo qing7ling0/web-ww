@@ -1,0 +1,201 @@
+import React, { Component } from 'react';
+import { connect } from 'react-redux'
+import {bindActionCreators} from 'redux'
+import moment from 'moment'
+
+import {
+  Card,
+  Icon,
+  Layout,
+  message,
+  Table,
+  Button
+} from 'antd'
+
+import {
+  Root,
+  LoginInput,
+  Container,
+  LoginCard,
+  BtnLogin
+} from './styled'
+
+import Actions from '../../../actions'
+import BaseListComponent from '../../common/BaseListComponent'
+import * as common from '../../../modules/common'
+import * as constants from '../../../constants/Constants'
+import CommonAddModal from './CommonAddModal'
+import CommonEditModal from './CommonEditModal'
+import { commonUtils } from '../../../modules/common';
+import { COMMON_TYPES, E_COMMON_TYPES } from './types'
+import * as optionsType from '../types'
+import utils from '../../../../utils/utils'
+
+class CommonListContainer extends Component {
+  // 构造函数，在创建组件的时候调用一次
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      addVisible:false,
+      editVisible:false,
+      page: 0,
+      selectRows:[]
+    }
+
+    this.searchWord = '';
+    this.options = [];
+    this.commonType=COMMON_TYPES[0];
+  }
+
+  //在组件挂载之前调用一次。如果在这个函数里面调用setState，本次的render函数可以看到更新后的state，并且只渲染一次
+  componentWillMount(){
+    for(let value of COMMON_TYPES) {
+      if (value.value === this.props.match.params.type) {
+        this.commonType = value;
+      }
+    }
+  }
+  
+  componentWillReceiveProps(nextProps){
+    if(nextProps.match.params.type !== this.props.match.params.type) {
+      for(let value of COMMON_TYPES) {
+        if (value.value === nextProps.match.params.type) {
+          this.commonType = value;
+        }
+      }
+      this.onReqList();
+    }
+  }
+
+  componentDidMount(){
+    // this.onReqList();
+    this.options = optionsType.getSalesBaseListOptions(this);
+  }
+
+  render() {
+    const list = this.currentList();
+    return (
+      <BaseListComponent
+        columns={this.options} 
+        dataSource={list} 
+        loading={this.props.loading}
+        onRowClick={this.onRowClick}
+        onBtnAddClicked={()=>{this.setState({addVisible:true});}}
+        onGetList={(pageInfo)=>{
+          this.onReqList();
+        }}
+        hasSearch={true}
+        searchPlaceholder={`请输入${this.commonType.label}`}
+        onSearch={(value)=>{
+          this.searchWord = value;
+          this.onReqList();
+        }}
+        onDelItems={this.onDelete}
+        onItemConver={this.onItemConver}
+        deleteIDS={this.props.deleteIDS}
+        addVisible={this.state.addVisible}
+        editVisible={this.state.editVisible}
+        addNode={
+          <CommonAddModal 
+            title={`添加${this.commonType.label}`} 
+            type={this.commonType} 
+            visible={this.state.addVisible}
+            onSubmitSuccess={this.onReqList}
+            onAdd={this.onAdd}
+            afterClose={()=>this.setState({addVisible:false})}/> 
+        }
+        editNode={
+          <CommonEditModal 
+            title={`编辑${this.commonType.label}`} 
+            data={this.state.editData} 
+            type={this.commonType} 
+            visible={this.state.editVisible} 
+            onSubmitSuccess={this.onReqList}
+            onEdit={this.onEdit}
+            afterClose={()=>this.setState({editVisible:false})}/> 
+          }
+      />
+    );
+  }
+
+  currentList = () => {
+    for(let key in this.props.sales) {
+      if (this.commonType.value.indexOf(key) !== -1) {
+        return this.props.sales[key];
+      }
+    }
+    return [];
+  }
+
+  onReqList = () => {
+    let con = null;
+    if (this.searchWord) {
+      con = {};
+      con.name = {$regex:`/${this.searchWord}/i`}
+    } 
+    if (this.commonType.colorType) {
+      con = con || {};
+      con.type = this.commonType.colorType;
+    }
+    this.props.reqGetSalesBaseList(this.commonType.tag, con);
+  }
+
+  onReqUpdate = (id, data) => {
+    if (this.commonType.colorType) {
+      data.type = this.commonType.colorType;
+    }
+    this.props.reqUpdateSalesBase(this.commonType.tag, id, data);
+  }
+  
+  onReqAdd = (data) => {
+    if (this.commonType.colorType) {
+      data.type = this.commonType.colorType;
+    }
+    this.props.reqAddSalesBase(this.commonType.tag, data);
+  }
+
+  onReqRemove = (ids) => {
+    this.props.reqDeleteSalesBase(this.commonType.tag, ids);
+  }
+
+  onItemConver = (item, index) => {
+    item.editor_time = moment(item.editor_time).format('YYYY-MM-DD HH:mm:ss');
+    return item;
+  }
+  
+  onDelete = (ids) => {
+    this.onReqRemove(ids);
+  }
+
+  onAdd = (values) => {
+    this.onReqAdd(values);
+  }
+
+  onEdit = (values) => {
+    values = utils.diffent(values, this.state.editData);
+    if (values) {
+      this.onReqUpdate(this.state.editData._id, values);
+    }
+  }
+
+  onRowClick = (record, index, event) => {
+    this.setState({editVisible:true, editData:record});
+  }
+}
+
+export default connect(
+  state => ({
+    sales:state.sales,
+    loading:state.sales.loading,
+    deleteIDS:state.sales.goodsBaseDeleteIDS
+  }),
+  (dispatch) => {
+    return bindActionCreators({
+      reqGetSalesBaseList: Actions.getSalesBaseList,
+      reqAddSalesBase: Actions.addSalesBase,
+      reqDeleteSalesBase: Actions.deleteSalesBase,
+      reqUpdateSalesBase: Actions.updateSalesBase
+    }, dispatch);
+  }
+)(CommonListContainer);

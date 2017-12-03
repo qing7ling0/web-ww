@@ -4,7 +4,6 @@ import { BaseH1, BaseLoading, ErrorTitle } from './BaseComponent.styled'
 
 import {H1} from './styled'
 
-import Navigation from '../modules/Navigation'
 
 class BaseComponent extends Component {
   // 构造函数，在创建组件的时候调用一次
@@ -14,7 +13,6 @@ class BaseComponent extends Component {
       loading: false,
       success: true
     }
-    this.navigation = new Navigation(this.props.history);
   }
 
   //在组件挂载之前调用一次。如果在这个函数里面调用setState，本次的render函数可以看到更新后的state，并且只渲染一次
