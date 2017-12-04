@@ -102,16 +102,16 @@ module.exports.maintainPriceModel = mongoose.model('maintain_price', maintainPri
 const baseOrderFields = {
   type: {type:String, description:'类型'},
   source: {type:String, description:'来源'},
-  shop: {type:Schema.Types.ObjectId, ref:'shop', decription:'店铺'},
-  guide: {type:Schema.Types.ObjectId, ref:'user_shop_guide', decription:'导购'},
-  customer: {type:Schema.Types.ObjectId, ref:'customer', decription:'客户'},
-  count: {type:Number, decription:'数量'},
   pay:{type:Number, decription:'支付金额'},
   payType:{type:String, decription:'支付方式'},
   order_state: {type:String, decription:'订单状态'},
   transport_company: {type:String, decription:'快递公司'},
   transport_id:{type:String, decription:'快递单号'},
   transport_price:{type:Number, decription:'快递费用'},
+  transport_name: {type:String, decription:'收货人'},
+  transport_phone: {type:String, decription:'电话'},
+  transport_address: {type:String, decription:'收货地址'},
+  transport_zipcode: {type:String, decription:'邮编'},
   remark:{type:String, ddecription:'备注'},
   ...baseFields
 }
@@ -119,10 +119,19 @@ const baseOrderFields = {
 var orderShoesSchema = new Schema({
   ...baseOrderFields,
   goods: {type:Schema.Types.ObjectId, ref:'goods_shoes', decription:'商品'},
+  shop: {type:Schema.Types.ObjectId, ref:'shop', decription:'店铺'},
+  guide: {type:Schema.Types.ObjectId, ref:'user_shop_guide', decription:'导购'},
+  customer: {type:Schema.Types.ObjectId, ref:'customer', decription:'客户'},
+  count: {type:Number, decription:'数量'},
   xieXuan:{type:String, decription:'鞋楦型'},
   xieGen:{type:String, decription:'鞋跟型'},
-  left_foot: {type:Schema.Types.ObjectId, ref:'foot', decription:'左脚'},
-  right_foot: {type:Schema.Types.ObjectId, ref:'foot', decription:'右脚'},
+  foot_size: {type: Number, description:'尺码'},
+  left_length: {type: Number, description:'左脚长度'},
+  left_zhiWei: {type: Number, decription:'左脚趾围'},
+  left_fuWei: {type: Number, decription:'左脚附维'},
+  right_length: {type: Number, description:'右脚长度'},
+  right_zhiWei: {type: Number, decription:'右脚趾围'},
+  right_fuWei: {type: Number, decription:'右脚附维'},
 });
 module.exports.orderShoesModel = mongoose.model('order_shoes', orderShoesSchema);
 

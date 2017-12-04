@@ -18,4 +18,5 @@ export const FormItemNormal = styled(Form.Item)`
   font-size: 0.2rem;
   font-weight: 500;
   color: #000;
+  ${props => props.labelLeft ? 'div {text-align:left;}' : ''}
 `

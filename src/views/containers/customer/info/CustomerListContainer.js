@@ -57,7 +57,7 @@ class CustomerListContainer extends Component {
       { title: '电话', dataIndex: 'phone', key: 'phone'},
       { title: '性别', dataIndex: 'sex', key: 'sex'},
       { title: '生日', dataIndex: 'birthday', key: 'birthday'},
-      { title: 'vip卡号', dataIndex: 'vip_card', key: 'vip_card'},
+      { title: '微信', dataIndex: 'weixin', key: 'weixin'},
       { title: '开卡门店', dataIndex: 'vip_card_shop_label', key: 'vip_card_shop_label'},
       { title: '开卡人员', dataIndex: 'vip_card_shop_guide_label', key: 'vip_card_shop_guide_label'},
       { title: 'vip等级', dataIndex: 'vip_level', key: 'vip_level'},

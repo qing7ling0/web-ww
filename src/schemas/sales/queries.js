@@ -67,3 +67,24 @@ export const goodsShoesList = {
     return await salesData.getGoodsShoesList({page:params.page, pageSize:params.pageSize}, {conditions:params.conditions})
 	}
 }
+
+export const goodsShoesList = {
+	type: new GraphQLObjectType({
+    name: 'goodsShoesList',
+    fields: {
+      page: {type:commonFields.defaultPageType},
+      list: {type:new GraphQLList(types.goodsShoesType)}
+    }
+  }),
+  args: {
+    page: {type: GraphQLInt},
+    pageSize: {type: GraphQLInt},
+    conditions: {type:GraphQLString}
+  },
+	async resolve (root, params, options) {
+    if (params.conditions) {
+      params.conditions = commonUtils.urlString2Conditions(params.conditions);
+    }
+    return await salesData.getGoodsShoesList({page:params.page, pageSize:params.pageSize}, {conditions:params.conditions})
+	}
+}

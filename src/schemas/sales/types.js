@@ -147,14 +147,17 @@ export const orderShoesInputFields = {
   count: {type:GraphQLInt, decription:'数量'},
   pay: {type:GraphQLFloat, decription:'支付金额'},
   pay_type: {type:GraphQLString, decription:'支付方式'},
-  xieXuan: {type:GraphQLString, decription:'鞋楦型'},
-  xieGen: {type:GraphQLString, decription:'鞋跟型'},
   order_state: {type:GraphQLString, decription:'订单状态'},
   transport_company: {type:GraphQLString, decription:'快递公司'},
   transport_id: {type:GraphQLString, decription:'快递单号'},
   transport_price: {type:GraphQLFloat, decription:'快递费用'},
+  transport_name: {type:GraphQLString, decription:'收货人'},
+  transport_phone: {type:GraphQLString, decription:'电话'},
+  transport_address: {type:GraphQLString, decription:'收货地址'},
+  transport_zipcode: {type:GraphQLString, decription:'邮编'},
   remark: {type:GraphQLString, ddecription:'备注'},
 };
+
 export const orderShoesType = new GraphQLObjectType({
   name: 'orderShoesType',
   fields: {
@@ -163,8 +166,15 @@ export const orderShoesType = new GraphQLObjectType({
     guide: {type:userTypes.userShopGuideType, decription:'导购'},
     customer: {type:customerTypes.customerType, decription:'客户'},
     goods: {type:goodsShoesType, decription:'商品'},
-    left_foot: {type:customerTypes.footType, decription:'左脚'},
-    right_foot: {type:customerTypes.footType, decription:'右脚'},
+    xieXuan: {type:GraphQLString, decription:'鞋楦型'},
+    xieGen: {type:GraphQLString, decription:'鞋跟型'},
+    foot_size: {type: GraphQLFloat, description:'尺码'},
+    left_length: {type: GraphQLFloat, description:'左脚长度'},
+    left_zhiWei: {type: GraphQLFloat, decription:'左脚趾围'},
+    left_fuWei: {type: GraphQLFloat, decription:'左脚附维'},
+    right_length: {type: GraphQLFloat, description:'右脚长度'},
+    right_zhiWei: {type: GraphQLFloat, decription:'右脚趾围'},
+    right_fuWei: {type: GraphQLFloat, decription:'右脚附维'},
     ...orderShoesInputFields,
     ...commonFields.defaultCreateFields
   }
@@ -176,8 +186,15 @@ export const orderShoesInputType = new GraphQLInputObjectType({
     guide: {type:GraphQLString, decription:'导购'},
     customer: {type:GraphQLString, decription:'客户'},
     goods: {type:GraphQLString, decription:'商品'},
-    left_foot: {type:GraphQLString, decription:'左脚'},
-    right_foot: {type:GraphQLString, decription:'右脚'},
+    xieXuan: {type:GraphQLString, decription:'鞋楦型'},
+    xieGen: {type:GraphQLString, decription:'鞋跟型'},
+    foot_size: {type: GraphQLFloat, description:'尺码'},
+    left_length: {type: GraphQLFloat, description:'左脚长度'},
+    left_zhiWei: {type: GraphQLFloat, decription:'左脚趾围'},
+    left_fuWei: {type: GraphQLFloat, decription:'左脚附维'},
+    right_length: {type: GraphQLFloat, description:'右脚长度'},
+    right_zhiWei: {type: GraphQLFloat, decription:'右脚趾围'},
+    right_fuWei: {type: GraphQLFloat, decription:'右脚附维'},
     ...orderShoesInputFields
   }
 });

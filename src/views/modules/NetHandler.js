@@ -225,6 +225,15 @@ class NetHandler {
     return netUtils.graphqlJson(config.GetServerAddress() + '/api', mut);
   }
 
+  static getLastCustomerOrderInfo(tag, type, id) {
+    let query = `
+      query Query {
+        lastCustomerOrder(customerId:"${id}", type:"${tag}")${type}
+      }
+    `;
+    return netUtils.graphqlJson(config.GetServerAddress() + '/api', query);
+  }
+
   static  getGoodsShoesList(pageIndex, pageSize=constants.DEFAULT_PAGE_SIZE, conditions) {
     let _conditions = '';
     if (conditions) {

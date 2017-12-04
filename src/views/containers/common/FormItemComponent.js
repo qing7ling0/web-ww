@@ -11,7 +11,7 @@ const AutoCompleteOption = AutoComplete.Option;
 
 import * as constants from '../../constants/Constants'
 
-import {FormItemLabel,FormItemNormal} from './common.styled'
+import {FormItemLabel,FormItemNormal,FormItemLabelLeft} from './common.styled'
 
 const defaultFormItemLayout = {
   labelCol: { span: 6 },
@@ -73,10 +73,14 @@ export default class FormItemComponent extends Component {
           <Select {...childOptions}>
             {
               options.selectItems.map((item,index) => {
+                let haId = {}
+                if (item._id) {
+                  haId ={haId:item._id}
+                } 
                 if (item.render) {
-                  return <Option key={item.value} value={item.value}>{item.render(item,index)}</Option>
+                  return <Option key={item.value} value={item.value} {...haId}>{item.render(item,index)}</Option>
                 } else {
-                  return <Option key={item.value} value={item.value}>{item.label}</Option>
+                  return <Option key={item.value} value={item.value} {...haId}>{item.label}</Option>
                 }
               })
             }

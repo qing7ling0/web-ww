@@ -18,7 +18,7 @@ import {
   phone: { type: GraphQLString, description:'电话' },
   sex: { type:GraphQLString },
   birthday: { type: GraphQLString },
-  vip_card: { type: GraphQLString },
+  weixin: { type: GraphQLString },
   vip_card_date: {type: GraphQLString, description:'开卡日期'},
   vip_card_shop: {type: GraphQLString, description:'开卡门店'},
   vip_card_guide: {type: GraphQLString, description:'开卡导购'},

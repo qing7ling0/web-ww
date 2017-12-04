@@ -57,7 +57,7 @@ class CustomerAddModal extends Component {
       {type:'select', name:'sex', label:'性别', selectItems:constants.SEX_DATA, options:{defaultActiveFirstOption:true}, rule:{required:true}},
       {type:'datePicker', name:'birthday', label:'生日', rule:{required:true}},
       {type:'input', name:'phone', label:'电话', itemOptions:{hasFeedback:true}, rule:{required:true, validator:this.checkPhone}},
-      {type:'input', name:'vip_card', label:'vip卡号', itemOptions:{hasFeedback:true}}
+      {type:'input', name:'weixin', label:'微信号', itemOptions:{hasFeedback:true}}
     ];
     this.setState({visible:this.props.visible})
   }

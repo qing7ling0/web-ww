@@ -11,7 +11,8 @@ import ContentHeaderComponent from '../../common/ContentHeaderComponent'
 import DataContentComponent from '../../common/DataContentComponent'
 
 import OrderListContainer from './OrderListContainer'
-import OrderProfileContianer from './OrderProfileContainer'
+import OrderProfileContainer from './OrderProfileContainer'
+import OrderAddContainer from './OrderAddContainer'
 import {ORDER_TYPES} from './types'
 
 class OrderContainer extends Component {
@@ -22,6 +23,7 @@ class OrderContainer extends Component {
       selectedKeys: [ORDER_TYPES[0].tag]
     }
   }
+  
   componentWillMount(){
     const { location } = this.props.history;
     const pathSnippets = location.pathname.split('/').filter(i => i);
@@ -54,10 +56,10 @@ class OrderContainer extends Component {
         <ContentHeaderComponent willSelectNavKey={constants.MENU_IDS.salesOrder} history={this.props.history} contentRender={this.renderHeaderContent} />
         <ContentContainer>
           <Switch>
-            <Route exact path={match.path} component={OrderListContainer} />
-            <Redirect from={match.path} to={match.path+'/'+ORDER_TYPES[0].tag} />
-            <Route exact path={`${match.path}/:type`} component={OrderListContainer} />
-            <Route path={`${match.path}/:type/:id`} component={OrderProfileContianer} />
+            <Redirect exact from={match.path} to={match.path+'/list/'+ORDER_TYPES[0].tag} />
+            <Route exact path={`${match.path}/list/:type`} component={OrderListContainer} />
+            <Route path={`${match.path}/profile/:type/:id`} component={OrderProfileContainer} />
+            <Route path={`${match.path}/add/:type`} component={OrderAddContainer} />
           </Switch>
         </ContentContainer>
       </Root>

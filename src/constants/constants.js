@@ -106,3 +106,6 @@ module.exports.COLOR_TYPE_IN = '2';
 module.exports.COLOR_TYPE_BOTTOM = '3';
 module.exports.COLOR_TYPE_BOTTOM_SIDE = '4';
 module.exports.COLOR_TYPE_MATERIAL = '5';
+
+module.exports.RIGHT_FOOT_ID = '1';
+module.exports.LEFT_FOOT_ID = '2';

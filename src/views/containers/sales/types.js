@@ -10,11 +10,12 @@ const OpeateBtn = styled(Button)`
   margin: 0 0.05rem;
 `
 
-const listToSelectOptions = (list) => {
+const listToSelectOptions = (list, valueFormat, labelFormat) => {
   return list.map((item) => {
-    item.value = item._id;
-    item.label = item.name;
-    return item;
+    let ret = {_id:item._id};
+    ret.value = valueFormat ? valueFormat(item) : item._id;
+    ret.label = labelFormat ? labelFormat(item) : item.name;
+    return ret;
   })
 }
 
@@ -326,46 +327,110 @@ export const getOrderListOptions = function(target) {
 }
 
 export const getOrderBaseOptions = function(target) {
+  let valuePhoneList = listToSelectOptions(target.props.customerList, (item)=>item.phone, (item)=>item.name+'-'+item.phone);
+  let valueNameList = listToSelectOptions(target.props.customerList, (item)=>item.name, (item)=>item.name+'-'+item.phone);
   return [
-    {type:'input', name:'type', label:'类型', itemOptions:{hasFeedback:true}, rule:{required:true}},
-    {type:'select', name:'source', label:'来源', selectItems:constants.BASE_CONSTANTS.ORDER_SOURCE, options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    {type:'select', name:'shop', label:'门店', selectItems:listToSelectOptions(target.props.shopList), options:{defaultActiveFirstOption:true}, rule:{required:true}},    
-    {type:'select', name:'guide', label:'导购', selectItems:listToSelectOptions(target.props.guideList), options:{defaultActiveFirstOption:true}, rule:{required:true}},    
-    {type:'select', name:'customer', label:'客户', selectItems:listToSelectOptions(target.props.customerList), options:{defaultActiveFirstOption:true}, rule:{required:true}},    
-    {type:'select', name:'goods', label:'商品', selectItems:listToSelectOptions(target.props.goodsShoesList), options:{defaultActiveFirstOption:true}, rule:{required:true}},    
-    {type:'number', name:'count', label:'数量', itemOptions:{hasFeedback:true}, rule:{required:true}},
-    {type:'number', name:'pay', label:'支付金额', options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, itemOptions:{hasFeedback:true}, rule:{required:true}},
-    {type:'select', name:'pay_type', label:'支付方式', selectItems:constants.BASE_CONSTANTS.PAY_TYPE, options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    {type:'input', name:'xieXuan', label:'鞋楦型', itemOptions:{hasFeedback:true}, rule:{required:true}},
-    {type:'input', name:'xieGen', label:'鞋跟型', itemOptions:{hasFeedback:true}, rule:{required:true}},
-    {type:'select', name:'transport_company', label:'快递公司', selectItems:constants.BASE_CONSTANTS.TRANSPORT_COMPANYS, options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    {type:'input', name:'transport_id', label:'快递单号', itemOptions:{hasFeedback:true}, rule:{required:true}},
-    {type:'number', name:'transport_price', label:'快递费用', options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, itemOptions:{hasFeedback:true}, rule:{required:true}},
-    {type:'textarea', name:'remark', label:'备注', itemOptions:{hasFeedback:true}, rule:{required:true}},
-  
+    {
+      index:1, title:'基础信息', options:[
+        {type:'input', name:'type', label:'类型', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+        {type:'select', name:'source', label:'来源', itemOptions:{labelLeft:true}, selectItems:constants.BASE_CONSTANTS.ORDER_SOURCE, options:{defaultActiveFirstOption:true}, rule:{required:true}},
+        {type:'select', name:'shop', label:'门店', itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(target.props.shopList), options:{defaultActiveFirstOption:true, showSearch:true, optionFilterProp:'children'}, rule:{required:true}},    
+        {type:'select', name:'guide', label:'导购', itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(target.props.guideList), options:{defaultActiveFirstOption:true, showSearch:true, optionFilterProp:'children'}, rule:{required:true}},    
+        {type:'select', name:'customer', label:'客户', itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(target.props.customerList), options:{defaultActiveFirstOption:true, showSearch:true, optionFilterProp:'children'}, rule:{required:true}},            
+      ]
+    },
+    {
+      index:1, title:'客户信息', options:[
+        {
+          type:'select', name:'phone', label:'手机号', 
+          itemOptions:{labelLeft:true}, 
+          selectItems:valuePhoneList, 
+          decoratorOptions:{initialValue:target.state.customerPhone},
+          options:{
+            defaultActiveFirstOption:true,
+            mode:"combobox", 
+            filterOption:false, 
+            onChange:target.onCustomerPhoneChange, 
+            onFocus:target.onCustomerPhoneFocus,
+            onSelect:target.onCustomerPhoneSelect,
+          }, 
+          rule:{required:true}
+        },            
+        {
+          type:'select', name:'name', label:'姓名',
+          itemOptions:{labelLeft:true}, 
+          selectItems:valueNameList, 
+          decoratorOptions:{initialValue:target.state.customerName},
+          options:{
+            defaultActiveFirstOption:true, 
+            mode:"combobox", 
+            filterOption:false, 
+            onChange:target.onCustomerNameChange, 
+            onFocus:target.onCustomerNameFocus,
+            onSelect:target.onCustomerNameSelect,
+          }, 
+          rule:{required:true}
+        },            
+        {type:'select', name:'sex', label:'性别', itemOptions:{labelLeft:true}, selectItems:constants.BASE_CONSTANTS.SEX_DATA, options:{defaultActiveFirstOption:true}, rule:{required:true}},
+        {type:'datePicker', name:'birthday', label:'生日', itemOptions:{labelLeft:true}, rule:{required:true}},
+        {type:'input', name:'weixin', label:'微信号', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+      ]
+    },
+    {
+      index:2, title:'脚型数据', 
+      options:[
+        {type:'input', name:'foot_size', label:'尺码', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+      ],
+      left:{title:'左脚', options:[
+        {type:'input', name:'left_length', label:'长度', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+        {type:'input', name:'left_zhiWei', label:'趾围', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},    
+        {type:'input', name:'left_fuWei', label:'附维', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},    
+      ]},
+      right:{title:'右脚', options:[
+        {type:'input', name:'right_length', label:'长度', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+        {type:'input', name:'right_zhiWei', label:'趾围', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},    
+        {type:'input', name:'right_fuWei', label:'附维', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},    
+      ]}
+    },
+    {
+      index:9, title:'收货地址', options:[
+        {type:'input', name:'transport_name', label:'收货人', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+        {type:'input', name:'transport_address', label:'收货地址', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+        {type:'input', name:'transport_phone', label:'收货电话', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+        {type:'input', name:'transport_zipcode', label:'邮编', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+      ]
+    },
+    {
+      index:10, title:'订单信息', options:[
+        {type:'number', name:'pay', label:'支付金额', options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+        {type:'select', name:'pay_type', label:'支付方式', itemOptions:{labelLeft:true}, selectItems:constants.BASE_CONSTANTS.PAY_TYPE, options:{defaultActiveFirstOption:true}, rule:{required:true}},
+        {type:'select', name:'transport_company', label:'快递公司', itemOptions:{labelLeft:true}, selectItems:constants.BASE_CONSTANTS.TRANSPORT_COMPANYS, options:{defaultActiveFirstOption:true}, rule:{}},
+        {type:'input', name:'transport_id', label:'快递单号', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{}},
+        {type:'number', name:'transport_price', label:'快递费用', options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, itemOptions:{hasFeedback:true, labelLeft:true}, rule:{}},
+        {type:'textarea', name:'remark', label:'备注', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{}},
+      ]
+    }
   ];
 } 
 export const getOrderShoesOptions = function(target) {
   let options = getOrderBaseOptions(target);
-  return options;
+  return options.concat([
+    {
+      index:3, title:'商品信息', options:[
+        {type:'select', name:'goods', label:'商品', itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(target.props.goodsShoesList), options:{defaultActiveFirstOption:true, showSearch:true, optionFilterProp:'children'}, rule:{required:true}},    
+        {type:'number', name:'count', label:'数量', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+        {type:'input', name:'xieXuan', label:'鞋楦型', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+        {type:'input', name:'xieGen', label:'鞋跟型', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+      ]
+    }
+  ]);
 }
 export const getOrderBeltOptions = function(target) {
   let options = getOrderBaseOptions(target);
-  return options.concat([
-    {type:'select', name:'shop', label:'门店', selectItems:listToSelectOptions(target.props.shopList), options:{defaultActiveFirstOption:true}, rule:{required:true}},    
-    {type:'select', name:'guide', label:'导购', selectItems:listToSelectOptions(target.props.guideList), options:{defaultActiveFirstOption:true}, rule:{required:true}},    
-    {type:'select', name:'customer', label:'客户', selectItems:listToSelectOptions(target.props.customerList), options:{defaultActiveFirstOption:true}, rule:{required:true}},    
-    {type:'select', name:'goods', label:'商品', selectItems:listToSelectOptions(target.props.goodsShoesList), options:{defaultActiveFirstOption:true}, rule:{required:true}},    
-  ]);
+  return options;
 }
 export const getOrderWatchStrapOptions = function(target) {
-  let options = getOrderBaseOptions(target);
-  return options.concat([
-    {type:'select', name:'shop', label:'门店', selectItems:listToSelectOptions(target.props.shopList), options:{defaultActiveFirstOption:true}, rule:{required:true}},    
-    {type:'select', name:'guide', label:'导购', selectItems:listToSelectOptions(target.props.guideList), options:{defaultActiveFirstOption:true}, rule:{required:true}},    
-    {type:'select', name:'customer', label:'客户', selectItems:listToSelectOptions(target.props.customerList), options:{defaultActiveFirstOption:true}, rule:{required:true}},    
-    {type:'select', name:'goods', label:'商品', selectItems:listToSelectOptions(target.props.goodsShoesList), options:{defaultActiveFirstOption:true}, rule:{required:true}},    
-  ]);
+  return options;
 }
 export const getOrderAddOptions = function(target) {
   if (target.orderType.tag === orderTypes.E_ORDER_TYPES.shoes) {

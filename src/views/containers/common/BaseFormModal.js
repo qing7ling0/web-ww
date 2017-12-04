@@ -71,7 +71,7 @@ class BaseFormModal extends Component {
         confirmLoading={this.state.confirmLoading}
         afterClose={this.props.onAfterClose || null}
       >
-        <NormalForm onSubmit={this.onSubmit} layout="inline">
+        <NormalForm onSubmit={this.onSubmit}>
           {
             this.props.options.map((item, index) => {
               return <FormItemComponent key={item.name} options={item} form={this.props.form} />

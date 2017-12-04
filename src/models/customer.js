@@ -9,10 +9,10 @@ var Schema = mongoose.Schema;
 
 export const customerFields = {
   name: {type:String, description:'姓名'},
-  phone: { type: String, description:'电话' },
+  phone: { type: String, description:'电话', unique: true},
   sex: { type:String},
   birthday: { type: Date, default:moment().format('YYYY-MM-DD') },
-  vip_card: {type:String},
+  weixin: {type:String},
   vip_card_date: {type: Date, default:moment().format('YYYY-MM-DD'), description:'开卡日期'},
   vip_card_shop: {type: String, description:'开卡门店'},
   vip_card_guide: {type: String, description:'开卡导购'},

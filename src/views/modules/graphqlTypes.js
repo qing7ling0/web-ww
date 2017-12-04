@@ -83,6 +83,7 @@ export const customerType = `{
   phone,
   sex,
   birthday,
+  weixin,
   vip_card_date,
   vip_card_shop,
   vip_card_guide,
@@ -166,12 +167,14 @@ export const orderBaseFields = `
   count,
   pay,
   pay_type,
-  xieXuan,
-  xieGen,
   order_state,
   transport_company,
   transport_id,
   transport_price,
+  transport_name,
+  transport_phone,
+  transport_address,
+  transport_zipcode,
   remark
 `
 export const orderShoseType = `{
@@ -180,8 +183,15 @@ export const orderShoseType = `{
   guide{_id, name},
   customer{_id, name},
   goods{_id, name},
-  left_foot ${footType},
-  right_foot ${footType},
+  xieXuan,
+  xieGen,
+  foot_size,
+  left_length,
+  left_zhiWei,
+  left_fuWei,
+  right_length,
+  right_zhiWei,
+  right_fuWei,
 }
 `
 

@@ -2,6 +2,7 @@ import { createAction } from 'redux-actions';
 import * as types from '../constants/ActionTypes';
 import config from '../constants/Config.js';
 import netHandler from '../modules/NetHandler'
+import * as graphqlTypes from '../modules/graphqlTypes'
 
 export const getCustomerList = createAction(types.CUSTOMER_LIST_GET, netHandler.getCustomerList);
 export const addCustomer = createAction(types.CUSTOMER_ADD, netHandler.addCustomer);

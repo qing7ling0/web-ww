@@ -21,14 +21,16 @@ import {
 } from './styled'
 
 import Actions from '../../../actions'
-import BaseListComponent from '../../common/BaseListComponent'
+import * as config from '../../../constants/Config'
 import * as common from '../../../modules/common'
 import * as constants from '../../../constants/Constants'
-import OrderAddModal from './OrderAddModal'
-import OrderEditModal from './OrderEditModal'
 import { commonUtils } from '../../../modules/common';
 import { ORDER_TYPES } from './types'
 import * as optionsType from '../types'
+
+import BaseListComponent from '../../common/BaseListComponent'
+import OrderAddModal from './OrderAddModal'
+import OrderEditModal from './OrderEditModal'
 
 class OrderListContainer extends Component {
   // 构造函数，在创建组件的时候调用一次
@@ -39,10 +41,11 @@ class OrderListContainer extends Component {
       addVisible:false,
       editVisible:false,
       page: 0,
-      selectRows:[]
+      selectRows:[],
     }
 
     this.searchWord = '';
+    this.routerPath = common.findRouterById(config.Routers, constants.MENU_IDS.salesOrder).url;
   }
 
   //在组件挂载之前调用一次。如果在这个函数里面调用setState，本次的render函数可以看到更新后的state，并且只渲染一次
@@ -79,7 +82,10 @@ class OrderListContainer extends Component {
         dataSource={list} 
         loading={this.props.loading}
         onRowClick={this.onRowClick}
-        onBtnAddClicked={()=>{this.setState({addVisible:true});}}
+        onBtnAddClicked={()=>{
+          this.props.history.push(this.routerPath+'/add/' + this.props.match.params.type);
+          // this.setState({addVisible:true});
+        }}
         pageInfo={this.props.pageInfo}
         onGetList={(pageInfo)=>{
           this.onReqList(pageInfo);

@@ -66,3 +66,6 @@ export const deleteOrder = createAction(types.ORDER_DELETE, (query, ids) => {
 export const updateOrder = createAction(types.ORDER_UPDATE, (query, id, data) => {
   return netHandler.updateDefault(query, id, data);
 })
+export const getLastCustomerOrderInfo = createAction(types.LAST_CUSTOMER_ORDER_INFO, (tag, query, id) => {
+  return netHandler.getLastCustomerOrderInfo(query, graphqlTypes.orderTypes[tag], id);
+})
