@@ -50,12 +50,7 @@ class CustomerData {
   }
 
   async find(conditions, projection, options) {
-    let customer = await customerModel.findOne(conditions, projection, options);
-    if (customer) {
-      return customer;
-    } else {
-      throw new ApiError(ApiErrorNames.UPDATE_FAIL);
-    }
+    return await customerModel.findOne(conditions, projection, options);
   }
 
   async add(doc, options={}) {

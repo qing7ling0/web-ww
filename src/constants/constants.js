@@ -96,6 +96,21 @@ module.exports.COLOR_TYPE = [
   {value:'5', label:'原材料'},
 ]
 
+const E_ORDER_TYPE = {
+  shoes:'1',belt:'2',watchStrap:'3',maintain:'4',fuliao:'5',ornament:'6'
+}
+module.exports.E_ORDER_TYPE = E_ORDER_TYPE;
+
+// order type
+module.exports.ORDER_TYPE = [
+  {value:E_ORDER_TYPE.shoes, label:'鞋'},
+  {value:E_ORDER_TYPE.belt, label:'皮带'},
+  {value:E_ORDER_TYPE.watchStrap, label:'表带'},
+  {value:E_ORDER_TYPE.maintain, label:'护理'},
+  {value:E_ORDER_TYPE.fuliao, label:'辅料'},
+  {value:E_ORDER_TYPE.ornament, label:'配饰'},
+]
+
 module.exports.TRANSPORT_COMPANYS = transportCompanys.companys; // 快递公司
 module.exports.ACCOUNT_MAX_LENGTH = 20; // 账号密码最大长度
 module.exports.ACCOUNT_MIN_LENGTH = 5; // 账号密码最小长度

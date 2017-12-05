@@ -75,7 +75,7 @@ class OrderListContainer extends Component {
 
   render() {
     const columns = optionsType.getOrderListOptions(this);
-    const list = this.props.sales[this.orderType.value];
+    const list = this.props.orderList;
     return (
       <BaseListComponent
         columns={columns} 
@@ -123,35 +123,27 @@ class OrderListContainer extends Component {
       />
     );
   }
-  
-  currentList = () => {
-    for(let key in this.props.sales) {
-      if (this.orderType.value.indexOf(key) !== -1) {
-        return this.props.sales[key];
-      }
-    }
-    return [];
-  }
 
   onReqList = (pageInfo) => {
     let con = null;
     if (this.searchWord) {
       con = {};
+      con.type=this.orderType.id;
       con.name = {$regex:`/${this.searchWord}/i`}
     }
-    this.props.reqGetOrderList(this.orderType.tag, this.orderType.value, con, pageInfo);
+    this.props.reqGetOrderList(this.orderType.query, con, pageInfo);
   }
 
   onReqUpdate = (id, data) => {
-    this.props.reqUpdateOrder(this.orderType.tag, id, data);
+    this.props.reqUpdateOrder(id, data);
   }
   
   onReqAdd = (data) => {
-    this.props.reqAddOrder(this.orderType.tag, this.orderType.value, data);
+    this.props.reqAddOrder(this.orderType.query, data);
   }
 
   onReqRemove = (ids) => {
-    this.props.reqDeleteOrder(this.orderType.value, ids);
+    this.props.reqDeleteOrder(this.orderType.query, ids);
   }
 
   onDelete = (ids) => {

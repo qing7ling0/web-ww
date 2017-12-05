@@ -70,8 +70,13 @@ class OrderAddContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps){
-    if (nextProps.orderType !== this.props.nextProps)
-      this.orderType = nextProps.orderType;
+    if(nextProps.match.params.type !== this.props.match.params.type) {
+      for(let value of ORDER_TYPES) {
+        if (value.tag === nextProps.match.params.type) {
+          this.orderType = value;
+        }
+      }
+    }
   }
   // <BaseFormModal
   //   title={this.props.title}
@@ -137,7 +142,14 @@ class OrderAddContainer extends Component {
             sm: { span: 16, offset: 8 },
           }}
         >
-          <Button type="primary" htmlType="submit">提交</Button>
+          <Button type="primary" onClick={()=>{
+            this.props.form.validateFields((err, values) => {
+              if (!err) {
+                this.setState({submitLoading:true});
+                this.onSubmit(err, values);
+              }
+            });
+          }}>提交</Button>
         </FormItem>
       </NormalForm>
     );
@@ -219,49 +231,18 @@ class OrderAddContainer extends Component {
 
   onSubmit = (err, values) => {
     if (!err) {
-      if (this.props.onAdd) {
-        let order = {
-          type:values.type,
-          source:values.source,
-          shop:values.shop,
-          guide:values.guide,
-          pay:values.pay,
-          pay_type:values.pay_type,
-          transport_company:values.transport_company,
-          transport_id:valuse.transport_id,
-          transport_price:values.transport_price,
-          remark:valuse.remark
-        };
-
-        let customer = {
-          name:values.name,
-          phone:values.phone,
-          sex:values.sex,
-          birthday:moment(values.birthday).format('YYYY-MM-DD'),
-          weixin:values.weixin
+      let order = {type:this.orderType.id};
+      let customer = {};
+      for(let key in values) {
+        if (key === 'name' || key ==='phone' || key==='sex' || key==='weixin') {
+          customer[key] = values[key];
+        } else if (key === 'birthday') {
+          customer[key] = moment(values[key]).format('YYYY-MM-DD');
+        } else {
+          order[key] = values[key];
         }
-
-        let left_foot = {
-          type:constants.BASE_CONSTANTS.LEFT_FOOT_ID,
-          size:values.foot_size,
-          length:values.l_length,
-          zhiWei:values.l_zhiWei,
-          fuWei:values.l_fuWei,
-        }
-        
-        let right_foot = {
-          type:constants.BASE_CONSTANTS.RIGHT_FOOT_ID,
-          size:values.foot_size,
-          length:values.r_length,
-          zhiWei:values.r_zhiWei,
-          fuWei:values.r_fuWei,
-        }
-
-        let doc = {
-          order, customer, leftFoot, rightFoot
-        }
-        this.props.reqAddOrder(this.orderType.tag, this.orderType.value, doc);
       }
+      this.props.reqAddOrder(this.orderType.query, order);
     }
   }
 }

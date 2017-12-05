@@ -3,6 +3,7 @@ import * as types from '../constants/ActionTypes';
 import config from '../constants/Config.js';
 import netHandler from '../modules/NetHandler'
 import * as graphqlTypes from '../modules/graphqlTypes'
+import * as orderTypes from '../modules/orderTypes'
 
 export const getGoodsShoesList = createAction(types.GOODS_SHOES_LIST_GET, netHandler.getGoodsShoesList);
 export const addGoodsShoes = createAction(types.GOODS_SHOES_ADD, netHandler.addGoodsShoes);
@@ -54,11 +55,11 @@ export const updateMaintain = createAction(types.MAINTAIN_UPDATE, (id, data) => 
 })
 
 // 订单
-export const getOrderList = createAction(types.ORDER_LIST_GET, (tag, query, conditions, page) => {
-  return netHandler.getDefaultList(query, graphqlTypes.orderTypes[tag], conditions, page?page.page:-1, page?page.pageSize:0);
+export const getOrderList = createAction(types.ORDER_LIST_GET, (query, conditions, page) => {
+  return netHandler.getDefaultList(query, orderTypes.orderType, conditions, page?page.page:-1, page?page.pageSize:0);
 })
-export const addOrder = createAction(types.ORDER_ADD, (tag, query, data) => {
-  return netHandler.addDefault(query, graphqlTypes.orderTypes[tag], data);
+export const addOrder = createAction(types.ORDER_ADD, (query, data) => {
+  return netHandler.addDefault(query, orderTypes.orderType, data);
 })
 export const deleteOrder = createAction(types.ORDER_DELETE, (query, ids) => {
   return netHandler.deleteDefault(query, ids);
@@ -67,5 +68,5 @@ export const updateOrder = createAction(types.ORDER_UPDATE, (query, id, data) =>
   return netHandler.updateDefault(query, id, data);
 })
 export const getLastCustomerOrderInfo = createAction(types.LAST_CUSTOMER_ORDER_INFO, (tag, query, id) => {
-  return netHandler.getLastCustomerOrderInfo(query, graphqlTypes.orderTypes[tag], id);
+  return netHandler.getLastCustomerOrderInfo(query, orderTypes.orderType, id);
 })

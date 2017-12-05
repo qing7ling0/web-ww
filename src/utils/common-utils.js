@@ -53,6 +53,13 @@ export const getOrderSource = function(id) {
 
   return null;
 }
+export const getOrderType = function(id) {
+  for(let i=0; i<constants.ORDER_TYPE.length; i++) {
+    if (constants.ORDER_TYPE[i].value === id) return constants.ORDER_TYPE[i];
+  }
+
+  return null;
+}
 export const getPayType = function(id) {
   for(let i=0; i<constants.PAY_TYPE.length; i++) {
     if (constants.PAY_TYPE[i].value === id) return constants.PAY_TYPE[i];

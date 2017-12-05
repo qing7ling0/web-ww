@@ -332,7 +332,6 @@ export const getOrderBaseOptions = function(target) {
   return [
     {
       index:1, title:'基础信息', options:[
-        {type:'input', name:'type', label:'类型', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
         {type:'select', name:'source', label:'来源', itemOptions:{labelLeft:true}, selectItems:constants.BASE_CONSTANTS.ORDER_SOURCE, options:{defaultActiveFirstOption:true}, rule:{required:true}},
         {type:'select', name:'shop', label:'门店', itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(target.props.shopList), options:{defaultActiveFirstOption:true, showSearch:true, optionFilterProp:'children'}, rule:{required:true}},    
         {type:'select', name:'guide', label:'导购', itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(target.props.guideList), options:{defaultActiveFirstOption:true, showSearch:true, optionFilterProp:'children'}, rule:{required:true}},    
@@ -379,17 +378,17 @@ export const getOrderBaseOptions = function(target) {
     {
       index:2, title:'脚型数据', 
       options:[
-        {type:'input', name:'foot_size', label:'尺码', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+        {type:'input', name:'s_foot_size', label:'尺码', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
       ],
       left:{title:'左脚', options:[
-        {type:'input', name:'left_length', label:'长度', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-        {type:'input', name:'left_zhiWei', label:'趾围', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},    
-        {type:'input', name:'left_fuWei', label:'附维', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},    
+        {type:'input', name:'s_left_length', label:'长度', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+        {type:'input', name:'s_left_zhiWei', label:'趾围', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},    
+        {type:'input', name:'s_left_fuWei', label:'附维', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},    
       ]},
       right:{title:'右脚', options:[
-        {type:'input', name:'right_length', label:'长度', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-        {type:'input', name:'right_zhiWei', label:'趾围', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},    
-        {type:'input', name:'right_fuWei', label:'附维', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},    
+        {type:'input', name:'s_right_length', label:'长度', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+        {type:'input', name:'s_right_zhiWei', label:'趾围', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},    
+        {type:'input', name:'s_right_fuWei', label:'附维', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},    
       ]}
     },
     {
@@ -418,10 +417,7 @@ export const getOrderShoesOptions = function(target) {
     {
       index:3, title:'商品信息', options:[
         {type:'select', name:'goods', label:'商品', itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(target.props.goodsShoesList), options:{defaultActiveFirstOption:true, showSearch:true, optionFilterProp:'children'}, rule:{required:true}},    
-        {type:'number', name:'count', label:'数量', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-        {type:'input', name:'xieXuan', label:'鞋楦型', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-        {type:'input', name:'xieGen', label:'鞋跟型', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-      ]
+       ]
     }
   ]);
 }
