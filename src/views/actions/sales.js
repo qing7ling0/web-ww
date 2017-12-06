@@ -14,11 +14,11 @@ export const getGoodsShoesProfile = createAction(types.GOODS_SHOES_PROFILE_GET, 
 });
 export const getGoodsBaseDatas = createAction(types.GOODS_BASE_DATAS, netHandler.getGoodsBaseDatas);
 
-export const getSalesBaseList = createAction(types.SALES_LIST_GET, (tag, conditions) => {
-  return netHandler.getDefaultList(tag, graphqlTypes.salesBaseType, conditions);
+export const getSalesBaseList = createAction(types.SALES_LIST_GET, (tag, graphqlType, conditions) => {
+  return netHandler.getDefaultList(tag, graphqlType, conditions);
 })
-export const addSalesBase = createAction(types.SALES_ADD, (tag, data) => {
-  return netHandler.addDefault(tag, graphqlTypes.salesBaseType, data);
+export const addSalesBase = createAction(types.SALES_ADD, (tag, graphqlType, data) => {
+  return netHandler.addDefault(tag, graphqlType, data);
 })
 export const deleteSalesBase = createAction(types.SALES_DELETE, (tag, ids) => {
   return netHandler.deleteDefault(tag, ids);
@@ -69,4 +69,32 @@ export const updateOrder = createAction(types.ORDER_UPDATE, (query, id, data) =>
 })
 export const getLastCustomerOrderInfo = createAction(types.LAST_CUSTOMER_ORDER_INFO, (tag, query, id) => {
   return netHandler.getLastCustomerOrderInfo(query, orderTypes.orderType, id);
+})
+
+// 特殊定制
+export const getCustomList = createAction(types.CUSTOM_LIST_GET, (conditions) => {
+  return netHandler.getDefaultList('customList', orderTypes.customType, conditions);
+})
+export const addCustom = createAction(types.CUSTOM_ADD, (data) => {
+  return netHandler.addDefault('custom', orderTypes.customType, data);
+})
+export const deleteCustom = createAction(types.CUSTOM_DELETE, (ids) => {
+  return netHandler.deleteDefault('custom', ids);
+})
+export const updateCustom = createAction(types.CUSTOM_UPDATE, (id, data) => {
+  return netHandler.updateDefault('custom', id, data);
+})
+
+// 加急
+export const getUrgentList = createAction(types.URGENT_LIST_GET, (conditions) => {
+  return netHandler.getDefaultList('urgentList', orderTypes.urgentType, conditions);
+})
+export const addUrgent = createAction(types.URGENT_ADD, (data) => {
+  return netHandler.addDefault('urgent', orderTypes.urgentType, data);
+})
+export const deleteUrgent = createAction(types.URGENT_DELETE, (ids) => {
+  return netHandler.deleteDefault('urgent', ids);
+})
+export const updateUrgent = createAction(types.URGENT_UPDATE, (id, data) => {
+  return netHandler.updateDefault('urgent', id, data);
 })

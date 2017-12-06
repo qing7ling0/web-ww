@@ -42,7 +42,7 @@ import * as common from '../../../modules/common'
 import FormItemComponent from '../../common/FormItemComponent'
 import BaseFormModal from '../../common/BaseFormModal'
 import * as optionsType from '../types'
-import { ORDER_TYPES } from './types'
+import { ORDER_TYPES, E_ORDER_TYPES } from './types'
 
 class OrderAddContainer extends Component {
   // 构造函数，在创建组件的时候调用一次
@@ -54,7 +54,8 @@ class OrderAddContainer extends Component {
       customerPhoneList:[],
       customerPhone:'',
       customerName:'',
-      selectCustomer:{}
+      selectCustomer:{},
+      customCount:1,
     }
   }
 
@@ -241,6 +242,18 @@ class OrderAddContainer extends Component {
         } else {
           order[key] = values[key];
         }
+      }
+      if (this.orderType.tag === E_ORDER_TYPES.shoes) {
+        // order
+        order.s_count = 1;
+        order.s_kuanhao = '款号';
+        order.s_xieXuan = '鞋楦';
+        order.s_xieGen = '鞋跟';
+        order.s_guiGe = '规格';
+        order.s_material = this.shoes.material.name;
+        order.s_xiemian_color = this.shoes.out_color.name;
+        order.s_leili_color = this.shoes.in_color.name;
+        // s_customs:[customSchema], // 特殊定制
       }
       order.customer = customer;
       this.props.reqAddOrder(this.orderType.query, order);

@@ -39,6 +39,7 @@ import * as common from '../../../modules/common'
 import FormItemComponent from '../../common/FormItemComponent'
 import BaseFormModal from '../../common/BaseFormModal'
 import * as optionsType from '../types'
+import { COMMON_TYPES, E_COMMON_TYPES } from './types'
 
 class CommonAddModal extends Component {
   // 构造函数，在创建组件的时候调用一次
@@ -53,7 +54,6 @@ class CommonAddModal extends Component {
   //在组件挂载之前调用一次。如果在这个函数里面调用setState，本次的render函数可以看到更新后的state，并且只渲染一次
   componentWillMount(){
     
-    this.options = optionsType.getSalesBaseAddOptions(this.props);
     this.setState({visible:this.props.visible})
   }
 
@@ -61,6 +61,7 @@ class CommonAddModal extends Component {
   }
 
   render() {
+    this.options = this.props.commonType.addOptions(this);
     return (
       <BaseFormModal
         title={this.props.title}

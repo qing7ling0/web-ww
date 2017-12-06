@@ -57,3 +57,15 @@ export const ORDER_ADD            = 'ORDER_ADD';
 export const ORDER_DELETE         = 'ORDER_DELETE';
 export const ORDER_UPDATE         = 'ORDER_UPDATE';
 export const ORDER_UPDATE_PROFILE_GET = 'ORDER_UPDATE_PROFILE_GET';
+
+// 特殊定制
+export const CUSTOM_LIST_GET      = 'CUSTOM_LIST_GET';
+export const CUSTOM_ADD           = 'CUSTOM_ADD';
+export const CUSTOM_DELETE        = 'CUSTOM_DELETE';
+export const CUSTOM_UPDATE        = 'CUSTOM_UPDATE';
+
+// 加急天数
+export const URGENT_LIST_GET      = 'URGENT_LIST_GET';
+export const URGENT_ADD           = 'URGENT_ADD';
+export const URGENT_DELETE        = 'URGENT_DELETE';
+export const URGENT_UPDATE        = 'URGENT_UPDATE';

@@ -99,13 +99,20 @@ var maintainPriceSchema = new Schema({
 
 module.exports.maintainPriceModel = mongoose.model('maintain_price', maintainPriceSchema);
 
+// 特殊定制
 var customSchema = new Schema({
-  NID: {type: String, description:'内容'},
+  NID: {type: String, description:'编号'},
   name: {type: String, description:'内容'},
   price: {type: Number, decription:'价格'},
 });
-
 module.exports.customModel = mongoose.model('custom', customSchema);
+
+// 加急
+var urgentSchema = new Schema({
+  day: {type: Number, description:'天数'},
+  price: {type: Number, decription:'价格'},
+});
+module.exports.urgentModel = mongoose.model('urgent', urgentSchema);
 
 // 鞋
 const shoesFields = {

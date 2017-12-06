@@ -19,6 +19,10 @@ import {
   sex: { type:GraphQLString },
   birthday: { type: GraphQLString },
   weixin: { type: GraphQLString },
+  country: {type:GraphQLString, description:'国家'},
+  city: {type:GraphQLString, description:'城市'},
+  address: {type:GraphQLString, description:'地址'},
+  zipcode: {type:GraphQLString, description:'邮编'},
   vip_card_date: {type: GraphQLString, description:'开卡日期'},
   vip_card_shop: {type: GraphQLString, description:'开卡门店'},
   vip_card_guide: {type: GraphQLString, description:'开卡导购'},
@@ -28,6 +32,7 @@ import {
 export const customerFields = {
   _id: {type:GraphQLString},
   ...customerInputFields,
+  weixin_code_pic: {type:GraphQLString, description:'微信二维码图片'},
   ...commonFields.defaultCreateFields
 };
 

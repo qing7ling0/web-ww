@@ -40,6 +40,7 @@ import * as common from '../../../modules/common'
 import FormItemComponent from '../../common/FormItemComponent'
 import BaseFormModal from '../../common/BaseFormModal'
 import utils from '../../../../utils/utils'
+import { COMMON_TYPES, E_COMMON_TYPES } from './types'
 
 class CommonEditModal extends Component {
   // 构造函数，在创建组件的时候调用一次
@@ -60,7 +61,7 @@ class CommonEditModal extends Component {
   }
 
   render() {
-    this.options = optionsType.getSalesBaseEditOptions(this);
+    this.options = this.props.commonType.editOptions(this);
     return (
       <BaseFormModal
         title={this.props.title}

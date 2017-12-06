@@ -50,6 +50,69 @@ export const getSalesBaseEditOptions = function(target) {
   });
 }
 
+export const getCustomListOptions = function(target) {
+  return [
+    { title: '名称', dataIndex: 'name', key: 'name'},
+    { title: '价格', dataIndex: 'price', key: 'price'},
+    { title: '编辑人', dataIndex: 'editor_name', key: 'editor_name'},
+    { title: '编辑时间', dataIndex: 'editor_time', key: 'editor_time'},
+    { title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
+      return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={()=>target.onDelete([record._id])} />);
+    }}
+  ]
+}
+
+export const getCustomAddOptions = function(target) {
+  return [
+    {type:'input', name:'name', label:'名称', itemOptions:{hasFeedback:true}, rule:{required:true}},
+    {type:'number', name:'price', label:'价格', itemOptions:{hasFeedback:true}, rule:{required:true}},
+  ];
+}
+
+export const getCustomEditOptions = function(target) {
+  let options = getCustomAddOptions(target);
+
+  return options.map((item, index) => {
+    if (!item.decoratorOptions) {
+      item.decoratorOptions = {};
+    }
+    item.decoratorOptions.initialValue = target.props.data[item.name];
+    return item;
+  });
+}
+
+
+export const getUrgentListOptions = function(target) {
+  return [
+    { title: '天数', dataIndex: 'day', key: 'day'},
+    { title: '价格', dataIndex: 'price', key: 'price'},
+    { title: '编辑人', dataIndex: 'editor_name', key: 'editor_name'},
+    { title: '编辑时间', dataIndex: 'editor_time', key: 'editor_time'},
+    { title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
+      return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={()=>target.onDelete([record._id])} />);
+    }}
+  ]
+}
+
+export const getUrgentAddOptions = function(target) {
+  return [
+    {type:'number', name:'day', label:'天数', itemOptions:{hasFeedback:true}, rule:{required:true}},
+    {type:'number', name:'price', label:'价格', itemOptions:{hasFeedback:true}, rule:{required:true}},
+  ];
+}
+
+export const getUrgentEditOptions = function(target) {
+  let options = getUrgentAddOptions(target);
+
+  return options.map((item, index) => {
+    if (!item.decoratorOptions) {
+      item.decoratorOptions = {};
+    }
+    item.decoratorOptions.initialValue = target.props.data[item.name];
+    return item;
+  });
+}
+
 export const getGoodsShoesBaseColumns = function(target) {
   return [
     { title: '名称', dataIndex: 'name', key: 'name'},
@@ -252,9 +315,9 @@ export const getOrderBaseColumns = function(target) {
       }
       return '';
     }},
-    { title: '鞋楦型', dataIndex: 'xieXuan', key: 'xieXuan'},
-    { title: '鞋跟型', dataIndex: 'xieGen', key: 'xieGen'},
-    { title: '订单状态', dataIndex: 'order_state', key: 'order_state'},
+    { title: '鞋楦型', dataIndex: 's_xieXuan', key: 'xieXuan'},
+    { title: '鞋跟型', dataIndex: 's_xieGen', key: 'xieGen'},
+    // { title: '订单状态', dataIndex: 'order_state', key: 'order_state'},
     { title: '物流公司', dataIndex: 'transport_company', key: 'transport_company', render:(item) => {
       let _source = commonUtils.getTransportCompany(item);
       if (_source) {
@@ -263,7 +326,6 @@ export const getOrderBaseColumns = function(target) {
       return '';
     }},
     { title: '快递单号', dataIndex: 'transport_id', key: 'transport_id'},
-    { title: '快递费用', dataIndex: 'transport_price', key: 'transport_price'},
     { title: '备注', dataIndex: 'remark', key: 'remark'},
   ]
 }
@@ -274,7 +336,7 @@ export const getOrderShoesColumns = function(target) {
     { title: '门店', dataIndex: 'shop', key: 'shop', render:(item) => item.name},
     { title: '导购', dataIndex: 'guide', key: 'guide', render:(item) => item.name},
     { title: '客户', dataIndex: 'customer', key: 'customer', render:(item) => item.name},
-    { title: '商品', dataIndex: 'goods', key: 'goods', render:(item) => item.name}
+    { title: '商品', dataIndex: 's_shoes', key: 's_shoes', render:(item) => item.name}
   ]);
 }
 

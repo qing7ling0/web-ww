@@ -19,7 +19,9 @@ import {
   goodsTypeModel,
   goodsShoesModel,
   maintainPriceModel,
-  orderShoesModel
+  orderShoesModel,
+  customModel,
+  urgentModel
 } from '../../models/sales'
 
 const DB = require('../../db/DB')
@@ -36,6 +38,8 @@ export const goodsSeasonList = schemasUtils.createDefaultListQuery('goodsSeasonL
 export const goodsTypeList = schemasUtils.createDefaultListQuery('goodsTypeList', types.baseType, goodsTypeModel);
 export const maintainPriceList = schemasUtils.createDefaultListQuery('maintainPriceList', types.maintainPriceType, maintainPriceModel);
 export const orderShoesList = schemasUtils.createDefaultListQuery('orderShoesList', types.orderShoesType, orderShoesModel);
+export const customList = schemasUtils.createDefaultListQuery('customList', types.customType, customModel);
+export const urgentList = schemasUtils.createDefaultListQuery('urgentList', types.urgentType, urgentModel);
 
 export const goodsShoesProfile = {
   type: types.goodsShoesType,

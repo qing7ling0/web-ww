@@ -18,7 +18,9 @@ import {
   goodsShoesModel,
   maintainPriceModel,
   orderShoesModel,
-  orderModel
+  orderModel,
+  customModel,
+  urgentModel
 } from '../../models/sales'
 import {salesData} from '../../data/index';
 import * as types from './types';
@@ -35,7 +37,8 @@ const goodsType = schemasUtils.createDefaultMutaion('goodsType', types.baseType,
 const goodsShoes = schemasUtils.createDefaultMutaion('goodsShoes', types.goodsShoesType, types.goodsShoesInputType, goodsShoesModel);
 const maintainPrice = schemasUtils.createDefaultMutaion('maintainPrice', types.maintainPriceType, types.maintainPriceInputType, maintainPriceModel);
 const orderShoes = schemasUtils.createDefaultMutaion('orderShoes', types.orderShoesType, types.orderShoesInputType, orderShoesModel);
-// const order = schemasUtils.createDefaultMutaion('order', types.orderType, types.orderInputType, orderModel);
+const custom = schemasUtils.createDefaultMutaion('custom', types.customType, types.customInputType, customModel);
+const urgent = schemasUtils.createDefaultMutaion('urgent', types.urgentType, types.urgentInputType, urgentModel);
 
 
 const orderAdd = {
@@ -82,7 +85,7 @@ const orderUpdate = {
 let mutations = {
   ...material, ...color, ...goodsStyle, 
   ...goodsSeason, ...goodsType, ...goodsShoes, 
-  ...maintainPrice, ...orderShoes,
+  ...maintainPrice, ...orderShoes, ...custom, ...urgent,
   orderAdd, orderRemove, orderUpdate
 };
 export default mutations;

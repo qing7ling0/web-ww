@@ -69,11 +69,10 @@ class CommonListContainer extends Component {
   }
 
   componentDidMount(){
-    // this.onReqList();
-    this.options = optionsType.getSalesBaseListOptions(this);
   }
 
   render() {
+    this.options = this.commonType.listOptions(this);
     const list = this.currentList();
     return (
       <BaseListComponent
@@ -99,7 +98,7 @@ class CommonListContainer extends Component {
         addNode={
           <CommonAddModal 
             title={`添加${this.commonType.label}`} 
-            type={this.commonType} 
+            commonType={this.commonType} 
             visible={this.state.addVisible}
             onSubmitSuccess={this.onReqList}
             onAdd={this.onAdd}
@@ -109,7 +108,7 @@ class CommonListContainer extends Component {
           <CommonEditModal 
             title={`编辑${this.commonType.label}`} 
             data={this.state.editData} 
-            type={this.commonType} 
+            commonType={this.commonType} 
             visible={this.state.editVisible} 
             onSubmitSuccess={this.onReqList}
             onEdit={this.onEdit}
@@ -138,7 +137,7 @@ class CommonListContainer extends Component {
       con = con || {};
       con.type = this.commonType.colorType;
     }
-    this.props.reqGetSalesBaseList(this.commonType.tag, con);
+    this.props.reqGetSalesBaseList(this.commonType.tag, this.commonType.graphqlType, con);
   }
 
   onReqUpdate = (id, data) => {
@@ -152,7 +151,7 @@ class CommonListContainer extends Component {
     if (this.commonType.colorType) {
       data.type = this.commonType.colorType;
     }
-    this.props.reqAddSalesBase(this.commonType.tag, data);
+    this.props.reqAddSalesBase(this.commonType.tag, this.commonType.graphqlType, data);
   }
 
   onReqRemove = (ids) => {
@@ -195,7 +194,15 @@ export default connect(
       reqGetSalesBaseList: Actions.getSalesBaseList,
       reqAddSalesBase: Actions.addSalesBase,
       reqDeleteSalesBase: Actions.deleteSalesBase,
-      reqUpdateSalesBase: Actions.updateSalesBase
+      reqUpdateSalesBase: Actions.updateSalesBase,
+      reqGetCustomList: Actions.getCustomList,
+      reqAddCustom: Actions.addCustom,
+      reqDeleteCustom: Actions.deleteCustom,
+      reqUpdateCustom: Actions.updateCustom,
+      reqGetSalesBaseList: Actions.getSalesBaseList,
+      reqAddSalesBase: Actions.addSalesBase,
+      reqDeleteSalesBase: Actions.deleteSalesBase,
+      reqUpdateSalesBase: Actions.updateSalesBase,
     }, dispatch);
   }
 )(CommonListContainer);

@@ -209,13 +209,34 @@ export const customFields = {
 export const customType = new GraphQLObjectType({
   name: 'customType',
   fields: {
-    ...customFields
+    _id: {type:GraphQLString},
+    ...customFields,
+    ...commonFields.defaultCreateFields
   }
 });
 export const customInputType = new GraphQLInputObjectType({
   name: 'customInputType',
   fields: {
     ...customFields
+  }
+});
+
+export const urgentFields = {
+  day: {type: GraphQLFloat, description:'天数'},
+  price: {type: GraphQLFloat, decription:'价格'},
+};
+export const urgentType = new GraphQLObjectType({
+  name: 'urgentType',
+  fields: {
+    _id: {type:GraphQLString},
+    ...urgentFields,
+    ...commonFields.defaultCreateFields
+  }
+});
+export const urgentInputType = new GraphQLInputObjectType({
+  name: 'urgentInputType',
+  fields: {
+    ...urgentFields
   }
 });
 
