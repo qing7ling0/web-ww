@@ -242,6 +242,7 @@ class OrderAddContainer extends Component {
           order[key] = values[key];
         }
       }
+      order.customer = customer;
       this.props.reqAddOrder(this.orderType.query, order);
     }
   }

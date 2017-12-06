@@ -184,6 +184,7 @@ export default connect(
     loading:state.sales.loading,
     pageInfo:state.sales.orderListPage,
     deleteIDS:state.sales.orderDeleteIDS,
+    orderList:state.sales.orderList,
     shopList:state.shop.shopList,
     guideList:state.shop.shopGuideList,
     customerList:state.customer.customerList,

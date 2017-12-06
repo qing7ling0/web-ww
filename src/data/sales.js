@@ -21,7 +21,7 @@ import {
 import { ApiError, ApiErrorNames } from '../error/api-errors'
 import utils from '../utils/utils'
 import baseUtils from '../base/utils/utils'
-import validate from '../base/utils/validate'
+import * as validate from '../base/utils/validate'
 import constants from '../constants/constants'
 import DB from '../db/DB'
 
@@ -65,12 +65,12 @@ class SalesData {
     return list;
   }
 
-  async updateOrAddCustomerByOrder(customerDoc) {
+  async updateOrAddCustomerByOrder(order, customerDoc) {
     if (customerDoc && customerDoc.phone && !validate.isMobile(customerDoc.phone)) {
       return null;
     }
 
-    let customer = await customerModel.findOne({phone:doc.customer.phone});
+    let customer = await customerModel.findOne({phone:customerDoc.phone});
     let _customerData = {}
     if (customer) { // 更新客户信息
       if (customerDoc.name && customer.name !== customerDoc.name) {
@@ -85,13 +85,13 @@ class SalesData {
       if (customer.weixin !== customerDoc.weixin) {
         _customerData.weixin = customerDoc.weixin;
       }
-      await customer.updateOne(_customerData);
+      await customerModel.findOneAndUpdate(customer._id, _customerData);
       return customer;
     } else { // 添加客户
       _customerData = {...customerDoc}
       _customerData.vip_card_date = moment().format('YYYY-MM-DD');
-      _customerData.vip_card_shop = doc.shop;
-      _customerData.vip_card_guide = doc.guide;
+      _customerData.vip_card_shop = order.shop;
+      _customerData.vip_card_guide = order.guide;
       let cmodel = new customerModel(_customerData);
       customer = await cmodel.save();
       return customer;
@@ -108,7 +108,7 @@ class SalesData {
         throw new ApiError(ApiErrorNames.ADD_FAIL);
       }
 
-      let customer = await this.updateOrAddCustomerByOrder(doc.customer);
+      let customer = await this.updateOrAddCustomerByOrder(doc, doc.customer);
       if (!customer) {
         // TODO
         // 必须有用户

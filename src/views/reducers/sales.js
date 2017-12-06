@@ -48,6 +48,7 @@ const initialState = {
   materialDeleteIDS: [],
   maintainPriceList: [],
   maintainPriceDeleteIDS: [],
+  orderList:[],
 };
 
 function createState(state, resState, values) {

@@ -37,14 +37,8 @@ const maintainPrice = schemasUtils.createDefaultMutaion('maintainPrice', types.m
 const orderShoes = schemasUtils.createDefaultMutaion('orderShoes', types.orderShoesType, types.orderShoesInputType, orderShoesModel);
 // const order = schemasUtils.createDefaultMutaion('order', types.orderType, types.orderInputType, orderModel);
 
-let mutations = {
-  ...material, ...color, ...goodsStyle, 
-  ...goodsSeason, ...goodsType, ...goodsShoes, 
-  ...maintainPrice, ...orderShoes
-};
-export default mutations;
 
-export const orderAdd = {
+const orderAdd = {
   type: types.orderType,
   args: {
     doc: {
@@ -59,7 +53,7 @@ export const orderAdd = {
   }
 };
 
-export const orderRemove = {
+const orderRemove = {
   type: new GraphQLList(GraphQLString),
   args: {
     ids: {type: new GraphQLList(GraphQLString)}
@@ -75,7 +69,7 @@ export const orderRemove = {
   }
 }
 
-export const orderUpdate = {
+const orderUpdate = {
   type: commonFields.operateResultType,
   args: {
     doc: {type: types.orderInputType},
@@ -84,3 +78,11 @@ export const orderUpdate = {
     return await salesData.updateOrder({_id:params.doc._id}, params.doc);
   }
 }
+
+let mutations = {
+  ...material, ...color, ...goodsStyle, 
+  ...goodsSeason, ...goodsType, ...goodsShoes, 
+  ...maintainPrice, ...orderShoes,
+  orderAdd, orderRemove, orderUpdate
+};
+export default mutations;

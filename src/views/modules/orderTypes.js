@@ -23,7 +23,7 @@ const fuliaoType = `f_NID, f_name, f_kuanhao`
 const ornamentType = `o_NID, o_name, o_kuanhao`
 
 export const orderType = `{
-  _id, type, source, pay, payType, order_state, transport_company, transport_id,
+  _id, type, source, pay, pay_type, order_state, transport_company, transport_id,
   transport_price, transport_name, transport_phone, transport_address, transport_zipcode, remark,
   shop${graphqlTypes.shopType}, guide{_id,name}, customer${graphqlTypes.customerType}, 
   ${shoesType}, ${beltType}, ${watchStrapType}, ${maintainType}, ${fuliaoType}, ${fuliaoType}, ${ornamentType}
