@@ -61,11 +61,11 @@ class DB {
         if (model) {
             let findOptions = options.options || {};
             let newPage = {page:-1, pageSize:0, total:0};
-            if (page) {
+            if (page && page.pageSize>-1) {
                 let skip = 0;
-                let limit = page.pageSize || 100;
+                let limit = page.page || 100;
                 if (page.page) {
-                skip = Math.max(page.page-1,0) * limit;
+                    skip = Math.max(page.page-1,0) * limit;
                 }
                 findOptions.limit = limit;
                 findOptions.skip = skip;
@@ -74,7 +74,7 @@ class DB {
             }
 
             let conditions = options.conditions || {};
-            if (page) {
+            if (page && page.page>-1) {
                 newPage.total = await model.find(conditions).count();
             }
             let datas = null;

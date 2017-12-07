@@ -10,17 +10,9 @@ import {
 } from 'graphql';
 
 import { 
-  materialModel, 
-  colorModel, 
-  goodsStyleModel, 
-  goodsSeasonModel, 
-  goodsTypeModel,
-  goodsShoesModel,
-  maintainPriceModel,
-  orderShoesModel,
+  materialModel,
   orderModel,
-  customModel,
-  urgentModel
+  goodsModel
 } from '../../models/sales'
 import {salesData} from '../../data/index';
 import * as types from './types';
@@ -30,16 +22,7 @@ const commonUtils = require('../../utils/common-utils')
 const schemasUtils = require('../../utils/schemas-utils')
 
 const material = schemasUtils.createDefaultMutaion('material', types.materialType, types.materialInputType, materialModel);
-const color = schemasUtils.createDefaultMutaion('color', types.colorType, types.colorInputType, colorModel);
-const goodsStyle = schemasUtils.createDefaultMutaion('goodsStyle', types.baseType, types.baseInputType, goodsStyleModel);
-const goodsSeason = schemasUtils.createDefaultMutaion('goodsSeason', types.baseType, types.baseInputType, goodsSeasonModel);
-const goodsType = schemasUtils.createDefaultMutaion('goodsType', types.baseType, types.baseInputType, goodsTypeModel);
-const goodsShoes = schemasUtils.createDefaultMutaion('goodsShoes', types.goodsShoesType, types.goodsShoesInputType, goodsShoesModel);
-const maintainPrice = schemasUtils.createDefaultMutaion('maintainPrice', types.maintainPriceType, types.maintainPriceInputType, maintainPriceModel);
-const orderShoes = schemasUtils.createDefaultMutaion('orderShoes', types.orderShoesType, types.orderShoesInputType, orderShoesModel);
-const custom = schemasUtils.createDefaultMutaion('custom', types.customType, types.customInputType, customModel);
-const urgent = schemasUtils.createDefaultMutaion('urgent', types.urgentType, types.urgentInputType, urgentModel);
-
+const goods = schemasUtils.createDefaultMutaion('goods', types.goodsType, types.goodsInputType, goodsModel);
 
 const orderAdd = {
   type: types.orderType,
@@ -83,9 +66,6 @@ const orderUpdate = {
 }
 
 let mutations = {
-  ...material, ...color, ...goodsStyle, 
-  ...goodsSeason, ...goodsType, ...goodsShoes, 
-  ...maintainPrice, ...orderShoes, ...custom, ...urgent,
-  orderAdd, orderRemove, orderUpdate
+  ...material, orderAdd, orderRemove, orderUpdate
 };
 export default mutations;

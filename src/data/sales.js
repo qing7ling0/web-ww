@@ -13,7 +13,7 @@ import {
   goodsSeasonModel,
   goodsStyleModel,
   xuanHaoModel,
-  goodsShoesModel,
+  goodsModel,
   orderModel,
   customerModel
 } from '../models/index.js'
@@ -32,23 +32,40 @@ const logUtil = require('../utils/log-utils');
 
 class SalesData {
 
-  goodsShoesPopulate(query) {
+  goodsPopulate(query) {
     return query
       .populate('type').populate('season').populate('style')
-      .populate('out_color').populate('in_color')
-      .populate('bottom_color').populate('bottom_side_color').exec();
+      .populate('s_material').populate('s_out_color').populate('s_in_color')
+      .populate('s_bottom_color').populate('s_bottom_side_color')
+      .populate('b_material').populate('b_color')
+      .populate('ws_material').exec();
   }
 
-  async getGoodsShoesList(page, options) {
-    const list = await DB.getList(goodsShoesModel, options, page, (query)=>{
-      return this.goodsShoesPopulate(query);
+  /**
+   * 获取商品列表
+   * 
+   * @param {any} goods 商品类型（鞋，皮带，表带）
+   * @param {any} page 
+   * @param {any} options 
+   * @returns 
+   * @memberof SalesData
+   */
+  async getGoodsList(goods, page, options) {
+    if (goods) {
+      if (!options.conditions) {
+        options.conditions = {};
+      }
+      options.conditions.goods = goods;
+    }
+    const list = await DB.getList(goodsModel, options, page, (query)=>{
+      return this.goodsPopulate(query);
     });
     return list;
   }
 
-  async getGoodsShoesProfile(id) {
-    const profile = await DB.findById(goodsShoesModel, id, (query)=>{
-      return this.goodsShoesPopulate(query);
+  async getGoodsProfile(id) {
+    const profile = await DB.findById(goodsModel, id, (query)=>{
+      return this.goodsPopulate(query);
     });
     return profile;
   }

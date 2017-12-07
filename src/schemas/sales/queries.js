@@ -13,15 +13,8 @@ import * as types from './types';
 import {salesData} from '../../data/index';
 import { 
   materialModel, 
-  colorModel, 
-  goodsStyleModel, 
-  goodsSeasonModel, 
-  goodsTypeModel,
-  goodsShoesModel,
-  maintainPriceModel,
-  orderShoesModel,
-  customModel,
-  urgentModel
+  goodsModel,
+  orderModel,
 } from '../../models/sales'
 
 const DB = require('../../db/DB')
@@ -32,31 +25,23 @@ const schemasUtils = require('../../utils/schemas-utils')
 export const materialList = schemasUtils.createDefaultListQuery('materialList', types.materialType, materialModel, (query) =>{
   return query.populate('color')
 });
-export const colorList = schemasUtils.createDefaultListQuery('colorList', types.colorType, colorModel);
-export const goodsStyleList = schemasUtils.createDefaultListQuery('goodsStyleList', types.baseType, goodsStyleModel);
-export const goodsSeasonList = schemasUtils.createDefaultListQuery('goodsSeasonList', types.baseType, goodsSeasonModel);
-export const goodsTypeList = schemasUtils.createDefaultListQuery('goodsTypeList', types.baseType, goodsTypeModel);
-export const maintainPriceList = schemasUtils.createDefaultListQuery('maintainPriceList', types.maintainPriceType, maintainPriceModel);
-export const orderShoesList = schemasUtils.createDefaultListQuery('orderShoesList', types.orderShoesType, orderShoesModel);
-export const customList = schemasUtils.createDefaultListQuery('customList', types.customType, customModel);
-export const urgentList = schemasUtils.createDefaultListQuery('urgentList', types.urgentType, urgentModel);
 
-export const goodsShoesProfile = {
-  type: types.goodsShoesType,
+export const goodsProfile = {
+  type: types.goodsType,
   args: {
     id: {type:GraphQLString},
   },
   async resolve (root, params, options) {
-    return await salesData.getGoodsShoesProfile(params.id);
+    return await salesData.getGoodsProfile(params.id);
   }
 };
 
-export const goodsShoesList = {
+export const goodsList = {
 	type: new GraphQLObjectType({
-    name: 'goodsShoesList',
+    name: 'goodsList',
     fields: {
       page: {type:commonFields.defaultPageType},
-      list: {type:new GraphQLList(types.goodsShoesType)}
+      list: {type:new GraphQLList(types.goodsType)}
     }
   }),
   args: {
@@ -68,7 +53,7 @@ export const goodsShoesList = {
     if (params.conditions) {
       params.conditions = commonUtils.urlString2Conditions(params.conditions);
     }
-    return await salesData.getGoodsShoesList({page:params.page, pageSize:params.pageSize}, {conditions:params.conditions})
+    return await salesData.getGoodsList({page:params.page, pageSize:params.pageSize}, {conditions:params.conditions})
 	}
 }
 

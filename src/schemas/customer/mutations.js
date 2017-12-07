@@ -12,19 +12,12 @@ import {
 import * as types from './types';
 import {userData, customerData} from '../../data/index';
 import { 
-  footModel,
-  customerModel,
-  beltModel,
-  watchStrapModel
+  customerModel
 } from '../../models/customer'
 const commonFields = require('../common/common-fields')
 const schemasUtils = require('../../utils/schemas-utils')
 
-const foot = schemasUtils.createDefaultMutaion('foot', types.footType, types.footInputType, footModel);
-const belt = schemasUtils.createDefaultMutaion('belt', types.beltType, types.beltInputType, beltModel);
-const watchStrap = schemasUtils.createDefaultMutaion('watchStrap', types.watchStrapType, types.watchStrapInputType, watchStrapModel);
-
-export const addCustomer = {
+const addCustomer = {
   type: types.customerType,
   args: {
     doc: {
@@ -39,7 +32,7 @@ export const addCustomer = {
   }
 };
 
-export const deleteCustomer = {
+const deleteCustomer = {
   type: new GraphQLList(GraphQLString),
   args: {
     ids: {type: new GraphQLList(GraphQLString)}
@@ -55,7 +48,7 @@ export const deleteCustomer = {
   }
 }
 
-export const updateCustomer = {
+const updateCustomer = {
   type: commonFields.operateResultType,
   args: {
     doc: {type: types.customerInputType},
@@ -68,9 +61,6 @@ export const updateCustomer = {
 let mutations = {
   addCustomer,
   deleteCustomer,
-  updateCustomer,
-  ...foot, 
-  ...belt, 
-  ...watchStrap
+  updateCustomer
 };
 export default mutations;

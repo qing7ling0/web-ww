@@ -3,6 +3,7 @@ const commonData = require('./common-data')
 const shop = require('./shop')
 const customer = require('./customer')
 const sales = require('./sales')
+const file = require('./file')
 
 module.exports = {
   userData: user,
@@ -10,4 +11,5 @@ module.exports = {
   shopData: shop,
   customerData: customer,
   salesData: sales,
+  fileData: file,
 }
