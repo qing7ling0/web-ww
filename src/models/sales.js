@@ -52,58 +52,61 @@ var xuanHaoSchema = new Schema({
 });
 module.exports.xuanHaoModel = mongoose.model('xuan_hao', xuanHaoSchema);
 
-var goodsShoesSchema = new Schema({
+const goodsBaseFields = {
+  NID: {type:String, decription:'男女'},
   name: {type:String, description:'名称'},
-  property: {type:String, description:'属性'},
+  goods: {type:String, description:'商品（鞋皮带表带）'},
   type: {type: Schema.Types.ObjectId, ref:'goods_type', description:'大分类'},
   style: {type: Schema.Types.ObjectId, ref:'goods_style', decription:'系列'},
   season: {type: Schema.Types.ObjectId, ref:'goods_season', decription:'季节'},
   put_date: {type:Date, decription:'上架时间'},
   sex: {type:String, decription:'男女'},
-  xuan_hao: {type:String, decription:'楦号'},
-  out_color: {type:Schema.Types.ObjectId, ref:'color', decription:'鞋面颜色'},
-  in_color: {type:Schema.Types.ObjectId, ref:'color', decription:'里皮颜色'},
-  bottom_color: {type:Schema.Types.ObjectId, ref:'color', decription:'鞋底颜色'},
-  bottom_side_color: {type:Schema.Types.ObjectId, ref:'color', decription:'底边颜色'},
-  height: {type:Number, decription:'跟高'},
   price: {type:Number, decription:'价格'},
   maintain_cycle: {type:Number, decription:'保养周期'}
-});
+};
+const goodsShoesFields = {
+  s_material: {type:Schema.Types.ObjectId, ref:'material', decription:'材质'},
+  s_xuan_hao: {type:Schema.Types.ObjectId, ref:'xuan_hao', decription:'楦号'},
+  s_out_color: {type:Schema.Types.ObjectId, ref:'color', decription:'鞋面颜色'},
+  s_in_color: {type:Schema.Types.ObjectId, ref:'color', decription:'里皮颜色'},
+  s_bottom_color: {type:Schema.Types.ObjectId, ref:'color', decription:'鞋底颜色'},
+  s_bottom_side_color: {type:Schema.Types.ObjectId, ref:'color', decription:'底边颜色'},
+  s_height: {type:Number, decription:'跟高'},
+};
 
-module.exports.goodsShoesModel = mongoose.model('goods_shoes', goodsShoesSchema);
+var goodsBeltFields = {
+  b_material: {type:Schema.Types.ObjectId, ref:'material', description:'材质'},
+  b_color: {type:Schema.Types.ObjectId, ref:'color', description:'颜色'}
+};
 
-var goodsBeltSchema = new Schema({
-  NID: {type:String, description:'编号'},
-  type: {type:String, description:'款号'},
-  material: {type:String, description:'材质'},
-  color: {type:String, description:'颜色'}
-});
-module.exports.goodsBeltModel = mongoose.model('goods_belt', goodsBeltSchema);
+var goodsWatchStrapFields = {
+  ws_material: {type:String, description:'材质'},
+  ws_style: {type:String, description:'类型，男女'}
+};
 
-var goodsWatchStrapSchema = new Schema({
-  NID: {type:String, description:'编号'},
-  type: {type:String, description:'款号'},
-  material: {type:String, description:'材质'},
-  color: {type:String, description:'颜色'}
+var goodsSchema = new Schema({
+  ...goodsBaseFields,
+  ...goodsShoesFields,
+  ...goodsBeltFields,
+  ...goodsWatchStrapFields,
+  ...baseFields
 });
-module.exports.goodsWatchStrapModel = mongoose.model('goods_watch_strap', goodsWatchStrapSchema);
+module.exports.goodsModel = mongoose.model('goods', goodsSchema);
 
 var maintainPriceSchema = new Schema({
   type: {type: String, description:'类型'},
-  NID: {type: String, description:'编号'},
   name: {type: String, decription:'项目名称'},
   price: {type: Number, decription:'价格'},
   time: {type:Number, decription:'时间'},
   ...baseFields
 });
-
 module.exports.maintainPriceModel = mongoose.model('maintain_price', maintainPriceSchema);
 
 // 特殊定制
 var customSchema = new Schema({
-  NID: {type: String, description:'编号'},
   name: {type: String, description:'内容'},
   price: {type: Number, decription:'价格'},
+  ...baseFields
 });
 module.exports.customModel = mongoose.model('custom', customSchema);
 
@@ -111,19 +114,18 @@ module.exports.customModel = mongoose.model('custom', customSchema);
 var urgentSchema = new Schema({
   day: {type: Number, description:'天数'},
   price: {type: Number, decription:'价格'},
+  ...baseFields
 });
 module.exports.urgentModel = mongoose.model('urgent', urgentSchema);
 
 // 鞋
 const shoesFields = {
-  s_count: {type:Number, decription:'数量'},
-  s_kuanhao:{type:String, decription:'款号'},
-  s_xieXuan:{type:String, decription:'鞋楦型'},
-  s_xieGen:{type:String, decription:'鞋跟型'},
-  s_guiGe:{type:String, decription:'规格'},
-  s_material:{type:String, decription:'鞋面材料'},
-  s_xiemian_color:{type:String, decription:'鞋面颜色'},
-  s_neili_color:{type:String, decription:'内里颜色'},
+  s_material: {type:String, decription:'材质'},
+  s_xuan_hao: {type:String, decription:'楦号'},
+  s_out_color: {type:String, decription:'鞋面颜色'},
+  s_in_color: {type:String, decription:'里皮颜色'},
+  s_bottom_color: {type:String, decription:'鞋底颜色'},
+  s_bottom_side_color: {type:String, decription:'底边颜色'},
   s_foot_size: {type: Number, description:'尺码'},
   s_left_length: {type: Number, description:'左脚长度'},
   s_left_zhiWei: {type: Number, decription:'左脚趾围'},
@@ -139,9 +141,6 @@ const shoesFields = {
 
 // 皮带
 const beltFields = {
-  // b_belt: {type:Schema.Types.ObjectId, ref:'goods_shoes', decription:'商品'},
-  b_NID:{type:String, decription:'编号'},
-  b_kuanhao:{type:String, decription:'款号'},
   b_material:{type:String, decription:'材质'},
   b_color:{type:String, decription:'颜色'},
   b_A: {type: Number, decription:'皮带测量数据A'},
@@ -153,26 +152,21 @@ const beltFields = {
 
 // 表带
 const watchStrapFields = {
-  // b_belt: {type:Schema.Types.ObjectId, ref:'goods_shoes', decription:'商品'},
-  bs_NID:{type:String, decription:'编号'},
-  bs_kuanhao:{type:String, decription:'款号'},
-  bs_material:{type:String, decription:'材质'},
-  bs_color:{type:String, decription:'颜色'},
-  bs_type:{type:String, decription:'类别，男女'},
-  bs_A: {type: Number, decription:'表带测量数据A'},
-  bs_B: {type: Number, decription:'表带测量数据B'},
-  bs_C: {type: Number, decription:'表带测量数据C'},
-  bs_D: {type: Number, decription:'表带测量数据D'},
-  bs_E: {type: Number, decription:'表带测量数据E'},
-  bs_F: {type: Number, decription:'表带测量数据F'},
-  bs_G: {type: Number, decription:'表带测量数据G'},
-  bs_watch_brand:{type: String, decription:'手表品牌'},
-  bs_size_remark: {type: String, decription:'表带测量备注'},
+  ws_material:{type:String, decription:'材质'},
+  ws_style:{type:String, decription:'类别，男女'},
+  ws_A: {type: Number, decription:'表带测量数据A'},
+  ws_B: {type: Number, decription:'表带测量数据B'},
+  ws_C: {type: Number, decription:'表带测量数据C'},
+  ws_D: {type: Number, decription:'表带测量数据D'},
+  ws_E: {type: Number, decription:'表带测量数据E'},
+  ws_F: {type: Number, decription:'表带测量数据F'},
+  ws_G: {type: Number, decription:'表带测量数据G'},
+  ws_watch_brand:{type: String, decription:'手表品牌'},
+  ws_size_remark: {type: String, decription:'表带测量备注'},
 }
 
 // 护理
 const maintainFields = {
-  m_NID:{type:String, decription:'编号'},
   m_name:{type:String, decription:'护理内容'},
   m_price:{type:String, decription:'护理价格'},
   m_time:{type:Number, decription:'护理时间'},

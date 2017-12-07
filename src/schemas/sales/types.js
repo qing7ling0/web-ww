@@ -76,7 +76,7 @@ export const baseInputType = new GraphQLInputObjectType({
   }
 });
 
-export const goodsShoesBaseFields = {
+export const goodsBaseFields = {
   _id: {type:GraphQLString},
   name: {type:GraphQLString, description:'名称'},
   property: {type:GraphQLString, description:'属性'},
