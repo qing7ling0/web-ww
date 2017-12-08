@@ -19,6 +19,7 @@ import {
   sex: { type:GraphQLString },
   birthday: { type: GraphQLString },
   weixin: { type: GraphQLString },
+  weixin_code_pic: {type:GraphQLString, description:'微信二维码图片'},
   country: {type:GraphQLString, description:'国家'},
   city: {type:GraphQLString, description:'城市'},
   address: {type:GraphQLString, description:'地址'},
@@ -32,7 +33,6 @@ import {
 export const customerFields = {
   _id: {type:GraphQLString},
   ...customerInputFields,
-  weixin_code_pic: {type:GraphQLString, description:'微信二维码图片'},
   ...commonFields.defaultCreateFields
 };
 

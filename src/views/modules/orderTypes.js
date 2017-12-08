@@ -1,7 +1,5 @@
 import * as graphqlTypes from './graphqlTypes'
 
-export const customType = `{_id, NID, name, price}`
-export const urgentType = `{_id, day, price}`
 
 const shoesType = `s_count, s_kuanhao, s_xieXuan, s_xieGen, s_guiGe,
   s_material, s_xiemian_color, s_neili_color,
