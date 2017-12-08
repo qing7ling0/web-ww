@@ -29,11 +29,11 @@ export const CUSTOMER_UPDATE      = 'CUSTOMER_UPDATE';
 export const CUSTOMER_PROFILE_GET = 'CUSTOMER_PROFILE_GET';
 export const LAST_CUSTOMER_ORDER_INFO  = 'CUSTOMER_ORDER_INFO_LAST'; 
 
-export const GOODS_SHOES_LIST_GET = 'GOODS_SHOES_LIST_GET';
-export const GOODS_SHOES_ADD      = 'GOODS_SHOES_ADD';
-export const GOODS_SHOES_DELETE   = 'GOODS_SHOES_DELETE';
-export const GOODS_SHOES_UPDATE   = 'GOODS_SHOES_UPDATE';
-export const GOODS_SHOES_PROFILE_GET = 'GOODS_SHOES_PROFILE_GET';
+export const GOODS_LIST_GET       = 'GOODS_LIST_GET';
+export const GOODS_ADD            = 'GOODS_ADD';
+export const GOODS_DELETE         = 'GOODS_DELETE';
+export const GOODS_UPDATE         = 'GOODS_UPDATE';
+export const GOODS_PROFILE_GET    = 'GOODS_PROFILE_GET';
 
 export const GOODS_BASE_DATAS     = 'GOODS_BASE_DATAS';
 

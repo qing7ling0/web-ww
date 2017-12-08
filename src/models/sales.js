@@ -53,11 +53,15 @@ var goodsWatchStrapFields = {
   ws_style: {type:Schema.Types.ObjectId, ref:'common', description:'类型，男女'}
 };
 
+var ornamentFields = {
+};
+
 var goodsSchema = new Schema({
   ...goodsBaseFields,
   ...goodsShoesFields,
   ...goodsBeltFields,
   ...goodsWatchStrapFields,
+  ...ornamentFields,
   ...baseFields
 });
 module.exports.goodsModel = mongoose.model('goods', goodsSchema);

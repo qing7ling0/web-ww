@@ -75,6 +75,11 @@ const watchStrapStyleFields = {
   name:{type:String, description:'名称'}
 }
 
+// 鞋贴边
+const shoesTieBianFields = {
+  name:{type:String, description:'名称'}
+}
+
 const commonFields = {
   ...commonBaseFields,
   ...colorFields,

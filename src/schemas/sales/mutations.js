@@ -66,6 +66,6 @@ const orderUpdate = {
 }
 
 let mutations = {
-  ...material, orderAdd, orderRemove, orderUpdate
+  ...material, ...goods, orderAdd, orderRemove, orderUpdate
 };
 export default mutations;

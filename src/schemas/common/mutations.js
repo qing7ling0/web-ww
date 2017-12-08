@@ -28,7 +28,7 @@ export const menuAdd = {
   }
 };
 
-export const addCommon = {
+export const commonAdd = {
   type: types.commonType,
   args: {
     doc: {
@@ -41,7 +41,7 @@ export const addCommon = {
     return common;
   }
 };
-export const deleteCommon = {
+export const commonRemove = {
   type: new GraphQLList(GraphQLString),
   args: {
     ids: {type: new GraphQLList(GraphQLString)}
@@ -56,12 +56,19 @@ export const deleteCommon = {
     return null;
   }
 }
-export const updateCommon = {
+export const commonUpdate = {
   type: commonFields.operateResultType,
   args: {
     doc: {type: types.commonInputType},
+    conditions: {type:GraphQLString},
+    id: {type:GraphQLString},
   },
   async resolve (ctx, params, options) {
-    return await commonData.updateCommon({_id:params.doc._id}, params.doc);
+    if (params.conditions) {
+      params.conditions = commonUtils.urlString2Conditions(params.conditions);
+    } else {
+      params.conditions = {_id:params.id};
+    }
+    return await commonData.updateCommon(params.conditions, params.doc);
   }
 }

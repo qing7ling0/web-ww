@@ -36,9 +36,9 @@ class SalesData {
     return query
       .populate('type').populate('season').populate('style')
       .populate('s_material').populate('s_out_color').populate('s_in_color')
-      .populate('s_bottom_color').populate('s_bottom_side_color')
+      .populate('s_bottom_color').populate('s_bottom_side_color').populate('s_xuan_hao').populate('s_gui_ge').populate('s_gen_gao')
       .populate('b_material').populate('b_color')
-      .populate('ws_material').exec();
+      .populate('ws_material').populate('ws_style').exec();
   }
 
   /**

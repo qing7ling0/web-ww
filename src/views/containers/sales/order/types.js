@@ -1,4 +1,5 @@
 import * as constants from '../../../constants/Constants'
+import { commonUtils } from '../../../modules/common';
 
 export const E_ORDER_TYPES = {shoes:'shoes', belt:'belt', watchStrap:'watchStrap'}
 export const ORDER_TYPES = [

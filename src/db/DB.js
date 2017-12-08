@@ -61,7 +61,7 @@ class DB {
         if (model) {
             let findOptions = options.options || {};
             let newPage = {page:-1, pageSize:0, total:0};
-            if (page && page.pageSize>-1) {
+            if (page && page.pageSize>0 && page.page>-1) {
                 let skip = 0;
                 let limit = page.page || 100;
                 if (page.page) {
@@ -74,9 +74,10 @@ class DB {
             }
 
             let conditions = options.conditions || {};
-            if (page && page.page>-1) {
+            if (page && page.pageSize>0 && page.page>-1) {
                 newPage.total = await model.find(conditions).count();
             }
+            console.log(JSON.stringify(conditions) + '; findOptions='+ JSON.stringify(findOptions))
             let datas = null;
             if (onQuery) {
                 let query = model.find(conditions, null, findOptions);

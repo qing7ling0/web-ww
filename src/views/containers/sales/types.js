@@ -19,96 +19,43 @@ const listToSelectOptions = (list, valueFormat, labelFormat) => {
   })
 }
 
-export const getSalesBaseListOptions = function(target) {
-  return [
-    { title: '名称', dataIndex: 'name', key: 'name'},
-    { title: '编辑人', dataIndex: 'editor_name', key: 'editor_name'},
-    { title: '编辑时间', dataIndex: 'editor_time', key: 'editor_time'},
-    { title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
-      return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={()=>target.onDelete([record._id])} />);
-    }}
-  ]
+export const getMaterialListOptions = function(target) {
+  let options = getMaterialBaseColumns(target);
+  options.push({ title: '编辑人', dataIndex: 'editor_name', key: 'editor_name'});
+  options.push({ title: '编辑时间', dataIndex: 'editor_time', key: 'editor_time'});
+  options.push({ title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
+    return (
+      <div>
+        <OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
+          e.stopPropagation();
+          target.onDelete([record._id])
+        }} />
+      </div>
+    );
+  }})
+  return options;
 }
 
-export const getSalesBaseAddOptions = function(target) {
-  return [
-    {type:'input', name:'name', label:'名称', itemOptions:{hasFeedback:true}, rule:{required:true}},
-  ];
-}
-
-export const getSalesBaseEditOptions = function(target) {
-  let options = getSalesBaseAddOptions(target);
-  // options.push({type:'input', name:'editor_name', label:'编辑人', options:{disabled:true}})
-  // options.push({type:'input', name:'editor_time', label:'编辑时间', options:{disabled:true}})
-
-  return options.map((item, index) => {
-    if (!item.decoratorOptions) {
-      item.decoratorOptions = {};
-    }
-    item.decoratorOptions.initialValue = target.props.data[item.name];
-    return item;
-  });
-}
-
-export const getCustomListOptions = function(target) {
-  return [
-    { title: '名称', dataIndex: 'name', key: 'name'},
-    { title: '价格', dataIndex: 'price', key: 'price'},
-    { title: '编辑人', dataIndex: 'editor_name', key: 'editor_name'},
-    { title: '编辑时间', dataIndex: 'editor_time', key: 'editor_time'},
-    { title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
-      return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={()=>target.onDelete([record._id])} />);
-    }}
-  ]
-}
-
-export const getCustomAddOptions = function(target) {
+export const getMaterialAddOptions = function(target) {
   return [
     {type:'input', name:'name', label:'名称', itemOptions:{hasFeedback:true}, rule:{required:true}},
-    {type:'number', name:'price', label:'价格', itemOptions:{hasFeedback:true}, rule:{required:true}},
+    {type:'select', name:'color', label:'颜色', selectItems:listToSelectOptions(target.props.materialColorList), options:{defaultActiveFirstOption:true}, rule:{required:true}},
+    {type:'number', name:'count', label:'数量', itemOptions:{hasFeedback:true}, rule:{required:true}},
   ];
-}
+} 
 
-export const getCustomEditOptions = function(target) {
-  let options = getCustomAddOptions(target);
+export const getMaterialEditOptions = function(target) {
+  let options = getMaterialAddOptions(target);
 
   return options.map((item, index) => {
     if (!item.decoratorOptions) {
       item.decoratorOptions = {};
     }
-    item.decoratorOptions.initialValue = target.props.data[item.name];
-    return item;
-  });
-}
-
-
-export const getUrgentListOptions = function(target) {
-  return [
-    { title: '天数', dataIndex: 'day', key: 'day'},
-    { title: '价格', dataIndex: 'price', key: 'price'},
-    { title: '编辑人', dataIndex: 'editor_name', key: 'editor_name'},
-    { title: '编辑时间', dataIndex: 'editor_time', key: 'editor_time'},
-    { title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
-      return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={()=>target.onDelete([record._id])} />);
-    }}
-  ]
-}
-
-export const getUrgentAddOptions = function(target) {
-  return [
-    {type:'number', name:'day', label:'天数', itemOptions:{hasFeedback:true}, rule:{required:true}},
-    {type:'number', name:'price', label:'价格', itemOptions:{hasFeedback:true}, rule:{required:true}},
-  ];
-}
-
-export const getUrgentEditOptions = function(target) {
-  let options = getUrgentAddOptions(target);
-
-  return options.map((item, index) => {
-    if (!item.decoratorOptions) {
-      item.decoratorOptions = {};
+    let value = target.props.data[item.name] || '';
+    if (value._id) {
+      value = value._id;
     }
-    item.decoratorOptions.initialValue = target.props.data[item.name];
+    item.decoratorOptions.initialValue = value;
     return item;
   });
 }
@@ -193,108 +140,6 @@ export const getMaterialBaseColumns = function(target) {
     { title: '数量', dataIndex: 'count', key: 'count'},
   ]
 }
-
-export const getMaterialListOptions = function(target) {
-  let options = getMaterialBaseColumns(target);
-  options.push({ title: '编辑人', dataIndex: 'editor_name', key: 'editor_name'});
-  options.push({ title: '编辑时间', dataIndex: 'editor_time', key: 'editor_time'});
-  options.push({ title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
-    return (
-      <div>
-        <OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
-          e.stopPropagation();
-          target.onDelete([record._id])
-        }} />
-      </div>
-    );
-  }})
-  return options;
-}
-
-export const getMaterialAddOptions = function(target) {
-  return [
-    {type:'input', name:'name', label:'名称', itemOptions:{hasFeedback:true}, rule:{required:true}},
-    {type:'select', name:'color', label:'颜色', selectItems:listToSelectOptions(target.props.materialColorList), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    {type:'number', name:'count', label:'数量', itemOptions:{hasFeedback:true}, rule:{required:true}},
-  ];
-} 
-
-export const getMaterialEditOptions = function(target) {
-  let options = getMaterialAddOptions(target);
-
-  return options.map((item, index) => {
-    if (!item.decoratorOptions) {
-      item.decoratorOptions = {};
-    }
-    let value = target.props.data[item.name] || '';
-    if (value._id) {
-      value = value._id;
-    }
-    item.decoratorOptions.initialValue = value;
-    return item;
-  });
-}
-
-export const getMaintainBaseColumns = function(target) {
-  return [
-    { title: '编号', dataIndex: 'NID', key: 'NID'},
-    { title: '名称', dataIndex: 'name', key: 'name'},
-    { title: '类型', dataIndex: 'type', key: 'type', render:(item) => {
-      let maintainType = commonUtils.getMaintainPriceType(item);
-      if (maintainType) {
-        return maintainType.label;
-      }
-      return '';
-    }},
-    { title: '价格', dataIndex: 'price', key: 'price',render:(item) => item+'RMB'},
-    { title: '时间', dataIndex: 'time', key: 'price',render:(item) => item+'天'},
-  ]
-}
-export const getMaintainListOptions = function(target) {
-  let options = getMaintainBaseColumns(target);
-  options.push({ title: '编辑人', dataIndex: 'editor_name', key: 'editor_name'});
-  options.push({ title: '编辑时间', dataIndex: 'editor_time', key: 'editor_time'});
-  options.push({ title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
-    return (
-      <div>
-        <OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
-          e.stopPropagation();
-          target.onDelete([record._id])
-        }} />
-      </div>
-    );
-  }})
-  return options;
-}
-
-export const getMaintainAddOptions = function(target) {
-  return [
-    {type:'input', name:'NID', label:'编号', itemOptions:{hasFeedback:true}, rule:{required:true}},
-    {type:'input', name:'name', label:'名称', itemOptions:{hasFeedback:true}, rule:{required:true}},
-    {type:'select', name:'type', label:'类型', selectItems:constants.BASE_CONSTANTS.MAINTAIN_PRICE_TYPE, options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    {type:'number', name:'price', label:'价格', itemOptions:{hasFeedback:true}, options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, rule:{required:true}},
-    {type:'number', name:'time', label:'时间', itemOptions:{hasFeedback:true}, options:{formatter:(value) => `${value}天`, parser:value => value.replace('天', '')}, rule:{required:true}},
-  ];
-} 
-
-export const getMaintainEditOptions = function(target) {
-  let options = getMaintainAddOptions(target);
-
-  return options.map((item, index) => {
-    if (!item.decoratorOptions) {
-      item.decoratorOptions = {};
-    }
-    let value = target.props.data[item.name] || '';
-    if (value._id) {
-      value = value._id;
-    }
-    item.decoratorOptions.initialValue = value;
-    return item;
-  });
-}
-
-
-
 
 export const getOrderBaseColumns = function(target) {
   return [

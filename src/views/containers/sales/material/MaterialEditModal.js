@@ -63,6 +63,6 @@ export default connect(
   state => ({
     loading:state.sales.loading,
     result:state.sales.result,
-    maintainColorList:state.sales.maintainColorList
+    materialColorList:state.sales.materialColorList
   })
 )(Form.create()(MaterialEditModal));

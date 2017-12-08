@@ -66,6 +66,7 @@ const goodsInputFields = {
   pics:{type:new GraphQLList(GraphQLString)},
 }
 
+// 鞋
 const goodsShoesBaseFields = {
 };
 const goodsShoesFields = {
@@ -91,6 +92,7 @@ const goodsShoesInputFields = {
   s_gen_gao: {type:GraphQLString, decription:'跟高'},
 }
 
+// 皮带
 const goodsBeltBaseFields = {
 };
 const goodsBeltFields = {
@@ -104,6 +106,7 @@ const goodsBeltInputFields = {
   b_color: {type:GraphQLString, decription:'颜色'},
 }
 
+// 表带
 const goodsWatchStrapBaseFields = {
 };
 const goodsWatchStrapFields = {
@@ -117,6 +120,16 @@ const goodsWatchStrapInputFields = {
   ws_style: {type:GraphQLString, decription:'类型'},
 }
 
+// 配饰
+const goodsOrnamentBaseFields = {
+};
+const goodsOrnamentFields = {
+  ...goodsOrnamentBaseFields,
+}
+const goodsOrnamentInputFields = {
+  ...goodsOrnamentBaseFields,
+}
+
 export const goodsType = new GraphQLObjectType({
   name: 'goodsType',
   fields: {
@@ -124,7 +137,9 @@ export const goodsType = new GraphQLObjectType({
     ...goodsFields,
     ...goodsShoesFields,
     ...goodsBeltFields,
-    ...goodsWatchStrapFields
+    ...goodsWatchStrapFields,
+    ...goodsOrnamentFields,
+    ...commonFields.defaultCreateFields
   }
 })
 
@@ -135,16 +150,15 @@ export const goodsInputType = new GraphQLInputObjectType({
     ...goodsInputFields,
     ...goodsShoesInputFields,
     ...goodsBeltInputFields,
-    ...goodsWatchStrapInputFields
+    ...goodsWatchStrapInputFields,
+    ...goodsOrnamentInputFields
   }
 })
 
 // 鞋
 const orderShoesBaseFields = {
   s_count: {type:GraphQLInt, decription:'数量'},
-
   s_NID:{type:GraphQLString, decription:'编号'},
-
   s_foot_size: {type: GraphQLFloat, description:'尺码'},
   s_left_length: {type: GraphQLFloat, description:'左脚长度'},
   s_left_zhiWei: {type: GraphQLFloat, decription:'左脚趾围'},
@@ -159,12 +173,13 @@ const orderShoesFields = {
   ...orderShoesBaseFields,
   s_xuan_hao:{type:commonTypes.commonType, decription:'鞋楦型'},
   s_gui_ge:{type:commonTypes.commonType, decription:'规格'},
+  s_gen_gao:{type:commonTypes.commonType, decription:'跟高'},
+  s_tie_di:{type:commonTypes.commonType, decription:'贴底'},
   s_material:{type:commonTypes.commonType, decription:'材料'},
   s_out_color:{type:commonTypes.commonType, decription:'鞋面颜色'},
   s_in_color:{type:commonTypes.commonType, decription:'内里颜色'},
-  s_gen_gao:{type:commonTypes.commonType, decription:'跟高'},
-  s_tie_di:{type:commonTypes.commonType, decription:'贴底'},
-  s_tie_di:{type:commonTypes.commonType, decription:'贴底'},
+  s_bottom_color:{type:commonTypes.commonType, decription:'鞋底颜色'},
+  s_bottom_side_color:{type:commonTypes.commonType, decription:'底边颜色'},
   s_customs:{type:new GraphQLList(commonTypes.commonType)}, // 特殊定制
   s_shoes: {type:goodsType, decription:'商品'}
 }
@@ -176,6 +191,8 @@ const orderShoesInputFields = {
   s_material:{type:GraphQLString, decription:'材料'},
   s_out_color:{type:GraphQLString, decription:'鞋面颜色'},
   s_in_color:{type:GraphQLString, decription:'内里颜色'},
+  s_bottom_color:{type:GraphQLString, decription:'鞋底颜色'},
+  s_bottom_side_color:{type:GraphQLString, decription:'底边颜色'},
   s_gen_gao:{type:GraphQLString, decription:'跟高'},
   s_tie_di:{type:GraphQLString, decription:'贴底'},
   s_customs:{type:new GraphQLList(GraphQLString)}, // 特殊定制
@@ -249,7 +266,7 @@ const orderMaintainInputFields = {
 
 // 充值
 const orderRechargeBaseFields = {
-  r_kuanhao:{type:GraphQLFloat, decription:'充值金额'},
+  r_amount:{type:GraphQLFloat, decription:'充值金额'},
 }
 const orderRechargeFields = {
   ...orderRechargeBaseFields

@@ -6,11 +6,12 @@ import results from './results'
 import baseUtils from '../../base/utils/Utils'
 
 const LOADING_ACTIONS = [
-  ActionTypes.GOODS_SHOES_ADD,
-  ActionTypes.GOODS_SHOES_DELETE,
-  ActionTypes.GOODS_SHOES_UPDATE,
-  ActionTypes.GOODS_SHOES_LIST_GET,
-  ActionTypes.GOODS_SHOES_PROFILE_GET,
+  ActionTypes.GOODS_ADD,
+  ActionTypes.GOODS_DELETE,
+  ActionTypes.GOODS_UPDATE,
+  ActionTypes.GOODS_LIST_GET,
+  ActionTypes.GOODS_PROFILE_GET,
+
   ActionTypes.SALES_ADD,
   ActionTypes.SALES_DELETE,
   ActionTypes.SALES_UPDATE,
@@ -33,7 +34,7 @@ const initialState = {
   result: {code:0, message:'', type:0},
   goodsShoesList: [],
   goodsShoesListPage: {page:0,pageSize:0,total:0},
-  goodsShoesDeleteIDS: [],
+  goodsDeleteIDS: [],
   goodsShoesProfile:{},
   goodsTypeList: [],
   goodsStyleList: [],
@@ -75,20 +76,43 @@ function doActions(state, action) {
   }
 
   switch (action.type) {
-    case ActionTypes.GOODS_SHOES_LIST_GET:
+    // case ActionTypes.GOODS_LIST_GET:
+    //   if (action.state === States.Fulfilled && result.code === 0) {
+    //     return createState(state, resState, {goodsShoesList:data.goodsShoesList.list, goodsShoesListPage:data.goodsShoesList.page});
+    //   }
+    //   break;
+    // case ActionTypes.GOODS_SHOES_DELETE:
+    //   if (action.state === States.Fulfilled && result.code === 0) {
+    //     return createState(state, resState, {goodsShoesDeleteIDS:data.deleteCustomer});
+    //   }
+    //   break;
+    case ActionTypes.GOODS_LIST_GET:
       if (action.state === States.Fulfilled && result.code === 0) {
-        return createState(state, resState, {goodsShoesList:data.goodsShoesList.list, goodsShoesListPage:data.goodsShoesList.page});
+        let list = {};
+        for(let key in data) {
+          if (key.indexOf('List') !== -1) {
+            list[key] = data[key].list;
+            list[key+'Page'] = data[key].page;
+          }
+        }
+        return createState(state, resState, list);
       }
       break;
-    case ActionTypes.GOODS_SHOES_DELETE:
+    case ActionTypes.GOODS_DELETE:
       if (action.state === States.Fulfilled && result.code === 0) {
-        return createState(state, resState, {goodsShoesDeleteIDS:data.deleteCustomer});
+        let deleteIDS = 0;
+        for(let key in data) {
+          if (key.indexOf('Remove') !== -1) {
+            deleteIDS = data[key];
+          }
+        }
+        return createState(state, resState, {goodsDeleteIDS:deleteIDS});
       }
       break;
       
     case ActionTypes.GOODS_SHOES_PROFILE_GET:
       if (action.state === States.Fulfilled && result.code === 0) {
-        return createState(state, resState, {goodsShoesProfile:data.goodsShoesProfile});
+        return createState(state, resState, {...data});
       }
     break;
 
@@ -129,16 +153,18 @@ function doActions(state, action) {
     break;
 
     case ActionTypes.SALES_LIST_GET:
+    {
       if (action.state === States.Fulfilled && result.code === 0) {
-        let list = {};
+        let _list = {};
         for(let key in data) {
           if (key.indexOf('List') !== -1) {
-            list[key] = data[key].list;
-            list[key+'Page'] = data[key].page;
+            _list[key] = data[key].list;
+            _list[key+'Page'] = data[key].page;
           }
         }
-        return createState(state, resState, list);
+        return createState(state, resState, _list);
       }
+    }
       break;
     case ActionTypes.SALES_DELETE:
       if (action.state === States.Fulfilled && result.code === 0) {
@@ -148,7 +174,7 @@ function doActions(state, action) {
             deleteIDS = data[key];
           }
         }
-        return createState(state, resState, {goodsBaseDeleteIDS:deleteIDS});
+        return createState(state, resState, {salesBaseDeleteIDS:deleteIDS});
       }
       break;
     case ActionTypes.MATERIAL_LIST_GET:

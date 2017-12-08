@@ -125,6 +125,7 @@ module.exports.COLOR_TYPE_MATERIAL = '5';
 module.exports.GOODS_SHOES = '1'; // 鞋
 module.exports.GOODS_BELT = '2'; // 皮带
 module.exports.GOODS_WATCH_STRAP = '3'; // 表带
+module.exports.GOODS_ORNAMENT = '4'; // 配饰
 
 module.exports.RIGHT_FOOT_ID = '1';
 module.exports.LEFT_FOOT_ID = '2';
@@ -147,4 +148,5 @@ module.exports.COMMON_DATA_TYPES = {
   WATCH_STRAP_STYLE:'14', // 表带类型
   SHOES_GEN_GAO:'15', // 跟高
   SHOES_GUI_GE:'16', // 规格
+  SHOES_TIE_BIAN:'17', // 规格
 }

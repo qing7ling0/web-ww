@@ -27,7 +27,7 @@ import * as constants from '../../../constants/Constants'
 import CommonAddModal from './CommonAddModal'
 import CommonEditModal from './CommonEditModal'
 import { commonUtils } from '../../../modules/common';
-import { COMMON_TYPES, E_COMMON_TYPES } from './types'
+import { COMMON_TYPES } from './types'
 import * as optionsType from '../types'
 import utils from '../../../../utils/utils'
 
@@ -51,7 +51,7 @@ class CommonListContainer extends Component {
   //在组件挂载之前调用一次。如果在这个函数里面调用setState，本次的render函数可以看到更新后的state，并且只渲染一次
   componentWillMount(){
     for(let value of COMMON_TYPES) {
-      if (value.value === this.props.match.params.type) {
+      if (value.key === this.props.match.params.type) {
         this.commonType = value;
       }
     }
@@ -60,7 +60,7 @@ class CommonListContainer extends Component {
   componentWillReceiveProps(nextProps){
     if(nextProps.match.params.type !== this.props.match.params.type) {
       for(let value of COMMON_TYPES) {
-        if (value.value === nextProps.match.params.type) {
+        if (value.key === nextProps.match.params.type) {
           this.commonType = value;
         }
       }
@@ -119,8 +119,13 @@ class CommonListContainer extends Component {
   }
 
   currentList = () => {
+    let listKey = this.commonType.tag;
+    let index = this.commonType.tag.indexOf(':');
+    if (index > -1) {
+      listKey = this.commonType.tag.substring(0, index);
+    }
     for(let key in this.props.sales) {
-      if (this.commonType.value.indexOf(key) !== -1) {
+      if (listKey === key) {
         return this.props.sales[key];
       }
     }
@@ -128,28 +133,26 @@ class CommonListContainer extends Component {
   }
 
   onReqList = () => {
-    let con = null;
+    let con = {
+      type:this.commonType.key
+    };
     if (this.searchWord) {
       con = {};
       con.name = {$regex:`/${this.searchWord}/i`}
-    } 
-    if (this.commonType.colorType) {
-      con = con || {};
-      con.type = this.commonType.colorType;
     }
     this.props.reqGetSalesBaseList(this.commonType.tag, this.commonType.graphqlType, con);
   }
 
   onReqUpdate = (id, data) => {
-    if (this.commonType.colorType) {
-      data.type = this.commonType.colorType;
+    if (data) {
+      data.type = this.commonType.key;
     }
     this.props.reqUpdateSalesBase(this.commonType.tag, id, data);
   }
   
   onReqAdd = (data) => {
-    if (this.commonType.colorType) {
-      data.type = this.commonType.colorType;
+    if (data) {
+      data.type = this.commonType.key;
     }
     this.props.reqAddSalesBase(this.commonType.tag, this.commonType.graphqlType, data);
   }
@@ -191,14 +194,6 @@ export default connect(
   }),
   (dispatch) => {
     return bindActionCreators({
-      reqGetSalesBaseList: Actions.getSalesBaseList,
-      reqAddSalesBase: Actions.addSalesBase,
-      reqDeleteSalesBase: Actions.deleteSalesBase,
-      reqUpdateSalesBase: Actions.updateSalesBase,
-      reqGetCustomList: Actions.getCustomList,
-      reqAddCustom: Actions.addCustom,
-      reqDeleteCustom: Actions.deleteCustom,
-      reqUpdateCustom: Actions.updateCustom,
       reqGetSalesBaseList: Actions.getSalesBaseList,
       reqAddSalesBase: Actions.addSalesBase,
       reqDeleteSalesBase: Actions.deleteSalesBase,

@@ -52,8 +52,6 @@ class GoodsAddModal extends Component {
 
   //在组件挂载之前调用一次。如果在这个函数里面调用setState，本次的render函数可以看到更新后的state，并且只渲染一次
   componentWillMount(){
-    
-    this.options = optionsType.getGoodsShoesAddOptions(this);
     this.setState({visible:this.props.visible})
   }
 
@@ -61,6 +59,7 @@ class GoodsAddModal extends Component {
   }
 
   render() {
+    this.options = this.props.goodsType.addOptions(this);
     return (
       <BaseFormModal
         title={this.props.title}
@@ -72,10 +71,8 @@ class GoodsAddModal extends Component {
         onCancel={this.onCancel}
         onAfterClose={this.props.afterClose || null}
         confirmLoading={this.state.confirmLoading}
-        actionType={ActionTypes.GOODS_SHOES_ADD}
-        onSubmitSuccess={()=>{
-          this.props.reqGetGoodsShoesList(this.props.pageInfo.page, this.props.pageInfo.pageSize);
-        }}
+        actionType={ActionTypes.GOODS_ADD}
+        onSubmitSuccess={this.props.onSubmitSuccess}
       />
     );
   }
@@ -83,11 +80,9 @@ class GoodsAddModal extends Component {
 
   onSubmit = (err, values) => {
     if (!err) {
-      if (values.put_date) {
-        values.put_date = values.put_date.format('YYYY-MM-DD')
+      if (this.props.onAdd) {
+        this.props.onAdd(values);
       }
-
-      this.props.reqAddGoodsShoes(values);
     }
   }
 
@@ -102,21 +97,12 @@ class GoodsAddModal extends Component {
 
 export default connect(
   state => ({
+    sales:state.sales,
     loading:state.sales.loading,
     result:state.sales.result,
-    goodsTypeList:state.sales.goodsTypeList,
-    goodsStyleList:state.sales.goodsStyleList,
-    goodsSeasonList:state.sales.goodsSeasonList,
-    matriealColorList:state.sales.matriealColorList,
-    outColorList:state.sales.outColorList,
-    inColorList:state.sales.inColorList,
-    bottomColorList:state.sales.bottomColorList,
-    bottomSideColorList:state.sales.bottomSideColorList,
   }),
   (dispatch) => {
     return bindActionCreators({
-      reqGetGoodsShoesList: Actions.getGoodsShoesList,
-      reqAddGoodsShoes: Actions.addGoodsShoes
     }, dispatch);
   }
 )(Form.create()(GoodsAddModal));

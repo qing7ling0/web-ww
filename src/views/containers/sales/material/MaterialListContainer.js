@@ -29,6 +29,7 @@ import MaterialEditModal from './MaterialEditModal'
 import { commonUtils } from '../../../modules/common';
 import * as optionsType from '../types'
 import utils from '../../../../utils/utils'
+import * as graphqlTypes from '../../../modules/graphqlTypes'
 
 const CONTAINER_TITLE = '原材料'
 const MATERIAL_TAG = 'material'
@@ -59,7 +60,7 @@ class MaterialListContainer extends Component {
   componentDidMount(){
     // this.onReqList();
     this.options = optionsType.getMaterialListOptions(this);
-    this.props.reqMaterialColorList('materialColorList:colorList', {type:constants.BASE_CONSTANTS.COLOR_TYPE_MATERIAL});
+    this.props.reqMaterialColorList('materialColorList:commonList', graphqlTypes.colorType, {type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.MATERIAL_COLOR});
   }
 
   render() {

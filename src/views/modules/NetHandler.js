@@ -271,24 +271,28 @@ class NetHandler {
   }
 
   static getGoodsBaseDatas() {
-    let outColor = {type:constants.BASE_CONSTANTS.COLOR_TYPE_OUT};
-    let inColor = {type:constants.BASE_CONSTANTS.COLOR_TYPE_IN};
-    let bottomColor = {type:constants.BASE_CONSTANTS.COLOR_TYPE_BOTTOM};
-    let bottomSideColor = {type:constants.BASE_CONSTANTS.COLOR_TYPE_BOTTOM_SIDE};
-    let materialColor = {type:constants.BASE_CONSTANTS.COLOR_TYPE_MATERIAL};
-    // let outColor = `conditions: "${encodeURIComponent(object2String({}))}"`
     let pageIndex = -1;
     let pageSize = 0;
     return netUtils.graphqlJson(config.GetServerAddress() + '/api', `
       query Query {
-        goodsStyleList(page:${pageIndex}, pageSize:${pageSize})${types.pageListType(types.salesBaseType)}
-        goodsSeasonList(page:${pageIndex}, pageSize:${pageSize})${types.pageListType(types.salesBaseType)}
-        goodsTypeList(page:${pageIndex}, pageSize:${pageSize})${types.pageListType(types.salesBaseType)}
-        outColorList:colorList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify(outColor))}")${types.pageListType(types.salesBaseType)}
-        inColorList:colorList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify(inColor))}")${types.pageListType(types.salesBaseType)}
-        bottomColorList:colorList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify(bottomColor))}")${types.pageListType(types.salesBaseType)}
-        bottomSideColorList:colorList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify(bottomSideColor))}")${types.pageListType(types.salesBaseType)}
-        materialColorList:colorList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify(materialColor))}")${types.pageListType(types.salesBaseType)}
+        goodsStyleList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.GOODS_TYPE}))}")${types.pageListType(types.salesBaseType)}
+        goodsSeasonList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.GOODS_STYLE}))}")${types.pageListType(types.salesBaseType)}
+        goodsTypeList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.GOODS_SEASON}))}")${types.pageListType(types.salesBaseType)}
+        outColorList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.SHOES_OUT_COLOR}))}")${types.pageListType(types.colorType)}
+        inColorList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.SHOES_IN_COLOR}))}")${types.pageListType(types.colorType)}
+        bottomColorList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.SHOES_BOTTOM_COLOR}))}")${types.pageListType(types.colorType)}
+        bottomSideColorList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.SHOES_BOTTOM_SIDE_COLOR}))}")${types.pageListType(types.colorType)}
+        materialColorList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.MATERIAL_COLOR}))}")${types.pageListType(types.colorType)}
+        customList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.CUSTOM}))}")${types.pageListType(types.customType)}
+        urgentList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.URGENT}))}")${types.pageListType(types.urgentType)}
+        maintainList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.MAINTION}))}")${types.pageListType(types.maintainType)}
+        xuanHaoList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.XUAN_HAO}))}")${types.pageListType(types.xuanHaoType)}
+        guiGeList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.SHOES_GUI_GE}))}")${types.pageListType(types.guiGeType)}
+        genGaoList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.SHOES_GEN_GAO}))}")${types.pageListType(types.genGaoType)}
+        shoesTieBianList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.SHOES_TIE_BIAN}))}")${types.pageListType(types.shoesTieBianType)}
+        watchStrapStyleList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.WATCH_STRAP_STYLE}))}")${types.pageListType(types.watchStrapStyleType)}
+        materialList(page:${pageIndex}, pageSize:${pageSize})${types.pageListType(types.materialType)}
+        
       }
   `);
   }

@@ -9,6 +9,7 @@ import {
   GraphQLInputObjectType,
   GraphQLList,
 } from 'graphql';
+import commonFields from '../common/common-fields'
 
 const MenuItem = {
   id: { type: GraphQLInt },
@@ -39,7 +40,7 @@ export const router = new GraphQLObjectType({
 
 
 const commonBaseFields = {
-  type: {type:GraphQLString, description:'类型'},
+  type: {type:new GraphQLNonNull(GraphQLString), description:'类型'},
 };
 
 // 颜色（斜面颜色，内里颜色，鞋底颜色，底边颜色，原材料颜色）
@@ -109,6 +110,7 @@ export const commonType = new GraphQLObjectType({
   fields: {
     _id: { type: GraphQLString },
     ...commonTypeFields,
+    ...commonFields.defaultCreateFields
   }
 });
 

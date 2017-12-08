@@ -119,7 +119,7 @@ export default connect(
     goodsTypeList:state.sales.goodsTypeList,
     goodsStyleList:state.sales.goodsStyleList,
     goodsSeasonList:state.sales.goodsSeasonList,
-    matriealColorList:state.sales.matriealColorList,
+    materialColorList:state.sales.materialColorList,
     outColorList:state.sales.outColorList,
     inColorList:state.sales.inColorList,
     bottomColorList:state.sales.bottomColorList,

@@ -52,8 +52,10 @@ export const goodsList = {
 	async resolve (root, params, options) {
     if (params.conditions) {
       params.conditions = commonUtils.urlString2Conditions(params.conditions);
+    } else {
+      params.conditions = {};
     }
-    return await salesData.getGoodsList({page:params.page, pageSize:params.pageSize}, {conditions:params.conditions})
+    return await salesData.getGoodsList(null, {page:params.page, pageSize:params.pageSize}, {conditions:params.conditions})
 	}
 }
 

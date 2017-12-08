@@ -21,7 +21,7 @@ class CommonContainer extends Component {
     this.state = {
       loading: false,
       success: true,
-      selectedKeys: [COMMON_TYPES[0].value]
+      selectedKeys: [COMMON_TYPES[0].key]
     }
   }
   
@@ -29,7 +29,7 @@ class CommonContainer extends Component {
     const { location } = this.props.history;
     const pathSnippets = location.pathname.split('/').filter(i => i);
     let len = pathSnippets.length;
-    if(len > 2 && pathSnippets[len-2] === 'base' && pathSnippets[len-1].indexOf('List') !== -1) {
+    if(len > 2 && pathSnippets[len-2] === 'base') {
       this.state.selectedKeys = [pathSnippets[len-1]];
     }
   }
@@ -43,7 +43,7 @@ class CommonContainer extends Component {
       >
         {COMMON_TYPES.map((item) => {
           return (
-            <Menu.Item key={item.value}>{item.label}</Menu.Item>
+            <Menu.Item key={item.key}>{item.label}</Menu.Item>
           );
         })}
       </Menu>

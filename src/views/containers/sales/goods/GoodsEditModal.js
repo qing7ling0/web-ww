@@ -53,7 +53,6 @@ class GoodsEditModal extends Component {
 
   //在组件挂载之前调用一次。如果在这个函数里面调用setState，本次的render函数可以看到更新后的state，并且只渲染一次
   componentWillMount(){
-    this.options = optionsType.getGoodsShoesEditOptions(this);
     this.setState({visible:this.props.visible})
   }
 
@@ -61,17 +60,7 @@ class GoodsEditModal extends Component {
   }
 
   render() {
-    let _options = this.options.map((item, index) => {
-      if (!item.decoratorOptions) {
-        item.decoratorOptions = {};
-      }
-      let value = this.props.data[item.name] || '';
-      if (value._id) {
-        value = value._id;
-      }
-      item.decoratorOptions.initialValue = value;
-      return item;
-    });
+    this.options = this.props.goodsType.editOptions(this);
     return (
       <BaseFormModal
         title={this.props.title}
@@ -83,23 +72,17 @@ class GoodsEditModal extends Component {
         onCancel={this.onCancel}
         onAfterClose={this.props.afterClose || null}
         confirmLoading={this.state.confirmLoading}
-        actionType={ActionTypes.GOODS_SHOES_UPDATE}
-        onSubmitSuccess={()=>{
-          this.props.reqGetGoodsShoesList(this.props.pageInfo.page, this.props.pageInfo.pageSize);
-        }}
+        actionType={ActionTypes.GOODS_UPDATE}
+        onSubmitSuccess={this.props.onSubmitSuccess}
       />
     );
   }
 
-
   onSubmit = (err, values) => {
     if (!err) {
-      values = utils.diffent(values, this.props.data);
-      if (values.put_date) {
-        values.put_date = values.put_date.format('YYYY-MM-DD')
+      if (this.props.onEdit) {
+        this.props.onEdit(values);
       }
-      values._id = this.props.data._id;
-      this.props.reqUpdateGoodsShoes(values);
     }
   }
 
@@ -114,21 +97,12 @@ class GoodsEditModal extends Component {
 
 export default connect(
   state => ({
+    sales:state.sales,
     loading:state.sales.loading,
     result:state.sales.result,
-    goodsTypeList:state.sales.goodsTypeList,
-    goodsStyleList:state.sales.goodsStyleList,
-    goodsSeasonList:state.sales.goodsSeasonList,
-    matriealColorList:state.sales.matriealColorList,
-    outColorList:state.sales.outColorList,
-    inColorList:state.sales.inColorList,
-    bottomColorList:state.sales.bottomColorList,
-    bottomSideColorList:state.sales.bottomSideColorList,
   }),
   (dispatch) => {
     return bindActionCreators({
-      reqGetGoodsShoesList: Actions.getGoodsShoesList,
-      reqUpdateGoodsShoes: Actions.updateGoodsShoes
     }, dispatch);
   }
 )(Form.create()(GoodsEditModal));
