@@ -20,7 +20,7 @@ export const updateSalesBase = createAction(types.SALES_UPDATE, (tag, id, data) 
   return netHandler.updateDefault(tag, id, data);
 })
 
-// 基础数据
+// 商品信息
 export const getGoodsBaseDatas = createAction(types.GOODS_BASE_DATAS, netHandler.getGoodsBaseDatas);
 export const getGoodsList = createAction(types.GOODS_LIST_GET, (tag, graphqlType, conditions, page={page:-1,pageSize:0}) => {
   return netHandler.getDefaultList(tag, graphqlType, conditions, page.page, page.pageSize);
@@ -37,6 +37,23 @@ export const updateGoods = createAction(types.GOODS_UPDATE, (tag, id, data) => {
 export const getGoodsProfile = createAction(types.GOODS_PROFILE_GET, (tag, id) => {
   return netHandler.getDefaultProfile(tag, graphqlTypes.goodsType, id);
 });
+
+// 订单
+export const getOrderList = createAction(types.ORDER_LIST_GET, (query, conditions, page) => {
+  return netHandler.getDefaultList(query, orderTypes.orderType, conditions, page?page.page:-1, page?page.pageSize:0);
+})
+export const addOrder = createAction(types.ORDER_ADD, (query, data) => {
+  return netHandler.addDefault(query, orderTypes.orderType, data);
+})
+export const deleteOrder = createAction(types.ORDER_DELETE, (query, ids) => {
+  return netHandler.deleteDefault(query, ids);
+})
+export const updateOrder = createAction(types.ORDER_UPDATE, (query, id, data) => {
+  return netHandler.updateDefault(query, id, data);
+})
+export const getLastCustomerOrderInfo = createAction(types.LAST_CUSTOMER_ORDER_INFO, (tag, query, id) => {
+  return netHandler.getLastCustomerOrderInfo(query, orderTypes.orderType, id);
+})
 
 // 原材料
 export const getMaterialList = createAction(types.MATERIAL_LIST_GET, (conditions) => {
@@ -64,21 +81,4 @@ export const deleteMaintain = createAction(types.MAINTAIN_DELETE, (ids) => {
 })
 export const updateMaintain = createAction(types.MAINTAIN_UPDATE, (id, data) => {
   return netHandler.updateDefault('maintainPrice', id, data);
-})
-
-// 订单
-export const getOrderList = createAction(types.ORDER_LIST_GET, (query, conditions, page) => {
-  return netHandler.getDefaultList(query, orderTypes.orderType, conditions, page?page.page:-1, page?page.pageSize:0);
-})
-export const addOrder = createAction(types.ORDER_ADD, (query, data) => {
-  return netHandler.addDefault(query, orderTypes.orderType, data);
-})
-export const deleteOrder = createAction(types.ORDER_DELETE, (query, ids) => {
-  return netHandler.deleteDefault(query, ids);
-})
-export const updateOrder = createAction(types.ORDER_UPDATE, (query, id, data) => {
-  return netHandler.updateDefault(query, id, data);
-})
-export const getLastCustomerOrderInfo = createAction(types.LAST_CUSTOMER_ORDER_INFO, (tag, query, id) => {
-  return netHandler.getLastCustomerOrderInfo(query, orderTypes.orderType, id);
 })

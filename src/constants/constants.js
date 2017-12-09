@@ -97,18 +97,18 @@ module.exports.COLOR_TYPE = [
 ]
 
 const E_ORDER_TYPE = {
-  shoes:'1',belt:'2',watchStrap:'3',maintain:'4',fuliao:'5',ornament:'6'
+  SHOES:'1', BELT:'2', WATCH_STRAP:'3', MAINTAIN:'4', RECHARGE:'5', ORNAMENT:'6'
 }
 module.exports.E_ORDER_TYPE = E_ORDER_TYPE;
 
 // order type
 module.exports.ORDER_TYPE = [
-  {value:E_ORDER_TYPE.shoes, label:'鞋'},
-  {value:E_ORDER_TYPE.belt, label:'皮带'},
-  {value:E_ORDER_TYPE.watchStrap, label:'表带'},
-  {value:E_ORDER_TYPE.maintain, label:'护理'},
-  {value:E_ORDER_TYPE.fuliao, label:'辅料'},
-  {value:E_ORDER_TYPE.ornament, label:'配饰'},
+  {value:E_ORDER_TYPE.SHOES, label:'鞋'},
+  {value:E_ORDER_TYPE.BELT, label:'皮带'},
+  {value:E_ORDER_TYPE.WATCH_STRAP, label:'表带'},
+  {value:E_ORDER_TYPE.MAINTAIN, label:'护理'},
+  {value:E_ORDER_TYPE.ORNAMENT, label:'配饰'},
+  {value:E_ORDER_TYPE.RECHARGE, label:'充值'},
 ]
 
 module.exports.TRANSPORT_COMPANYS = transportCompanys.companys; // 快递公司

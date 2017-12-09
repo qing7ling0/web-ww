@@ -95,9 +95,9 @@ class DB {
         if (doc && model) {
             let data = await new model(doc).save(options);
             if (data) {
-            return data;
+                return data;
             } else {
-            throw new ApiError(ApiErrorNames.ADD_FAIL);
+                throw new ApiError(ApiErrorNames.ADD_FAIL);
             }
         } else {
             throw new ApiError(ApiErrorNames.ADD_FAIL);

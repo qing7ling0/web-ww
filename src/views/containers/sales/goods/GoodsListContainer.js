@@ -85,9 +85,9 @@ class GoodsListContainer extends Component {
           this.searchWord = value;
           this.onReqList(this.props.pageInfo);
         }}
-        onDelItems={this.props.onDelete}
+        onDelItems={this.onDelete}
         onItemConver={this.onItemConver}
-        deleteIDS={this.props.goodsDeleteIDS}
+        deleteIDS={this.props.deleteIDS}
         addVisible={this.state.addVisible}
         editVisible={this.state.editVisible}
         addNode={
@@ -115,10 +115,10 @@ class GoodsListContainer extends Component {
     );
   }
   currentList = () => {
-    let listKey = this.goodsType.tag;
-    let index = this.goodsType.tag.indexOf(':');
+    let listKey = this.goodsType.listTag;
+    let index = this.goodsType.listTag.indexOf(':');
     if (index > -1) {
-      listKey = this.goodsType.tag.substring(0, index);
+      listKey = this.goodsType.listTag.substring(0, index);
     }
     for(let key in this.props.sales) {
       if (listKey === key) {
@@ -136,7 +136,7 @@ class GoodsListContainer extends Component {
       con = {};
       con.name = {$regex:`/${this.searchWord}/i`}
     }
-    this.props.reqGetGoodsList(this.goodsType.tag, this.goodsType.graphqlType, con, pageInfo);
+    this.props.reqGetGoodsList(this.goodsType.listTag, this.goodsType.graphqlType, con, pageInfo);
   }
   onReqUpdate = (id, data) => {
     if (data) {
@@ -194,7 +194,7 @@ export default connect(
     sales:state.sales,
     loading:state.sales.loading,
     pageInfo:state.sales.goodsListPage,
-    goodsDeleteIDS:state.sales.goodsDeleteIDS
+    deleteIDS:state.sales.goodsDeleteIDS
   }),
   (dispatch) => {
     return bindActionCreators({

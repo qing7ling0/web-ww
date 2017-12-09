@@ -140,7 +140,7 @@ class CommonListContainer extends Component {
       con = {};
       con.name = {$regex:`/${this.searchWord}/i`}
     }
-    this.props.reqGetSalesBaseList(this.commonType.tag, this.commonType.graphqlType, con);
+    this.props.reqGetSalesBaseList(this.commonType.listTag, con);
   }
 
   onReqUpdate = (id, data) => {
@@ -154,7 +154,7 @@ class CommonListContainer extends Component {
     if (data) {
       data.type = this.commonType.key;
     }
-    this.props.reqAddSalesBase(this.commonType.tag, this.commonType.graphqlType, data);
+    this.props.reqAddSalesBase(this.commonType.tag, data);
   }
 
   onReqRemove = (ids) => {

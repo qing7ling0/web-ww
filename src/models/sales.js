@@ -17,6 +17,7 @@ const materialFields = {
 
 module.exports.materialModel = mongoose.model('material', new Schema(materialFields));
 
+// 商品档案
 const goodsBaseFields = {
   NID: {type:String, decription:'编号'},
   name: {type:String, description:'名称'},
@@ -50,22 +51,21 @@ var goodsBeltFields = {
 
 var goodsWatchStrapFields = {
   ws_material: {type:Schema.Types.ObjectId, ref:'material', description:'材质'},
-  ws_style: {type:Schema.Types.ObjectId, ref:'common', description:'类型，男女'}
+  ws_style: {type:Schema.Types.ObjectId, ref:'common', description:'类型，男女'},
 };
 
-var ornamentFields = {
-};
 
 var goodsSchema = new Schema({
   ...goodsBaseFields,
   ...goodsShoesFields,
   ...goodsBeltFields,
   ...goodsWatchStrapFields,
-  ...ornamentFields,
+  // ...ornamentFields,
   ...baseFields
 });
 module.exports.goodsModel = mongoose.model('goods', goodsSchema);
 
+// 订单信息
 // 鞋
 const shoesFields = {
   s_NID: {type:String, decription:'编号'},

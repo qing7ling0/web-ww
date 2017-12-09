@@ -280,7 +280,7 @@ const getGoodsOrnamentEditOptions = function(target) {
 export const GOODS_TYPES = [
   {
     key:BASE_CONSTANTS.GOODS_SHOES,
-    tag:'shoesList:goodsList', label:'鞋', 
+    listTag:'shoesList:goodsList', tag:'goodsList', label:'鞋', 
     graphqlType:graphqlTypes.goodsType,
     listOptions:getGoodsShoesListOptions,
     addOptions:getGoodsShoesAddOptions,
@@ -288,7 +288,7 @@ export const GOODS_TYPES = [
   },
   {
     key:BASE_CONSTANTS.GOODS_BELT,
-    tag:'beltList:goodsList', label:'皮带', 
+    listTag:'beltList:goodsList', tag:'goodsList', label:'皮带', 
     graphqlType:graphqlTypes.goodsType,
     listOptions:getGoodsBeltListOptions,
     addOptions:getGoodsBeltAddOptions,
@@ -296,7 +296,7 @@ export const GOODS_TYPES = [
   },
   {
     key:BASE_CONSTANTS.GOODS_WATCH_STRAP,
-    tag:'watchStrapList:goodsList', label:'表带', 
+    listTag:'watchStrapList:goodsList', tag:'goodsList', label:'表带', 
     graphqlType:graphqlTypes.goodsType,
     listOptions:getGoodsWatchStrapListOptions,
     addOptions:getGoodsWatchStrapAddOptions,
@@ -304,7 +304,7 @@ export const GOODS_TYPES = [
   },
   {
     key:BASE_CONSTANTS.GOODS_ORNAMENT,
-    tag:'ornamentList:goodsList', label:'配饰', 
+    listTag:'ornamentList:goodsList', tag:'goodsList', label:'配饰', 
     graphqlType:graphqlTypes.goodsType,
     listOptions:getGoodsOrnamentListOptions,
     addOptions:getGoodsOrnamentAddOptions,

@@ -178,7 +178,7 @@ const getMaintainEditOptions = function(target) {
 export const COMMON_TYPES = [
   {
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.GOODS_TYPE,
-    tag:'goodsTypeList:commonList', label:'商品分类', 
+    tag:'commonList', listTag:'goodsTypeList:commonList', label:'商品分类', 
     graphqlType:graphqlTypes.salesBaseType,
     listOptions:getSalesBaseListOptions,
     addOptions:getSalesBaseAddOptions,
@@ -186,7 +186,7 @@ export const COMMON_TYPES = [
   },
   {
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.GOODS_STYLE,
-    tag:'goodsStyleList:commonList', label:'商品系列', 
+    listTag:'goodsStyleList:commonList', tag:'commonList', label:'商品系列', 
     graphqlType:graphqlTypes.salesBaseType,
     listOptions:getSalesBaseListOptions,
     addOptions:getSalesBaseAddOptions,
@@ -194,7 +194,7 @@ export const COMMON_TYPES = [
   },
   {
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.GOODS_SEASON,
-    tag:'goodsSeasonList:commonList', label:'商品季节', 
+    listTag:'goodsSeasonList:commonList', tag:'commonList', label:'商品季节', 
     graphqlType:graphqlTypes.salesBaseType,
     listOptions:getSalesBaseListOptions,
     addOptions:getSalesBaseAddOptions,
@@ -202,7 +202,7 @@ export const COMMON_TYPES = [
   },
   {
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.MATERIAL_COLOR,
-    tag:'materialColorList:commonList', label:'原材料颜色', 
+    listTag:'materialColorList:commonList', tag:'commonList', label:'原材料颜色', 
     graphqlType:graphqlTypes.salesBaseType,
     listOptions:getSalesBaseListOptions,
     addOptions:getSalesBaseAddOptions,
@@ -210,7 +210,7 @@ export const COMMON_TYPES = [
   },
   {
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.SHOES_OUT_COLOR,
-    tag:'outColorList:commonList', label:'鞋面颜色', 
+    listTag:'outColorList:commonList', tag:'commonList', label:'鞋面颜色', 
     graphqlType:graphqlTypes.salesBaseType,
     listOptions:getSalesBaseListOptions,
     addOptions:getSalesBaseAddOptions,
@@ -218,7 +218,7 @@ export const COMMON_TYPES = [
   },
   {
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.SHOES_IN_COLOR,
-    tag:'inColorList:commonList', label:'里皮颜色', 
+    listTag:'inColorList:commonList', tag:'commonList', label:'里皮颜色', 
     graphqlType:graphqlTypes.salesBaseType,
     listOptions:getSalesBaseListOptions,
     addOptions:getSalesBaseAddOptions,
@@ -226,7 +226,7 @@ export const COMMON_TYPES = [
   },
   {
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.SHOES_BOTTOM_COLOR,
-    tag:'bottomColorList:commonList', label:'鞋底颜色', 
+    listTag:'bottomColorList:commonList', tag:'commonList', label:'鞋底颜色', 
     graphqlType:graphqlTypes.salesBaseType,
     listOptions:getSalesBaseListOptions,
     addOptions:getSalesBaseAddOptions,
@@ -234,7 +234,7 @@ export const COMMON_TYPES = [
   },
   {
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.SHOES_BOTTOM_SIDE_COLOR,
-    tag:'bottomSideColorList:commonList', label:'底边颜色', 
+    listTag:'bottomSideColorList:commonList', tag:'commonList', label:'底边颜色', 
     graphqlType:graphqlTypes.salesBaseType,
     listOptions:getSalesBaseListOptions,
     addOptions:getSalesBaseAddOptions,
@@ -242,7 +242,7 @@ export const COMMON_TYPES = [
   },
   {
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.XUAN_HAO,
-    tag:'xuanHaoList:commonList', label:'鞋楦号', 
+    listTag:'xuanHaoList:commonList', tag:'commonList', label:'鞋楦号', 
     graphqlType:graphqlTypes.xuanHaoType,
     listOptions:getSalesBaseListOptions,
     addOptions:getSalesBaseAddOptions,
@@ -250,7 +250,7 @@ export const COMMON_TYPES = [
   },
   {
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.SHOES_GUI_GE,
-    tag:'guiGeList:commonList', label:'鞋规格', 
+    listTag:'guiGeList:commonList', tag:'commonList', label:'鞋规格', 
     graphqlType:graphqlTypes.guiGeType,
     listOptions:getSalesBaseListOptions,
     addOptions:getSalesBaseAddOptions,
@@ -258,7 +258,7 @@ export const COMMON_TYPES = [
   },
   {
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.SHOES_GEN_GAO,
-    tag:'genGaoList:commonList', label:'鞋跟高', 
+    listTag:'genGaoList:commonList', tag:'commonList', label:'鞋跟高', 
     graphqlType:graphqlTypes.genGaoType,
     listOptions:getSalesBaseListOptions,
     addOptions:getSalesBaseAddOptions,
@@ -266,7 +266,7 @@ export const COMMON_TYPES = [
   },
   {
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.MAINTAIN,
-    tag:'maintainList:commonList', label:'护理项目', 
+    listTag:'maintainList:commonList', tag:'commonList', label:'护理项目', 
     graphqlType:graphqlTypes.maintainType,
     listOptions:getMaintainListOptions,
     addOptions:getMaintainAddOptions,
@@ -274,7 +274,7 @@ export const COMMON_TYPES = [
   },
   {
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.CUSTOM,
-    tag:'customList:commonList', label:'特殊定制', 
+    listTag:'customList:commonList', tag:'commonList', label:'特殊定制', 
     graphqlType:graphqlTypes.customType,
     listOptions:getCustomListOptions,
     addOptions:getCustomAddOptions,
@@ -282,7 +282,7 @@ export const COMMON_TYPES = [
   },
   {
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.URGENT,
-    tag:'urgentList:commonList', label:'加急天数', 
+    listTag:'urgentList:commonList', tag:'commonList', label:'加急天数', 
     graphqlType:graphqlTypes.urgentType,
     listOptions:getUrgentListOptions,
     addOptions:getUrgentAddOptions,
@@ -290,7 +290,7 @@ export const COMMON_TYPES = [
   },
   {
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.WATCH_STRAP_STYLE,
-    tag:'watchStrapStyleList:commonList', label:'表带类型', 
+    listTag:'watchStrapStyleList:commonList', tag:'commonList', label:'表带类型', 
     graphqlType:graphqlTypes.watchStrapStyleType,
     listOptions:getSalesBaseListOptions,
     addOptions:getSalesBaseAddOptions,
@@ -298,7 +298,7 @@ export const COMMON_TYPES = [
   },
   {
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.SHOES_TIE_BIAN,
-    tag:'shoesTieBianList:commonList', label:'鞋贴边', 
+    listTag:'shoesTieBianList:commonList', tag:'commonList', label:'鞋贴边', 
     graphqlType:graphqlTypes.shoesTieBianType,
     listOptions:getSalesBaseListOptions,
     addOptions:getSalesBaseAddOptions,
