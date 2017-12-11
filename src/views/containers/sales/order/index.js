@@ -4,8 +4,10 @@ import {HashRouter, Route,Link, Switch, Redirect} from 'react-router-dom'
 import {Menu, Icon} from 'antd'
 
 import { Root } from './styled'
-
+import * as common from '../../../modules/common'
+import * as config from '../../../constants/Config'
 import * as constants from '../../../constants/Constants'
+
 import ContentContainer from '../../common/ContentComponent'
 import ContentHeaderComponent from '../../common/ContentHeaderComponent'
 import DataContentComponent from '../../common/DataContentComponent'
@@ -20,16 +22,19 @@ class OrderContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedKeys: [ORDER_TYPES[0].tag]
+      selectedKeys: [ORDER_TYPES[0].key]
     }
   }
   
   componentWillMount(){
     const { location } = this.props.history;
-    const pathSnippets = location.pathname.split('/').filter(i => i);
-    let len = pathSnippets.length;
-    if(len > 3 && pathSnippets[len-3] === 'order') {
-      this.state.selectedKeys = [pathSnippets[len-1]];
+    const urlPath = common.findRouterById(config.Routers, constants.MENU_IDS.salesOrder).url + '/list/';
+    if (location.pathname.indexOf(urlPath) !== -1) {
+      const pathSnippets = location.pathname.replace(urlPath, '').split('/').filter(i => i);
+      let len = pathSnippets.length;
+      if(len > 0) {
+        this.state.selectedKeys = [pathSnippets[0]];
+      }
     }
   }
 
@@ -56,8 +61,9 @@ class OrderContainer extends Component {
         <ContentHeaderComponent willSelectNavKey={constants.MENU_IDS.salesOrder} history={this.props.history} contentRender={this.renderHeaderContent} />
         <ContentContainer>
           <Switch>
-            <Redirect exact from={match.path} to={match.path+'/list/'+ORDER_TYPES[0].tag} />
+            <Redirect exact from={match.path} to={match.path+'/list/'+ORDER_TYPES[0].key} />
             <Route exact path={`${match.path}/list/:type`} component={OrderListContainer} />
+            <Route exact path={`${match.path}/list/:type/:key`} component={OrderListContainer} />
             <Route path={`${match.path}/profile/:type/:id`} component={OrderProfileContainer} />
             <Route path={`${match.path}/add/:type`} component={OrderAddContainer} />
           </Switch>

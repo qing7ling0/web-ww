@@ -15,7 +15,8 @@ import {
   xuanHaoModel,
   goodsModel,
   orderModel,
-  customerModel
+  customerModel,
+  subOrderModel
 } from '../models/index.js'
 
 import { ApiError, ApiErrorNames } from '../error/api-errors'
@@ -72,12 +73,32 @@ class SalesData {
   
   orderPopulate(query) {
     return query
-      .populate('s_shoes').populate('shop').populate('guide')
+      .populate('shop').populate('guide')
       .populate('customer').exec();
   }
   async getOrderList(page, options) {
     const list = await DB.getList(orderModel, options, page, (query)=>{
       return this.orderPopulate(query);
+    });
+    return list;
+  }
+
+  // 自订单
+  subOrderPopulate(query) {
+    return query
+      .populate({
+        path:'order',
+        populate:[
+          {path:'shop'},
+          {path:'guide'},
+          {path:'customer'}
+        ]
+      }).exec();
+  }
+  // 自订单列表
+  async getSubOrderList(page, options) {
+    const list = await DB.getList(subOrderModel, options, page, (query)=>{
+      return this.subOrderPopulate(query);
     });
     return list;
   }

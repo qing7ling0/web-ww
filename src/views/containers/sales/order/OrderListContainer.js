@@ -10,14 +10,19 @@ import {
   message,
   Table,
   Button,
-  Tabs
+  Tabs,
+  Menu,
+  Select
 } from 'antd'
 
 const TabPane = Tabs.TabPane;
 
 
 import {
-  Root
+  Root,
+  SearchContainer,
+  SelectInput,
+  SearchInput
 } from './styled'
 
 import Actions from '../../../actions'
@@ -33,6 +38,14 @@ import BaseListComponent from '../../common/BaseListComponent'
 import OrderAddModal from './OrderAddModal'
 import OrderEditModal from './OrderEditModal'
 
+const ORDER_MENUS = [
+  {key:'1', label:'需审核'},
+  {key:'2', label:'制作中'},
+  {key:'3', label:'已完成'},
+  {key:'4', label:'全部'}
+]
+const URL_REG = new RegExp(common.findRouterById(config.Routers, constants.MENU_IDS.salesOrder).url + '/list/' +'\\d/') ;
+
 class OrderListContainer extends Component {
   // 构造函数，在创建组件的时候调用一次
   constructor(props) {
@@ -43,9 +56,12 @@ class OrderListContainer extends Component {
       editVisible:false,
       page: 0,
       selectRows:[],
+      selectedKeys: [ORDER_MENUS[0].key]
     }
 
     this.searchWord = '';
+    this.searchGuide = '';
+    this.searchShop = '';
     this.routerPath = common.findRouterById(config.Routers, constants.MENU_IDS.salesOrder).url;
   }
 
@@ -53,8 +69,16 @@ class OrderListContainer extends Component {
   componentWillMount(){
     this.orderType = ORDER_TYPES[0];
     for(let value of ORDER_TYPES) {
-      if (value.tag === this.props.match.params.type) {
+      if (value.key === this.props.match.params.type) {
         this.orderType = value;
+      }
+    }
+    const { location } = this.props.history;
+    if (location.pathname.match(URL_REG)) {
+      const pathSnippets = location.pathname.replace(URL_REG, '').split('/').filter(i => i);
+      let len = pathSnippets.length;
+      if(len > 0) {
+        this.state.selectedKeys = [pathSnippets[0]];
       }
     }
     this.props.reqCustomerList(0, 10000);
@@ -65,7 +89,7 @@ class OrderListContainer extends Component {
   componentWillReceiveProps(nextProps){
     if(nextProps.match.params.type !== this.props.match.params.type) {
       for(let value of ORDER_TYPES) {
-        if (value.tag === nextProps.match.params.type) {
+        if (value.key === nextProps.match.params.type) {
           this.orderType = value;
         }
       }
@@ -75,11 +99,36 @@ class OrderListContainer extends Component {
 
   renderHeader = () => {
     return(
-      <Tabs defaultActiveKey="2" size="small">
-        <TabPane tab="Tab 1" key="1">Content of tab 1</TabPane>
-        <TabPane tab="Tab 2" key="2">Content of tab 2</TabPane>
-        <TabPane tab="Tab 3" key="3">Content of tab 3</TabPane>
-      </Tabs>
+      <div>
+        <Menu
+          onClick={this.onMenuClicked}
+          mode="horizontal"
+          defaultSelectedKeys={this.state.selectedKeys}
+        >
+          {ORDER_MENUS.map((item) => {
+            return (
+              <Menu.Item key={item.key}>{item.label}</Menu.Item>
+            );
+          })}
+        </Menu>
+        <SearchContainer>
+          <SearchInput placeholder={'请输入订单号'} onSearch={this.onSearchOrderID}/>
+          <SelectInput showSearch={true} placeholder={'请选择导购'} allowClear='true' optionFilterProp='children' onChange={this.onGudieChange}>
+            {
+              this.props.guideList.map((item) => {
+                return <Select.Option key={item._id} >{item.name}</Select.Option>;
+              })
+            }
+          </SelectInput>
+          <SelectInput placeholder={'请选择店铺'} onChange={this.onShopChange}>
+            {
+              this.props.shopList.map((item) => {
+                return <Select.Option key={item._id}>{item.name}</Select.Option>;
+              })
+            }
+          </SelectInput>
+        </SearchContainer>
+      </div>
     );
   }
 
@@ -159,37 +208,18 @@ class OrderListContainer extends Component {
         total: this.props.pageInfo.total
       }
     }
-    this.columns=[
-      { title: '名称', dataIndex: 'name', key: 'name'},
-      { title: '颜色', dataIndex: 'color', key: 'color', render:(item) => item.name},
-      { title: '数量', dataIndex: 'count', key: 'count'}
-    ]
+    this.columns= this.orderType.listOptions(this);
     this.source = [
       
     ]
     return (
       <Root>
         <DataContentComponent
-          hasSearch={true}
-          searchPlaceholder={'输入订单编号'}
           headerRender={this.renderHeader}
-          listener={(e, value)=>{
-            if (e === 'add') {
-              if (this.props.onBtnAddClicked) {
-                // this.props.onBtnAddClicked();
-              }
-            } else if (e === 'delArray') {
-              // let ids = this.state.selectedRows.map((item) => {
-              //   return item._id;
-              // })
-              // this.props.onDelItems(ids);
-            } else if (e === 'search') {
-              // this.props.onSearch(value);
-            }
-          }}>
+          >
           <Table 
             columns={this.columns} 
-            dataSource={this.state.source} 
+            dataSource={this.props.list} 
             loading={this.props.loading}
             rowKey={'_id1'}
             onRowClick={this.onRowClick}
@@ -202,13 +232,18 @@ class OrderListContainer extends Component {
   }
 
   onReqList = (pageInfo) => {
-    let con = null;
-    if (this.searchWord) {
-      con = {};
-      con.type=this.orderType.id;
-      con.name = {$regex:`/${this.searchWord}/i`}
+    let con = {};
+    if (this.searchOrderId) {
+      // con.sub_order_id=this.orderType.id;
+      con.sub_order_id = {$regex:`/${this.searchOrderId}/i`}
     }
-    this.props.reqGetOrderList(this.orderType.query, con, pageInfo);
+    if (this.searchGuide) {
+      con.guide = this.searchGuide;
+    }
+    if (this.searchShop) {
+      con.shop = this.searchShop;
+    }
+    this.props.reqGetSubOrderList('subOrderList', con, pageInfo);
   }
 
   onReqUpdate = (id, data) => {
@@ -263,6 +298,30 @@ class OrderListContainer extends Component {
   onEdit = (record) => {
     // this.setState({editVisible:true, editData:record});
   }
+
+  onMenuClicked = ({item, key}) => {
+    const rootPath = this.props.match.url.match(URL_REG);
+    if (rootPath && rootPath.length > 0) {
+      this.props.history.push(rootPath[0] + key);
+    }
+  }
+
+  onSearchOrderID = (value) => {
+    this.searchOrderId = value;
+    this.onReqList(this.props.pageInfo);
+  }
+
+  onGudieChange = (value) => {
+    this.searchGuide = value;
+    this.onReqList(this.props.pageInfo);
+    console.log('onGudieChange ' + value)
+  }
+
+  onShopChange = (value) => {
+    this.searchShop = value;
+    this.onReqList(this.props.pageInfo);
+  }
+
 }
 
 export default connect(
@@ -270,8 +329,8 @@ export default connect(
     sales:state.sales,
     loading:state.sales.loading,
     pageInfo:state.sales.orderListPage,
+    list:state.sales.subOrderList,
     deleteIDS:state.sales.orderDeleteIDS,
-    orderList:state.sales.orderList,
     shopList:state.shop.shopList,
     guideList:state.shop.shopGuideList,
     customerList:state.customer.customerList,
@@ -280,6 +339,7 @@ export default connect(
   (dispatch) => {
     return bindActionCreators({
       reqGetOrderList: Actions.getOrderList,
+      reqGetSubOrderList: Actions.getSubOrderList,
       reqDeleteOrder: Actions.deleteOrder,
       reqAddOrder: Actions.addOrder,
       reqUpdateOrder: Actions.updateOrder,

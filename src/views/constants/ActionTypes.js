@@ -53,6 +53,7 @@ export const MAINTAIN_DELETE      = 'MAINTAIN_DELETE';
 export const MAINTAIN_UPDATE      = 'MAINTAIN_UPDATE';
 
 export const ORDER_LIST_GET       = 'ORDER_LIST_GET';
+export const SUB_ORDER_LIST_GET   = 'SUB_ORDER_LIST_GET';
 export const ORDER_ADD            = 'ORDER_ADD';
 export const ORDER_DELETE         = 'ORDER_DELETE';
 export const ORDER_UPDATE         = 'ORDER_UPDATE';

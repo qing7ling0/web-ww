@@ -10,6 +10,8 @@ import {
   Spin
 } from 'antd'
 
+const Search = Input.Search;
+
 export const Root = styled.div`
 `
 export const Container = styled.div`
@@ -39,4 +41,15 @@ export const ProfileBtnBack = styled.span`
 `
 export const Loading = styled(Spin)`
   margin:0 auto;
+`
+export const SearchContainer = styled.div`
+  margin: 0.2rem 0 0 0;
+`
+export const SearchInput = styled(Search)`
+  width: 1.6rem;
+  margin-right: 0.15rem;
+`
+export const SelectInput = styled(Select)`
+  width: 1.6rem;
+  margin-right: 0.15rem;
 `

@@ -18,10 +18,9 @@ import {
   Radio,
   Slider, Upload,
   Modal,
-  Row,Col,Steps 
+  Row,Col
 } from 'antd'
 
-const Step = Steps.Step;
 const FormItem = Form.Item;
 const Option = Select.Option;
 const RadioButton = Radio.Button;
@@ -44,18 +43,6 @@ import FormItemComponent from '../../common/FormItemComponent'
 import BaseFormModal from '../../common/BaseFormModal'
 import * as optionsType from '../types'
 import { ORDER_TYPES, E_ORDER_TYPES } from './types'
-
-
-const ADD_ORDER_STEPS = [{
-  title: '客户',
-  content: 'First-content',
-}, {
-  title: '上班',
-  content: 'Second-content',
-}, {
-  title: '结算',
-  content: 'Last-content',
-}];
 
 class OrderAddContainer extends Component {
   // 构造函数，在创建组件的时候调用一次

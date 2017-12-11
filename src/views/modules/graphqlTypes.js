@@ -82,11 +82,11 @@ export const customerType = `{
   vip_card_date,vip_card_shop,vip_card_guide,vip_level,join_type,
 }`
 
-export const materialType = `{_id, name, color{_id,name}, count}`
+export const materialType = `{_id, name, NID, color{_id,name}, count}`
 
-export const salesBaseType = `{_id, name, editor_name, editor_time}`
+export const salesBaseType = `{_id, name, NID, editor_name, editor_time}`
 
-export const colorType = `{_id, name, editor_name, editor_time}`
+export const colorType = `{_id, name, NID, editor_name, editor_time}`
 
 export const maintainType = `{_id, name, price, time, editor_name, editor_time}`
 export const customType = `{_id, name, price, editor_name, editor_time}`

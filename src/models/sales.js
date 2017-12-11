@@ -61,11 +61,9 @@ var goodsSchema = new Schema({
 });
 module.exports.goodsModel = mongoose.model('goods', goodsSchema);
 
-
 // 订单信息
 // 鞋
 const shoesFields = {
-  s_NID: {type:String, decription:'编号'},
   s_material: {type:String, decription:'材质'},
   s_xuan_hao: {type:String, decription:'楦号'},
   s_gui_ge: {type:String, decription:'规格'},
@@ -74,7 +72,7 @@ const shoesFields = {
   s_in_color: {type:String, decription:'里皮颜色'},
   s_bottom_color: {type:String, decription:'鞋底颜色'},
   s_bottom_side_color: {type:String, decription:'底边颜色'},
-  s_tie_di: {type:String, decription:'贴底'},
+  s_tie_di: {type:Schema.Types.ObjectId, ref:'common', decription:'贴底'},
   s_design_self: {type:Boolean, default:false, decription:'是否来样设计'},
   s_shoes: {type:Schema.Types.ObjectId, ref:'goods', decription:'商品'},
 
@@ -92,7 +90,6 @@ const shoesFields = {
 
 // 皮带
 const beltFields = {
-  b_NID: {type:String, decription:'编号'},
   b_material:{type:String, decription:'材质'},
   b_color:{type:String, decription:'颜色'},
   b_belt: {type:Schema.Types.ObjectId, ref:'goods', decription:'商品'},
@@ -106,7 +103,6 @@ const beltFields = {
 
 // 表带
 const watchStrapFields = {
-  ws_NID: {type:String, decription:'编号'},
   ws_material:{type:String, decription:'材质'},
   ws_style:{type:String, decription:'类别，男女'},
   ws_watch_strap: {type:Schema.Types.ObjectId, ref:'goods', decription:'商品'},
@@ -121,7 +117,7 @@ const watchStrapFields = {
   ws_watch_brand:{type: String, decription:'手表品牌'},
   ws_size_remark: {type: String, decription:'表带测量备注'},
 }
-
+ 
 // 护理
 const maintainFields = {
   m_maintain: {type:Schema.Types.ObjectId, ref:'common', decription:'商品'},
@@ -140,7 +136,6 @@ const rechargeFields = {
 
 // 配饰
 const ornamentFields = {
-  o_NID:{type:String, decription:'编号'},
   o_name:{type:String, decription:'名称'},
 }
 
@@ -160,15 +155,25 @@ const subOrderSchema = new Schema({
     file:{type:Schema.Types.ObjectId, ref:'file', decription:'图片'},
     desc:{type:String, decription:'说明'}
   })],
+  NID: {type:String, decription:'编号'},
+  name:{type:String, decription:'名称'},
+  count:{type:Number, decription:'数量', default:1},
   sub_order_id: {type:String, description:'子订单订单ID'},
   transport_company: {type:String, decription:'快递公司'},
   transport_id:{type:String, decription:'快递单号'},
   transport_price:{type:Number, decription:'快递费用'},
+  transport_name: {type:String, decription:'收货人'},
+  transport_phone: {type:String, decription:'电话'},
+  transport_address: {type:String, decription:'收货地址'},
+  transport_zipcode: {type:String, decription:'邮编'},
   remark:{type:String, ddecription:'备注'},
-  order:{type:Schema.Types.ObjectId, ref:'order', decription:'订单信息'},
-  urgent:{type:Schema.Types.ObjectId, ref:'common', decription:'加急'},
   urgent_day: {type: Number, decription:'加急天数'},
   urgent_price: {type: Number, decription:'加急价格'},
+  shop: {type:Schema.Types.ObjectId, ref:'shop', decription:'店铺'},
+  guide: {type:Schema.Types.ObjectId, ref:'user_shop_guide', decription:'导购'},
+  customer: {type:Schema.Types.ObjectId, ref:'customer', decription:'客户'},
+  order:{type:Schema.Types.ObjectId, ref:'order', decription:'订单信息'},
+  urgent:{type:Schema.Types.ObjectId, ref:'common', decription:'加急'},
   ...baseFields
 });
 module.exports.subOrderModel = mongoose.model('sub_order', subOrderSchema);
@@ -178,13 +183,6 @@ const orderFields = {
   source: {type:String, description:'来源'},
   pay:{type:Number, decription:'支付金额'},
   pay_type:{type:String, decription:'支付方式'},
-  transport_name: {type:String, decription:'收货人'},
-  transport_phone: {type:String, decription:'电话'},
-  transport_address: {type:String, decription:'收货地址'},
-  transport_zipcode: {type:String, decription:'邮编'},
-  shop: {type:Schema.Types.ObjectId, ref:'shop', decription:'店铺'},
-  guide: {type:Schema.Types.ObjectId, ref:'user_shop_guide', decription:'导购'},
-  customer: {type:Schema.Types.ObjectId, ref:'customer', decription:'客户'},
   sub_order:[{type:Schema.Types.ObjectId, ref:'sub_order', decription:'子订单'}],
   ...baseFields
 }

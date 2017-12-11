@@ -42,6 +42,9 @@ export const getGoodsProfile = createAction(types.GOODS_PROFILE_GET, (tag, id) =
 export const getOrderList = createAction(types.ORDER_LIST_GET, (query, conditions, page) => {
   return netHandler.getDefaultList(query, orderTypes.orderType, conditions, page?page.page:-1, page?page.pageSize:0);
 })
+export const getSubOrderList = createAction(types.SUB_ORDER_LIST_GET, (query, conditions, page) => {
+  return netHandler.getDefaultList(query, orderTypes.subOrderType, conditions, page?page.page:-1, page?page.pageSize:0);
+})
 export const addOrder = createAction(types.ORDER_ADD, (query, data) => {
   return netHandler.addDefault(query, orderTypes.orderType, data);
 })

@@ -64,7 +64,7 @@ export const orderList = {
     name: 'orderList',
     fields: {
       page: {type:commonFields.defaultPageType},
-      list: {type:new GraphQLList(types.orderType)}
+      list: {type:new GraphQLList(types.orderDetailType)}
     }
   }),
   args: {
@@ -77,5 +77,26 @@ export const orderList = {
       params.conditions = commonUtils.urlString2Conditions(params.conditions);
     }
     return await salesData.getOrderList({page:params.page, pageSize:params.pageSize}, {conditions:params.conditions})
+	}
+}
+
+export const subOrderList = {
+	type: new GraphQLObjectType({
+    name: 'subOrderList',
+    fields: {
+      page: {type:commonFields.defaultPageType},
+      list: {type:new GraphQLList(types.subOrderType)}
+    }
+  }),
+  args: {
+    page: {type: GraphQLInt},
+    pageSize: {type: GraphQLInt},
+    conditions: {type:GraphQLString}
+  },
+	async resolve (root, params, options) {
+    if (params.conditions) {
+      params.conditions = commonUtils.urlString2Conditions(params.conditions);
+    }
+    return await salesData.getSubOrderList({page:params.page, pageSize:params.pageSize}, {conditions:params.conditions})
 	}
 }

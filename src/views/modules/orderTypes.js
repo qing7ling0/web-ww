@@ -1,27 +1,29 @@
 import * as graphqlTypes from './graphqlTypes'
 
 // 鞋子
-const shoesType = `s_count, s_NID, 
-  s_xuanhao, s_gui_ge, s_material, s_customs{_id, name, price}
-  s_out_color,s_in_color,s_bottom_color,s_bottom_side_color,
+const shoesType = `s_xuanhao, s_gui_ge, s_material, s_customs{_id, name, price}
+  s_out_color,s_in_color,s_bottom_color,s_bottom_side_color, s_tie_di{_id,name}
   s_foot_size, s_left_length, s_left_zhiWei, s_left_fuWei, s_right_length,
   s_right_zhiWei, s_right_fuWei`
 // 皮带
-const beltType = `b_NID, b_material, b_color, b_A, b_B, b_C, b_D, b_size_remark`
+const beltType = `b_material, b_color, b_A, b_B, b_C, b_D, b_size_remark`
 // 表带
-const watchStrapType = `ws_NID, ws_material, ws_style, ws_A, ws_B, ws_C, ws_D, ws_E, ws_F, ws_G, ws_watch_brand, ws_size_remark`
+const watchStrapType = `ws_material, ws_style, ws_A, ws_B, ws_C, ws_D, ws_E, ws_F, ws_G, ws_watch_brand, ws_size_remark`
 // 护理
-const maintainType = `m_NID, m_name, m_price, m_time, m_color, m_demo, m_wash`
+const maintainType = `m_name, m_price, m_time, m_color, m_demo, m_wash`
 // 充值
 const rechargeType = `r_amount`
 // 配饰
-const ornamentType = `o_NID, o_name`
+const ornamentType = `o_name`
 
 export const subOrderType = `{
-  _id, type, sub_order_id, urgent_day, urgent_price, state, transport_company, transport_id, transport_price, remark, pics{file, desc}
+  _id, NID, name, count, type, sub_order_id, urgent_day, urgent_price, state, transport_company, transport_id, transport_price, remark, pics{file, desc}, transport_name, transport_phone, transport_address, transport_zipcode,
+  shop{_id,name}, guide{_id,name}, customer{_id,name,phone},
   ${shoesType}, ${beltType}, ${watchStrapType}, ${maintainType}, ${rechargeType}, ${ornamentType}
 }`
 export const orderType = `{
-  _id, order_id, source, pay, pay_type, transport_name, transport_phone, transport_address, transport_zipcode,
-  shop{_id,name}, guide{_id,name}, customer{_id,name,phone}, sub_order${subOrderType}
+  _id, order_id, source, pay, pay_type, sub_order
+}`
+export const orderDetailType = `{
+  _id, order_id, source, pay, pay_type, sub_order${subOrderType}
 }`

@@ -27,6 +27,7 @@ const LOADING_ACTIONS = [
   ActionTypes.ORDER_UPDATE,
   ActionTypes.ORDER_LIST_GET,
   ActionTypes.ORDER_PROFILE_GET,
+  ActionTypes.SUB_ORDER_LIST_GET,
 ];
 
 const initialState = {
@@ -50,6 +51,7 @@ const initialState = {
   maintainPriceList: [],
   maintainPriceDeleteIDS: [],
   orderList:[],
+  subOrderList:[],
 };
 
 function createState(state, resState, values) {
@@ -117,6 +119,7 @@ function doActions(state, action) {
     break;
 
     case ActionTypes.ORDER_LIST_GET:
+    case ActionTypes.SUB_ORDER_LIST_GET:
       if (action.state === States.Fulfilled && result.code === 0) {
         let list = {};
         for(let key in data) {

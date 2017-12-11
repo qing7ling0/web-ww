@@ -33,16 +33,82 @@ const listToSelectOptions = (list, valueFormat, labelFormat) => {
   })
 }
 
+export const ORDER_TYPES = [
+  {
+    key:BASE_CONSTANTS.E_ORDER_TYPE.SHOES,
+    listTag:'orderShoesList:orderList', tag:'orderList', label:'鞋', 
+    graphqlType:graphqlTypes.orderType,
+    listOptions:getOrderListColumns,
+    addOptions:getOrderAddOptions,
+    editOptions:getOrderEditOptions,
+  },
+  {
+    key:BASE_CONSTANTS.E_ORDER_TYPE.BELT,
+    listTag:'orderBeltList:goodsList', tag:'orderList', label:'皮带', 
+    graphqlType:graphqlTypes.orderType,
+    listOptions:getOrderListColumns,
+    addOptions:getOrderAddOptions,
+    editOptions:getOrderEditOptions,
+  },
+  {
+    key:BASE_CONSTANTS.E_ORDER_TYPE.WATCH_STRAP,
+    listTag:'orderWatchStrapList:goodsList', tag:'orderList', label:'表带', 
+    graphqlType:graphqlTypes.orderType,
+    listOptions:getOrderListColumns,
+    addOptions:getOrderAddOptions,
+    editOptions:getOrderEditOptions,
+  },
+  {
+    key:BASE_CONSTANTS.E_ORDER_TYPE.MAINTAIN,
+    listTag:'orderMaintainList:goodsList', tag:'orderList', label:'护理', 
+    graphqlType:graphqlTypes.orderType,
+    listOptions:getOrderListColumns,
+    addOptions:getOrderAddOptions,
+    editOptions:getOrderEditOptions,
+  },
+  {
+    key:BASE_CONSTANTS.E_ORDER_TYPE.ORNAMENT,
+    listTag:'orderOrnamentList:goodsList', tag:'orderList', label:'配饰', 
+    graphqlType:graphqlTypes.orderType,
+    listOptions:getOrderListColumns,
+    addOptions:getOrderAddOptions,
+    editOptions:getOrderEditOptions,
+  },
+  {
+    key:BASE_CONSTANTS.E_ORDER_TYPE.RECHARGE,
+    listTag:'orderRechageList:goodsList', tag:'orderList', label:'充值', 
+    graphqlType:graphqlTypes.orderType,
+    listOptions:getOrderListColumns,
+    addOptions:getOrderAddOptions,
+    editOptions:getOrderEditOptions,
+  }
+]
+
 // 订单基础表
 const getOrderBaseListColumns = function(target) {
   return [
-    { title: '编号', dataIndex: 'NID', key: 'NID'},
-    { title: '名称', dataIndex: 'name', key: 'name'},
+    { title: '门店', dataIndex: 'shop', key: 'shop', render:(item) => item.name},
+    { title: '导购', dataIndex: 'guide', key: 'guide', render:(item) => item.name},
+    { title: '客户', dataIndex: 'customer', key: 'customer', render:(item) => item.name},
     { title: '数量', dataIndex: 'count', key: 'count'},
-    { title: '门店', dataIndex: 'shop', key: 'shop', render:(item) => item.shop.name},
-    { title: '导购', dataIndex: 'guide', key: 'guide', render:(item) => item.guide.name},
-    { title: '客户', dataIndex: 'customer', key: 'customer', render:(item) => item.customer.name},
     { title: '支付金额', dataIndex: 'pay', key: 'pay', render:(item) => item+'RMB'},
+    // { title: '订单状态', dataIndex: 'order_state', key: 'order_state'},
+    { title: '物流公司', dataIndex: 'transport_company', key: 'transport_company', render:(item) => {
+      let _source = commonUtils.getTransportCompany(item);
+      if (_source) {
+        return _source.label;
+      }
+      return '';
+    }},
+    { title: '快递单号', dataIndex: 'transport_id', key: 'transport_id'},
+    { title: '备注', dataIndex: 'remark', key: 'remark'},
+    { title: '来源', dataIndex: 'source', key: 'source', render:(item) => {
+      let _source = commonUtils.getOrderSource(item);
+      if (_source) {
+        return _source.label;
+      }
+      return '';
+    }},
   ]
 }
 // 脚型
@@ -245,8 +311,29 @@ const getOrderRechargeOptions = function(target) {
 }
 
 const getOrderListColumns = function(target) {
-  let options = getOrderBaseListColumns();
-  
+  let options = [];
+  switch(target.orderType.key) {
+    case BASE_CONSTANTS.E_ORDER_TYPE.SHOES:
+      options = getOrderShoesListColumns(target);
+    break;
+    case BASE_CONSTANTS.E_ORDER_TYPE.BELT:
+    options = getOrderBeltListColumns(target);
+    break;
+    case BASE_CONSTANTS.E_ORDER_TYPE.WATCH_STRAP:
+    options = getOrderWatchStrapListColumns(target);
+    break;
+    case BASE_CONSTANTS.E_ORDER_TYPE.MAINTAIN:
+    options = getOrderMaintainListColumns(target);
+    break;
+    case BASE_CONSTANTS.E_ORDER_TYPE.ORNAMENT:
+    options = getOrderOrnamentListColumns(target);
+    break;
+    case BASE_CONSTANTS.E_ORDER_TYPE.RECHARGE:
+    options = getOrderRechargeListColumns(target);
+    break;
+  }
+  options.push({ title: '编辑人', dataIndex: 'editor_name', key: 'editor_name'});
+  options.push({ title: '编辑时间', dataIndex: 'editor_time', key: 'editor_time'});
   options.push({ title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
     return (
       <div>
@@ -302,54 +389,3 @@ const getOrderEditOptions = function(target) {
     return item;
   });
 }
-
-export const ORDER_TYPES = [
-  {
-    key:BASE_CONSTANTS.E_ORDER_TYPE.SHOES,
-    listTag:'orderShoesList:orderList', tag:'orderList', label:'鞋', 
-    graphqlType:graphqlTypes.orderType,
-    listOptions:getOrderListColumns,
-    addOptions:getOrderAddOptions,
-    editOptions:getOrderEditOptions,
-  },
-  {
-    key:BASE_CONSTANTS.E_ORDER_TYPE.BELT,
-    listTag:'orderBeltList:goodsList', tag:'orderList', label:'皮带', 
-    graphqlType:graphqlTypes.orderType,
-    listOptions:getOrderListColumns,
-    addOptions:getOrderAddOptions,
-    editOptions:getOrderEditOptions,
-  },
-  {
-    key:BASE_CONSTANTS.E_ORDER_TYPE.WATCH_STRAP,
-    listTag:'orderWatchStrapList:goodsList', tag:'orderList', label:'表带', 
-    graphqlType:graphqlTypes.orderType,
-    listOptions:getOrderListColumns,
-    addOptions:getOrderAddOptions,
-    editOptions:getOrderEditOptions,
-  },
-  {
-    key:BASE_CONSTANTS.E_ORDER_TYPE.MAINTAIN,
-    listTag:'orderMaintainList:goodsList', tag:'orderList', label:'护理', 
-    graphqlType:graphqlTypes.orderType,
-    listOptions:getOrderListColumns,
-    addOptions:getOrderAddOptions,
-    editOptions:getOrderEditOptions,
-  },
-  {
-    key:BASE_CONSTANTS.E_ORDER_TYPE.ORNAMENT,
-    listTag:'orderOrnamentList:goodsList', tag:'orderList', label:'配饰', 
-    graphqlType:graphqlTypes.orderType,
-    listOptions:getOrderListColumns,
-    addOptions:getOrderAddOptions,
-    editOptions:getOrderEditOptions,
-  },
-  {
-    key:BASE_CONSTANTS.E_ORDER_TYPE.RECHARGE,
-    listTag:'orderRechageList:goodsList', tag:'orderList', label:'充值', 
-    graphqlType:graphqlTypes.orderType,
-    listOptions:getOrderListColumns,
-    addOptions:getOrderAddOptions,
-    editOptions:getOrderEditOptions,
-  }
-]
