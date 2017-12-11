@@ -28,7 +28,7 @@ class OrderContainer extends Component {
     const { location } = this.props.history;
     const pathSnippets = location.pathname.split('/').filter(i => i);
     let len = pathSnippets.length;
-    if(len > 2 && pathSnippets[len-2] === 'order' && pathSnippets[len-1].indexOf('List') !== -1) {
+    if(len > 3 && pathSnippets[len-3] === 'order') {
       this.state.selectedKeys = [pathSnippets[len-1]];
     }
   }
@@ -42,7 +42,7 @@ class OrderContainer extends Component {
       >
         {ORDER_TYPES.map((item) => {
           return (
-            <Menu.Item key={item.tag}>{item.label}</Menu.Item>
+            <Menu.Item key={item.key}>{item.label}</Menu.Item>
           );
         })}
       </Menu>
@@ -64,6 +64,10 @@ class OrderContainer extends Component {
         </ContentContainer>
       </Root>
     );
+  }
+
+  onMenuClicked = ({item, key}) => {
+    this.props.history.replace(this.props.match.path+'/list/' + key);
   }
 }
 

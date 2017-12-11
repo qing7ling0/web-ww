@@ -43,18 +43,14 @@ const goodsShoesFields = {
   s_bottom_side_color: {type:Schema.Types.ObjectId, ref:'common', decription:'底边颜色'},
   s_gen_gao: {type:Schema.Types.ObjectId, ref:'common', decription:'跟高'},
 };
-
 var goodsBeltFields = {
   b_material: {type:Schema.Types.ObjectId, ref:'material', description:'材质'},
   b_color: {type:Schema.Types.ObjectId, ref:'common', description:'颜色'}
 };
-
 var goodsWatchStrapFields = {
   ws_material: {type:Schema.Types.ObjectId, ref:'material', description:'材质'},
   ws_style: {type:Schema.Types.ObjectId, ref:'common', description:'类型，男女'},
 };
-
-
 var goodsSchema = new Schema({
   ...goodsBaseFields,
   ...goodsShoesFields,
@@ -64,6 +60,7 @@ var goodsSchema = new Schema({
   ...baseFields
 });
 module.exports.goodsModel = mongoose.model('goods', goodsSchema);
+
 
 // 订单信息
 // 鞋
@@ -147,33 +144,48 @@ const ornamentFields = {
   o_name:{type:String, decription:'名称'},
 }
 
-const orderFields = {
-  type: {type:String, description:'类型'},
-  source: {type:String, description:'来源'},
-  pay:{type:Number, decription:'支付金额'},
-  pay_type:{type:String, decription:'支付方式'},
-  order_state: {type:String, decription:'订单状态'},
-  transport_company: {type:String, decription:'快递公司'},
-  transport_id:{type:String, decription:'快递单号'},
-  transport_price:{type:Number, decription:'快递费用'},
-  transport_name: {type:String, decription:'收货人'},
-  transport_phone: {type:String, decription:'电话'},
-  transport_address: {type:String, decription:'收货地址'},
-  transport_zipcode: {type:String, decription:'邮编'},
-  remark:{type:String, ddecription:'备注'},
-  shop: {type:Schema.Types.ObjectId, ref:'shop', decription:'店铺'},
-  guide: {type:Schema.Types.ObjectId, ref:'user_shop_guide', decription:'导购'},
-  customer: {type:Schema.Types.ObjectId, ref:'customer', decription:'客户'},
-  pics:[new Schema({
-    file:{type:Schema.Types.ObjectId, ref:'file', decription:'图片'},
-    desc:{type:String, decription:'说明'}
-  })],
+const orderGoodsFields = {
   ...shoesFields,
   ...beltFields,
   ...watchStrapFields,
   ...maintainFields,
   ...rechargeFields,
-  ...ornamentFields,
+  ...ornamentFields
+}
+const subOrderSchema = new Schema({
+  orderGoodsFields,
+  type: {type:String, description:'类型'},
+  state: {type:String, decription:'订单状态'},
+  pics:[new Schema({
+    file:{type:Schema.Types.ObjectId, ref:'file', decription:'图片'},
+    desc:{type:String, decription:'说明'}
+  })],
+  sub_order_id: {type:String, description:'子订单订单ID'},
+  transport_company: {type:String, decription:'快递公司'},
+  transport_id:{type:String, decription:'快递单号'},
+  transport_price:{type:Number, decription:'快递费用'},
+  remark:{type:String, ddecription:'备注'},
+  order:{type:Schema.Types.ObjectId, ref:'order', decription:'订单信息'},
+  urgent:{type:Schema.Types.ObjectId, ref:'common', decription:'加急'},
+  urgent_day: {type: Number, decription:'加急天数'},
+  urgent_price: {type: Number, decription:'加急价格'},
+  ...baseFields
+});
+module.exports.subOrderModel = mongoose.model('sub_order', subOrderSchema);
+
+const orderFields = {
+  order_id: {type:String, description:'订单ID'},
+  source: {type:String, description:'来源'},
+  pay:{type:Number, decription:'支付金额'},
+  pay_type:{type:String, decription:'支付方式'},
+  transport_name: {type:String, decription:'收货人'},
+  transport_phone: {type:String, decription:'电话'},
+  transport_address: {type:String, decription:'收货地址'},
+  transport_zipcode: {type:String, decription:'邮编'},
+  shop: {type:Schema.Types.ObjectId, ref:'shop', decription:'店铺'},
+  guide: {type:Schema.Types.ObjectId, ref:'user_shop_guide', decription:'导购'},
+  customer: {type:Schema.Types.ObjectId, ref:'customer', decription:'客户'},
+  sub_order:[{type:Schema.Types.ObjectId, ref:'sub_order', decription:'子订单'}],
   ...baseFields
 }
 const orderSchema = new Schema({

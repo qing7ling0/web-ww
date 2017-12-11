@@ -9,15 +9,15 @@ import {
   Layout,
   message,
   Table,
-  Button
+  Button,
+  Tabs
 } from 'antd'
 
+const TabPane = Tabs.TabPane;
+
+
 import {
-  Root,
-  LoginInput,
-  Container,
-  LoginCard,
-  BtnLogin
+  Root
 } from './styled'
 
 import Actions from '../../../actions'
@@ -28,6 +28,7 @@ import { commonUtils } from '../../../modules/common';
 import { ORDER_TYPES } from './types'
 import * as optionsType from '../types'
 
+import DataContentComponent from '../../common/DataContentComponent'
 import BaseListComponent from '../../common/BaseListComponent'
 import OrderAddModal from './OrderAddModal'
 import OrderEditModal from './OrderEditModal'
@@ -59,7 +60,6 @@ class OrderListContainer extends Component {
     this.props.reqCustomerList(0, 10000);
     this.props.reqShopList(0, 100);
     this.props.reqShopGuideList(0, 1000);
-    this.props.reqGoodsShoesList(0, 1000);
   }
   
   componentWillReceiveProps(nextProps){
@@ -73,7 +73,30 @@ class OrderListContainer extends Component {
     }
   }
 
-  render() {
+  renderHeader = () => {
+    return(
+      <Tabs defaultActiveKey="2" size="small">
+        <TabPane tab="Tab 1" key="1">Content of tab 1</TabPane>
+        <TabPane tab="Tab 2" key="2">Content of tab 2</TabPane>
+        <TabPane tab="Tab 3" key="3">Content of tab 3</TabPane>
+      </Tabs>
+    );
+  }
+
+  renderSubOrder = (item) => {
+    const subColumns = {};
+    return (
+      <Table
+        columns={subColumns}
+        dataSource={item.sub_order}
+        pagination={false}
+      />
+    );
+  }
+
+  /**
+   * 
+    render() {
     const columns = optionsType.getOrderListOptions(this);
     const list = this.props.orderList;
     return (
@@ -123,6 +146,60 @@ class OrderListContainer extends Component {
       />
     );
   }
+  */
+
+  render() {
+    let pagination = false;
+    if (this.props.pageInfo && this.props.pageInfo.pageSize) {
+      pagination = {
+        current:this.props.pageInfo.page,
+        pageSize:constants.DEFAULT_PAGE_SIZE,
+        onChange:this.onPageChange,
+        showTotal:total => `Total:${total}`,
+        total: this.props.pageInfo.total
+      }
+    }
+    this.columns=[
+      { title: '名称', dataIndex: 'name', key: 'name'},
+      { title: '颜色', dataIndex: 'color', key: 'color', render:(item) => item.name},
+      { title: '数量', dataIndex: 'count', key: 'count'}
+    ]
+    this.source = [
+      
+    ]
+    return (
+      <Root>
+        <DataContentComponent
+          hasSearch={true}
+          searchPlaceholder={'输入订单编号'}
+          headerRender={this.renderHeader}
+          listener={(e, value)=>{
+            if (e === 'add') {
+              if (this.props.onBtnAddClicked) {
+                // this.props.onBtnAddClicked();
+              }
+            } else if (e === 'delArray') {
+              // let ids = this.state.selectedRows.map((item) => {
+              //   return item._id;
+              // })
+              // this.props.onDelItems(ids);
+            } else if (e === 'search') {
+              // this.props.onSearch(value);
+            }
+          }}>
+          <Table 
+            columns={this.columns} 
+            dataSource={this.state.source} 
+            loading={this.props.loading}
+            rowKey={'_id1'}
+            onRowClick={this.onRowClick}
+            rowSelection={{onChange:this.onRowSelectionChange}}
+            pagination={pagination}
+          />
+        </DataContentComponent>
+      </Root>
+    );
+  }
 
   onReqList = (pageInfo) => {
     let con = null;
@@ -166,11 +243,21 @@ class OrderListContainer extends Component {
   }
 
   onRowClick = (record, index, event) => {
-    this.setState({editVisible:true, editData:record});
+    // this.setState({editVisible:true, editData:record});
   }
 
   onRowClick = (record, index, event) => {
-    this.props.history.push(this.props.match.path+'/' + record._id);
+    // this.props.history.push(this.props.match.path+'/' + record._id);
+  }
+  onPageChange = (page, pageSize) => {
+    // if (this.props.onPageChange) {
+    //   this.props.onPageChange(page, pageSize);
+    // } else {
+    //   this.props.onGetList({page:page, pageSize:pageSize, total:0})
+    // }
+  }
+  onRowSelectionChange = (selectedRowKeys, selectedRows) => {
+    this.setState({selectedRows:selectedRows});
   }
 
   onEdit = (record) => {

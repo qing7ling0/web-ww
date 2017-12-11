@@ -17,9 +17,11 @@ const rechargeType = `r_amount`
 // 配饰
 const ornamentType = `o_NID, o_name`
 
-export const orderType = `{
-  _id, type, source, pay, pay_type, urgent_day, urgent_price, order_state, transport_company, transport_id,
-  transport_price, transport_name, transport_phone, transport_address, transport_zipcode, remark,
-  shop{_id,name}, guide{_id,name}, customer{_id,name,phone}, 
+export const subOrderType = `{
+  _id, type, sub_order_id, urgent_day, urgent_price, state, transport_company, transport_id, transport_price, remark, pics{file, desc}
   ${shoesType}, ${beltType}, ${watchStrapType}, ${maintainType}, ${rechargeType}, ${ornamentType}
+}`
+export const orderType = `{
+  _id, order_id, source, pay, pay_type, transport_name, transport_phone, transport_address, transport_zipcode,
+  shop{_id,name}, guide{_id,name}, customer{_id,name,phone}, sub_order${subOrderType}
 }`

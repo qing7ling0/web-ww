@@ -67,8 +67,7 @@ const goodsInputFields = {
 }
 
 // 鞋
-const goodsShoesBaseFields = {
-};
+const goodsShoesBaseFields = {};
 const goodsShoesFields = {
   ...goodsShoesBaseFields,
   s_material: {type:materialType, decription:'材质'},
@@ -107,8 +106,7 @@ const goodsBeltInputFields = {
 }
 
 // 表带
-const goodsWatchStrapBaseFields = {
-};
+const goodsWatchStrapBaseFields = {};
 const goodsWatchStrapFields = {
   ...goodsWatchStrapBaseFields,
   ws_material: {type:materialType, decription:'材质'},
@@ -121,8 +119,7 @@ const goodsWatchStrapInputFields = {
 }
 
 // 配饰
-const goodsOrnamentBaseFields = {
-};
+const goodsOrnamentBaseFields = {};
 const goodsOrnamentFields = {
   ...goodsOrnamentBaseFields,
 }
@@ -142,7 +139,6 @@ export const goodsType = new GraphQLObjectType({
     ...commonFields.defaultCreateFields
   }
 })
-
 export const goodsInputType = new GraphQLInputObjectType({
   name: 'goodsInputType',
   fields: {
@@ -168,7 +164,6 @@ const orderShoesBaseFields = {
   s_right_fuWei: {type: GraphQLFloat, decription:'右脚附维'},
   s_design_self: {type: GraphQLBoolean, decription:'是否来样设计'}
 }
-
 const orderShoesFields = {
   ...orderShoesBaseFields,
   s_xuan_hao:{type:commonTypes.commonType, decription:'鞋楦型'},
@@ -183,7 +178,6 @@ const orderShoesFields = {
   s_customs:{type:new GraphQLList(commonTypes.commonType)}, // 特殊定制
   s_shoes: {type:goodsType, decription:'商品'}
 }
-
 const orderShoesInputFields = {
   ...orderShoesBaseFields,
   s_xuan_hao:{type:GraphQLString, decription:'鞋楦型'},
@@ -289,24 +283,73 @@ const orderOrnamentInputFields = {
   o_ornament:{type:GraphQLString, decription:'配饰'},
 }
 
-const orderBaseFields = {
-  type: {type:GraphQLString, description:'类型'},
-  source: {type:GraphQLString, description:'来源'},
-  pay:{type:GraphQLFloat, decription:'支付金额'},
-  pay_type:{type:GraphQLString, decription:'支付方式'},
-  order_state: {type:GraphQLString, decription:'订单状态'},
+// 子订单
+const subOrderBaseFields = {
+  type: {type:GraphQLString, decription:'类型'},
+  state: {type:GraphQLString, decription:'订单状态'},
   transport_company: {type:GraphQLString, decription:'快递公司'},
   transport_id:{type:GraphQLString, decription:'快递单号'},
   transport_price:{type:GraphQLFloat, decription:'快递费用'},
+  remark:{type:GraphQLString, ddecription:'备注'},
+  urgent_day: {type: GraphQLInt, decription:'加急天数'},
+  urgent_price: {type: GraphQLFloat, decription:'加急价格'},
+}
+
+export const subOrderType = new GraphQLObjectType({
+  name: 'subOrderType',
+  fields: {
+    _id: {type:GraphQLString},
+    ...subOrderBaseFields,
+    ...orderShoesFields,
+    ...orderBeltFields,
+    ...orderWatchStrapFields,
+    ...orderMaintainFields,
+    ...orderRechargeFields,
+    ...orderOrnamentFields,
+    pics:{type:new GraphQLList(new GraphQLObjectType({
+        name: 'orderPicType',
+        fields: {
+          file:{type:GraphQLString, decription:'图片'},
+          desc:{type:GraphQLString, decription:'说明'}
+        }
+      }
+    ))},
+    sub_order_id:{type:GraphQLString, decription:'子订单id'},
+    ...commonFields.defaultCreateFields
+  }
+});
+export const subOrderInputType = new GraphQLInputObjectType({
+  name: 'subOrderInputType',
+  fields: {
+    ...subOrderBaseFields,
+    ...orderShoesInputFields,
+    ...orderBeltInputFields,
+    ...orderWatchStrapInputFields,
+    ...orderMaintainInputFields,
+    ...orderRechargeInputFields,
+    ...orderOrnamentInputFields,
+    pics:[{type:new GraphQLList(new GraphQLInputObjectType({
+        name: 'orderPicInputType',
+        fields: {
+          file:{type:GraphQLString, decription:'图片'},
+          desc:{type:GraphQLString, decription:'说明'}
+        }
+      }
+    ))}],
+    ...commonFields.defaultCreateFields
+  }
+});
+
+// 订单
+const orderBaseFields = {
+  source: {type:GraphQLString, description:'来源'},
+  pay:{type:GraphQLFloat, decription:'支付金额'},
+  pay_type:{type:GraphQLString, decription:'支付方式'},
   transport_name: {type:GraphQLString, decription:'收货人'},
   transport_phone: {type:GraphQLString, decription:'电话'},
   transport_address: {type:GraphQLString, decription:'收货地址'},
-  transport_zipcode: {type:GraphQLString, decription:'邮编'},
-  remark:{type:GraphQLString, ddecription:'备注'},
-  urgent_day: {type: GraphQLInt, decription:'加急天数'},
-  urgent_price: {type: GraphQLFloat, decription:'加急价格'}
+  transport_zipcode: {type:GraphQLString, decription:'邮编'}
 }
-
 export const orderType = new GraphQLObjectType({
   name: 'orderType',
   fields: {
@@ -315,17 +358,10 @@ export const orderType = new GraphQLObjectType({
     shop: {type:shopTypes.shopType, ref:'shop', decription:'店铺'},
     guide: {type:userTypes.userShopGuideType, ref:'user_shop_guide', decription:'导购'},
     customer: {type:customerTypes.customerType, ref:'customer', decription:'客户'},
-    urgent:{type:commonTypes.commonType, decription:'加急'},
-    ...orderShoesFields,
-    ...orderBeltFields,
-    ...orderWatchStrapFields,
-    ...orderMaintainFields,
-    ...orderRechargeFields,
-    ...orderOrnamentFields,
+    sub_order:{type:new GraphQLList(subOrderType)},
     ...commonFields.defaultCreateFields
   }
 });
-
 export const orderInputType = new GraphQLInputObjectType({
   name: 'orderInputType',
   fields: {
@@ -333,13 +369,6 @@ export const orderInputType = new GraphQLInputObjectType({
     shop: {type:GraphQLString, decription:'店铺'},
     guide: {type:GraphQLString, decription:'导购'},
     customer: {type:customerTypes.customerInputType, decription:'客户id'},
-    urgent:{type:GraphQLString, decription:'加急'},
-    ...orderShoesInputFields,
-    ...orderBeltInputFields,
-    ...orderWatchStrapInputFields,
-    ...orderMaintainInputFields,
-    ...orderRechargeInputFields,
-    ...orderOrnamentInputFields,
     ...commonFields.defaultCreateFields
   }
 });

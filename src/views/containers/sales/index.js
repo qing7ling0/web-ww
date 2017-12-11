@@ -36,12 +36,6 @@ export default [
     strict={true}
     component={CommonContainer}
   />),
-  (<Route 
-    key={constants.MENU_IDS.salesMaintainPrices} 
-    path={common.findRouterById(config.Routers, constants.MENU_IDS.salesMaintainPrices).url} 
-    strict={true}
-    component={MaintainContainer}
-  />),
   (<Redirect 
     key={constants.MENU_IDS.sales} 
     from={common.findRouterById(config.Routers, constants.MENU_IDS.sales).url} 
