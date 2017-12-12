@@ -112,7 +112,7 @@ class OrderListContainer extends Component {
           })}
         </Menu>
         <SearchContainer>
-          <SearchInput placeholder={'请输入订单号'} onSearch={this.onSearchOrderID}/>
+          <SearchInput placeholder={'请输入订单号'} allowClear='true' onSearch={this.onSearchOrderID}/>
           <SelectInput showSearch={true} placeholder={'请选择导购'} allowClear='true' optionFilterProp='children' onChange={this.onGudieChange}>
             {
               this.props.guideList.map((item) => {
@@ -120,7 +120,7 @@ class OrderListContainer extends Component {
               })
             }
           </SelectInput>
-          <SelectInput placeholder={'请选择店铺'} onChange={this.onShopChange}>
+          <SelectInput placeholder={'请选择店铺'} allowClear='true' onChange={this.onShopChange}>
             {
               this.props.shopList.map((item) => {
                 return <Select.Option key={item._id}>{item.name}</Select.Option>;

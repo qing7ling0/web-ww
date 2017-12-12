@@ -363,7 +363,7 @@ export const orderType = new GraphQLObjectType({
   fields: {
     _id: {type:GraphQLString},
     ...orderBaseFields,
-    sub_order:{type:new GraphQLList(GraphQLString)},
+    sub_orders:{type:new GraphQLList(GraphQLString)},
     ...commonFields.defaultCreateFields
   }
 });
@@ -372,7 +372,7 @@ export const orderDetailType = new GraphQLObjectType({
   fields: {
     _id: {type:GraphQLString},
     ...orderBaseFields,
-    sub_order:{type:new GraphQLList(subOrderType)},
+    sub_orders:{type:new GraphQLList(subOrderType)},
     ...commonFields.defaultCreateFields
   }
 });

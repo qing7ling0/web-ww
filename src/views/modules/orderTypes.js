@@ -1,7 +1,7 @@
 import * as graphqlTypes from './graphqlTypes'
 
 // 鞋子
-const shoesType = `s_xuanhao, s_gui_ge, s_material, s_customs{_id, name, price}
+const shoesType = `s_xuan_hao, s_gui_ge, s_material, s_customs{_id, name, price}
   s_out_color,s_in_color,s_bottom_color,s_bottom_side_color, s_tie_di{_id,name}
   s_foot_size, s_left_length, s_left_zhiWei, s_left_fuWei, s_right_length,
   s_right_zhiWei, s_right_fuWei`
@@ -22,8 +22,8 @@ export const subOrderType = `{
   ${shoesType}, ${beltType}, ${watchStrapType}, ${maintainType}, ${rechargeType}, ${ornamentType}
 }`
 export const orderType = `{
-  _id, order_id, source, pay, pay_type, sub_order
+  _id, order_id, source, pay, pay_type, sub_orders
 }`
 export const orderDetailType = `{
-  _id, order_id, source, pay, pay_type, sub_order${subOrderType}
+  _id, order_id, source, pay, pay_type, sub_orders${subOrderType}
 }`

@@ -42,6 +42,22 @@ class CommonData {
   async findByIdCommon(id, onQuery) {
     return DB.findById(commonModel, id, onQuery);
   }
+
+  createCurrentOrderIndex() {
+    let _time = new Date().getTime() / 1000;
+    if (!currentOrderTime) {
+      currentOrderTime = _time;
+      currentOrderIndex = 1001;
+    } else {
+      if (_time !== currentOrderTime) {
+        currentOrderTime = _time;
+        currentOrderIndex = 1001;
+      } else {
+        if (!currentOrderIndex) currentOrderIndex = 1001;
+      }
+    }
+    return currentOrderIndex++;
+  }
 }
 
 module.exports = new CommonData();

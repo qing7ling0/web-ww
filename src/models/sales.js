@@ -183,7 +183,7 @@ const orderFields = {
   source: {type:String, description:'来源'},
   pay:{type:Number, decription:'支付金额'},
   pay_type:{type:String, decription:'支付方式'},
-  sub_order:[{type:Schema.Types.ObjectId, ref:'sub_order', decription:'子订单'}],
+  sub_orders:[{type:Schema.Types.ObjectId, ref:'sub_order', decription:'子订单'}],
   ...baseFields
 }
 const orderSchema = new Schema({

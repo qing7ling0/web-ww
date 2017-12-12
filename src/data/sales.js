@@ -21,10 +21,12 @@ import {
 
 import { ApiError, ApiErrorNames } from '../error/api-errors'
 import utils from '../utils/utils'
+import commonUtils from '../utils/common-utils'
 import baseUtils from '../base/utils/utils'
 import * as validate from '../base/utils/validate'
 import constants from '../constants/constants'
 import DB from '../db/DB'
+import commonData from './common-data'
 
 import {customerData} from './index'
 // import 
@@ -140,26 +142,68 @@ class SalesData {
 
   async addOrder(doc, options={}) {
     if (doc) {
-      if (!doc.customer || !doc.customer.phone) {
-        // TODO
-        // 必须有用户
+      
+      if (!doc.pay || !doc.pay_type) {
+        // 必须有支付信息
         throw new ApiError(ApiErrorNames.ADD_FAIL);
       }
 
-      let customer = await this.updateOrAddCustomerByOrder(doc, doc.customer);
-      if (!customer) {
-        // TODO
-        // 必须有用户
+      let subOrders = doc.sub_orders;
+      if (!subOrders || !subOrders.length || subOrders.length < 1) {
+        // 必须有自订单
         throw new ApiError(ApiErrorNames.ADD_FAIL);
       }
-      doc.customer = customer._id;
 
+      for(let sub of subOrders) {
+        if (!sub.customer || !sub.customer.phone) {
+          // TODO
+          // 必须有用户
+          throw new ApiError(ApiErrorNames.ADD_FAIL);
+        }
+        if (!sub.type) {
+          // TODO
+          // 必须有类型
+          throw new ApiError(ApiErrorNames.ADD_FAIL);
+        }
+      }
+      
+      let customers = [];
+      let newSubOrders = [];
+      for(let sub of subOrders) {
+        let customer = await this.updateOrAddCustomerByOrder(sub, sub.customer);
+        if (!customer) {
+          // TODO
+          // 必须有用户
+          throw new ApiError(ApiErrorNames.ADD_FAIL);
+        }
+        // customers.push(customer._id);
+        sub.customer = customer._id;
+        sub.sub_order_id = commonUtils.createOrderId(sub.type, commonData.createCurrentOrderIndex());
+        let subOrder = new subOrderModel(sub);
+        let newSubOrder = await subOrder.save();
+        if (newSubOrder) {
+          newSubOrders.push(newSubOrder._id);
+        } else {
+          // 添加失败 移除之前添加的 
+          await subOrderModel.remove({_id:{$in:newSubOrders}});
+          throw new ApiError(ApiErrorNames.ADD_FAIL);
+        }
+      }
+
+      if (newSubOrders.length === 0) {
+        // 添加失败
+        throw new ApiError(ApiErrorNames.ADD_FAIL);
+      }
+
+      doc.sub_orders = newSubOrders;
       let order = new orderModel(doc);
       if (order) {
         let newOrder = await order.save(options);
         if (newOrder) {
+          await subOrderModel.updateMany({_id:{$in:newSubOrders}}, {order:newOrder._id});
           return newOrder;
         }
+        throw new ApiError(ApiErrorNames.ADD_FAIL);
       } else {
         throw new ApiError(ApiErrorNames.ADD_FAIL);
       }
@@ -176,7 +220,7 @@ class SalesData {
         throw new ApiError(ApiErrorNames.ADD_FAIL);
       }
 
-      let customer = await this.updateOrAddCustomerByOrder(doc.customer);
+      let customer = await this.updateOrAddCustomerByOrder(doc, doc.customer);
       if (!customer) {
         // TODO
         // 必须有用户
@@ -204,6 +248,26 @@ class SalesData {
       return await orderModel.remove({_id:{$in:ids}});
     } else {
       throw new ApiError(ApiErrorNames.DELETE_FAIL);
+    }
+  }
+  
+  async updateSubOrder(conditions, doc, options) {
+    if (doc) {
+      if (doc.customer && doc.customer.phone) {
+        
+        let customer = await this.updateOrAddCustomerByOrder(doc, doc.customer);
+        if (!customer) {
+          // TODO
+          // 必须有用户
+          throw new ApiError(ApiErrorNames.ADD_FAIL);
+        }
+        doc.customer = customer._id;
+      }
+
+      let ret = await subOrderModel.update(conditions, doc, options);
+      return ret;
+    } else {
+      throw new ApiError(ApiErrorNames.UPDATE_FAIL);
     }
   }
 }
