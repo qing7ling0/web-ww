@@ -22,6 +22,8 @@ const commonFields = require('../common/common-fields')
 const commonUtils = require('../../utils/common-utils')
 const schemasUtils = require('../../utils/schemas-utils')
 
+const TEST = require('../../test/test')
+
 export const materialList = schemasUtils.createDefaultListQuery('materialList', types.materialType, materialModel, (query) =>{
   return query.populate('color')
 });
@@ -76,6 +78,7 @@ export const orderList = {
     if (params.conditions) {
       params.conditions = commonUtils.urlString2Conditions(params.conditions);
     }
+
     return await salesData.getOrderList({page:params.page, pageSize:params.pageSize}, {conditions:params.conditions})
 	}
 }
@@ -97,6 +100,7 @@ export const subOrderList = {
     if (params.conditions) {
       params.conditions = commonUtils.urlString2Conditions(params.conditions);
     }
+    // TEST();
     return await salesData.getSubOrderList({page:params.page, pageSize:params.pageSize}, {conditions:params.conditions})
 	}
 }

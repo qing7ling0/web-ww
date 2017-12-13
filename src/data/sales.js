@@ -35,6 +35,13 @@ const logUtil = require('../utils/log-utils');
 
 class SalesData {
 
+  createOrderId = function(type, count) {
+    const moment = require('moment')
+    let date = moment().format('MMDDHHmmss');
+  
+    return type+date+count;
+  }
+
   goodsPopulate(query) {
     return query
       .populate('type').populate('season').populate('style')
@@ -88,14 +95,7 @@ class SalesData {
   // 自订单
   subOrderPopulate(query) {
     return query
-      .populate({
-        path:'order',
-        populate:[
-          {path:'shop'},
-          {path:'guide'},
-          {path:'customer'}
-        ]
-      }).exec();
+    .populate('shop').populate('guide').populate('customer').exec();
   }
   // 自订单列表
   async getSubOrderList(page, options) {
@@ -176,9 +176,8 @@ class SalesData {
           // 必须有用户
           throw new ApiError(ApiErrorNames.ADD_FAIL);
         }
-        // customers.push(customer._id);
         sub.customer = customer._id;
-        sub.sub_order_id = commonUtils.createOrderId(sub.type, commonData.createCurrentOrderIndex());
+        sub.sub_order_id = this.createOrderId(sub.type, commonData.createCurrentOrderIndex());
         let subOrder = new subOrderModel(sub);
         let newSubOrder = await subOrder.save();
         if (newSubOrder) {
@@ -254,7 +253,7 @@ class SalesData {
   async updateSubOrder(conditions, doc, options) {
     if (doc) {
       if (doc.customer && doc.customer.phone) {
-        
+
         let customer = await this.updateOrAddCustomerByOrder(doc, doc.customer);
         if (!customer) {
           // TODO

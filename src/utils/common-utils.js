@@ -91,9 +91,16 @@ export const urlString2Conditions = function(value) {
   return ret;
 }
 
-export const createOrderId = function(type, count) {
-  const monent = require('monent')
-  let date = monent().format('MMDDHHmmss');
 
-  return type+date+count;
+export const createGoodsNID = function(type, data) {
+  let NID = '';
+  switch(type) {
+    case constants.GOODS_SHOES:
+      
+    break;
+    case constants.GOODS_BELT:
+    break;
+    case constants.GOODS_WATCH_STRAP:
+    break;
+  }
 }

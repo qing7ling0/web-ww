@@ -45,18 +45,18 @@ class CommonData {
 
   createCurrentOrderIndex() {
     let _time = new Date().getTime() / 1000;
-    if (!currentOrderTime) {
-      currentOrderTime = _time;
-      currentOrderIndex = 1001;
+    if (!CommonData.currentOrderTime) {
+      CommonData.currentOrderTime = _time;
+      CommonData.currentOrderIndex = 1001;
     } else {
-      if (_time !== currentOrderTime) {
-        currentOrderTime = _time;
-        currentOrderIndex = 1001;
+      if (_time !== CommonData.currentOrderTime) {
+        CommonData.currentOrderTime = _time;
+        CommonData.currentOrderIndex = 1001;
       } else {
-        if (!currentOrderIndex) currentOrderIndex = 1001;
+        if (!CommonData.currentOrderIndex) CommonData.currentOrderIndex = 1001;
       }
     }
-    return currentOrderIndex++;
+    return CommonData.currentOrderIndex++;
   }
 }
 

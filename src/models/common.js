@@ -14,6 +14,7 @@ var Schema = mongoose.Schema;
 
 const commonBaseFields = {
   type: {type:String, description:'类型'},
+  NID:{type:String, description:'名字'},
 };
 
 // 颜色（斜面颜色，内里颜色，鞋底颜色，底边颜色，原材料颜色）

@@ -61,18 +61,26 @@ var goodsSchema = new Schema({
 });
 module.exports.goodsModel = mongoose.model('goods', goodsSchema);
 
+const orderBaseSchea = new Schema({
+  _id: {type:String, decription:'ID'},
+  name: {type:String, decription:'名称'},
+  NID: {type:String, decription:'编号'},
+  price: {type:Number, decription:'价格'},
+  day: {type:Number, decription:'天数'}
+});
 // 订单信息
 // 鞋
 const shoesFields = {
-  s_material: {type:String, decription:'材质'},
-  s_xuan_hao: {type:String, decription:'楦号'},
-  s_gui_ge: {type:String, decription:'规格'},
-  s_gen_gao: {type:String, decription:'跟高'},
-  s_out_color: {type:String, decription:'鞋面颜色'},
-  s_in_color: {type:String, decription:'里皮颜色'},
-  s_bottom_color: {type:String, decription:'鞋底颜色'},
-  s_bottom_side_color: {type:String, decription:'底边颜色'},
-  s_tie_di: {type:Schema.Types.ObjectId, ref:'common', decription:'贴底'},
+  s_material: {type:orderBaseSchea, decription:'材质'},
+  s_xuan_hao: {type:orderBaseSchea, decription:'楦号'},
+  s_gui_ge: {type:orderBaseSchea, decription:'规格'},
+  s_gen_gao: {type:orderBaseSchea, decription:'跟高'},
+  s_out_color: {type:orderBaseSchea, decription:'鞋面颜色'},
+  s_in_color: {type:orderBaseSchea, decription:'里皮颜色'},
+  s_bottom_color: {type:orderBaseSchea, decription:'鞋底颜色'},
+  s_bottom_side_color: {type:orderBaseSchea, decription:'底边颜色'},
+
+  s_tie_di: {type:orderBaseSchea, decription:'贴底'},
   s_design_self: {type:Boolean, default:false, decription:'是否来样设计'},
   s_shoes: {type:Schema.Types.ObjectId, ref:'goods', decription:'商品'},
 
@@ -83,15 +91,13 @@ const shoesFields = {
   s_right_length: {type: Number, description:'右脚长度'},
   s_right_zhiWei: {type: Number, decription:'右脚趾围'},
   s_right_fuWei: {type: Number, decription:'右脚附维'},
-  s_customs:[commonSchema], // 特殊定制
-  s_urgent_day: {type: Number, decription:'加急天数'},
-  s_urgent_price: {type: Number, decription:'加急价格'},
+  s_customs:[orderBaseSchea], // 特殊定制
 }
 
 // 皮带
 const beltFields = {
-  b_material:{type:String, decription:'材质'},
-  b_color:{type:String, decription:'颜色'},
+  b_material:{type:orderBaseSchea, decription:'材质'},
+  b_color:{type:orderBaseSchea, decription:'颜色'},
   b_belt: {type:Schema.Types.ObjectId, ref:'goods', decription:'商品'},
 
   b_A: {type: Number, decription:'皮带测量数据A'},
@@ -103,8 +109,8 @@ const beltFields = {
 
 // 表带
 const watchStrapFields = {
-  ws_material:{type:String, decription:'材质'},
-  ws_style:{type:String, decription:'类别，男女'},
+  ws_material:{type:orderBaseSchea, decription:'材质'},
+  ws_style:{type:orderBaseSchea, decription:'类别，男女'},
   ws_watch_strap: {type:Schema.Types.ObjectId, ref:'goods', decription:'商品'},
 
   ws_A: {type: Number, decription:'表带测量数据A'},
@@ -148,7 +154,7 @@ const orderGoodsFields = {
   ...ornamentFields
 }
 const subOrderSchema = new Schema({
-  orderGoodsFields,
+  ...orderGoodsFields,
   type: {type:String, description:'类型'},
   state: {type:String, decription:'订单状态'},
   pics:[new Schema({
@@ -158,7 +164,10 @@ const subOrderSchema = new Schema({
   NID: {type:String, decription:'编号'},
   name:{type:String, decription:'名称'},
   count:{type:Number, decription:'数量', default:1},
+  price:{type:Number, decription:'价格'},
+  remark:{type:String, ddecription:'备注'},
   sub_order_id: {type:String, description:'子订单订单ID'},
+
   transport_company: {type:String, decription:'快递公司'},
   transport_id:{type:String, decription:'快递单号'},
   transport_price:{type:Number, decription:'快递费用'},
@@ -166,14 +175,12 @@ const subOrderSchema = new Schema({
   transport_phone: {type:String, decription:'电话'},
   transport_address: {type:String, decription:'收货地址'},
   transport_zipcode: {type:String, decription:'邮编'},
-  remark:{type:String, ddecription:'备注'},
-  urgent_day: {type: Number, decription:'加急天数'},
-  urgent_price: {type: Number, decription:'加急价格'},
+
+  urgent:{type:orderBaseSchea, decription:'加急'},
   shop: {type:Schema.Types.ObjectId, ref:'shop', decription:'店铺'},
   guide: {type:Schema.Types.ObjectId, ref:'user_shop_guide', decription:'导购'},
   customer: {type:Schema.Types.ObjectId, ref:'customer', decription:'客户'},
   order:{type:Schema.Types.ObjectId, ref:'order', decription:'订单信息'},
-  urgent:{type:Schema.Types.ObjectId, ref:'common', decription:'加急'},
   ...baseFields
 });
 module.exports.subOrderModel = mongoose.model('sub_order', subOrderSchema);
@@ -187,6 +194,6 @@ const orderFields = {
   ...baseFields
 }
 const orderSchema = new Schema({
-  orderFields
+  ...orderFields
 });
 module.exports.orderModel = mongoose.model('order', orderSchema);

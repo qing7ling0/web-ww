@@ -39,10 +39,10 @@ const getOrderBaseListColumns = function(target) {
     { title: '编号', dataIndex: 'NID', key: 'NID'},
     { title: '名称', dataIndex: 'name', key: 'name'},
     { title: '数量', dataIndex: 'count', key: 'count'},
-    { title: '门店', dataIndex: 'shop', key: 'shop', render:(item) => item.shop.name},
-    { title: '导购', dataIndex: 'guide', key: 'guide', render:(item) => item.guide.name},
-    { title: '客户', dataIndex: 'customer', key: 'customer', render:(item) => item.customer.name},
-    { title: '支付金额', dataIndex: 'pay', key: 'pay', render:(item) => item+'RMB'},
+    { title: '门店', dataIndex: 'shop', key: 'shop', render:(item) => item.name},
+    { title: '导购', dataIndex: 'guide', key: 'guide', render:(item) => item.name},
+    { title: '客户', dataIndex: 'customer', key: 'customer', render:(item) => item.name},
+    { title: '价格', dataIndex: 'price', key: 'price', render:(item) => item+'RMB'},
   ]
 }
 // 脚型

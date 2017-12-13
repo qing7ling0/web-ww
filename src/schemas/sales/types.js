@@ -164,14 +164,14 @@ const orderShoesBaseFields = {
 }
 const orderShoesFields = {
   ...orderShoesBaseFields,
-  s_xuan_hao:{type:GraphQLString, decription:'鞋楦型'},
-  s_gui_ge:{type:GraphQLString, decription:'规格'},
-  s_gen_gao:{type:GraphQLString, decription:'跟高'},
-  s_material:{type:GraphQLString, decription:'材料'},
-  s_out_color:{type:GraphQLString, decription:'鞋面颜色'},
-  s_in_color:{type:GraphQLString, decription:'内里颜色'},
-  s_bottom_color:{type:GraphQLString, decription:'鞋底颜色'},
-  s_bottom_side_color:{type:GraphQLString, decription:'底边颜色'},
+  s_xuan_hao:{type:commonTypes.commonType, decription:'鞋楦型'},
+  s_gui_ge:{type:commonTypes.commonType, decription:'规格'},
+  s_gen_gao:{type:commonTypes.commonType, decription:'跟高'},
+  s_material:{type:commonTypes.commonType, decription:'材料'},
+  s_out_color:{type:commonTypes.commonType, decription:'鞋面颜色'},
+  s_in_color:{type:commonTypes.commonType, decription:'内里颜色'},
+  s_bottom_color:{type:commonTypes.commonType, decription:'鞋底颜色'},
+  s_bottom_side_color:{type:commonTypes.commonType, decription:'底边颜色'},
   s_tie_di:{type:commonTypes.commonType, decription:'贴底'},
   s_customs:{type:new GraphQLList(commonTypes.commonType)}, // 特殊定制
   s_shoes: {type:goodsType, decription:'商品'}
@@ -186,7 +186,7 @@ const orderShoesInputFields = {
   s_bottom_color:{type:commonTypes.commonInputType, decription:'鞋底颜色'},
   s_bottom_side_color:{type:commonTypes.commonInputType, decription:'底边颜色'},
   s_gen_gao:{type:commonTypes.commonInputType, decription:'跟高'},
-  s_tie_di:{type:GraphQLString, decription:'贴底'},
+  s_tie_di:{type:commonTypes.commonInputType, decription:'贴底'},
   s_customs:{type:new GraphQLList(GraphQLString)}, // 特殊定制
   s_shoes: {type:GraphQLString, decription:'商品'},
 }
@@ -201,8 +201,8 @@ const orderBeltBaseFields = {
 }
 const orderBeltFields = {
   ...orderBeltBaseFields,
-  b_material:{type:GraphQLString, decription:'材质'},
-  b_color:{type:GraphQLString, decription:'颜色'},
+  b_material:{type:commonTypes.commonType, decription:'材质'},
+  b_color:{type:commonTypes.commonType, decription:'颜色'},
   b_belt: {type:goodsType, decription:'皮带'}
 }
 const orderBeltInputFields = {
@@ -227,8 +227,8 @@ const orderWatchStrapBaseFields = {
 const orderWatchStrapFields = {
   ...orderWatchStrapBaseFields,
   ws_watchStrap: {type:goodsType, decription:'表带'},
-  ws_material:{type:GraphQLString, decription:'材质'},
-  ws_style:{type:GraphQLString, decription:'类别，男女'},
+  ws_material:{type:commonTypes.commonType, decription:'材质'},
+  ws_style:{type:commonTypes.commonType, decription:'类别，男女'},
 }
 const orderWatchStrapInputFields = {
   ...orderWatchStrapBaseFields,
@@ -248,7 +248,7 @@ const orderMaintainBaseFields = {
 }
 const orderMaintainFields = {
   ...orderMaintainBaseFields,
-  m_maintain: {type:commonTypes.commonType, decription:'护理'},
+  m_maintain: {type:GraphQLString, decription:'护理'},
 }
 const orderMaintainInputFields = {
   ...orderMaintainBaseFields,
@@ -272,7 +272,7 @@ const orderOrnamentBaseFields = {
 }
 const orderOrnamentFields = {
   ...orderOrnamentBaseFields,
-  o_ornament:{type:goodsType, decription:'配饰'},
+  o_ornament:{type:GraphQLString, decription:'配饰'},
 }
 const orderOrnamentInputFields = {
   ...orderOrnamentBaseFields,
@@ -340,15 +340,14 @@ export const subOrderInputType = new GraphQLInputObjectType({
     shop: {type:GraphQLString, decription:'店铺'},
     guide: {type:GraphQLString, decription:'导购'},
     customer: {type:customerTypes.customerInputType, decription:'客户id'},
-    pics:[{type:new GraphQLList(new GraphQLInputObjectType({
+    pics:{type:new GraphQLList(new GraphQLInputObjectType({
         name: 'orderPicInputType',
         fields: {
           file:{type:GraphQLString, decription:'图片'},
           desc:{type:GraphQLString, decription:'说明'}
         }
       }
-    ))}],
-    ...commonFields.defaultCreateFields
+    ))}
   }
 });
 
@@ -380,6 +379,6 @@ export const orderInputType = new GraphQLInputObjectType({
   name: 'orderInputType',
   fields: {
     ...orderBaseFields,
-    ...commonFields.defaultCreateFields
+    sub_orders:{type:new GraphQLList(subOrderInputType)},
   }
 });

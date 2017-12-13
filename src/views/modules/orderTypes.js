@@ -1,14 +1,14 @@
 import * as graphqlTypes from './graphqlTypes'
 
 // 鞋子
-const shoesType = `s_xuan_hao, s_gui_ge, s_material, s_customs{_id, name, price}
-  s_out_color,s_in_color,s_bottom_color,s_bottom_side_color, s_tie_di{_id,name}
+const shoesType = `s_xuan_hao{_id,NID,name}, s_gui_ge{_id,NID,name}, s_material{_id,NID,name}, s_customs{_id, name, price}
+  s_out_color{_id,NID,name},s_in_color{_id,NID,name},s_bottom_color{_id,NID,name},s_bottom_side_color{_id,NID,name}, s_tie_di{_id,NID,name}
   s_foot_size, s_left_length, s_left_zhiWei, s_left_fuWei, s_right_length,
   s_right_zhiWei, s_right_fuWei`
 // 皮带
-const beltType = `b_material, b_color, b_A, b_B, b_C, b_D, b_size_remark`
+const beltType = `b_material{_id,NID,name}, b_color{_id,NID,name}, b_A, b_B, b_C, b_D, b_size_remark`
 // 表带
-const watchStrapType = `ws_material, ws_style, ws_A, ws_B, ws_C, ws_D, ws_E, ws_F, ws_G, ws_watch_brand, ws_size_remark`
+const watchStrapType = `ws_material{_id,NID,name}, ws_style{_id,NID,name}, ws_A, ws_B, ws_C, ws_D, ws_E, ws_F, ws_G, ws_watch_brand, ws_size_remark`
 // 护理
 const maintainType = `m_name, m_price, m_time, m_color, m_demo, m_wash`
 // 充值

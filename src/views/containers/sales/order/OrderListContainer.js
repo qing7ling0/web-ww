@@ -84,6 +84,7 @@ class OrderListContainer extends Component {
     this.props.reqCustomerList(0, 10000);
     this.props.reqShopList(0, 100);
     this.props.reqShopGuideList(0, 1000);
+    this.onReqList();
   }
   
   componentWillReceiveProps(nextProps){
@@ -112,7 +113,7 @@ class OrderListContainer extends Component {
           })}
         </Menu>
         <SearchContainer>
-          <SearchInput placeholder={'请输入订单号'} allowClear='true' onSearch={this.onSearchOrderID}/>
+          <SearchInput placeholder={'请输入订单号'} onSearch={this.onSearchOrderID}/>
           <SelectInput showSearch={true} placeholder={'请选择导购'} allowClear='true' optionFilterProp='children' onChange={this.onGudieChange}>
             {
               this.props.guideList.map((item) => {

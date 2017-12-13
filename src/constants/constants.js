@@ -97,7 +97,7 @@ module.exports.COLOR_TYPE = [
 ]
 
 const E_ORDER_TYPE = {
-  SHOES:'1', BELT:'2', WATCH_STRAP:'3', MAINTAIN:'4', RECHARGE:'5', ORNAMENT:'6'
+  SHOES:'1', BELT:'2', WATCH_STRAP:'3', MAINTAIN:'4', RECHARGE:'5', ORNAMENT:'6', DESIGN:'7'
 }
 module.exports.E_ORDER_TYPE = E_ORDER_TYPE;
 
@@ -148,5 +148,5 @@ module.exports.COMMON_DATA_TYPES = {
   WATCH_STRAP_STYLE:'14', // 表带类型
   SHOES_GEN_GAO:'15', // 跟高
   SHOES_GUI_GE:'16', // 规格
-  SHOES_TIE_BIAN:'17', // 规格
+  SHOES_TIE_BIAN:'17', // 贴边
 }
