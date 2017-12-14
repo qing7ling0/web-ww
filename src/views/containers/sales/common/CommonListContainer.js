@@ -119,10 +119,10 @@ class CommonListContainer extends Component {
   }
 
   currentList = () => {
-    let listKey = this.commonType.tag;
-    let index = this.commonType.tag.indexOf(':');
+    let listKey = this.commonType.listTag;
+    let index = this.commonType.listTag.indexOf(':');
     if (index > -1) {
-      listKey = this.commonType.tag.substring(0, index);
+      listKey = this.commonType.listTag.substring(0, index);
     }
     for(let key in this.props.sales) {
       if (listKey === key) {
@@ -140,7 +140,7 @@ class CommonListContainer extends Component {
       con = {};
       con.name = {$regex:`/${this.searchWord}/i`}
     }
-    this.props.reqGetSalesBaseList(this.commonType.listTag, con);
+    this.props.reqGetSalesBaseList(this.commonType.listTag, this.commonType.graphqlType, con);
   }
 
   onReqUpdate = (id, data) => {
@@ -154,7 +154,7 @@ class CommonListContainer extends Component {
     if (data) {
       data.type = this.commonType.key;
     }
-    this.props.reqAddSalesBase(this.commonType.tag, data);
+    this.props.reqAddSalesBase(this.commonType.tag, this.commonType.graphqlType, data);
   }
 
   onReqRemove = (ids) => {

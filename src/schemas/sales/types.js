@@ -23,6 +23,7 @@ import { commonType } from '../common/types';
 export const materialInputFields = {
   _id: {type:GraphQLString},
   name: {type:GraphQLString, description:'名称'},
+  NID: {type:GraphQLString, description:'编号'},
   count: {type:GraphQLInt, description:'数量'}
 };
 export const materialType = new GraphQLObjectType({

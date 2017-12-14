@@ -13,6 +13,7 @@ import {commonData} from '../../data/index';
 import { 
   commonModel
 } from '../../models'
+import { ApiError, ApiErrorNames } from '../../error/api-errors'
 const commonFields = require('../common/common-fields')
 const schemasUtils = require('../../utils/schemas-utils')
 
@@ -36,9 +37,13 @@ export const commonAdd = {
     }
   },
   async resolve (ctx, params, options) {
-    const common = await commonData.addCommon(params.doc)
-    ctx.result = '添加成功！';
-    return common;
+    if (ctx.session.user) {
+      const common = await commonData.addCommon(params.doc)
+      ctx.result = '添加成功！';
+      return common;
+    } else {
+      throw new ApiError(ApiErrorNames.ACCOUNT_SESSION_EXPIRE);
+    }
   }
 };
 export const commonRemove = {

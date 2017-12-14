@@ -97,6 +97,7 @@ class BaseListComponent extends Component {
             }
           }}>
           <Table 
+            bordered={true}
             columns={this.props.columns} 
             dataSource={this.state.source} 
             loading={this.props.loading}

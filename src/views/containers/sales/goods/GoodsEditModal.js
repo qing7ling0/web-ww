@@ -64,7 +64,7 @@ class GoodsEditModal extends Component {
     return (
       <BaseFormModal
         title={this.props.title}
-        options={_options}
+        options={this.options}
         visible={this.state.visible}
         loading={this.props.loading}
         result={this.props.result}

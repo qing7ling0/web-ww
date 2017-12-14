@@ -1,0 +1,12 @@
+th.table-column-center,
+td.table-column-center {
+  text-align: center !important;
+}
+th.table-column-left,
+td.table-column-left {
+  text-align: left !important;
+}
+th.table-column-right,
+td.table-column-right {
+  text-align: right !important;
+}

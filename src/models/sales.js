@@ -10,6 +10,7 @@ const Schema = mongoose.Schema;
 
 const materialFields = {
   name: {type:String, description:'名称'},
+  NID: {type:String, description:'编号'},
   count: {type:Number, description:'数量'},
   color: {type:String, ref:'common', description:'颜色'},
   ...baseFields
@@ -31,7 +32,8 @@ const goodsBaseFields = {
   maintain_cycle: {type:Number, decription:'保养周期'},
   pics:[new Schema({
     file:{type: Schema.Types.ObjectId, ref:'file', description:'图片'}
-  })]
+  })],
+  hide:{type:Boolean, description:'是否隐藏，前端进行删除操作，进行假删除', default:false}
 };
 const goodsShoesFields = {
   s_material: {type:Schema.Types.ObjectId, ref:'material', decription:'材质'},

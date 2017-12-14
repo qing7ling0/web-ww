@@ -83,19 +83,16 @@ export const customerType = `{
 }`
 
 export const materialType = `{_id, name, NID, color{_id,name}, count}`
-
 export const salesBaseType = `{_id, name, NID, editor_name, editor_time}`
-
 export const colorType = `{_id, name, NID, editor_name, editor_time}`
-
-export const maintainType = `{_id, name, price, time, editor_name, editor_time}`
-export const customType = `{_id, name, price, editor_name, editor_time}`
-export const urgentType = `{_id, day, price, editor_name, editor_time}`
-export const xuanHaoType = `{_id, name, editor_name, editor_time}`
-export const guiGeType = `{_id, name, editor_name, editor_time}`
-export const genGaoType = `{_id, name, editor_name, editor_time}`
-export const watchStrapStyleType = `{_id, name, editor_name, editor_time}`
-export const shoesTieBianType = `{_id, name, editor_name, editor_time}`
+export const maintainType = `{_id, name, NID, price, time, editor_name, editor_time}`
+export const customType = `{_id, name, NID, price, editor_name, editor_time}`
+export const urgentType = `{_id, NID, day, price, editor_name, editor_time}`
+export const xuanHaoType = `{_id, NID, name, editor_name, editor_time}`
+export const guiGeType = `{_id, NID, name, editor_name, editor_time}`
+export const genGaoType = `{_id, NID, name, editor_name, editor_time}`
+export const watchStrapStyleType = `{_id, NID, name, editor_name, editor_time}`
+export const shoesTieBianType = `{_id, NID, name, editor_name, editor_time}`
 export const footType = `{_id, type, size, length, zhiWei, fuWei}`
 
 const goodsBaseType =`_id, NID, name, goods, put_date, sex, price, maintain_cycle,type { _id, name }, style { _id, name }, season { _id, name }, pics,editor_name,editor_time`

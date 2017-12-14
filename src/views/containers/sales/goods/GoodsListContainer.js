@@ -24,6 +24,7 @@ import Actions from '../../../actions'
 import BaseListComponent from '../../common/BaseListComponent'
 import * as common from '../../../modules/common'
 import * as constants from '../../../constants/Constants'
+import utils from '../../../../utils/utils'
 import GoodsAddModal from './GoodsAddModal'
 import GoodsEditModal from './GoodsEditModal'
 import { commonUtils } from '../../../modules/common';
@@ -162,6 +163,8 @@ class GoodsListContainer extends Component {
       if (values.put_date) {
         values.put_date = moment(values.put_date).format('YYYY-MM-DD');
       }
+
+
       this.onReqAdd(values);
     }
   }

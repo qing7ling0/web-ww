@@ -22,7 +22,11 @@ const commonUtils = require('../../utils/common-utils')
 const schemasUtils = require('../../utils/schemas-utils')
 
 const material = schemasUtils.createDefaultMutaion('material', types.materialType, types.materialInputType, materialModel);
-const goods = schemasUtils.createDefaultMutaion('goods', types.goodsType, types.goodsInputType, goodsModel);
+const goods = schemasUtils.createDefaultMutaion('goods', types.goodsType, types.goodsInputType, goodsModel, {
+  add:salesData.addGoods.bind(salesData), 
+  remove:salesData.removeGoodsByIds.bind(salesData), 
+  update:salesData.updateGoods.bind(salesData)
+});
 
 const orderAdd = {
   type: types.orderType,

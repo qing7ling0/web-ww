@@ -19,7 +19,11 @@ const defaultInitFormValue = (options, target) => {
     if (!item.decoratorOptions) {
       item.decoratorOptions = {};
     }
-    item.decoratorOptions.initialValue = target.props.data[item.name];
+    let value = target.props.data[item.name] || '';
+    if (value._id) {
+      value = value._id;
+    }
+    item.decoratorOptions.initialValue = value;
     return item;
   });
 }
@@ -61,7 +65,7 @@ const getGoodsShoesProfileOptions = function(target) {
 }
 const getGoodsShoesListOptions = function(target) {
   let options = getGoodsShoesBaseColumns(target);
-  options.push({ title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
+  options.push({ title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
     return (
       <div>
         <OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
@@ -70,7 +74,7 @@ const getGoodsShoesListOptions = function(target) {
         }} />
         <OpeateBtn type="primary" shape="circle" icon="edit" size="large" onClick={(e)=>{
           e.stopPropagation();
-          target.onEdit(record);
+          target.onEditClick(record);
         }} />
       </div>
     );
@@ -127,7 +131,7 @@ const getGoodsBeltProfileOptions = function(target) {
 }
 const getGoodsBeltListOptions = function(target) {
   let options = getGoodsBeltBaseColumns(target);
-  options.push({ title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
+  options.push({ title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
     return (
       <div>
         <OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
@@ -136,7 +140,7 @@ const getGoodsBeltListOptions = function(target) {
         }} />
         <OpeateBtn type="primary" shape="circle" icon="edit" size="large" onClick={(e)=>{
           e.stopPropagation();
-          target.onEdit(record);
+          target.onEditClick(record);
         }} />
       </div>
     );
@@ -186,7 +190,7 @@ const getGoodsWatchStrapProfileOptions = function(target) {
 }
 const getGoodsWatchStrapListOptions = function(target) {
   let options = getGoodsWatchStrapBaseColumns(target);
-  options.push({ title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
+  options.push({ title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
     return (
       <div>
         <OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
@@ -195,7 +199,7 @@ const getGoodsWatchStrapListOptions = function(target) {
         }} />
         <OpeateBtn type="primary" shape="circle" icon="edit" size="large" onClick={(e)=>{
           e.stopPropagation();
-          target.onEdit(record);
+          target.onEditClick(record);
         }} />
       </div>
     );
@@ -243,7 +247,7 @@ const getGoodsOrnamentProfileOptions = function(target) {
 }
 const getGoodsOrnamentListOptions = function(target) {
   let options = getGoodsOrnamentBaseColumns(target);
-  options.push({ title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
+  options.push({ title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
     return (
       <div>
         <OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
@@ -252,7 +256,7 @@ const getGoodsOrnamentListOptions = function(target) {
         }} />
         <OpeateBtn type="primary" shape="circle" icon="edit" size="large" onClick={(e)=>{
           e.stopPropagation();
-          target.onEdit(record);
+          target.onEditClick(record);
         }} />
       </div>
     );
@@ -292,7 +296,7 @@ export const GOODS_TYPES = [
     graphqlType:graphqlTypes.goodsType,
     listOptions:getGoodsBeltListOptions,
     addOptions:getGoodsBeltAddOptions,
-    editOptions:getGoodsBeltAddOptions,
+    editOptions:getGoodsBeltEditOptions,
   },
   {
     key:BASE_CONSTANTS.GOODS_WATCH_STRAP,

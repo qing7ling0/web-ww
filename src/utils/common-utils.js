@@ -61,8 +61,10 @@ export const getOrderType = function(id) {
   return null;
 }
 export const getPayType = function(id) {
-  for(let i=0; i<constants.PAY_TYPE.length; i++) {
-    if (constants.PAY_TYPE[i].value === id) return constants.PAY_TYPE[i];
+}
+export const getSex = function(id) {
+  for(let i=0; i<constants.SEX_DATA.length; i++) {
+    if (constants.SEX_DATA[i].value === id) return constants.SEX_DATA[i];
   }
 
   return null;
@@ -92,15 +94,50 @@ export const urlString2Conditions = function(value) {
 }
 
 
-export const createGoodsNID = function(type, data) {
+export const createGoodsNID = function(type, data, sex) {
   let NID = '';
+  let sexData = getSex(sex);
+  if (!sexData) return constants.NULL_NID;
+  NID = sexData.etc;
+  let order = getOrderType(type);
+  if(!order) return constants.NULL_NID;
+  NID += order.etc;
+
   switch(type) {
     case constants.GOODS_SHOES:
-      
-    break;
+      for(let key of constants.GOODS_SHOES_NID_FIELDS) {
+        if (key === 's_gen_gao') {
+          if (sex !== constants.SEX_FEMALE) continue;
+        }
+        if (data[key] && data[key].NID) {
+          NID += data[key].NID;
+        } else {
+          return constants.NULL_NID;
+        }
+      }
+
+      return NID;
     case constants.GOODS_BELT:
-    break;
+      for(let key of constants.GOODS_BLET_NID_FIELDS) {
+        if (data[key] && data[key].NID) {
+          NID += data[key].NID;
+        } else {
+          return constants.NULL_NID;
+        }
+      }
+      return NID;
     case constants.GOODS_WATCH_STRAP:
-    break;
+      for(let key of constants.GOODS_WATCH_STRAP_NID_FIELDS) {
+        if (data[key] && data[key].NID) {
+          NID += data[key].NID;
+        } else {
+          return constants.NULL_NID;
+        }
+      }
+      return NID;
+
+    case constants.GOODS_ORNAMENT:
+      
+    return NID;
   }
 }

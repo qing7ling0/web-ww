@@ -5,6 +5,8 @@ import { Layout, Row, Col, Avatar } from 'antd';
 const { Header, Content, Sider, Footer } = Layout;
 import styled from 'styled-components'
 
+require('./images/base.css')
+
 import HeaderComponent from './common/HeaderComponent'
 
 import login from './login/LoginContainer'

@@ -55,7 +55,7 @@ export const createDefaultProfileQuery = (type, model) => {
   };
 }
 
-export const createDefaultMutaion = (tag, type, inputType, model) => {
+export const createDefaultMutaion = (tag, type, inputType, model, resolves) => {
   let ret = {};
   ret[`${tag}Add`] = {
     type: type,
@@ -63,6 +63,9 @@ export const createDefaultMutaion = (tag, type, inputType, model) => {
       doc: {type:inputType},
     },
     async resolve (ctx, params, options) {
+      if (resolves && resolves.add) {
+        return await resolves.add(params.doc);
+      }
       return await DB.add(model, params.doc);
     }
   };
@@ -72,9 +75,18 @@ export const createDefaultMutaion = (tag, type, inputType, model) => {
       ids: {type:new GraphQLList(GraphQLString)}
     },
     async resolve (ctx, params, options) {
-      let ret = await DB.removeByIds(model, params.ids);
+      let ret = null;
+      if (resolves && resolves.remove) {
+        ret = await resolves.remove(params.ids);
+      } else {
+        ret = await DB.removeByIds(model, params.ids);
+      }
       if (ret) {
-        ret = JSON.parse(ret);
+        try{
+          ret = JSON.parse(ret);
+        } catch(error) {
+
+        }
         if (ret.ok) {
           return params.ids;
         }
@@ -95,6 +107,9 @@ export const createDefaultMutaion = (tag, type, inputType, model) => {
       } else {
         params.conditions = {_id:params.id};
       }
+      if (resolves && resolves.update) {
+        return await resolves.update(params.conditions, params.doc);
+      } 
       return await DB.update(model, params.conditions, params.doc);
     }
   };

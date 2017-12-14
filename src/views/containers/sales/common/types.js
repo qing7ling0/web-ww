@@ -18,7 +18,11 @@ const defaultInitFormValue = (options, target) => {
     if (!item.decoratorOptions) {
       item.decoratorOptions = {};
     }
-    item.decoratorOptions.initialValue = target.props.data[item.name];
+    let value = target.props.data[item.name] || '';
+    if (value._id) {
+      value = value._id;
+    }
+    item.decoratorOptions.initialValue = value;
     return item;
   });
 }
@@ -35,10 +39,9 @@ const listToSelectOptions = (list, valueFormat, labelFormat) => {
 // 基础
 const getSalesBaseListOptions = function(target) {
   return [
-    { title: '名称', dataIndex: 'name', key: 'name'},
-    { title: '编辑人', dataIndex: 'editor_name', key: 'editor_name'},
-    { title: '编辑时间', dataIndex: 'editor_time', key: 'editor_time'},
-    { title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
+    { title: '名称', dataIndex: 'name', key: 'name', className:"table-column-left"},
+    { title: '编辑人', dataIndex: 'editor_name', width:'120', key: 'editor_name'},
+    { title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
       return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={()=>target.onDelete([record._id])} />);
     }}
   ]
@@ -53,14 +56,35 @@ const getSalesBaseEditOptions = function(target) {
   return defaultInitFormValue(options, target);
 }
 
+// 基础
+const getNIDBaseListOptions = function(target) {
+  return [
+    { title: '名称', dataIndex: 'name', key: 'name', className:"table-column-left"},
+    { title: '编号', dataIndex: 'NID', key: 'NID', className:"table-column-left"},
+    { title: '编辑人', dataIndex: 'editor_name', key: 'editor_name', width:120},
+    { title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
+      return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={()=>target.onDelete([record._id])} />);
+    }}
+  ]
+}
+const getNIDBaseAddOptions = function(target) {
+  return [
+    {type:'input', name:'name', label:'名称', itemOptions:{hasFeedback:true}, rule:{required:true}},
+    {type:'input', name:'NID', label:'编号', itemOptions:{hasFeedback:true}, rule:{required:true}},
+  ];
+}
+const getNIDBaseEditOptions = function(target) {
+  let options = getNIDBaseAddOptions(target);
+  return defaultInitFormValue(options, target);
+}
+
 // 特殊定制
 const getCustomListOptions = function(target) {
   return [
     { title: '名称', dataIndex: 'name', key: 'name'},
     { title: '价格', dataIndex: 'price', key: 'price', render:(text)=>text+' RMB'},
-    { title: '编辑人', dataIndex: 'editor_name', key: 'editor_name'},
-    { title: '编辑时间', dataIndex: 'editor_time', key: 'editor_time'},
-    { title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
+    { title: '编辑人', dataIndex: 'editor_name', width:120, key: 'editor_name'},
+    { title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
       return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={()=>target.onDelete([record._id])} />);
     }}
   ]
@@ -81,9 +105,8 @@ const getUrgentListOptions = function(target) {
   return [
     { title: '天数', dataIndex: 'day', key: 'day'},
     { title: '价格', dataIndex: 'price', key: 'price', render:(text)=>text+' RMB'},
-    { title: '编辑人', dataIndex: 'editor_name', key: 'editor_name'},
-    { title: '编辑时间', dataIndex: 'editor_time', key: 'editor_time'},
-    { title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
+    { title: '编辑人', dataIndex: 'editor_name', key: 'editor_name', width:120},
+    { title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
       return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={()=>target.onDelete([record._id])} />);
     }}
   ]
@@ -100,11 +123,18 @@ const getUrgentEditOptions = function(target) {
 }
 
 // 原材料
+const getMaterialBaseColumns = function(target) {
+  return [
+    { title: '名称', dataIndex: 'name', key: 'name'},
+    { title: '编号', dataIndex: 'NID', key: 'NID'},
+    { title: '颜色', dataIndex: 'color', key: 'color', render:(item) => item.name},
+    { title: '数量', dataIndex: 'count', key: 'count'},
+  ]
+}
 const getMaterialListOptions = function(target) {
   let options = getMaterialBaseColumns(target);
-  options.push({ title: '编辑人', dataIndex: 'editor_name', key: 'editor_name'});
-  options.push({ title: '编辑时间', dataIndex: 'editor_time', key: 'editor_time'});
-  options.push({ title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
+  options.push({ title: '编辑人', dataIndex: 'editor_name', key: 'editor_name', width:120});
+  options.push({ title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
     return (
       <div>
         <OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
@@ -119,6 +149,7 @@ const getMaterialListOptions = function(target) {
 const getMaterialAddOptions = function(target) {
   return [
     {type:'input', name:'name', label:'名称', itemOptions:{hasFeedback:true}, rule:{required:true}},
+    {type:'input', name:'NID', label:'编号', itemOptions:{hasFeedback:true}, rule:{required:true}},
     {type:'select', name:'color', label:'颜色', selectItems:listToSelectOptions(target.props.materialColorList), options:{defaultActiveFirstOption:true}, rule:{required:true}},
     {type:'number', name:'count', label:'数量', itemOptions:{hasFeedback:true}, rule:{required:true}},
   ];
@@ -143,6 +174,7 @@ const getMaterialEditOptions = function(target) {
 const getMaintainBaseColumns = function(target) {
   return [
     { title: '名称', dataIndex: 'name', key: 'name'},
+    { title: '编号', dataIndex: 'NID', key: 'NID'},
     { title: '价格', dataIndex: 'price', key: 'price',render:(item) => item+' RMB'},
     { title: '时间', dataIndex: 'time', key: 'time',render:(item) => item+' 天'},
   ]
@@ -166,6 +198,7 @@ const getMaintainListOptions = function(target) {
 const getMaintainAddOptions = function(target) {
   return [
     {type:'input', name:'name', label:'名称', itemOptions:{hasFeedback:true}, rule:{required:true}},
+    {type:'input', name:'NID', label:'编号', itemOptions:{hasFeedback:true}, rule:{required:true}},
     {type:'number', name:'price', label:'价格', itemOptions:{hasFeedback:true}, options:{formatter:(value) => `${value} RMB`, parser:value => value.replace('RMB', '')}, rule:{required:true}},
     {type:'number', name:'time', label:'时间', itemOptions:{hasFeedback:true}, options:{formatter:(value) => `${value} 天`, parser:value => value.replace('天', '')}, rule:{required:true}},
   ];
@@ -204,65 +237,65 @@ export const COMMON_TYPES = [
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.MATERIAL_COLOR,
     listTag:'materialColorList:commonList', tag:'commonList', label:'原材料颜色', 
     graphqlType:graphqlTypes.salesBaseType,
-    listOptions:getSalesBaseListOptions,
-    addOptions:getSalesBaseAddOptions,
-    editOptions:getSalesBaseEditOptions,
+    listOptions:getNIDBaseListOptions,
+    addOptions:getNIDBaseAddOptions,
+    editOptions:getNIDBaseEditOptions,
   },
   {
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.SHOES_OUT_COLOR,
     listTag:'outColorList:commonList', tag:'commonList', label:'鞋面颜色', 
     graphqlType:graphqlTypes.salesBaseType,
-    listOptions:getSalesBaseListOptions,
-    addOptions:getSalesBaseAddOptions,
-    editOptions:getSalesBaseEditOptions,
+    listOptions:getNIDBaseListOptions,
+    addOptions:getNIDBaseAddOptions,
+    editOptions:getNIDBaseEditOptions,
   },
   {
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.SHOES_IN_COLOR,
     listTag:'inColorList:commonList', tag:'commonList', label:'里皮颜色', 
     graphqlType:graphqlTypes.salesBaseType,
-    listOptions:getSalesBaseListOptions,
-    addOptions:getSalesBaseAddOptions,
-    editOptions:getSalesBaseEditOptions,
+    listOptions:getNIDBaseListOptions,
+    addOptions:getNIDBaseAddOptions,
+    editOptions:getNIDBaseEditOptions,
   },
   {
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.SHOES_BOTTOM_COLOR,
     listTag:'bottomColorList:commonList', tag:'commonList', label:'鞋底颜色', 
     graphqlType:graphqlTypes.salesBaseType,
-    listOptions:getSalesBaseListOptions,
-    addOptions:getSalesBaseAddOptions,
-    editOptions:getSalesBaseEditOptions,
+    listOptions:getNIDBaseListOptions,
+    addOptions:getNIDBaseAddOptions,
+    editOptions:getNIDBaseEditOptions,
   },
   {
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.SHOES_BOTTOM_SIDE_COLOR,
     listTag:'bottomSideColorList:commonList', tag:'commonList', label:'底边颜色', 
     graphqlType:graphqlTypes.salesBaseType,
-    listOptions:getSalesBaseListOptions,
-    addOptions:getSalesBaseAddOptions,
-    editOptions:getSalesBaseEditOptions,
+    listOptions:getNIDBaseListOptions,
+    addOptions:getNIDBaseAddOptions,
+    editOptions:getNIDBaseEditOptions,
   },
   {
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.XUAN_HAO,
     listTag:'xuanHaoList:commonList', tag:'commonList', label:'鞋楦号', 
     graphqlType:graphqlTypes.xuanHaoType,
-    listOptions:getSalesBaseListOptions,
-    addOptions:getSalesBaseAddOptions,
-    editOptions:getSalesBaseEditOptions,
+    listOptions:getNIDBaseListOptions,
+    addOptions:getNIDBaseAddOptions,
+    editOptions:getNIDBaseEditOptions,
   },
   {
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.SHOES_GUI_GE,
     listTag:'guiGeList:commonList', tag:'commonList', label:'鞋规格', 
     graphqlType:graphqlTypes.guiGeType,
-    listOptions:getSalesBaseListOptions,
-    addOptions:getSalesBaseAddOptions,
-    editOptions:getSalesBaseEditOptions,
+    listOptions:getNIDBaseListOptions,
+    addOptions:getNIDBaseAddOptions,
+    editOptions:getNIDBaseEditOptions,
   },
   {
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.SHOES_GEN_GAO,
     listTag:'genGaoList:commonList', tag:'commonList', label:'鞋跟高', 
     graphqlType:graphqlTypes.genGaoType,
-    listOptions:getSalesBaseListOptions,
-    addOptions:getSalesBaseAddOptions,
-    editOptions:getSalesBaseEditOptions,
+    listOptions:getNIDBaseListOptions,
+    addOptions:getNIDBaseAddOptions,
+    editOptions:getNIDBaseEditOptions,
   },
   {
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.MAINTAIN,
@@ -292,9 +325,9 @@ export const COMMON_TYPES = [
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.WATCH_STRAP_STYLE,
     listTag:'watchStrapStyleList:commonList', tag:'commonList', label:'表带类型', 
     graphqlType:graphqlTypes.watchStrapStyleType,
-    listOptions:getSalesBaseListOptions,
-    addOptions:getSalesBaseAddOptions,
-    editOptions:getSalesBaseEditOptions,
+    listOptions:getNIDBaseListOptions,
+    addOptions:getNIDBaseAddOptions,
+    editOptions:getNIDBaseEditOptions,
   },
   {
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.SHOES_TIE_BIAN,

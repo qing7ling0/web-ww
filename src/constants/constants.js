@@ -33,10 +33,13 @@ module.exports.USER_TYPES = {
   admin:4, // 管理员
 }
 
+module.exports.SEX_MAN = '男';
+module.exports.SEX_FEMALE = '女';
+
 /** 性别数据 */
 module.exports.SEX_DATA = [
-  {id:0, value:'男', label:'男'},
-  {id:1, value:'女', label:'女'}
+  {id:0, value:exports.SEX_MAN, label:'男', etc:'BM'},
+  {id:1, value:exports.SEX_FEMALE, label:'女', etc:'BF'}
 ]
 
 /** 商品属性，左脚，右脚，一双，一个 */
@@ -103,12 +106,13 @@ module.exports.E_ORDER_TYPE = E_ORDER_TYPE;
 
 // order type
 module.exports.ORDER_TYPE = [
-  {value:E_ORDER_TYPE.SHOES, label:'鞋'},
-  {value:E_ORDER_TYPE.BELT, label:'皮带'},
-  {value:E_ORDER_TYPE.WATCH_STRAP, label:'表带'},
-  {value:E_ORDER_TYPE.MAINTAIN, label:'护理'},
-  {value:E_ORDER_TYPE.ORNAMENT, label:'配饰'},
-  {value:E_ORDER_TYPE.RECHARGE, label:'充值'},
+  {value:E_ORDER_TYPE.SHOES, label:'鞋', etc:'X'},
+  {value:E_ORDER_TYPE.BELT, label:'皮带', etc:'PD'},
+  {value:E_ORDER_TYPE.WATCH_STRAP, label:'表带', etc:'BD'},
+  {value:E_ORDER_TYPE.MAINTAIN, label:'护理', etc:'HL'},
+  {value:E_ORDER_TYPE.ORNAMENT, label:'配饰', etc:'PS'},
+  {value:E_ORDER_TYPE.RECHARGE, label:'充值', etc:'CZ'},
+  {value:E_ORDER_TYPE.DESIGN, label:'来样设计', etc:'SD'},
 ]
 
 module.exports.TRANSPORT_COMPANYS = transportCompanys.companys; // 快递公司
@@ -122,10 +126,28 @@ module.exports.COLOR_TYPE_BOTTOM = '3';
 module.exports.COLOR_TYPE_BOTTOM_SIDE = '4';
 module.exports.COLOR_TYPE_MATERIAL = '5';
 
-module.exports.GOODS_SHOES = '1'; // 鞋
-module.exports.GOODS_BELT = '2'; // 皮带
-module.exports.GOODS_WATCH_STRAP = '3'; // 表带
-module.exports.GOODS_ORNAMENT = '4'; // 配饰
+module.exports.GOODS_SHOES = E_ORDER_TYPE.SHOES; // 鞋
+module.exports.GOODS_BELT = E_ORDER_TYPE.BELT; // 皮带
+module.exports.GOODS_WATCH_STRAP = E_ORDER_TYPE.WATCH_STRAP; // 表带
+module.exports.GOODS_ORNAMENT = E_ORDER_TYPE.ORNAMENT; // 配饰
+module.exports.MAINTAIN = E_ORDER_TYPE.MAINTAIN; // 护理
+module.exports.GOODS_SHOES_NID_FIELDS = [
+  's_xuan_hao', 's_material', 's_gui_ge', 
+  's_out_color', 's_in_color', 's_bottom_color', 
+  's_bottom_side_color', 's_gen_gao'
+]; // 鞋子和编号关联字段
+module.exports.GOODS_BLET_NID_FIELDS = ['b_material', 'b_color']; // 皮带和编号关联字段
+module.exports.GOODS_WATCH_STRAP_NID_FIELDS = ['ws_material', 'ws_style']; // 表带和编号关联字段
+module.exports.NULL_NID = '不存在'; // 不存在的编号
+
+module.exports.E_DB_LOG_TYPES =  {
+  ORDER: '1', // 订单操作
+  COMMON: '2', // 基础数据操作
+  CUSTOMER: '3', // 客户
+  ADMIN: '4', // 管理员账号
+  SHOP: '5', // 门店
+  SHOP_GUIDE: '6', // 导购
+}
 
 module.exports.RIGHT_FOOT_ID = '1';
 module.exports.LEFT_FOOT_ID = '2';

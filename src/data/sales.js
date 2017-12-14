@@ -21,7 +21,7 @@ import {
 
 import { ApiError, ApiErrorNames } from '../error/api-errors'
 import utils from '../utils/utils'
-import commonUtils from '../utils/common-utils'
+import * as commonUtils from '../utils/common-utils'
 import baseUtils from '../base/utils/utils'
 import * as validate from '../base/utils/validate'
 import constants from '../constants/constants'
@@ -48,7 +48,7 @@ class SalesData {
       .populate('s_material').populate('s_out_color').populate('s_in_color')
       .populate('s_bottom_color').populate('s_bottom_side_color').populate('s_xuan_hao').populate('s_gui_ge').populate('s_gen_gao')
       .populate('b_material').populate('b_color')
-      .populate('ws_material').populate('ws_style').exec();
+      .populate('ws_material').populate('ws_style');
   }
 
   /**
@@ -61,16 +61,108 @@ class SalesData {
    * @memberof SalesData
    */
   async getGoodsList(goods, page, options) {
+    if (!options.conditions) {
+      options.conditions = {};
+    }
+    options.conditions.hide = false;
     if (goods) {
-      if (!options.conditions) {
-        options.conditions = {};
-      }
       options.conditions.goods = goods;
     }
+    
     const list = await DB.getList(goodsModel, options, page, (query)=>{
       return this.goodsPopulate(query);
     });
+
+    
+    // for(let item of list.list) {
+    //   let NID = commonUtils.createGoodsNID(item.goods, item, item.sex);
+    //   // return {_id:item._id, NID:NID}
+    //   console.log('----------getGoodsList NID=' + NID);
+    //   await goodsModel.findOneAndUpdate({_id:item._id}, {NID:NID});
+    // }
+
+
     return list;
+  }
+  
+  async addGoods(doc, options={}) {
+    if (doc) {
+      let order = new goodsModel(doc);
+      if (order) {
+        let newOrder = await order.save(options);
+        if (newOrder) {
+          newOrder = await this.goodsPopulate(newOrder).execPopulate();
+          let NID = commonUtils.createGoodsNID(newOrder.goods, newOrder, newOrder.sex);
+          await goodsModel.findOneAndUpdate({_id:newOrder._id}, {NID:NID});
+          return newOrder;
+        }
+        throw new ApiError(ApiErrorNames.ADD_FAIL);
+      } else {
+        throw new ApiError(ApiErrorNames.ADD_FAIL);
+      }
+    } else {
+      throw new ApiError(ApiErrorNames.ADD_FAIL);
+    }
+  }
+
+  async updateGoods(conditions, doc, options) {
+    if (doc) {
+      let NIDChange = false;
+      if (doc.sex) {
+        NIDChange = true;
+      }
+      if (!NIDChange) {
+        for(let key of constants.GOODS_SHOES_NID_FIELDS) {
+          if (doc[key]) {
+            NIDChange = true;
+            break;
+          }
+        }
+      }
+      if (!NIDChange) {
+        for(let key of constants.GOODS_BLET_NID_FIELDS) {
+          if (doc[key]) {
+            NIDChange = true;
+            break;
+          }
+        }
+      }
+      if (!NIDChange) {
+        for(let key of constants.GOODS_WATCH_STRAP_NID_FIELDS) {
+          if (doc[key]) {
+            NIDChange = true;
+            break;
+          }
+        }
+      }
+      if (NIDChange) {
+        let goods = await this.goodsPopulate(goodsModel.findOne(conditions));
+        if (goods) {
+          let NID = commonUtils.createGoodsNID(goods.goods, goods, goods.sex);
+          await goodsModel.findOneAndUpdate({_id:goods._id}, {NID:NID});
+        }
+      }
+      let ret = await goodsModel.update(conditions, doc, options);
+      return ret;
+    } else {
+      throw new ApiError(ApiErrorNames.UPDATE_FAIL);
+    }
+  }
+
+  async removeGoods(conditions) {
+    if (conditions) {
+      return await goodsModel.updateMany(conditions, {hide:true});
+    } else {
+      throw new ApiError(ApiErrorNames.DELETE_FAIL);
+    }
+  }
+
+  async removeGoodsByIds(ids) {
+    if (ids && ids.length > 0) {
+      return await goodsModel.updateMany({_id:{$in:ids}}, {hide:true});
+    } else {
+      throw new ApiError(ApiErrorNames.DELETE_FAIL);
+    }
   }
 
   async getGoodsProfile(id) {
