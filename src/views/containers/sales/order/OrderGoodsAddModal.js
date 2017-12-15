@@ -39,51 +39,97 @@ import * as common from '../../../modules/common'
 import FormItemComponent from '../../common/FormItemComponent'
 import BaseFormModal from '../../common/BaseFormModal'
 import * as optionsType from '../types'
+import { ORDER_TYPES } from './types';
 
-class OrderAddModal extends Component {
+class OrderGoodsAddModal extends Component {
   // 构造函数，在创建组件的时候调用一次
   constructor(props) {
     super(props);
 
     this.state = {
       visible:false,
+      currentOrderType:'',
+      data:{}
     }
+    this.orderType = null;
   }
 
   //在组件挂载之前调用一次。如果在这个函数里面调用setState，本次的render函数可以看到更新后的state，并且只渲染一次
   componentWillMount(){
-    this.orderType = this.props.orderType;
-    this.options = optionsType.getOrderAddOptions(this);
+    if (this.props.isRecharge) {
+      this.currentOrderType = constants.BASE_CONSTANTS.E_ORDER_TYPE.RECHARGE;
+    }
+    if (this.props.isEditMode) {
+      this.currentOrderType = this.props.orderType;
+    }
     this.setState({visible:this.props.visible})
   }
 
-  componentWillReceiveProps(nextProps){
-    if (nextProps.orderType !== this.props.nextProps)
-      this.orderType = nextProps.orderType;
+  renderHeader = () => {
+    return (
+      <div>
+        {
+          this.props.isRecharge || this.props.isEditMode ? null
+          :
+          <Select style={{ width:120, marginBottom:20 }} onChange={this.onChange}>
+            {
+              constants.BASE_CONSTANTS.ORDER_TYPE.map((item) => {
+                if (item.value !== constants.BASE_CONSTANTS.E_ORDER_TYPE.RECHARGE) {
+                  return <Option key={item.value} value={item.value}>{item.label}</Option>
+                }
+              })
+            }
+          </Select>
+        }
+        
+      </div>
+    );
   }
 
   render() {
+    this.orderType = null;
+    for(let value of ORDER_TYPES) {
+      if (value.key === this.state.currentOrderType) {
+        this.orderType = value;
+      }
+    }
+    this.options=[];
+    if (this.orderType) {
+      this.options = this.orderType.addOptions(this);
+      this.options = options.map((item, index) => {
+        if (!item.decoratorOptions) {
+          item.decoratorOptions = {};
+        }
+        let value = this.props.data[item.name] || '';
+        if (value._id) {
+          value = value._id;
+        }
+        item.decoratorOptions.initialValue = value;
+        return item;
+      });
+    }
+
     return (
       <BaseFormModal
         title={this.props.title}
         options={this.options}
         visible={this.state.visible}
-        loading={this.props.loading}
         result={this.props.result}
         onSubmit={this.onSubmit}
         onCancel={this.onCancel}
         onAfterClose={this.props.afterClose || null}
-        confirmLoading={this.state.confirmLoading}
-        actionType={ActionTypes.ORDER_ADD}
-        onSubmitSuccess={this.props.onSubmitSuccess}
       />
     );
   }
 
+  onChange = (value) => {
+    this.setState({currentOrderType:value});
+  }
 
   onSubmit = (err, values) => {
     if (!err) {
       if (this.props.onAdd) {
+        values.type = this.currentOrderType;
         this.props.onAdd(values);
       }
     }
@@ -105,4 +151,4 @@ export default connect(
       reqAddOrder: Actions.addOrder
     }, dispatch);
   }
-)(Form.create()(OrderAddModal));
+)(Form.create()(OrderGoodsAddModal));

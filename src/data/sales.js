@@ -187,6 +187,11 @@ class SalesData {
   // 自订单
   subOrderPopulate(query) {
     return query
+    .populate('s_xuan_hao').populate('s_material').populate('s_gui_ge')
+    .populate('s_gen_gao').populate('s_out_color').populate('s_in_color')
+    .populate('s_bottom_color').populate('s_bottom_side_color').populate('s_tie_di')
+    .populate('b_material').populate('b_color')
+    .populate('ws_material').populate('ws_style')
     .populate('shop').populate('guide').populate('customer').exec();
   }
   // 自订单列表

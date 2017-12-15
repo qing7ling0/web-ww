@@ -7,7 +7,8 @@ import {
   Row,
   Col,
   Select,
-  Spin
+  Spin,
+  Steps
 } from 'antd'
 
 const Search = Input.Search;
@@ -42,6 +43,9 @@ export const ProfileBtnBack = styled.span`
 export const Loading = styled(Spin)`
   margin:0 auto;
 `
+export const ButtonOp = styled(Button)`
+  margin-right: 0.08rem;
+`
 export const SearchContainer = styled.div`
   margin: 0.2rem 0 0 0;
 `
@@ -52,4 +56,20 @@ export const SearchInput = styled(Search)`
 export const SelectInput = styled(Select)`
   width: 1.6rem;
   margin-right: 0.15rem;
+`
+
+export const NextContainer = styled.div`
+  width:100%;
+  padding:0.2rem 0;
+  text-align:center;
+`
+export const BtnNext = styled(Button)`
+  display:inline;
+  margin: 0 0.15rem;
+`
+export const OrderSteps = styled(Steps)`
+  margin: 0.2rem 0.2rem;
+`
+export const OrderStepContent = styled.div`
+  padding: 0.2rem;
 `

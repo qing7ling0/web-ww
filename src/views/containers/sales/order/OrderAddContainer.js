@@ -33,6 +33,10 @@ import {
 
 import {
   Root,
+  OrderSteps,
+  OrderStepContent,
+  BtnNext,
+  NextContainer
 } from './styled'
 
 import * as ActionTypes from '../../../constants/ActionTypes'
@@ -43,19 +47,37 @@ import * as common from '../../../modules/common'
 import FormItemComponent from '../../common/FormItemComponent'
 import BaseFormModal from '../../common/BaseFormModal'
 import * as optionsType from '../types'
-import { ORDER_TYPES, E_ORDER_TYPES } from './types'
+import { ORDER_TYPES, ORDER_OPTIONS } from './types'
+
+import OrderGoodsAddModal from './OrderGoodsAddModal'
 
 
 const ADD_ORDER_STEPS = [{
-  title: '客户',
-  content: 'First-content',
+  title: '选择客户',
 }, {
-  title: '上班',
-  content: 'Second-content',
+  title: '选择商品',
 }, {
   title: '结算',
-  content: 'Last-content',
+}, {
+  title: '完成',
 }];
+
+const initFormDefaultValues = (options, values) => {
+  return options.map((item) => {
+    item.options = item.options.map((sub) => {
+      if (!sub.decoratorOptions) {
+        sub.decoratorOptions = {};
+      }
+      let value = values[sub.name] || '';
+      if (value._id) {
+        value = value._id;
+      }
+      sub.decoratorOptions.initialValue = value;
+      return sub;
+    })
+    return item;
+  })
+}
 
 class OrderAddContainer extends Component {
   // 构造函数，在创建组件的时候调用一次
@@ -63,12 +85,16 @@ class OrderAddContainer extends Component {
     super(props);
 
     this.state = {
+      addVisible:false,
       visible:false,
       customerPhoneList:[],
       customerPhone:'',
       customerName:'',
-      selectCustomer:{},
+      goods:[],
       customCount:1,
+      currentStep:0,
+      currentStepStatus:'finish',
+      stepOneValues:{}
     }
   }
 
@@ -141,31 +167,87 @@ class OrderAddContainer extends Component {
     )
   }
 
-  render() {
-    this.options = optionsType.getOrderAddOptions(this);
+  renderCustomer = () => {
+    this.options = ORDER_OPTIONS.add(this);
+    this.options = initFormDefaultValues(this.options, this.state.stepOneValues);
     return (
-      <NormalForm onSubmit={this.onSubmit}>
+      <NormalForm onSubmit={this.onNext}>
         {
           this.options.map((item, index) => {
             return item.left ? this.renderFoot(item,index) : this.renderBaseForm(item, index);
           })
         }
-        <FormItem
-          wrapperCol={{
-            xs: { span: 24, offset: 0 },
-            sm: { span: 16, offset: 8 },
-          }}
-        >
-          <Button type="primary" onClick={()=>{
+        <NextContainer>
+          <BtnNext type="primary" onClick={()=>{
             this.props.form.validateFields((err, values) => {
               if (!err) {
-                this.setState({submitLoading:true});
-                this.onSubmit(err, values);
+                this.onNext(values);
               }
             });
-          }}>提交</Button>
-        </FormItem>
+          }}>下一步</BtnNext>
+        </NextContainer>
       </NormalForm>
+    )
+  }
+
+  renderGoods = () => {
+    return (
+      <div>
+        <Table
+          bordered={true}
+          columns={ORDER_OPTIONS.goodsList(this)} 
+          dataSource={this.state.goods}
+          showHeader={true}
+          title={()=>{
+            return (
+              <div>
+                <Button type="primary" onClick={()=>{this.setState({addVisible:true})}}>添加</Button>
+                <Button type="primary" onClick={()=>{this.setState({addVisible:true, isRechargeOrder:true})}}>充值</Button>
+              </div>
+            );
+          }}
+        />
+        {
+          this.state.addVisible ?
+          <OrderGoodsAddModal 
+            title={'添加商品'}
+            isRecharge={this.state.isRechargeOrder}
+            visible={this.state.addVisible} 
+            onAdd={this.onGoodsAdd}
+            afterClose={()=>this.setState({addVisible:false})}/> 
+          : null
+        }
+        <NextContainer>
+          <BtnNext type="primary" onClick={()=>{this.onPrev()}}>上一步</BtnNext>
+          <BtnNext type="primary" disabled={this.state.goods.length === 0} onClick={()=>{this.onNext()}}>下一步</BtnNext>
+        </NextContainer>
+      </div>
+    );
+  }
+
+  render() {
+    return (
+      <div>
+        <OrderSteps current={this.state.currentStep}>
+          {ADD_ORDER_STEPS.map((item) => {
+            return <Step key={item.title} title={item.title} />
+          })}
+        </OrderSteps>
+        <OrderStepContent>
+          <Card noHovering={true}>
+            {
+              this.state.currentStep===0 
+              && 
+              this.renderCustomer()
+            }
+            {
+              this.state.currentStep===1 
+              && 
+              this.renderGoods()
+            }
+          </Card>
+        </OrderStepContent>
+      </div>
     );
   }
 
@@ -243,34 +325,61 @@ class OrderAddContainer extends Component {
     }
   }
 
-  onSubmit = (err, values) => {
-    if (!err) {
-      let order = {type:this.orderType.id};
+  onPrev = () => {
+    this.setState({currentStep:Math.max(0,this.state.currentStep-1)})
+  }
+
+  onNext = (values) => {
+    if (this.state.currentStep === 0) {
+      let order = {};
       let customer = {};
       for(let key in values) {
-        if (key === 'name' || key ==='phone' || key==='sex' || key==='weixin') {
-          customer[key] = values[key];
+        if (key !== 'source') {
+          order[key] = values[key];
         } else if (key === 'birthday') {
           customer[key] = moment(values[key]).format('YYYY-MM-DD');
         } else {
-          order[key] = values[key];
+          customer[key] = values[key];
         }
       }
-      if (this.orderType.tag === E_ORDER_TYPES.shoes) {
-        // order
-        order.s_count = 1;
-        order.s_kuanhao = '款号';
-        order.s_xieXuan = '鞋楦';
-        order.s_xieGen = '鞋跟';
-        order.s_guiGe = '规格';
-        order.s_material = this.shoes.material.name;
-        order.s_xiemian_color = this.shoes.out_color.name;
-        order.s_leili_color = this.shoes.in_color.name;
-        // s_customs:[customSchema], // 特殊定制
-      }
-      order.customer = customer;
-      this.props.reqAddOrder(this.orderType.query, order);
+      this.setState({stepOneValues:values, customer:customer, order:order, currentStep:this.state.currentStep+1});
+    } else if (this.state.currentStep === 1) {
+      
+      this.setState({currentStep:this.state.currentStep+1});
+    } else if (this.state.currentStep === 2) {
+      
+      this.setState({currentStep:this.state.currentStep+1});
     }
+    // let customer = {};
+    // for(let key in values) {
+    //   if (key === 'name' || key ==='phone' || key==='sex' || key==='weixin') {
+    //     customer[key] = values[key];
+    //   } else if (key === 'birthday') {
+    //     customer[key] = moment(values[key]).format('YYYY-MM-DD');
+    //   } else {
+    //     order[key] = values[key];
+    //   }
+    // }
+    // if (this.orderType.tag === E_ORDER_TYPES.shoes) {
+    //   // order
+    //   order.s_count = 1;
+    //   order.s_kuanhao = '款号';
+    //   order.s_xieXuan = '鞋楦';
+    //   order.s_xieGen = '鞋跟';
+    //   order.s_guiGe = '规格';
+    //   order.s_material = this.shoes.material.name;
+    //   order.s_xiemian_color = this.shoes.out_color.name;
+    //   order.s_leili_color = this.shoes.in_color.name;
+    //   // s_customs:[customSchema], // 特殊定制
+    // }
+    // order.customer = customer;
+    // this.props.reqAddOrder(this.orderType.query, order);
+  }
+
+  onGoodsAdd = (values) => {
+    let goods = this.state.goods;
+    goods.push(values);
+    this.setState({goods:goods});
   }
 }
 

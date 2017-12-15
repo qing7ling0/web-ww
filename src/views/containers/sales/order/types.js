@@ -263,28 +263,106 @@ const getOrderListColumns = function(target) {
   }})
   return options;
 }
+
+const getOrderAddStepCunstomerOptions = function(target) {
+  let valuePhoneList = listToSelectOptions(target.props.customerList, (item)=>item.phone, (item)=>item.name+'-'+item.phone);
+  let valueNameList = listToSelectOptions(target.props.customerList, (item)=>item.name, (item)=>item.name+'-'+item.phone);
+  return [
+    {
+      index:1, title:'基础信息', options:[
+        {type:'select', name:'source', label:'来源', itemOptions:{labelLeft:true}, selectItems:constants.BASE_CONSTANTS.ORDER_SOURCE, options:{defaultActiveFirstOption:true}, rule:{required:true}},
+        {type:'select', name:'shop', label:'门店', itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(target.props.shopList), options:{defaultActiveFirstOption:true, showSearch:true, optionFilterProp:'children'}, rule:{required:true}},    
+        {type:'select', name:'guide', label:'导购', itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(target.props.guideList), options:{defaultActiveFirstOption:true, showSearch:true, optionFilterProp:'children'}, rule:{required:true}},    
+      ]
+    },
+    {
+      index:1, title:'客户信息', options:[
+        {
+          type:'select', name:'phone', label:'手机号', 
+          itemOptions:{labelLeft:true}, 
+          selectItems:valuePhoneList, 
+          decoratorOptions:{initialValue:target.state.customerPhone},
+          options:{
+            defaultActiveFirstOption:true,
+            mode:"combobox", 
+            filterOption:false, 
+            onChange:target.onCustomerPhoneChange, 
+            onFocus:target.onCustomerPhoneFocus,
+            onSelect:target.onCustomerPhoneSelect,
+          }, 
+          rule:{required:true}
+        },            
+        {
+          type:'select', name:'name', label:'姓名',
+          itemOptions:{labelLeft:true}, 
+          selectItems:valueNameList, 
+          decoratorOptions:{initialValue:target.state.customerName},
+          options:{
+            defaultActiveFirstOption:true, 
+            mode:"combobox", 
+            filterOption:false, 
+            onChange:target.onCustomerNameChange, 
+            onFocus:target.onCustomerNameFocus,
+            onSelect:target.onCustomerNameSelect,
+          }, 
+          rule:{required:true}
+        },            
+        {type:'select', name:'sex', label:'性别', itemOptions:{labelLeft:true}, selectItems:constants.BASE_CONSTANTS.SEX_DATA, options:{defaultActiveFirstOption:true}, rule:{required:true}},
+        {type:'datePicker', name:'birthday', label:'生日', itemOptions:{labelLeft:true}, rule:{required:true}},
+        {type:'input', name:'weixin', label:'微信号', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+      ]
+    }
+  ];
+}
+const getOrderAddStepGoodsListColumns = function(target) {
+  
+  return [
+    { title: '编号', dataIndex: 'NID', key: 'NID'},
+    { title: '类型', dataIndex: 'type', key: 'type', render:(item) => {
+      let type = commonUtils.getOrderType(item);
+      if (type) return type.label;
+      return '';
+    }},
+    { title: '价格', dataIndex: 'price', key: 'price', render:(item) => item+'RMB'},
+    { title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
+      return (
+        <div>
+          <OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
+            e.stopPropagation();
+            target.onGoodsDelete([record._id])
+          }} />
+          <OpeateBtn type="primary" shape="circle" icon="edit" size="large" onClick={(e)=>{
+            e.stopPropagation();
+            target.onGoodsEdit(record);
+          }} />
+        </div>
+      );
+    }}
+  ]
+}
+
 const getOrderAddOptions = function(target) {
   let options = [];
-  switch(target.orderType.key) {
-    case BASE_CONSTANTS.E_ORDER_TYPE.SHOES:
-      options = getOrderShoesListColumns(target);
-    break;
-    case BASE_CONSTANTS.E_ORDER_TYPE.BELT:
-      options = getOrderBeltListColumns(target);
-    break;
-    case BASE_CONSTANTS.E_ORDER_TYPE.WATCH_STRAP:
-      options = getOrderWatchStrapListColumns(target);
-    break;
-    case BASE_CONSTANTS.E_ORDER_TYPE.MAINTAIN:
-      options = getOrderMaintainListColumns(target);
-    break;
-    case BASE_CONSTANTS.E_ORDER_TYPE.ORNAMENT:
-      options = getOrderOrnamentListColumns(target);
-    break;
-    case BASE_CONSTANTS.E_ORDER_TYPE.RECHARGE:
-      options = getOrderRechargeListColumns(target);
-    break;
-  }
+  // switch(target.orderType.key) {
+  //   case BASE_CONSTANTS.E_ORDER_TYPE.SHOES:
+  //     options = getOrderShoesListColumns(target);
+  //   break;
+  //   case BASE_CONSTANTS.E_ORDER_TYPE.BELT:
+  //     options = getOrderBeltListColumns(target);
+  //   break;
+  //   case BASE_CONSTANTS.E_ORDER_TYPE.WATCH_STRAP:
+  //     options = getOrderWatchStrapListColumns(target);
+  //   break;
+  //   case BASE_CONSTANTS.E_ORDER_TYPE.MAINTAIN:
+  //     options = getOrderMaintainListColumns(target);
+  //   break;
+  //   case BASE_CONSTANTS.E_ORDER_TYPE.ORNAMENT:
+  //     options = getOrderOrnamentListColumns(target);
+  //   break;
+  //   case BASE_CONSTANTS.E_ORDER_TYPE.RECHARGE:
+  //     options = getOrderRechargeListColumns(target);
+  //   break;
+  // }
   return options;
 } 
 const getOrderEditOptions = function(target) {
@@ -301,6 +379,11 @@ const getOrderEditOptions = function(target) {
     item.decoratorOptions.initialValue = value;
     return item;
   });
+}
+
+export const ORDER_OPTIONS = {
+  add:getOrderAddStepCunstomerOptions,
+  goodsList:getOrderAddStepGoodsListColumns,
 }
 
 export const ORDER_TYPES = [

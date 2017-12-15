@@ -71,6 +71,11 @@ class BaseFormModal extends Component {
         confirmLoading={this.state.confirmLoading}
         afterClose={this.props.onAfterClose || null}
       >
+        {
+          this.props.renderHeader ?
+          this.props.renderHeader()
+          :null
+        }
         <NormalForm onSubmit={this.onSubmit}>
           {
             this.props.options.map((item, index) => {

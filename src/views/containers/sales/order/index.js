@@ -65,7 +65,7 @@ class OrderContainer extends Component {
             <Route exact path={`${match.path}/list/:type`} component={OrderListContainer} />
             <Route exact path={`${match.path}/list/:type/:key`} component={OrderListContainer} />
             <Route path={`${match.path}/profile/:type/:id`} component={OrderProfileContainer} />
-            <Route path={`${match.path}/add/:type`} component={OrderAddContainer} />
+            <Route path={`${match.path}/add/`} component={OrderAddContainer} />
           </Switch>
         </ContentContainer>
       </Root>

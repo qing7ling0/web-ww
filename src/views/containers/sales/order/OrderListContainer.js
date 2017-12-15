@@ -12,17 +12,18 @@ import {
   Button,
   Tabs,
   Menu,
-  Select
+  Select,
+  Steps
 } from 'antd'
 
 const TabPane = Tabs.TabPane;
-
 
 import {
   Root,
   SearchContainer,
   SelectInput,
-  SearchInput
+  SearchInput,
+  ButtonOp,
 } from './styled'
 
 import Actions from '../../../actions'
@@ -35,7 +36,6 @@ import * as optionsType from '../types'
 
 import DataContentComponent from '../../common/DataContentComponent'
 import BaseListComponent from '../../common/BaseListComponent'
-import OrderAddModal from './OrderAddModal'
 import OrderEditModal from './OrderEditModal'
 
 const ORDER_MENUS = [
@@ -44,7 +44,9 @@ const ORDER_MENUS = [
   {key:'3', label:'已完成'},
   {key:'4', label:'全部'}
 ]
-const URL_REG = new RegExp(common.findRouterById(config.Routers, constants.MENU_IDS.salesOrder).url + '/list/' +'\\d/') ;
+const ROOT_URL = common.findRouterById(config.Routers, constants.MENU_IDS.salesOrder).url;
+const ADD_URL = ROOT_URL + '/add';
+const URL_REG = new RegExp(ROOT_URL + '/list/' +'\\d/') ;
 
 class OrderListContainer extends Component {
   // 构造函数，在创建组件的时候调用一次
@@ -113,15 +115,16 @@ class OrderListContainer extends Component {
           })}
         </Menu>
         <SearchContainer>
+          <ButtonOp type="primary" onClick={this.onAddClicked}>添加</ButtonOp>
           <SearchInput placeholder={'请输入订单号'} onSearch={this.onSearchOrderID}/>
-          <SelectInput showSearch={true} placeholder={'请选择导购'} allowClear='true' optionFilterProp='children' onChange={this.onGudieChange}>
+          <SelectInput showSearch={true} placeholder={'请选择导购'} allowClear={true} optionFilterProp='children' onChange={this.onGudieChange}>
             {
               this.props.guideList.map((item) => {
                 return <Select.Option key={item._id} >{item.name}</Select.Option>;
               })
             }
           </SelectInput>
-          <SelectInput placeholder={'请选择店铺'} allowClear='true' onChange={this.onShopChange}>
+          <SelectInput placeholder={'请选择店铺'} allowClear={true} onChange={this.onShopChange}>
             {
               this.props.shopList.map((item) => {
                 return <Select.Option key={item._id}>{item.name}</Select.Option>;
@@ -305,6 +308,10 @@ class OrderListContainer extends Component {
     if (rootPath && rootPath.length > 0) {
       this.props.history.push(rootPath[0] + key);
     }
+  }
+
+  onAddClicked = () => {
+    this.props.history.push(ADD_URL);
   }
 
   onSearchOrderID = (value) => {

@@ -284,6 +284,7 @@ const orderOrnamentInputFields = {
 const subOrderBaseFields = {
   NID:{type:GraphQLString, decription:'编号'},
   name:{type:GraphQLString, decription:'名称'},
+  price:{type:GraphQLString, decription:'价格'},
   count:{type:GraphQLInt, decription:'数量'},
   type: {type:GraphQLString, decription:'类型'},
   state: {type:GraphQLString, decription:'订单状态'},

@@ -12,6 +12,7 @@ var addOrderTest = async function() {
       let subOrder = {};
       subOrder.NID = 'NID101';
       subOrder.name = goodsShoes.name;
+      subOrder.price = goodsShoes.price;
       subOrder.count = 1;
       console.log('----test add 2 order');
       subOrder.type = constants.E_ORDER_TYPE.SHOES;
@@ -30,39 +31,48 @@ var addOrderTest = async function() {
       
       subOrder.s_xuan_hao = {
         _id:'5a2a5d4b700447398cbf3e65',
-        name:'楦号101'
+        name:'楦号101',
+        NID:'X1'
       };
       subOrder.s_gui_ge = {
         _id:'5a2a5d55700447398cbf3e67',
-        name:'规格'
+        name:'规格',
+        NID:'G1'
       };
       subOrder.s_material = {
         _id:'5a2a5d4b700447398cbf3e65',
-        name:'原材料'
+        name:'原材料',
+        NID:'Y1'
       };
       subOrder.s_out_color = {
         _id:'5a2a5cf7700447398cbf3e5d',
-        name:'鞋面颜色'
+        name:'鞋面颜色',
+        NID:'M1'
       };
       subOrder.s_in_color = {
         _id:'5a2a5d18700447398cbf3e5f',
-        name:'里皮颜色'
+        name:'里皮颜色',
+        NID:'L1'
       };
       subOrder.s_bottom_color = {
         _id:'5a2a5d25700447398cbf3e61',
-        name:'鞋底颜色'
+        name:'鞋底颜色',
+        NID:'B1'
       };
       subOrder.s_bottom_side_color = {
         _id:'5a2a5d3a700447398cbf3e63',
-        name:'底边颜色'
+        name:'底边颜色',
+        NID:'D1'
       };
       subOrder.s_gen_gao = {
         _id:'5a2a5d60700447398cbf3e69',
-        name:'跟高10cm'
+        name:'跟高10cm',
+        NID:'H1'
       };
       subOrder.s_tie_di = {
         _id:'5a2a7a3123299d50e4664524',
-        name:'贴底'
+        name:'贴底',
+        NID:'T1'
       };
       subOrder.s_customs = [
         {
@@ -71,6 +81,7 @@ var addOrderTest = async function() {
           "name" : "鞋面皮护理",
           "price" : 150,
           "time" : 20,
+          NID:'CD01'
         },
         {
           "_id" : "5a2a5e12700447398cbf3e6c",
@@ -78,6 +89,7 @@ var addOrderTest = async function() {
           "name" : "鳄鱼皮护理",
           "price" : 2650,
           "time" : 10,
+          NID:'CD02'
         }
       ]
       subOrder.customer = {
@@ -102,7 +114,8 @@ var addOrderTest = async function() {
       subOrder.urgent = {
         _id: '5a2a58efa543457088e165f6',
         day: 10,
-        price: 3688
+        price: 3688,
+        NID:'JD01'
       }
 
       let order = {};
