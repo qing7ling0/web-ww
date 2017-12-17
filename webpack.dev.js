@@ -6,6 +6,7 @@ const merge = require('webpack-merge')
 const Webpack = require('webpack')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 const BaseConfig = require('./webpack.base.js')
 

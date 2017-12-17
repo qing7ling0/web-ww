@@ -76,13 +76,19 @@ class BaseFormModal extends Component {
           this.props.renderHeader()
           :null
         }
-        <NormalForm onSubmit={this.onSubmit}>
-          {
-            this.props.options.map((item, index) => {
-              return <FormItemComponent key={item.name} options={item} form={this.props.form} />
-            })
-          }
-        </NormalForm>
+        {
+          this.props.renderBody ?
+          this.props.renderBody()
+          :
+          <NormalForm onSubmit={this.onSubmit}>
+            {
+              this.props.options.map((item, index) => {
+                return <FormItemComponent key={item.name} options={item} form={this.props.form} />
+              })
+            }
+          </NormalForm>
+        }
+        
       </Modal>
     );
   }

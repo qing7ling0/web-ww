@@ -36,7 +36,8 @@ const config = {
         }),
         new webpack.optimize.CommonsChunkPlugin({
             names: ['common', 'manifest']
-        })
+        }),
+        new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /zh-cn/)
     ]
 };
 

@@ -65,14 +65,16 @@ const ADD_ORDER_STEPS = [{
 const initFormDefaultValues = (options, values) => {
   return options.map((item) => {
     item.options = item.options.map((sub) => {
-      if (!sub.decoratorOptions) {
-        sub.decoratorOptions = {};
-      }
       let value = values[sub.name] || '';
       if (value._id) {
         value = value._id;
       }
-      sub.decoratorOptions.initialValue = value;
+      if (value !== null && value !== undefined && value !== NaN && value !== '') {
+        if (!sub.decoratorOptions) {
+          sub.decoratorOptions = {};
+        }
+        sub.decoratorOptions.initialValue = value;
+      }
       return sub;
     })
     return item;
@@ -107,6 +109,7 @@ class OrderAddContainer extends Component {
       }
     }
     this.setState({visible:this.props.visible})
+    this.props.reqGetGoodsBaseDatas();
   }
 
   componentWillReceiveProps(nextProps){
@@ -387,16 +390,18 @@ export default connect(
   state => ({
     loading:state.sales.loading,
     result:state.sales.result,
+    sales:state.sales,
     shopList:state.shop.shopList,
     guideList:state.shop.shopGuideList,
-    customerList:state.customer.customerList,
-    goodsShoesList:state.sales.goodsShoesList
+    customerList:state.customer.customerList
   }),
   (dispatch) => {
     return bindActionCreators({
       reqGetOrderList: Actions.getOrderList,
       reqAddOrder: Actions.addOrder,
+      reqGetGoodsList: Actions.getGoodsList,
       reqCustomerList:Actions.getCustomerList,
+      reqGetGoodsBaseDatas: Actions.getGoodsBaseDatas
     }, dispatch);
   }
 )(Form.create()(OrderAddContainer));
