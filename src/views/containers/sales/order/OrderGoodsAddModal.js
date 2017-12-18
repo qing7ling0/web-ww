@@ -15,7 +15,8 @@ import {
   Switch,
   Radio,
   Slider, Upload,
-  Modal
+  Modal,
+  Row,Col
 } from 'antd'
 
 const FormItem = Form.Item;
@@ -42,7 +43,7 @@ import * as common from '../../../modules/common'
 import FormItemComponent from '../../common/FormItemComponent'
 import BaseFormModal from '../../common/BaseFormModal'
 import * as optionsType from '../types'
-import { ORDER_TYPES } from './types';
+import { ORDER_TYPES, listToSelectOptions } from './types';
 
 const initFormDefaultValues = (options, values) => {
   return options.map((item) => {
@@ -112,7 +113,7 @@ class OrderGoodsAddModal extends Component {
   }
 
   renderBaseForm(item, index, vertical) {
-    let span = {xs:24, sm:12, lg:8};
+    let span = {sm:24, lg:12};
     if (vertical) {
       span={};
     }
@@ -148,9 +149,9 @@ class OrderGoodsAddModal extends Component {
   }
 
   renderBody = () => {
-    let span = {xs:24, sm:12, lg:8};
+    let span = {sm:24, lg:12};
     let urgentOptionItem = {type:'select', name:'urgent', label:'加急', itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(this.props.sales.urgentList), options:{defaultActiveFirstOption:true}, rule:{required:true}};
-    
+    // return (<div></div>)
     return (
       <div>
         <NormalForm onSubmit={this.onSubmit}>
@@ -160,7 +161,7 @@ class OrderGoodsAddModal extends Component {
             })
           }
           
-          <Row>
+          {/* <Row>
             <Col><ContentTitle>特殊定制</ContentTitle></Col>
             {
               this.state.customs.map((item,index) => {
@@ -185,7 +186,7 @@ class OrderGoodsAddModal extends Component {
                 <Icon type="plus" /> 增加
               </Button>
             </Col>
-          </Row>
+          </Row> */}
           <FormItemComponent key={urgentOptionItem.name} options={urgentOptionItem} form={this.props.form} />
         </NormalForm>
       </div>
@@ -214,8 +215,10 @@ class OrderGoodsAddModal extends Component {
         visible={this.state.visible}
         result={this.props.result}
         renderHeader={this.renderHeader}
+        renderBody={this.renderBody}
         onSubmit={this.onSubmit}
         onCancel={this.onCancel}
+        modalOptions={{width:'60%'}}
         onAfterClose={this.props.afterClose || null}
       />
     );

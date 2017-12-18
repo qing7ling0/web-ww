@@ -14,7 +14,7 @@ const {BASE_CONSTANTS} = constants;
 const OpeateBtn = styled(Button)`
   margin: 0 0.05rem;
 `
-const defaultInitFormValue = (options, target) => {
+export const defaultInitFormValue = (options, target) => {
   return options.map((item, index) => {
     if (!item.decoratorOptions) {
       item.decoratorOptions = {};
@@ -24,7 +24,7 @@ const defaultInitFormValue = (options, target) => {
   });
 }
 
-const listToSelectOptions = (list, valueFormat, labelFormat) => {
+export const listToSelectOptions = (list, valueFormat, labelFormat) => {
   return list.map((item) => {
     let ret = {_id:item._id};
     ret.value = valueFormat ? valueFormat(item) : item._id;
@@ -34,7 +34,7 @@ const listToSelectOptions = (list, valueFormat, labelFormat) => {
 }
 
 // 订单基础表
-const getOrderBaseListColumns = function(target) {
+export const getOrderBaseListColumns = function(target) {
   return [
     { title: '编号', dataIndex: 'NID', key: 'NID'},
     { title: '名称', dataIndex: 'name', key: 'name'},
@@ -154,7 +154,7 @@ const getOrderShoesOptions = function(target) {
   // s_bottom_side_color:{type:commonTypes.commonType, decription:'底边颜色'},
   // s_tie_di:{type:commonTypes.commonType, decription:'贴底'},
   // s_customs:{type:new GraphQLList(commonTypes.commonType)}, // 特殊定制
-  return options.concat([
+  return [
     {
       index:3, title:'商品信息', options:[
         {
@@ -183,8 +183,8 @@ const getOrderShoesOptions = function(target) {
         {type:'select', name:'s_tie_di', label:'贴底', itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(target.props.sales.shoesTieBianList), options:{defaultActiveFirstOption:true}, rule:{required:true}},    
       ]
     },
-    FOOT_OPTIONS, TRANSPORT_OPTIONS
-  ]).sort();
+    FOOT_OPTIONS
+  ];
 }
 
 // 皮带

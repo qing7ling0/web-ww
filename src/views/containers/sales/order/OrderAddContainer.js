@@ -110,6 +110,9 @@ class OrderAddContainer extends Component {
     }
     this.setState({visible:this.props.visible})
     this.props.reqGetGoodsBaseDatas();
+    this.props.reqCustomerList(0, 10000);
+    this.props.reqShopList(0, 100);
+    this.props.reqShopGuideList(0, 1000);
   }
 
   componentWillReceiveProps(nextProps){
@@ -400,6 +403,8 @@ export default connect(
       reqGetOrderList: Actions.getOrderList,
       reqAddOrder: Actions.addOrder,
       reqGetGoodsList: Actions.getGoodsList,
+      reqShopList:Actions.getShopList,
+      reqShopGuideList:Actions.getShopGuideList,
       reqCustomerList:Actions.getCustomerList,
       reqGetGoodsBaseDatas: Actions.getGoodsBaseDatas
     }, dispatch);

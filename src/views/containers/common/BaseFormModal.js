@@ -62,14 +62,16 @@ class BaseFormModal extends Component {
   }
 
   render() {
+    let mOptions = this.props.modalOptions || {};
     return (
-      <Modal
+      <Modal 
         title={this.props.title}
         visible={this.state.visible}
         onOk={this.onSubmit}
         onCancel={this.onCancel}
         confirmLoading={this.state.confirmLoading}
         afterClose={this.props.onAfterClose || null}
+        {...mOptions}
       >
         {
           this.props.renderHeader ?
