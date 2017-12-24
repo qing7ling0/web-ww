@@ -64,3 +64,31 @@ export const checkPasswordInput = function(password) {
 
   return null;
 }
+
+export const initFormDefaultValues = (options, values) => {
+  return options.map((item) => {
+    item.options = item.options.map((sub) => {
+      let value = values[sub.name] || '';
+      if (value._id) {
+        value = value._id;
+      }
+      if (value !== null && value !== undefined && value !== NaN && value !== '') {
+        if (!sub.decoratorOptions) {
+          sub.decoratorOptions = {};
+        }
+        sub.decoratorOptions.initialValue = value;
+      }
+      return sub;
+    })
+    return item;
+  })
+}
+
+export const listToSelectOptions = (list, valueFormat, labelFormat) => {
+  return list.map((item) => {
+    let ret = {_id:item._id};
+    ret.value = valueFormat ? valueFormat(item) : item._id;
+    ret.label = labelFormat ? labelFormat(item) : item.name;
+    return ret;
+  })
+}

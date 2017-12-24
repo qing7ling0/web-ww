@@ -171,12 +171,18 @@ class CommonListContainer extends Component {
   }
 
   onAdd = (values) => {
+    if (values.NID === undefined) {
+      values.NID = '0';
+    }
     this.onReqAdd(values);
   }
 
   onEdit = (values) => {
     values = utils.diffent(values, this.state.editData);
     if (values) {
+      if (values.NID === undefined) {
+        values.NID = '0';
+      }
       this.onReqUpdate(this.state.editData._id, values);
     }
   }

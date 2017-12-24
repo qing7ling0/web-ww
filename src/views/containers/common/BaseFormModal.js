@@ -84,7 +84,7 @@ class BaseFormModal extends Component {
           :
           <NormalForm onSubmit={this.onSubmit}>
             {
-              this.props.options.map((item, index) => {
+              this.props.options && this.props.options.map((item, index) => {
                 return <FormItemComponent key={item.name} options={item} form={this.props.form} />
               })
             }
@@ -104,7 +104,7 @@ class BaseFormModal extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    this.props.form.validateFields((err, values) => {
+    this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         this.setState({confirmLoading:true});
         if (this.props.onSubmit) {

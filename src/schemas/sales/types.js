@@ -296,6 +296,7 @@ const subOrderBaseFields = {
   transport_zipcode: {type:GraphQLString, decription:'邮编'},
   transport_price:{type:GraphQLFloat, decription:'快递费用'},
   remark:{type:GraphQLString, ddecription:'备注'},
+  
   urgent_day: {type: GraphQLInt, decription:'加急天数'},
   urgent_price: {type: GraphQLFloat, decription:'加急价格'}
 }

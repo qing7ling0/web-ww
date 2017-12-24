@@ -16,7 +16,7 @@ class CommonData {
     return Routers;
   }
 
-  // 检查NID是否唯一（NID ===0 不用检测）
+  // 检查NID是否唯一（NID === 0 不用检测）
   async checkNIDUnique(NID, type) {
     if (NID === null || NID === undefined || type === null || type === undefined) return false;
 
@@ -43,7 +43,7 @@ class CommonData {
     return DB.getList(commonModel, options, page);
   }
   async addCommon(doc, options={}) {
-    let NIDUnique = await this.checkNIDUnique(doc.type, doc.NID);
+    let NIDUnique = await this.checkNIDUnique(doc.NID, doc.type);
     if (!NIDUnique) {
       throw new ApiError(ApiErrorNames.ADD_FAIL, '编号已存在!');
     }
@@ -56,7 +56,7 @@ class CommonData {
       if (!data) {
         throw new ApiError(ApiErrorNames.UPDATE_FAIL);
       }
-      let NIDUnique = await this.checkNIDUnique(data.type, doc.NID);
+      let NIDUnique = await this.checkNIDUnique(doc.NID, data.type);
       if (!NIDUnique) {
         throw new ApiError(ApiErrorNames.ADD_FAIL, '编号已使用!');
       }

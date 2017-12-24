@@ -112,6 +112,7 @@ export const createGoodsNID = function(type, data, sex) {
         if (data[key] && data[key].NID) {
           NID += data[key].NID;
         } else {
+          console.log('createGoodsNID shoes fail key=' + key);
           return constants.NULL_NID;
         }
       }

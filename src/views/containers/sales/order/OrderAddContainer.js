@@ -219,6 +219,7 @@ class OrderAddContainer extends Component {
             title={'添加商品'}
             isRecharge={this.state.isRechargeOrder}
             visible={this.state.addVisible} 
+            customer={this.state.customer}
             onAdd={this.onGoodsAdd}
             afterClose={()=>this.setState({addVisible:false})}/> 
           : null
@@ -340,7 +341,7 @@ class OrderAddContainer extends Component {
       let order = {};
       let customer = {};
       for(let key in values) {
-        if (key !== 'source') {
+        if (key === 'source') {
           order[key] = values[key];
         } else if (key === 'birthday') {
           customer[key] = moment(values[key]).format('YYYY-MM-DD');
