@@ -297,8 +297,6 @@ const subOrderBaseFields = {
   transport_price:{type:GraphQLFloat, decription:'快递费用'},
   remark:{type:GraphQLString, ddecription:'备注'},
   
-  urgent_day: {type: GraphQLInt, decription:'加急天数'},
-  urgent_price: {type: GraphQLFloat, decription:'加急价格'}
 }
 
 export const orderPicType = new GraphQLObjectType({
@@ -321,6 +319,7 @@ export const subOrderType = new GraphQLObjectType({
     ...orderMaintainFields,
     ...orderRechargeFields,
     ...orderOrnamentFields,
+    urgent:{type:commonTypes.commonType, decription:'加急'},
     pics:{type:new GraphQLList(orderPicType)},
     sub_order_id:{type:GraphQLString, decription:'子订单id'},
     order:{type:GraphQLString},
@@ -340,6 +339,7 @@ export const subOrderInputType = new GraphQLInputObjectType({
     ...orderMaintainInputFields,
     ...orderRechargeInputFields,
     ...orderOrnamentInputFields,
+    urgent:{type:commonTypes.commonInputType, ddecription:'加急'},
     shop: {type:GraphQLString, decription:'店铺'},
     guide: {type:GraphQLString, decription:'导购'},
     customer: {type:customerTypes.customerInputType, decription:'客户id'},

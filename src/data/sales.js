@@ -202,6 +202,10 @@ class SalesData {
     return list;
   }
 
+  async findSubOrder(conditions, fields, options) {
+    return await subOrderModel.findOne(conditions, fields, options);
+  }
+
   async updateOrAddCustomerByOrder(order, customerDoc) {
     if (customerDoc && customerDoc.phone && !validate.isMobile(customerDoc.phone)) {
       return null;

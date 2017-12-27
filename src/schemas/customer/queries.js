@@ -10,7 +10,7 @@ import {
 } from 'graphql';
 
 import * as types from './types';
-import {customerData} from '../../data/index';
+import {customerData, salesData} from '../../data/index';
 import { 
   footModel,
   customerModel,
@@ -49,6 +49,27 @@ export const customerDetail = {
     conditions: {type:GraphQLString}
   },
 	async resolve (root, params, options) {
-    return await customerData.find(conditions)
+    if (params.conditions) {
+      params.conditions = commonUtils.urlString2Conditions(params.conditions);
+    }
+    return await customerData.find(params.conditions)
+	}
+}
+
+export const customerOrderInfo = {
+	type: types.customerType,
+  args: {
+    conditions: {type:GraphQLString},
+    options:{type:GraphQLString},
+    id: {type:GraphQLString}
+  },
+	async resolve (root, params, options) {
+    if (params.conditions) {
+      params.conditions = commonUtils.urlString2Conditions(params.conditions);
+    } else {
+      params.conditions = {_id:params.id};
+    }
+
+    return await salesData.find(params.conditions, null, params.options)
 	}
 }

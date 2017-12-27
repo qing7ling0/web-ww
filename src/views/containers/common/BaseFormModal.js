@@ -106,9 +106,11 @@ class BaseFormModal extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        this.setState({confirmLoading:true});
         if (this.props.onSubmit) {
-          this.props.onSubmit(err, values);
+          let suc = this.props.onSubmit(err, values);
+          this.setState({confirmLoading:suc});
+        } else {
+
         }
       }
     });

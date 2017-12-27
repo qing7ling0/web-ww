@@ -82,7 +82,7 @@ const getNIDBaseEditOptions = function(target) {
 const getCustomListOptions = function(target) {
   return [
     { title: '名称', dataIndex: 'name', key: 'name'},
-    { title: '价格', dataIndex: 'price', key: 'price', render:(text)=>text+' RMB'},
+    { title: '价格', dataIndex: 'price', key: 'price', render:(text)=>text+'RMB'},
     { title: '编辑人', dataIndex: 'editor_name', width:120, key: 'editor_name'},
     { title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
       return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={()=>target.onDelete([record._id])} />);
@@ -92,7 +92,7 @@ const getCustomListOptions = function(target) {
 const getCustomAddOptions = function(target) {
   return [
     {type:'input', name:'name', label:'名称', itemOptions:{hasFeedback:true}, rule:{required:true}},
-    {type:'number', name:'price', label:'价格', itemOptions:{hasFeedback:true}, options:{formatter:(value) => `${value} RMB`, parser:value => value.replace('RMB', '')}, rule:{required:true}},
+    {type:'number', name:'price', label:'价格', itemOptions:{hasFeedback:true}, options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, rule:{required:true}},
   ];
 }
 const getCustomEditOptions = function(target) {
@@ -104,7 +104,7 @@ const getCustomEditOptions = function(target) {
 const getUrgentListOptions = function(target) {
   return [
     { title: '天数', dataIndex: 'day', key: 'day'},
-    { title: '价格', dataIndex: 'price', key: 'price', render:(text)=>text+' RMB'},
+    { title: '价格', dataIndex: 'price', key: 'price', render:(text)=>text+'RMB'},
     { title: '编辑人', dataIndex: 'editor_name', key: 'editor_name', width:120},
     { title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
       return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={()=>target.onDelete([record._id])} />);
@@ -175,8 +175,8 @@ const getMaintainBaseColumns = function(target) {
   return [
     { title: '名称', dataIndex: 'name', key: 'name'},
     { title: '编号', dataIndex: 'NID', key: 'NID'},
-    { title: '价格', dataIndex: 'price', key: 'price',render:(item) => item+' RMB'},
-    { title: '时间', dataIndex: 'time', key: 'time',render:(item) => item+' 天'},
+    { title: '价格', dataIndex: 'price', key: 'price',render:(item) => item+'RMB'},
+    { title: '时间', dataIndex: 'time', key: 'time',render:(item) => item+'天'},
   ]
 }
 const getMaintainListOptions = function(target) {
@@ -199,8 +199,8 @@ const getMaintainAddOptions = function(target) {
   return [
     {type:'input', name:'name', label:'名称', itemOptions:{hasFeedback:true}, rule:{required:true}},
     {type:'input', name:'NID', label:'编号', itemOptions:{hasFeedback:true}, rule:{required:true}},
-    {type:'number', name:'price', label:'价格', itemOptions:{hasFeedback:true}, options:{formatter:(value) => `${value} RMB`, parser:value => value.replace('RMB', '')}, rule:{required:true}},
-    {type:'number', name:'time', label:'时间', itemOptions:{hasFeedback:true}, options:{formatter:(value) => `${value} 天`, parser:value => value.replace('天', '')}, rule:{required:true}},
+    {type:'number', name:'price', label:'价格', itemOptions:{hasFeedback:true}, options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, rule:{required:true}},
+    {type:'number', name:'time', label:'时间', itemOptions:{hasFeedback:true}, options:{formatter:(value) => `${value}天`, parser:value => value.replace('天', '')}, rule:{required:true}},
   ];
 } 
 const getMaintainEditOptions = function(target) {

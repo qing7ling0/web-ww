@@ -32,8 +32,8 @@ import {
 
 import {
   Root,
-  ProfileCol,
   Loading,
+  ProfileCol,
   ProfileColLabel,
   ProfileColValue,
   ProfileBtnBack,

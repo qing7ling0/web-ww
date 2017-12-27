@@ -206,8 +206,9 @@ class OrderGoodsAddModal extends Component {
 
   onSubmit = () => {
     if (this.onGoodsAdd) {
-      this.onGoodsAdd();
+      return this.onGoodsAdd();
     }
+    return false;
   }
 
   onAddSuccess = (values) => {

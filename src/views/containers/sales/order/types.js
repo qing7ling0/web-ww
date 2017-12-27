@@ -49,7 +49,7 @@ export const getOrderBaseListColumns = function(target) {
 const FOOT_OPTIONS = {
   index:2, title:'脚型数据', 
   options:[
-    {type:'input', name:'s_foot_size', label:'尺码', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+    {type:'number', name:'s_foot_size', label:'尺码', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
   ],
   left:{title:'左脚', options:[
     {type:'number', name:'s_left_length', label:'长度', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
@@ -181,13 +181,56 @@ const getOrderShoesOptions = function(target) {
           }, 
           rule:{required:true}
         },    
-        {type:'select', name:'s_xuan_hao', label:'楦型', itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(target.props.sales.xuanHaoList), options:{defaultActiveFirstOption:true, onChange:target.onNIDPropertyChange}, rule:{required:true}},    
-        {type:'select', name:'s_gui_ge', label:'规格', itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(target.props.sales.guiGeList), options:{defaultActiveFirstOption:true, onChange:target.onNIDPropertyChange}, rule:{required:true}},    
-        {type:'select', name:'s_material', label:'材料', itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(target.props.sales.materialList), options:{defaultActiveFirstOption:true, onChange:target.onNIDPropertyChange}, rule:{required:true}},    
-        {type:'select', name:'s_out_color', label:'鞋面颜色', itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(target.props.sales.outColorList), options:{defaultActiveFirstOption:true, onChange:target.onNIDPropertyChange}, rule:{required:true}},    
-        {type:'select', name:'s_in_color', label:'内里颜色', itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(target.props.sales.inColorList), options:{defaultActiveFirstOption:true, onChange:target.onNIDPropertyChange}, rule:{required:true}},    
-        {type:'select', name:'s_bottom_color', label:'鞋底颜色', itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(target.props.sales.bottomColorList), options:{defaultActiveFirstOption:true, onChange:target.onNIDPropertyChange}, rule:{required:true}},    
-        {type:'select', name:'s_bottom_side_color', label:'底边颜色', itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(target.props.sales.bottomSideColorList), options:{defaultActiveFirstOption:true, onChange:target.onNIDPropertyChange}, rule:{required:true}},       
+        {
+          type:'select', name:'s_xuan_hao', label:'楦型', itemOptions:{labelLeft:true}, 
+          selectItems:listToSelectOptions(target.props.sales.xuanHaoList), 
+          options:{
+            defaultActiveFirstOption:true, 
+            onChange:(value)=>target.onNIDPropertyChange('s_xuan_hao', value)
+          }, rule:{required:true}
+        },    
+        {
+          type:'select', name:'s_gui_ge', label:'规格', itemOptions:{labelLeft:true}, 
+          selectItems:listToSelectOptions(target.props.sales.guiGeList), 
+          options:{
+            defaultActiveFirstOption:true, 
+            onChange:(value)=>target.onNIDPropertyChange('s_gui_ge', value)
+          }, rule:{required:true}},    
+        {
+          type:'select', name:'s_material', label:'材料', itemOptions:{labelLeft:true}, 
+          selectItems:listToSelectOptions(target.props.sales.materialList), 
+          options:{
+            defaultActiveFirstOption:true, 
+            onChange:(value)=>target.onNIDPropertyChange('s_material', value)
+          }, rule:{required:true}},    
+        {
+          type:'select', name:'s_out_color', label:'鞋面颜色', itemOptions:{labelLeft:true}, 
+          selectItems:listToSelectOptions(target.props.sales.outColorList), 
+          options:{
+            defaultActiveFirstOption:true, 
+            onChange:(value)=>target.onNIDPropertyChange('s_out_color', value)
+          }, rule:{required:true}},    
+        {
+          type:'select', name:'s_in_color', label:'内里颜色', itemOptions:{labelLeft:true}, 
+          selectItems:listToSelectOptions(target.props.sales.inColorList), 
+          options:{
+            defaultActiveFirstOption:true, 
+            onChange:(value)=>target.onNIDPropertyChange('s_in_color', value)
+          }, rule:{required:true}},    
+        {
+          type:'select', name:'s_bottom_color', label:'鞋底颜色', itemOptions:{labelLeft:true}, 
+          selectItems:listToSelectOptions(target.props.sales.bottomColorList), 
+          options:{
+            defaultActiveFirstOption:true, 
+            onChange:(value)=>target.onNIDPropertyChange('s_bottom_color', value)
+          }, rule:{required:true}},    
+        {
+          type:'select', name:'s_bottom_side_color', label:'底边颜色', itemOptions:{labelLeft:true}, 
+          selectItems:listToSelectOptions(target.props.sales.bottomSideColorList), 
+          options:{
+            defaultActiveFirstOption:true, 
+            onChange:(value)=>target.onNIDPropertyChange('s_bottom_side_color', value)
+          }, rule:{required:true}},       
       ].concat(endOptions).concat([
         {type:'select', name:'s_tie_di', label:'贴底', itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(target.props.sales.shoesTieBianList), options:{defaultActiveFirstOption:true}, rule:{required:true}},    
         {type:'number', name:'price', label:'价格', itemOptions:{labelLeft:true}, options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, rule:{required:true}},    

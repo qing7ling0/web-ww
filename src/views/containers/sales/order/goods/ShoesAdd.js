@@ -31,6 +31,11 @@ import {
 
 import {
   Root,
+  ProfileCol,
+  ProfileColLabel,
+  ProfileColValue,
+  ProfileBtnBack,
+  ProfileRowTitle
 } from '../styled'
 
 import * as graphqlTypes from '../../../../modules/graphqlTypes'
@@ -58,14 +63,13 @@ class ShoesAdd extends Component {
       customs:[],
       selectShoes:{}, // 当前选择的鞋子
     }
-    this.orderType = null;
   }
 
   //在组件挂载之前调用一次。如果在这个函数里面调用setState，本次的render函数可以看到更新后的state，并且只渲染一次
   componentWillMount(){
     
     this.props.setGoodsCallback(this.onAdd);
-    this.onReqOrderGoodsList();
+    this.onReqOrderGoodsList(this.props.orderType.key);
   }
 
   renderBaseForm(item, index, vertical) {
@@ -92,7 +96,7 @@ class ShoesAdd extends Component {
         <Row>
           {
             item.options.map((item, index) => {
-              <Col key={index} xs={24} sm={12} lg={8}><FormItemComponent key={item.name} options={item} form={this.props.form} /></Col>
+              return (<Col key={index} xs={24} sm={12} lg={8}><FormItemComponent key={item.name} options={item} form={this.props.form} /></Col>);
             })
           }
         </Row>
@@ -134,28 +138,44 @@ class ShoesAdd extends Component {
             {
               this.state.customs.map((item,index) => {
                 return (
-                  <Col key={index} {...span}>
-                    <Select style={{ width:120, marginBottom:20 }} defaultValue={this.state.currentOrderType} 
-                      onChange={(value) => {
-                        this.onCustomChange(index, value)
-                      }}>
-                      {
-                        this.props.sales.customList.map((item) => {
-                          if (this.state.customs.findIndex((value)=>value._id === item._id) === -1) {
-                            return item;
+                  <Col key={index} span={24}>
+                    <ProfileCol span={8}>
+                      <ProfileColLabel>收费内容：</ProfileColLabel>
+                      <ProfileColValue>
+                        <Select style={{ width:120 }} value={item.name} 
+                          onChange={(value) => {
+                            this.onCustomChange(index, value)
+                          }}>
+                          {
+                            this.props.sales.customList.map((item) => {
+                              if (this.state.customs.findIndex((value)=>value._id === item._id) === -1) {
+                                return item;
+                              }
+                              return null;
+                            }).map((item) => {
+                              if (!item) return null;
+                              return <Option key={item._id} value={item._id}>{item.name}</Option>
+                            })
                           }
-                          return null;
-                        }).map((item) => {
-                          if (!item) return null;
-                          return <Option key={item._id} value={item._id}>{item.name}</Option>
-                        })
-                      }
-                    </Select>
+                        </Select>
+                        <Button icon="delete" size="small" shape="circle" style={{marginLeft:'0.1rem'}} onClick={()=>{
+                          let cus = this.state.customs;
+                          cus.splice(index, 1);
+                          this.setState({customs:cus});
+                        }} />
+                      </ProfileColValue>
+                    </ProfileCol>
+                    <ProfileCol span={8}>
+                      <ProfileColLabel>价  格：</ProfileColLabel>
+                      <ProfileColValue>
+                        {this.state.customs[index].price} RMB
+                      </ProfileColValue>
+                    </ProfileCol>
                   </Col>
                 );
               })
             }
-            <Col {...span}>
+            <Col {...span} style={{paddingTop:20}}>
               <Button type="dashed" onClick={this.addCustom} style={{ width: 120 }}>
                 <Icon type="plus" /> 增加
               </Button>
@@ -176,10 +196,28 @@ class ShoesAdd extends Component {
       if (!err) {
         if (this.props.onAddSuccess) {
           values.type = this.props.orderType.type;
-          this.props.onAddSuccess(values);
+          let shoesInfo = values;
+          shoesInfo.s_material = this.getValueFromListById(this.props.sales.materialList, shoesInfo.s_material);
+          shoesInfo.s_xuan_hao = this.getValueFromListById(this.props.sales.xuanHaoList, shoesInfo.s_xuan_hao);
+          shoesInfo.s_gui_ge = this.getValueFromListById(this.props.sales.guiGeList, shoesInfo.s_gui_ge);
+          shoesInfo.s_out_color = this.getValueFromListById(this.props.sales.outColorList, shoesInfo.s_out_color);
+          shoesInfo.s_in_color = this.getValueFromListById(this.props.sales.inColorList, shoesInfo.s_in_color);
+          shoesInfo.s_bottom_color = this.getValueFromListById(this.props.sales.bottomColorList, shoesInfo.s_bottom_color);
+          shoesInfo.s_bottom_side_color = this.getValueFromListById(this.props.sales.bottomSideColorList, shoesInfo.s_bottom_side_color);
+          shoesInfo.s_gen_gao = this.getValueFromListById(this.props.sales.genGaoList, shoesInfo.s_gen_gao);
+          shoesInfo.s_tie_di = this.getValueFromListById(this.props.sales.shoesTieBianList, shoesInfo.s_tie_di);
+
+          shoesInfo.customs = this.state.customs;
+          if (shoesInfo.urgent) {
+            shoesInfo.urgent = this.getValueFromListById(this.props.sales.urgentList, shoesInfo.urgent);
+          }
+          this.props.onAddSuccess(shoesInfo);
+          return true;
         }
       }
     })
+
+    return false;
   }
 
   getUnusedCustom = () => {
@@ -233,17 +271,20 @@ class ShoesAdd extends Component {
         forms.setFieldsValue({s_in_color:shoes.s_in_color._id});
         forms.setFieldsValue({s_bottom_color:shoes.s_bottom_color._id});
         forms.setFieldsValue({s_bottom_side_color:shoes.s_bottom_side_color._id});
-        forms.setFieldsValue({s_gen_gao:shoes.s_gen_gao._id});
         forms.setFieldsValue({price:shoes.price});
+        if (this.props.customer.sex === constants.BASE_CONSTANTS.SEX_FEMALE) {
+          forms.setFieldsValue({s_gen_gao:shoes.s_gen_gao._id});
+        }
 
         this.setState({selectShoes:shoes});
       }
     }
   }
 
-  onNIDPropertyChange = () => {
+  onNIDPropertyChange = (key, value) => {
     const {form:forms} = this.props;
     let shoesInfo = forms.getFieldsValue();
+    shoesInfo[key] = value;
     shoesInfo.s_material = this.getValueFromListById(this.props.sales.materialList, shoesInfo.s_material);
     shoesInfo.s_xuan_hao = this.getValueFromListById(this.props.sales.xuanHaoList, shoesInfo.s_xuan_hao);
     shoesInfo.s_gui_ge = this.getValueFromListById(this.props.sales.guiGeList, shoesInfo.s_gui_ge);
@@ -257,6 +298,8 @@ class ShoesAdd extends Component {
       let shoes = this.getValueFromListById(this.props.sales.goodsShoesList, 0, (item)=>item.NID === nid);
       if (shoes) {
         forms.setFieldsValue({price:shoes.price});
+      } else {
+        forms.setFieldsValue({price:null});
       }
     }
     forms.setFieldsValue({NID:nid});

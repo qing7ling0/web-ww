@@ -23,8 +23,8 @@ export const FormItemNormal = styled(Form.Item)`
 
 export const ContentTitle = styled.div`
   width: 100%;
-  pading: 0.15rem;
+  padding: 0.15rem;
   font-size: 0.16rem;
-  text-align:right;
+  text-align:left;
   border-bottom: 1px solid #e9e9e9;
 `
