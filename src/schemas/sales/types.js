@@ -41,6 +41,25 @@ export const materialInputType = new GraphQLInputObjectType({
     color: { type: GraphQLString, description:'颜色' },
   }
 });
+const orderBaseCommonFields = {
+  _id: {type:GraphQLString, decription:'ID'},
+  name: {type:GraphQLString, decription:'名称'},
+  NID: {type:GraphQLString, decription:'编号'},
+  price: {type:GraphQLFloat, decription:'价格'},
+  day: {type:GraphQLInt, decription:'天数'}
+};
+const orderBaseCommonType = new GraphQLObjectType({
+  name: 'orderBaseCommonType',
+  fields: {
+    ...orderBaseCommonFields
+  }
+});
+const orderBaseCommonInputType = new GraphQLInputObjectType({
+  name: 'orderBaseCommonInputType',
+  fields: {
+    ...orderBaseCommonFields
+  }
+});
 
 const goodsBaseFields = {
   _id: {type:GraphQLString},
@@ -54,9 +73,9 @@ const goodsBaseFields = {
 };
 const goodsFields = {
   ...goodsBaseFields,
-  type: {type:commonTypes.commonType, description:'大分类'},
-  style: {type:commonTypes.commonType, decription:'系列'},
-  season: {type:commonTypes.commonType, decription:'季节'},
+  type: {type:orderBaseCommonType, description:'大分类'},
+  style: {type:orderBaseCommonType, decription:'系列'},
+  season: {type:orderBaseCommonType, decription:'季节'},
   pics:{type:new GraphQLList(GraphQLString)},
 }
 const goodsInputFields = {
@@ -71,14 +90,14 @@ const goodsInputFields = {
 const goodsShoesBaseFields = {};
 const goodsShoesFields = {
   ...goodsShoesBaseFields,
-  s_material: {type:materialType, decription:'材质'},
-  s_xuan_hao: {type:commonTypes.commonType, decription:'楦号'},
-  s_gui_ge: {type:commonTypes.commonType, decription:'规格'},
-  s_out_color: {type:commonTypes.commonType, decription:'鞋面颜色'},
-  s_in_color: {type:commonTypes.commonType, decription:'里皮颜色'},
-  s_bottom_color: {type:commonTypes.commonType, decription:'鞋底颜色'},
-  s_bottom_side_color: {type:commonTypes.commonType, decription:'底边颜色'},
-  s_gen_gao: {type:commonTypes.commonType, decription:'跟高'},
+  s_material: {type:orderBaseCommonType, decription:'材质'},
+  s_xuan_hao: {type:orderBaseCommonType, decription:'楦号'},
+  s_gui_ge: {type:orderBaseCommonType, decription:'规格'},
+  s_out_color: {type:orderBaseCommonType, decription:'鞋面颜色'},
+  s_in_color: {type:orderBaseCommonType, decription:'里皮颜色'},
+  s_bottom_color: {type:orderBaseCommonType, decription:'鞋底颜色'},
+  s_bottom_side_color: {type:orderBaseCommonType, decription:'底边颜色'},
+  s_gen_gao: {type:orderBaseCommonType, decription:'跟高'},
 }
 const goodsShoesInputFields = {
   ...goodsShoesBaseFields,
@@ -97,8 +116,8 @@ const goodsBeltBaseFields = {
 };
 const goodsBeltFields = {
   ...goodsBeltBaseFields,
-  b_material: {type:materialType, decription:'材质'},
-  b_color: {type:commonTypes.commonType, decription:'颜色'},
+  b_material: {type:orderBaseCommonType, decription:'材质'},
+  b_color: {type:orderBaseCommonType, decription:'颜色'},
 }
 const goodsBeltInputFields = {
   ...goodsBeltBaseFields,
@@ -110,8 +129,8 @@ const goodsBeltInputFields = {
 const goodsWatchStrapBaseFields = {};
 const goodsWatchStrapFields = {
   ...goodsWatchStrapBaseFields,
-  ws_material: {type:materialType, decription:'材质'},
-  ws_style: {type:commonTypes.commonType, decription:'类型'},
+  ws_material: {type:orderBaseCommonType, decription:'材质'},
+  ws_style: {type:orderBaseCommonType, decription:'类型'},
 }
 const goodsWatchStrapInputFields = {
   ...goodsWatchStrapBaseFields,
@@ -165,30 +184,30 @@ const orderShoesBaseFields = {
 }
 const orderShoesFields = {
   ...orderShoesBaseFields,
-  s_xuan_hao:{type:commonTypes.commonType, decription:'鞋楦型'},
-  s_gui_ge:{type:commonTypes.commonType, decription:'规格'},
-  s_gen_gao:{type:commonTypes.commonType, decription:'跟高'},
-  s_material:{type:commonTypes.commonType, decription:'材料'},
-  s_out_color:{type:commonTypes.commonType, decription:'鞋面颜色'},
-  s_in_color:{type:commonTypes.commonType, decription:'内里颜色'},
-  s_bottom_color:{type:commonTypes.commonType, decription:'鞋底颜色'},
-  s_bottom_side_color:{type:commonTypes.commonType, decription:'底边颜色'},
-  s_tie_di:{type:commonTypes.commonType, decription:'贴底'},
-  s_customs:{type:new GraphQLList(commonTypes.commonType)}, // 特殊定制
+  s_xuan_hao:{type:orderBaseCommonType, decription:'鞋楦型'},
+  s_gui_ge:{type:orderBaseCommonType, decription:'规格'},
+  s_gen_gao:{type:orderBaseCommonType, decription:'跟高'},
+  s_material:{type:orderBaseCommonType, decription:'材料'},
+  s_out_color:{type:orderBaseCommonType, decription:'鞋面颜色'},
+  s_in_color:{type:orderBaseCommonType, decription:'内里颜色'},
+  s_bottom_color:{type:orderBaseCommonType, decription:'鞋底颜色'},
+  s_bottom_side_color:{type:orderBaseCommonType, decription:'底边颜色'},
+  s_tie_di:{type:orderBaseCommonType, decription:'贴底'},
+  s_customs:{type:new GraphQLList(orderBaseCommonType)}, // 特殊定制
   s_shoes: {type:goodsType, decription:'商品'}
 }
 const orderShoesInputFields = {
   ...orderShoesBaseFields,
-  s_xuan_hao:{type:commonTypes.commonInputType, decription:'鞋楦型'},
-  s_gui_ge:{type:commonTypes.commonInputType, decription:'规格'},
-  s_material:{type:commonTypes.commonInputType, decription:'材料'},
-  s_out_color:{type:commonTypes.commonInputType, decription:'鞋面颜色'},
-  s_in_color:{type:commonTypes.commonInputType, decription:'内里颜色'},
-  s_bottom_color:{type:commonTypes.commonInputType, decription:'鞋底颜色'},
-  s_bottom_side_color:{type:commonTypes.commonInputType, decription:'底边颜色'},
-  s_gen_gao:{type:commonTypes.commonInputType, decription:'跟高'},
-  s_tie_di:{type:commonTypes.commonInputType, decription:'贴底'},
-  s_customs:{type:new GraphQLList(GraphQLString)}, // 特殊定制
+  s_xuan_hao:{type:orderBaseCommonInputType, decription:'鞋楦型'},
+  s_gui_ge:{type:orderBaseCommonInputType, decription:'规格'},
+  s_material:{type:orderBaseCommonInputType, decription:'材料'},
+  s_out_color:{type:orderBaseCommonInputType, decription:'鞋面颜色'},
+  s_in_color:{type:orderBaseCommonInputType, decription:'内里颜色'},
+  s_bottom_color:{type:orderBaseCommonInputType, decription:'鞋底颜色'},
+  s_bottom_side_color:{type:orderBaseCommonInputType, decription:'底边颜色'},
+  s_gen_gao:{type:orderBaseCommonInputType, decription:'跟高'},
+  s_tie_di:{type:orderBaseCommonInputType, decription:'贴底'},
+  s_customs:{type:new GraphQLList(orderBaseCommonInputType)}, // 特殊定制
   s_shoes: {type:GraphQLString, decription:'商品'},
 }
 
@@ -202,14 +221,14 @@ const orderBeltBaseFields = {
 }
 const orderBeltFields = {
   ...orderBeltBaseFields,
-  b_material:{type:commonTypes.commonType, decription:'材质'},
-  b_color:{type:commonTypes.commonType, decription:'颜色'},
+  b_material:{type:orderBaseCommonType, decription:'材质'},
+  b_color:{type:orderBaseCommonType, decription:'颜色'},
   b_belt: {type:goodsType, decription:'皮带'}
 }
 const orderBeltInputFields = {
   ...orderBeltBaseFields,
-  b_material:{type:materialInputType, decription:'材质'},
-  b_color:{type:commonTypes.commonInputType, decription:'颜色'},
+  b_material:{type:orderBaseCommonInputType, decription:'材质'},
+  b_color:{type:orderBaseCommonInputType, decription:'颜色'},
   b_belt:{type:GraphQLString, decription:'皮带'},
 }
 
@@ -228,14 +247,14 @@ const orderWatchStrapBaseFields = {
 const orderWatchStrapFields = {
   ...orderWatchStrapBaseFields,
   ws_watchStrap: {type:goodsType, decription:'表带'},
-  ws_material:{type:commonTypes.commonType, decription:'材质'},
-  ws_style:{type:commonTypes.commonType, decription:'类别，男女'},
+  ws_material:{type:orderBaseCommonType, decription:'材质'},
+  ws_style:{type:orderBaseCommonType, decription:'类别，男女'},
 }
 const orderWatchStrapInputFields = {
   ...orderWatchStrapBaseFields,
   ws_watchStrap:{type:GraphQLString, decription:'表带'},
-  ws_material:{type:materialInputType, decription:'材质'},
-  ws_style:{type:commonTypes.commonInputType, decription:'类别，男女'},
+  ws_material:{type:orderBaseCommonInputType, decription:'材质'},
+  ws_style:{type:orderBaseCommonInputType, decription:'类别，男女'},
 }
 
 // 护理
@@ -284,10 +303,10 @@ const orderOrnamentInputFields = {
 const subOrderBaseFields = {
   NID:{type:GraphQLString, decription:'编号'},
   name:{type:GraphQLString, decription:'名称'},
-  price:{type:GraphQLString, decription:'价格'},
+  price:{type:GraphQLFloat, decription:'价格'},
   count:{type:GraphQLInt, decription:'数量'},
   type: {type:GraphQLString, decription:'类型'},
-  state: {type:GraphQLString, decription:'订单状态'},
+  state: {type:GraphQLInt, decription:'订单状态'},
   transport_company: {type:GraphQLString, decription:'快递公司'},
   transport_id:{type:GraphQLString, decription:'快递单号'},
   transport_name: {type:GraphQLString, decription:'收货人'},
@@ -319,7 +338,7 @@ export const subOrderType = new GraphQLObjectType({
     ...orderMaintainFields,
     ...orderRechargeFields,
     ...orderOrnamentFields,
-    urgent:{type:commonTypes.commonType, decription:'加急'},
+    urgent:{type:orderBaseCommonType, decription:'加急'},
     pics:{type:new GraphQLList(orderPicType)},
     sub_order_id:{type:GraphQLString, decription:'子订单id'},
     order:{type:GraphQLString},
@@ -339,7 +358,7 @@ export const subOrderInputType = new GraphQLInputObjectType({
     ...orderMaintainInputFields,
     ...orderRechargeInputFields,
     ...orderOrnamentInputFields,
-    urgent:{type:commonTypes.commonInputType, ddecription:'加急'},
+    urgent:{type:orderBaseCommonInputType, ddecription:'加急'},
     shop: {type:GraphQLString, decription:'店铺'},
     guide: {type:GraphQLString, decription:'导购'},
     customer: {type:customerTypes.customerInputType, decription:'客户id'},

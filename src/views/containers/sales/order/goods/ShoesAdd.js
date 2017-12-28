@@ -236,7 +236,7 @@ class ShoesAdd extends Component {
       let ret = {};
       for(let key in value) {
         if (key.indexOf('editor_') === -1) {
-          ret[key] = value[value];
+          ret[key] = value[key];
         }
       }
       return ret;
@@ -271,7 +271,7 @@ class ShoesAdd extends Component {
     if (index < 0 || index >= this.state.customs.length) return;
     let customs = this.state.customs;
     let cus = this.getValueFromListById(this.props.sales.customList, value);
-    if (this.state.customs.findIndex((value)=>value._id === cus._id) === -1) {
+    if (cus && this.state.customs.findIndex((value)=>value._id === cus._id) === -1) {
       customs[index] = cus;
       this.setState({customs:customs}); 
     }
@@ -351,21 +351,21 @@ class ShoesAdd extends Component {
 
   getValueFromListById = (list, id, checkFn) => {
     if (!list) return null;
-    let item = null;
+    let ret = null;
     for(let item of list) {
       if (checkFn) {
         if (checkFn(item)) {
-          item = item;
+          ret = item;
           break;
         }
       } else {
         if (item._id === id) {
-          item = item;
+          ret = item;
           break;
         }
       }
     }
-    return this.filterEditorProperty(item);
+    return this.filterEditorProperty(ret);
   }
 }
 

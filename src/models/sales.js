@@ -63,7 +63,7 @@ var goodsSchema = new Schema({
 });
 module.exports.goodsModel = mongoose.model('goods', goodsSchema);
 
-const orderBaseSchea = new Schema({
+const orderBaseSchema = new Schema({
   _id: {type:String, decription:'ID'},
   name: {type:String, decription:'名称'},
   NID: {type:String, decription:'编号'},
@@ -73,16 +73,16 @@ const orderBaseSchea = new Schema({
 // 订单信息
 // 鞋
 const shoesFields = {
-  s_material: {type:orderBaseSchea, decription:'材质'},
-  s_xuan_hao: {type:orderBaseSchea, decription:'楦号'},
-  s_gui_ge: {type:orderBaseSchea, decription:'规格'},
-  s_gen_gao: {type:orderBaseSchea, decription:'跟高'},
-  s_out_color: {type:orderBaseSchea, decription:'鞋面颜色'},
-  s_in_color: {type:orderBaseSchea, decription:'里皮颜色'},
-  s_bottom_color: {type:orderBaseSchea, decription:'鞋底颜色'},
-  s_bottom_side_color: {type:orderBaseSchea, decription:'底边颜色'},
+  s_material: {type:orderBaseSchema, decription:'材质'},
+  s_xuan_hao: {type:orderBaseSchema, decription:'楦号'},
+  s_gui_ge: {type:orderBaseSchema, decription:'规格'},
+  s_gen_gao: {type:orderBaseSchema, decription:'跟高'},
+  s_out_color: {type:orderBaseSchema, decription:'鞋面颜色'},
+  s_in_color: {type:orderBaseSchema, decription:'里皮颜色'},
+  s_bottom_color: {type:orderBaseSchema, decription:'鞋底颜色'},
+  s_bottom_side_color: {type:orderBaseSchema, decription:'底边颜色'},
 
-  s_tie_di: {type:orderBaseSchea, decription:'贴底'},
+  s_tie_di: {type:orderBaseSchema, decription:'贴底'},
   s_design_self: {type:Boolean, default:false, decription:'是否来样设计'},
   s_shoes: {type:Schema.Types.ObjectId, ref:'goods', decription:'商品'},
 
@@ -93,13 +93,13 @@ const shoesFields = {
   s_right_length: {type: Number, description:'右脚长度'},
   s_right_zhiWei: {type: Number, decription:'右脚趾围'},
   s_right_fuWei: {type: Number, decription:'右脚附维'},
-  s_customs:[orderBaseSchea], // 特殊定制
+  s_customs:[orderBaseSchema], // 特殊定制
 }
 
 // 皮带
 const beltFields = {
-  b_material:{type:orderBaseSchea, decription:'材质'},
-  b_color:{type:orderBaseSchea, decription:'颜色'},
+  b_material:{type:orderBaseSchema, decription:'材质'},
+  b_color:{type:orderBaseSchema, decription:'颜色'},
   b_belt: {type:Schema.Types.ObjectId, ref:'goods', decription:'商品'},
 
   b_A: {type: Number, decription:'皮带测量数据A'},
@@ -111,8 +111,8 @@ const beltFields = {
 
 // 表带
 const watchStrapFields = {
-  ws_material:{type:orderBaseSchea, decription:'材质'},
-  ws_style:{type:orderBaseSchea, decription:'类别，男女'},
+  ws_material:{type:orderBaseSchema, decription:'材质'},
+  ws_style:{type:orderBaseSchema, decription:'类别，男女'},
   ws_watch_strap: {type:Schema.Types.ObjectId, ref:'goods', decription:'商品'},
 
   ws_A: {type: Number, decription:'表带测量数据A'},
@@ -178,7 +178,7 @@ const subOrderSchema = new Schema({
   transport_address: {type:String, decription:'收货地址'},
   transport_zipcode: {type:String, decription:'邮编'},
 
-  urgent:{type:orderBaseSchea, decription:'加急'},
+  urgent:{type:orderBaseSchema, decription:'加急'},
   shop: {type:Schema.Types.ObjectId, ref:'shop', decription:'店铺'},
   guide: {type:Schema.Types.ObjectId, ref:'user_shop_guide', decription:'导购'},
   customer: {type:Schema.Types.ObjectId, ref:'customer', decription:'客户'},
