@@ -66,10 +66,10 @@ class ShoesAdd extends Component {
   }
 
   //在组件挂载之前调用一次。如果在这个函数里面调用setState，本次的render函数可以看到更新后的state，并且只渲染一次
-  componentWillMount(){
-    
+  componentDidMount(){
     this.props.setGoodsCallback(this.onAdd);
     this.onReqOrderGoodsList(this.props.orderType.key);
+    this.props.reqLastCustomerOrderInfo(this.props.customer._id, this.props.orderType.key, 'lastCustomerOrderInfo')
   }
 
   renderBaseForm(item, index, vertical) {
@@ -111,7 +111,18 @@ class ShoesAdd extends Component {
   render() {
     this.options = this.props.orderType.addOptions(this);
     if (this.props.data) {
-      this.options = common.initFormDefaultValues(this.options, this.props.data);
+      let data = {...this.props.data}
+      if (this.props.lastCustomerOrderInfo) {
+        const {lastCustomerOrderInfo} = this.props;
+        data.s_foot_size = lastCustomerOrderInfo.s_foot_size;
+        data.s_left_length = lastCustomerOrderInfo.s_left_length;
+        data.s_left_zhiWei = lastCustomerOrderInfo.s_left_zhiWei;
+        data.s_left_fuWei = lastCustomerOrderInfo.s_left_fuWei;
+        data.s_right_length = lastCustomerOrderInfo.s_right_length;
+        data.s_right_zhiWei = lastCustomerOrderInfo.s_right_zhiWei;
+        data.s_right_fuWei = lastCustomerOrderInfo.s_right_fuWei;
+      }
+      this.options = common.initFormDefaultValues(this.options, data);
     }
     let span = {sm:24, lg:12};
     let urgentOptionItem = {
@@ -207,7 +218,7 @@ class ShoesAdd extends Component {
           shoesInfo.s_gen_gao = this.getValueFromListById(this.props.sales.genGaoList, shoesInfo.s_gen_gao);
           shoesInfo.s_tie_di = this.getValueFromListById(this.props.sales.shoesTieBianList, shoesInfo.s_tie_di);
 
-          shoesInfo.customs = this.state.customs;
+          shoesInfo.s_customs = this.state.customs;
           if (shoesInfo.urgent) {
             shoesInfo.urgent = this.getValueFromListById(this.props.sales.urgentList, shoesInfo.urgent);
           }
@@ -220,13 +231,27 @@ class ShoesAdd extends Component {
     return false;
   }
 
+  filterEditorProperty = (value) => {
+    if (value) {
+      let ret = {};
+      for(let key in value) {
+        if (key.indexOf('editor_') === -1) {
+          ret[key] = value[value];
+        }
+      }
+      return ret;
+    }
+
+    return null;
+  }
+
   getUnusedCustom = () => {
     for(let cus of this.props.sales.customList) {
       let index = this.state.customs.findIndex((value) => {
         return value._id === cus._id;
       });
       if (index === -1) {
-        return cus;
+        return this.filterEditorProperty(cus);
       }
     }
 
@@ -326,19 +351,21 @@ class ShoesAdd extends Component {
 
   getValueFromListById = (list, id, checkFn) => {
     if (!list) return null;
+    let item = null;
     for(let item of list) {
       if (checkFn) {
         if (checkFn(item)) {
-          return item;
+          item = item;
+          break;
         }
       } else {
         if (item._id === id) {
-          return item;
+          item = item;
+          break;
         }
       }
     }
-
-    return null;
+    return this.filterEditorProperty(item);
   }
 }
 
@@ -350,13 +377,15 @@ export default connect(
     shopList:state.shop.shopList,
     guideList:state.shop.shopGuideList,
     customerList:state.customer.customerList,
+    lastCustomerOrderInfo:state.customer.lastCustomerOrderInfo
   }),
   (dispatch) => {
     return bindActionCreators({
       reqGetOrderList: Actions.getOrderList,
       reqAddOrder: Actions.addOrder,
       reqGetGoodsList: Actions.getGoodsList,
-      reqGetGoodsBaseDatas: Actions.getGoodsBaseDatas
+      reqGetGoodsBaseDatas: Actions.getGoodsBaseDatas,
+      reqLastCustomerOrderInfo: Actions.lastCustomerOrderInfo
     }, dispatch);
   }
 )(Form.create()(ShoesAdd));

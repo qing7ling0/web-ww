@@ -74,6 +74,11 @@ function doActions(state, action) {
         return createState(state, resState, {customerGuideDeleteIDS:data.deleteCustomerGuide});
       }
         break;
+    case ActionTypes.LAST_CUSTOMER_ORDER_INFO:
+      if (action.state === States.Fulfilled && result.code === 0) {
+        return createState(state, resState, {...data});
+      }
+        break;
     default:
       break;
   }

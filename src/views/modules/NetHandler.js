@@ -225,10 +225,14 @@ class NetHandler {
     return netUtils.graphqlJson(config.GetServerAddress() + '/api', mut);
   }
 
-  static getLastCustomerOrderInfo(tag, type, id) {
+  static getLastCustomerOrderInfo(id, orderType, tag, graphqlType) {
+    let conditions ={};
+    conditions.customer = id;
+    conditions.type = orderType;
+    let options = {sort:{create_time:"desc"}}
     let query = `
       query Query {
-        lastCustomerOrder(customerId:"${id}", type:"${tag}")${type}
+        ${tag}:customerOrderInfo(conditions:"${encodeURIComponent(JSON.stringify(conditions))}", options:"${encodeURIComponent(JSON.stringify(options))}")${graphqlType}
       }
     `;
     return netUtils.graphqlJson(config.GetServerAddress() + '/api', query);

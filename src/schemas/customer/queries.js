@@ -10,6 +10,7 @@ import {
 } from 'graphql';
 
 import * as types from './types';
+import * as salesTypes from '../sales/types';
 import {customerData, salesData} from '../../data/index';
 import { 
   footModel,
@@ -57,19 +58,27 @@ export const customerDetail = {
 }
 
 export const customerOrderInfo = {
-	type: types.customerType,
+	type: salesTypes.subOrderType,
   args: {
     conditions: {type:GraphQLString},
-    options:{type:GraphQLString},
-    id: {type:GraphQLString}
+    options:{type:GraphQLString}
   },
 	async resolve (root, params, options) {
-    if (params.conditions) {
-      params.conditions = commonUtils.urlString2Conditions(params.conditions);
-    } else {
-      params.conditions = {_id:params.id};
+    try {
+      if (params.conditions) {
+        params.conditions = commonUtils.urlString2Conditions(params.conditions);
+      } else {
+        params.conditions = {};
+      }
+      if (params.options) {
+        params.options = commonUtils.urlString2Conditions(params.options);
+      } else {
+        params.options = {};
+      }
+    } catch(error) {
+      console.log(error);
     }
 
-    return await salesData.find(params.conditions, null, params.options)
+    return await salesData.findSubOrder(params.conditions, null)
 	}
 }

@@ -50,6 +50,7 @@ import * as optionsType from '../types'
 import { ORDER_TYPES, ORDER_OPTIONS } from './types'
 
 import OrderGoodsAddModal from './OrderGoodsAddModal'
+import OrderPayComponent from './components/OrderPayComponent'
 
 
 const ADD_ORDER_STEPS = [{
@@ -124,19 +125,6 @@ class OrderAddContainer extends Component {
       }
     }
   }
-  // <BaseFormModal
-  //   title={this.props.title}
-  //   options={this.options}
-  //   visible={this.state.visible}
-  //   loading={this.props.loading}
-  //   result={this.props.result}
-  //   onSubmit={this.onSubmit}
-  //   onCancel={this.onCancel}
-  //   onAfterClose={this.props.afterClose || null}
-  //   confirmLoading={this.state.confirmLoading}
-  //   actionType={ActionTypes.ORDER_ADD}
-  //   onSubmitSuccess={this.props.onSubmitSuccess}
-  // />
 
   renderBaseForm(item, index, vertical) {
     let span = {xs:24, sm:12, lg:8};
@@ -155,23 +143,6 @@ class OrderAddContainer extends Component {
       </Card>
     )
   }
-  renderFoot(item, index) {
-    return (
-      <Card key={index} title={item.title} bordered={false} noHovering={true}>
-        <Row>
-          {
-            item.options.map((item, index) => {
-              <Col key={index} xs={24} sm={12} lg={8}><FormItemComponent key={item.name} options={item} form={this.props.form} /></Col>
-            })
-          }
-        </Row>
-        <Row>
-          <Col xs={{span:24}} md={{span:10, offset:1}} lg={{span:8, offset:2}}>{this.renderBaseForm(item.left, index+1000, true)}</Col>
-          <Col xs={{span:24}} md={{span:10, offset:2}} lg={{span:8, offset:4}}>{this.renderBaseForm(item.right, index+1000, true)}</Col>
-        </Row>
-      </Card>
-    )
-  }
 
   renderCustomer = () => {
     this.options = ORDER_OPTIONS.add(this);
@@ -180,7 +151,7 @@ class OrderAddContainer extends Component {
       <NormalForm onSubmit={this.onNext}>
         {
           this.options.map((item, index) => {
-            return item.left ? this.renderFoot(item,index) : this.renderBaseForm(item, index);
+            return this.renderBaseForm(item, index);
           })
         }
         <NextContainer>
@@ -232,6 +203,15 @@ class OrderAddContainer extends Component {
     );
   }
 
+  renderPay= ()=> {
+    return <OrderPayComponent 
+      onOrderAddSuccess={()=>{}} 
+      customer={this.props.customer} 
+      goods={this.state.goods}
+      order={this.state.order}
+      onPrev={this.onPrev} />
+  }
+
   render() {
     return (
       <div>
@@ -251,6 +231,11 @@ class OrderAddContainer extends Component {
               this.state.currentStep===1 
               && 
               this.renderGoods()
+            }
+            {
+              this.state.currentStep===2 
+              && 
+              this.renderPay()
             }
           </Card>
         </OrderStepContent>

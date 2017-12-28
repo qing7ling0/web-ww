@@ -425,7 +425,7 @@ const getOrderListColumns = function(target) {
   return options;
 }
 
-const getOrderAddStepCunstomerOptions = function(target) {
+const getOrderAddStepCustomerOptions = function(target) {
   let valuePhoneList = listToSelectOptions(target.props.customerList, (item)=>item.phone, (item)=>item.name+'-'+item.phone);
   let valueNameList = listToSelectOptions(target.props.customerList, (item)=>item.name, (item)=>item.name+'-'+item.phone);
   return [
@@ -475,7 +475,8 @@ const getOrderAddStepCunstomerOptions = function(target) {
     }
   ];
 }
-const getOrderAddStepGoodsListColumns = function(target) {
+const getOrderPayStepGoodsListColumns = function(target) {
+
   return [
     { title: '编号', dataIndex: 'NID', key: 'NID'},
     { title: '类型', dataIndex: 'type', key: 'type', render:(item) => {
@@ -483,7 +484,75 @@ const getOrderAddStepGoodsListColumns = function(target) {
       if (type) return type.label;
       return '';
     }},
-    { title: '价格', dataIndex: 'price', key: 'price', render:(item) => item+'RMB'},
+    { title: '价格', dataIndex: 'price', key: 'price', render:(item, record) =>{
+      let calcCustomPrice = (customs) =>{
+        if (!customs) return 0;
+        let customPrice = 0;
+        for(let cus of customs) {
+          customPrice += cus.price;
+        }
+        return customPrice;
+      }
+
+      let priceInfo = {}
+      priceInfo.customPrice = calcCustomPrice(record.s_customs);
+      priceInfo.urgentPrice = record.urgent ? record.urgent.price : 0;
+      priceInfo.totalPrice= record.price + priceInfo.customPrice + priceInfo.urgentPrice;
+      
+      return (<div>
+        <div>金额:{priceInfo.totalPrice}元</div>
+        {
+          priceInfo.customPrice > 0 ?
+          <div>含定制费:{priceInfo.customPrice}元</div>
+          : null
+        }
+        {
+          priceInfo.urgentPrice > 0 ?
+          <div>含加急费:{priceInfo.urgentPrice}元</div>
+          : null
+        }
+      </div>)
+    }}
+  ]
+}
+const getOrderAddStepGoodsListColumns = function(target) {
+  let priceRender = target.priceRender || ((item) => item+'RMB');
+  return [
+    { title: '编号', dataIndex: 'NID', key: 'NID'},
+    { title: '类型', dataIndex: 'type', key: 'type', render:(item) => {
+      let type = commonUtils.getOrderType(item);
+      if (type) return type.label;
+      return '';
+    }},
+    { title: '价格', dataIndex: 'price', key: 'price', render:(item, record) =>{
+      let calcCustomPrice = (customs) =>{
+        if (!customs) return 0;
+        let customPrice = 0;
+        for(let cus of customs) {
+          customPrice += cus.price;
+        }
+        return customPrice;
+      }
+
+      let priceInfo = {}
+      priceInfo.customPrice = calcCustomPrice(record.s_customs);
+      priceInfo.urgentPrice = record.urgent ? record.urgent.price : 0;
+      priceInfo.totalPrice= record.price + priceInfo.customPrice + priceInfo.urgentPrice;
+      
+      return (<div>
+        <div>金额:{priceInfo.totalPrice}元</div>
+        {
+          priceInfo.customPrice > 0 ?
+          <div>含定制费:{priceInfo.customPrice}元</div>
+          : null
+        }
+        {
+          priceInfo.urgentPrice > 0 ?
+          <div>含加急费:{priceInfo.urgentPrice}元</div>
+          : null
+        }
+      </div>)
+    }},
     { title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
       return (
         <div>
@@ -542,8 +611,12 @@ const getOrderEditOptions = function(target) {
 }
 
 export const ORDER_OPTIONS = {
-  add:getOrderAddStepCunstomerOptions,
+  add:getOrderAddStepCustomerOptions,
   goodsList:getOrderAddStepGoodsListColumns,
+}
+
+export const ORDER_PAY_OPTIONS = {
+  goodsList:getOrderPayStepGoodsListColumns,
 }
 
 export const ORDER_TYPES = [

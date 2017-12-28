@@ -46,7 +46,7 @@ export const getSubOrderList = createAction(types.SUB_ORDER_LIST_GET, (query, co
   return netHandler.getDefaultList(query, orderTypes.subOrderType, conditions, page?page.page:-1, page?page.pageSize:0);
 })
 export const addOrder = createAction(types.ORDER_ADD, (query, data) => {
-  return netHandler.addDefault(query, orderTypes.orderType, data);
+  return netHandler.addDefault(query||'order', orderTypes.orderType, data);
 })
 export const deleteOrder = createAction(types.ORDER_DELETE, (query, ids) => {
   return netHandler.deleteDefault(query, ids);
