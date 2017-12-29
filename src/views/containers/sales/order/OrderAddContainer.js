@@ -18,7 +18,7 @@ import {
   Radio,
   Slider, Upload,
   Modal,
-  Row,Col,Steps 
+  Row,Col,Steps, Alert
 } from 'antd'
 
 const Step = Steps.Step;
@@ -36,7 +36,10 @@ import {
   OrderSteps,
   OrderStepContent,
   BtnNext,
-  NextContainer
+  NextContainer,
+  OrderSuccessContainer,
+  OrderSuccessTitle,
+   
 } from './styled'
 
 import * as ActionTypes from '../../../constants/ActionTypes'
@@ -94,9 +97,7 @@ class OrderAddContainer extends Component {
       customerPhone:'',
       customerName:'',
       goods:[],
-      customCount:1,
       currentStep:0,
-      currentStepStatus:'finish',
       stepOneValues:{}
     }
   }
@@ -205,11 +206,31 @@ class OrderAddContainer extends Component {
 
   renderPay= ()=> {
     return <OrderPayComponent 
-      onOrderAddSuccess={()=>{}} 
-      customer={this.props.customer} 
+      onOrderAddSuccess={()=>{
+        this.onNext();
+      }} 
+      customer={this.state.customer} 
       goods={this.state.goods}
       order={this.state.order}
       onPrev={this.onPrev} />
+  }
+
+  renderPaySuccess= () => {
+    return <OrderSuccessContainer>
+      <OrderSuccessTitle >下单成功！    </OrderSuccessTitle>
+      <Button type="primary" onClick={()=>{
+        this.setState({
+          currentStep:0,
+          goods:[],
+          customerPhoneList:[],
+          order:{},
+          customer:{}, 
+          customerPhone:'',
+          customerName:'',
+          stepOneValues:{}
+        })
+      }}>再下一单</Button>
+    </OrderSuccessContainer>
   }
 
   render() {
@@ -236,6 +257,11 @@ class OrderAddContainer extends Component {
               this.state.currentStep===2 
               && 
               this.renderPay()
+            }
+            {
+              this.state.currentStep===3 
+              && 
+              this.renderPaySuccess()
             }
           </Card>
         </OrderStepContent>
@@ -326,7 +352,7 @@ class OrderAddContainer extends Component {
       let order = {};
       let customer = {};
       for(let key in values) {
-        if (key === 'source') {
+        if (key==='source' || key==='shop' || key==='guide') {
           order[key] = values[key];
         } else if (key === 'birthday') {
           customer[key] = moment(values[key]).format('YYYY-MM-DD');

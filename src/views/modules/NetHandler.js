@@ -13,7 +13,7 @@ const object2String = (object) => {
   if (utils.IsObject(object)) {
     let str = '';
     for(let key in object) {
-      if (object[key] !== undefined) {
+      if (object[key] !== undefined && object[key] !== null) {
         str = str + (str.length>0?',':'') +  key + ':' + object2String(object[key]);
       } 
     }

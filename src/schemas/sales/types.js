@@ -45,6 +45,7 @@ const orderBaseCommonFields = {
   _id: {type:GraphQLString, decription:'ID'},
   name: {type:GraphQLString, decription:'名称'},
   NID: {type:GraphQLString, decription:'编号'},
+  color: {type:GraphQLString, decription:'颜色'},
   price: {type:GraphQLFloat, decription:'价格'},
   day: {type:GraphQLInt, decription:'天数'}
 };

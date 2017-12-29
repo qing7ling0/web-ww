@@ -75,3 +75,15 @@ export const OrderSteps = styled(Steps)`
 export const OrderStepContent = styled.div`
   padding: 0.2rem;
 `
+export const OrderSuccessContainer = styled.div`
+  height:2rem;
+  width:100%;
+  text-align:center;
+`
+export const OrderSuccessTitle = styled.span`
+  font-size:0.4rem;
+  line-height:1.5rem;
+  width:60%;
+  color:red;
+  margin:0 auto;
+`

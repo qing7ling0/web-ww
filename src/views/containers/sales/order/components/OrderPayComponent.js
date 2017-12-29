@@ -65,11 +65,15 @@ class OrderPayComponent extends Component {
       customs:[],
       selectShoes:{}, // 当前选择的鞋子
       submitOrdering:false,
+      pay_type:'0',
     }
   }
 
   //在组件挂载之前调用一次。如果在这个函数里面调用setState，本次的render函数可以看到更新后的state，并且只渲染一次
   componentWillMount(){
+    if (constants.BASE_CONSTANTS.PAY_TYPE.length > 0) {
+      this.setState({pay_type:constants.BASE_CONSTANTS.PAY_TYPE[0].value})
+    }
   }
 
   componentWillReceiveProps(nextProps){
@@ -141,10 +145,18 @@ class OrderPayComponent extends Component {
                   </Row>
                 </Col>
                 <Col span={6}>
-                  <Button type="primary" onClick={()=>this.handleSelectDiscount}>选择优惠券</Button>
+                  <Select defaultValue={this.state.pay_type} onChange={(value)=>{
+                    this.setState({pay_type:value});
+                  }}>
+                    {
+                      constants.BASE_CONSTANTS.PAY_TYPE.map((item, index) => {
+                        return <Option key={item.value}>{item.label}</Option>
+                      })
+                    }
+                  </Select>
                 </Col>
                 <Col span={6}>
-                  <Button type="primary" onClick={()=>this.handlePay} loading={this.state.submitOrdering}>结算</Button>
+                  <Button type="primary" onClick={()=>this.handleSelectDiscount}>选择优惠券</Button>
                 </Col>
               </Row>
             );
@@ -191,7 +203,8 @@ class OrderPayComponent extends Component {
   }
 
   handlePay = () => {
-    let order = {...this.props.order};
+    let order = {};
+    order.source = this.props.order.source;
     order.pay = this.calcPayMount();
     order.pay_type = this.state.pay_type;
 
@@ -200,6 +213,7 @@ class OrderPayComponent extends Component {
       let sub = {...good};
       sub.shop = this.props.order.shop;
       sub.guide = this.props.order.guide;
+      sub.customer = this.props.customer;
       subOrders.push(sub);
     }
     order.sub_orders = subOrders;

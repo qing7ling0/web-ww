@@ -16,14 +16,10 @@ const rechargeType = `r_amount`
 // 配饰
 const ornamentType = `o_name`
 
-export const subOrderType = `{
-  _id, NID, name, price, count, type, sub_order_id, state, transport_company, transport_id, transport_price, remark, pics{file, desc}, transport_name, transport_phone, transport_address, transport_zipcode,
+export const subOrderType = `{_id, NID, name, price, count, type, sub_order_id, state, transport_company, transport_id, transport_price, remark, pics{file, desc}, transport_name, transport_phone, transport_address, transport_zipcode,
   shop{_id,name}, guide{_id,name}, customer{_id,name,phone}, urgent{_id,day,price},
-  ${shoesType}, ${beltType}, ${watchStrapType}, ${maintainType}, ${rechargeType}, ${ornamentType}
-}`
-export const orderType = `{
-  _id, order_id, source, pay, pay_type, sub_orders
-}`
+  ${shoesType}, ${beltType}, ${watchStrapType}, ${maintainType}, ${rechargeType}, ${ornamentType}}`
+export const orderType = `{_id, source, pay, pay_type}`
 export const orderDetailType = `{
-  _id, order_id, source, pay, pay_type, sub_orders${subOrderType}
+  _id, source, pay, pay_type, sub_orders${subOrderType}
 }`

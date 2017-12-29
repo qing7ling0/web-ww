@@ -67,6 +67,7 @@ const orderBaseSchema = new Schema({
   _id: {type:String, decription:'ID'},
   name: {type:String, decription:'名称'},
   NID: {type:String, decription:'编号'},
+  color: {type:String, decription:'颜色'},
   price: {type:Number, decription:'价格'},
   day: {type:Number, decription:'天数'}
 });
