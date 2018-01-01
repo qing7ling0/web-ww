@@ -37,6 +37,7 @@ import * as optionsType from '../types'
 import DataContentComponent from '../../common/DataContentComponent'
 import BaseListComponent from '../../common/BaseListComponent'
 import OrderEditModal from './OrderEditModal'
+import OrderGoodsReviewModal from './OrderGoodsReviewModal'
 
 const ORDER_MENUS = [
   {key:'1', label:'需审核'},
@@ -56,6 +57,8 @@ class OrderListContainer extends Component {
     this.state = {
       addVisible:false,
       editVisible:false,
+      reviewModalVisible:false,
+      reviewOrderInfo:null,
       page: 0,
       selectRows:[],
       selectedKeys: [ORDER_MENUS[0].key]
@@ -231,6 +234,17 @@ class OrderListContainer extends Component {
             pagination={pagination}
           />
         </DataContentComponent>
+        {
+          this.state.reviewModalVisible ?
+          <OrderGoodsReviewModal 
+            title={'订单审核'}
+            isRecharge={false}
+            visible={this.state.reviewModalVisible} 
+            data={this.state.reviewOrderInfo}
+            // onAdd={this.onGoodsAdd}
+            afterClose={()=>this.setState({addVisible:false})}/> 
+          : null
+        }
       </Root>
     );
   }
@@ -300,7 +314,7 @@ class OrderListContainer extends Component {
   }
 
   onEdit = (record) => {
-    // this.setState({editVisible:true, editData:record});
+    this.setState({reviewModalVisible:true, reviewOrderInfo:record});
   }
 
   onMenuClicked = ({item, key}) => {

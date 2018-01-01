@@ -172,3 +172,20 @@ module.exports.COMMON_DATA_TYPES = {
   SHOES_GUI_GE:'16', // 规格
   SHOES_TIE_BIAN:'17', // 贴边
 }
+
+// 订单状态
+const E_ORDER_STATUS = {
+  REVIEW: '1', // 审核
+  TRY: '2', // 是样品鞋
+  MAKING: '3', // 制作中
+  TRANSPORT: '4', // 物流中
+  SURE: '5', // 客户确认
+}
+module.exports.E_ORDER_STATUS = E_ORDER_STATUS;
+module.exports.ORDER_STATUS_LIST = [
+  {value:E_ORDER_STATUS.REVIEW, label:'审核中'},
+  {value:E_ORDER_STATUS.TRY, label:'试鞋中'},
+  {value:E_ORDER_STATUS.MAKING, label:'制作'},
+  {value:E_ORDER_STATUS.TRANSPORT, label:'已发货'},
+  {value:E_ORDER_STATUS.SURE, label:'已完成'},
+]

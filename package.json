@@ -46,6 +46,7 @@
     "dependencies": {
         "antd": "^2.13.5",
         "graphql": "^0.11.3",
+        "jfum": "^1.0.3",
         "koa": "^2.2.0",
         "koa-bodyparser": "^3.2.0",
         "koa-convert": "^1.2.0",
@@ -53,8 +54,10 @@
         "koa-graphql": "^0.7.3",
         "koa-json": "^2.0.2",
         "koa-logger": "^2.0.1",
+        "koa-multer": "^1.0.2",
         "koa-onerror": "^1.2.1",
         "koa-router": "^7.1.1",
+        "koa-send": "^4.1.2",
         "koa-session2": "^2.2.5",
         "koa-static": "^3.0.0",
         "koa-views": "^5.2.1",

@@ -1,4 +1,5 @@
 import crypto from 'crypto'
+import moment from 'moment'
 
 /**
  * 是否是有效的帐号
@@ -41,3 +42,19 @@ module.exports.diffent = function(newValue, oldValue) {
 
   return ret;
 }
+
+module.exports.createEditorDoc = function(user) {
+  if (!user) return null;
+  return {
+    editor_id:user._id,
+    editor_name:user.name,
+    editor_time:moment().format('YYYY-MM-DD HH:mm:ss')
+  }
+}
+
+module.exports.getClientIp = function(req) {
+    return req.headers['x-forwarded-for'] ||
+    req.connection.remoteAddress ||
+    req.socket.remoteAddress ||
+    req.connection.socket.remoteAddress;
+};

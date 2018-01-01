@@ -69,6 +69,14 @@ export const getSex = function(id) {
 
   return null;
 }
+
+export const getOrderStatus = function(id) {
+  for(let i=0; i<constants.ORDER_STATUS_LIST.length; i++) {
+    if (constants.ORDER_STATUS_LIST[i].value === id) return constants.ORDER_STATUS_LIST[i];
+  }
+
+  return null;
+}
 export const getTransportCompany = function(id) {
   for(let i=0; i<transportCompanys.companys.length; i++) {
     if (transportCompanys.companys[i].value === id) return transportCompanys.companys[i];
@@ -92,7 +100,6 @@ export const urlString2Conditions = function(value) {
 
   return ret;
 }
-
 
 export const createGoodsNID = function(type, data, sex) {
   let NID = '';

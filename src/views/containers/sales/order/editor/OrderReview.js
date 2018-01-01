@@ -16,11 +16,9 @@ import {
   Radio,
   Slider, Upload,
   Modal,
-  Row,Col,
-  Input
+  Row,Col
 } from 'antd'
 
-const TextArea = Input.TextArea;
 const FormItem = Form.Item;
 const Option = Select.Option;
 const RadioButton = Radio.Button;
@@ -37,9 +35,7 @@ import {
   ProfileColLabel,
   ProfileColValue,
   ProfileBtnBack,
-  ProfileRowTitle,
-  PhotoDeleteBtn,
-  PhotoUploadBtnCotnainer
+  ProfileRowTitle
 } from '../styled'
 
 import * as graphqlTypes from '../../../../modules/graphqlTypes'
@@ -48,7 +44,6 @@ import * as ActionTypes from '../../../../constants/ActionTypes'
 import Actions from '../../../../actions'
 import * as validate from '../../../../../base/utils/validate'
 import * as constants from '../../../../constants/Constants'
-import * as config from '../../../../constants/Config'
 import * as common from '../../../../modules/common'
 import FormItemComponent from '../../../common/FormItemComponent'
 import BaseFormModal from '../../../common/BaseFormModal'
@@ -56,7 +51,7 @@ import * as optionsType from '../../types'
 import { ORDER_TYPES, listToSelectOptions } from '../types';
 import { commonUtils } from '../../../../modules/common';
 
-class ShoesAdd extends Component {
+class OrderReview extends Component {
   // 构造函数，在创建组件的时候调用一次
   constructor(props) {
     super(props);
@@ -67,11 +62,6 @@ class ShoesAdd extends Component {
       data:{},
       customs:[],
       selectShoes:{}, // 当前选择的鞋子
-      pics:[],
-      goodsReviewSure:false,
-      customReviewSure:false,
-      photoReviewSure:false,
-      footReviewSure:false
     }
   }
 
@@ -82,30 +72,16 @@ class ShoesAdd extends Component {
     this.props.reqLastCustomerOrderInfo(this.props.customer._id, this.props.orderType.key, 'lastCustomerOrderInfo')
   }
 
-  renderReviewBtn = (isReview, sure, onClick) => {
-    let cardExtra = null;
-    if (isReview) {
-      cardExtra = (
-        <Switch checkedChildren="未审核" unCheckedChildren="已审核" checked={sure} />
-      )
-    }
-    return cardExtra;
-  }
-
   renderBaseForm(item, index, vertical) {
     let span = {sm:24, lg:12};
     if (vertical) {
       span={};
     }
-    let cardExtra = this.renderReviewBtn(this.props.isReview, this.state.goodsReviewSure, ()=> {
-      this.setState({goodsReviewSure:false})
-    })
     return (
-      <Card key={index} title={item.title} bordered={false} noHovering={true} bodyStyle={{padding:0}} extra={cardExtra}>
+      <Card key={index} title={item.title} bordered={false} noHovering={true} bodyStyle={{padding:0}}>
         <Row>
           {
             item.options.map((item, index) => {
-              item.options.disabled = this.props.isReview&&this.state.goodsReviewSure;
               return <Col key={index} {...span}><FormItemComponent key={item.name} options={item} form={this.props.form} /></Col>
             })
           }
@@ -115,15 +91,11 @@ class ShoesAdd extends Component {
   }
 
   renderFoot(item, index) {
-    let cardExtra = this.renderReviewBtn(this.props.isReview, this.state.footReviewSure, ()=> {
-      this.setState({footReviewSure:false})
-    })
     return (
-      <Card key={index} title={item.title} bordered={false} noHovering={true} extra={cardExtra}>
+      <Card key={index} title={item.title} bordered={false} noHovering={true}>
         <Row>
           {
             item.options.map((item, index) => {
-              item.options.disabled = this.props.isReview&&this.state.footReviewSure;
               return (<Col key={index} xs={24} sm={12} lg={8}><FormItemComponent key={item.name} options={item} form={this.props.form} /></Col>);
             })
           }
@@ -133,77 +105,6 @@ class ShoesAdd extends Component {
           <Col xs={{span:24}} md={{span:10, offset:2}} lg={{span:8, offset:4}}>{this.renderBaseForm(item.right, index+1000, true)}</Col>
         </Row>
       </Card>
-    )
-  }
-
-  renderPics = () =>{
-    let cardExtra = this.renderReviewBtn(this.props.isReview, this.state.photoReviewSure, ()=> {
-      this.setState({photoReviewSure:false})
-    })
-    let disabled = this.props.isReview&&this.state.photoReviewSure;
-    return (
-      <Row>
-        <Col><span style={{float:'right'}}>{cardExtra}</span><ContentTitle>拍照信息</ContentTitle></Col>
-        {
-          this.state.pics.map((item,index) => {
-            return (
-              <Row key={index} style={{marginTop:20}}>
-                <Col span={6}>
-                  <Upload
-                    name="order"
-                    listType="picture-card"
-                    className="avatar-uploader"
-                    showUploadList={false}
-                    style={{padding:0, position:'relative'}}
-                    action={config.GetServerAddress() + '/upload'}
-                    onChange={({file, fileList})=>this.onUploadPicChange(index, file)}
-                    withCredentials={true}
-                    disabled={disabled}
-                  >
-                    {
-                      item.file ? 
-                      <div style={{width:'100%', height:'100%', position:'relative'}}>
-                        <img src={config.GetServerAddress() + '/file/'+item.file} alt="" style={{width:'100%', height:'100%'}} /> 
-                        {
-                          disabled ? null :
-                          <PhotoDeleteBtn icon='minus' type="danger" shape="circle" size="small" ghost onClick={(e)=>{
-                            e.stopPropagation();
-                            this.onRemovePhoto(index);
-                          }} />
-                        }
-                      </div>
-                      :
-                      <PhotoUploadBtnCotnainer>
-                        <Icon type='plus' />
-                        <div className="ant-upload-text">Upload</div>
-                      </PhotoUploadBtnCotnainer>
-                    }
-                  </Upload>
-                </Col>
-                <Col span={12}>
-                  <TextArea disabled={disabled} placeholder="请输入拍照备注" autosize={{ minRows: 2, maxRows: 10 }} defaultValue={item.desc} onPressEnter={(e)=>{
-                    let pics = this.state.pics;
-                    let pic = pics[index];
-                    if (pic) {
-                      pic.desc = e.target.value;
-                      this.setState({pics:pics})
-                    }
-                  }} />
-                </Col>
-              </Row>
-            );
-          })
-        }
-        {
-          disabled ?
-          null :
-          <Col span={24} style={{paddingTop:20}}>
-            <Button type="dashed" onClick={this.onAddPhoto} style={{ width: 120 }}>
-              <Icon type="plus" /> 增加
-            </Button>
-          </Col>
-        }
-      </Row>
     )
   }
 
@@ -259,23 +160,16 @@ class ShoesAdd extends Component {
       // this.options = common.initFormDefaultValues(this.options, data);
     }
     let span = {sm:24, lg:12};
-
-    let customExtra = this.renderReviewBtn(this.props.isReview, this.state.customReviewSure, ()=> {
-      this.setState({customReviewSure:false})
-    })
-    let customDisable = this.props.isReview && this.state.customReviewSure;
-
     let urgentOptionItem = {
       type:'select', 
       name:'urgent', 
       label:'加急', 
       itemOptions:{labelLeft:true}, 
       selectItems:common.listToSelectOptions(this.props.sales.urgentList, null, (item)=>item.day+'天'), 
-      options:{defaultActiveFirstOption:true, disable:customDisable}, 
+      options:{defaultActiveFirstOption:true}, 
       rule:{required:true}
     };
-    
-
+    // return (<div></div>)
     return (
       <div>
         <NormalForm>
@@ -284,11 +178,9 @@ class ShoesAdd extends Component {
               return item.left ? this.renderFoot(item,index) : this.renderBaseForm(item, index);
             })
           }
-          {
-            this.renderPics()
-          }
+          
           <Row>
-            <Col><span style={{float:'right'}}>{customExtra}</span><ContentTitle>特殊定制</ContentTitle></Col>
+            <Col><ContentTitle>特殊定制</ContentTitle></Col>
             {
               this.state.customs.map((item,index) => {
                 return (
@@ -296,7 +188,7 @@ class ShoesAdd extends Component {
                     <ProfileCol span={8}>
                       <ProfileColLabel>收费内容：</ProfileColLabel>
                       <ProfileColValue>
-                        <Select disabled={customDisable} style={{ width:120 }} value={item.name} 
+                        <Select style={{ width:120 }} value={item.name} 
                           onChange={(value) => {
                             this.onCustomChange(index, value)
                           }}>
@@ -312,14 +204,11 @@ class ShoesAdd extends Component {
                             })
                           }
                         </Select>
-                        {
-                          customDisable ? null :
-                          <Button icon="delete" size="small" shape="circle" style={{marginLeft:'0.1rem'}} onClick={()=>{
-                            let cus = this.state.customs;
-                            cus.splice(index, 1);
-                            this.setState({customs:cus});
-                          }} />
-                        }
+                        <Button icon="delete" size="small" shape="circle" style={{marginLeft:'0.1rem'}} onClick={()=>{
+                          let cus = this.state.customs;
+                          cus.splice(index, 1);
+                          this.setState({customs:cus});
+                        }} />
                       </ProfileColValue>
                     </ProfileCol>
                     <ProfileCol span={8}>
@@ -332,39 +221,16 @@ class ShoesAdd extends Component {
                 );
               })
             }
-            {
-              customDisable ? null :
-              <Col {...span} style={{paddingTop:20}}>
-                <Button type="dashed" onClick={this.addCustom} style={{ width: 120 }}>
-                  <Icon type="plus" /> 增加
-                </Button>
-              </Col>
-            }
+            <Col {...span} style={{paddingTop:20}}>
+              <Button type="dashed" onClick={this.addCustom} style={{ width: 120 }}>
+                <Icon type="plus" /> 增加
+              </Button>
+            </Col>
           </Row>
           <FormItemComponent key={urgentOptionItem.name} options={urgentOptionItem} form={this.props.form} />
         </NormalForm>
       </div>
     );
-  }
-
-  onUploadPicChange = (index, file) => {
-    let pics = this.state.pics;
-    let pic = pics[index];
-    if (pic && file.response.data.files && file.response.data.files.length > 0) {
-      pic.file = file.response.data.files[0];
-      this.setState({pics:pics})
-    }
-  }
-
-  onAddPhoto = () => {
-    let pics = this.state.pics;
-    pics.push({file:'', desc:''});
-    this.setState({pics:pics});
-  }
-  onRemovePhoto = (index) => {
-    let pics = this.state.pics;
-    pics.splice(index, 1);
-    this.setState({pics:pics});
   }
 
   onReqOrderGoodsList = (type) => {
@@ -397,13 +263,6 @@ class ShoesAdd extends Component {
           if (shoesInfo.urgent) {
             shoesInfo.urgent = this.getValueFromListById(this.props.sales.urgentList, shoesInfo.urgent);
           }
-          if (this.state.pics) {
-            let pics = this.state.pics.map((item)=>{
-              if (item.file) return item;
-            })
-            shoesInfo.pics = pics;
-          }
-
           this.props.onAddSuccess(shoesInfo);
           return true;
         }
@@ -570,4 +429,4 @@ export default connect(
       reqLastCustomerOrderInfo: Actions.lastCustomerOrderInfo
     }, dispatch);
   }
-)(Form.create()(ShoesAdd));
+)(Form.create()(OrderReview));

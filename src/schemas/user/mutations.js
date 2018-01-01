@@ -203,6 +203,10 @@ export const login = {
       name: 'password',
       type: GraphQLString
     },
+    check: {
+      name: 'check',
+      type: GraphQLBoolean
+    }
   },
   async resolve (ctx, params, options) {
     let user = await userData.login(ctx, params);

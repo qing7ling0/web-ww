@@ -87,3 +87,14 @@ export const OrderSuccessTitle = styled.span`
   color:red;
   margin:0 auto;
 `
+export const PhotoUploadBtnCotnainer = styled.div`
+  position: absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%, -50%)
+`
+export const PhotoDeleteBtn = styled(Button)`
+  position: absolute;
+  right:0;
+  top:0;
+`

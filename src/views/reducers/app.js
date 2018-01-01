@@ -31,6 +31,7 @@ function doErrors(result) {
 function doActions(state, action) {
     let result = {}
     let data = {}
+    let notLogin = {};
     if (action && action.payload) {
         result = action.payload;
         if (result && result.data) {
@@ -38,7 +39,11 @@ function doActions(state, action) {
         }
     }
     if (result) {
-        doErrors(result);
+        if (result.code === 20) { // 未登录
+            notLogin = {loginInfo:{code:result.code, message:result.message, user:null}};
+        } else {
+            doErrors(result);
+        }
     }
     switch (action.type) {
         case ActionTypes.LOAD:
@@ -98,7 +103,7 @@ function doActions(state, action) {
         default:
             break;
     }
-    return Object.assign({}, state, {results:results});
+    return Object.assign({}, state, {results:results}, notLogin);
 }
 
 const app = (state = initialState, action) => {

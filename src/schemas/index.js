@@ -4,6 +4,7 @@ import graphqlHTTP from 'koa-graphql'
 var _expressGraphql = require('express-graphql');
 import {
     GraphQLObjectType,
+    GraphQLString,
     GraphQLSchema
 } from 'graphql';
   
@@ -59,9 +60,27 @@ let schema = new GraphQLSchema({
   })
 });
 
+
+let loginSchema = new GraphQLSchema({
+    query: new GraphQLObjectType({
+      name: 'LoginQuery',
+      fields: {
+          id: {type:GraphQLString}
+      }
+    }),
+    mutation: new GraphQLObjectType({
+      name: 'Login',
+      fields: {
+          ...user.mutations,
+          ...common.queries,
+      }
+    })
+});
+
 function register() {
     return function (router) {
         router.all('/api', createModule(schema));
+        router.post('/login', createModule(loginSchema));
     }
 }
 

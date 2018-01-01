@@ -1,4 +1,5 @@
 
+import moment from 'moment'
 import { 
   userModel, 
   userShopGuideModel, 
@@ -8,6 +9,8 @@ import {
   accountModel
 } from '../models/index.js'
 
+import fileData from './file'
+
 import { ApiError, ApiErrorNames } from '../error/api-errors'
 import utils from '../utils/utils'
 import baseUtils from '../base/utils/utils'
@@ -15,8 +18,6 @@ import constants from '../constants/constants'
 // import 
 
 const logUtil = require('../utils/log-utils');
-
-
 
 class UserData {
 
@@ -321,18 +322,36 @@ class UserData {
     }
   }
 
-  // async 
+  /**
+   * 登陆成功
+   * 
+   * @param {*} ctx 上下文
+   * @param {*} user 登陆的账号
+   * @param {*} isRelogin  是否重新登陆
+   */
+  async loginSuccess(ctx, user, isRelogin) {
+    ctx.session.user = user;
+    if (isRelogin) {
+      await fileData.removeTempByUser(user);
+    }
 
+    return user;
+  }
+
+  // async 
   async login(ctx, params) {
     let superAdmin = require('./super-admin');
     if (superAdmin.account.account === params.account) {
-      ctx.session.user = superAdmin;
-      return superAdmin;
+      return this.loginSuccess(ctx, superAdmin, true);
     }
 
     if (ctx.session.user){
       logUtil.debug('login user session====' + JSON.stringify(ctx.session.user))
-      return ctx.session.user;
+      return this.loginSuccess(ctx, ctx.session.user, false);
+    }
+
+    if (params.check) {
+      throw new ApiError(ApiErrorNames.LOGIN_INVALID);
     }
 
     if (!UserData.checkAccount(params.account) || !UserData.checkPassword(params.password)) {
@@ -349,8 +368,13 @@ class UserData {
     if (!user) {
       throw new ApiError(ApiErrorNames.ACCOUNT_PASSWORD_ERROR);
     }
-    ctx.session.user = user;
-    return user;
+    let ip = utils.getClientIp(ctx.req);
+    console.log('ip ==============' + ip);
+    await accountModel.findByIdAndUpdate(account._id, {
+      last_login_ip:ip,
+      last_login_time:moment().format('YYYY-MM-DD HH:mm:ss')
+    }, {new:true})
+    return this.loginSuccess(ctx, user, true);
   }
   
   async logout(ctx, params) {

@@ -7,6 +7,7 @@ var ApiErrorNames = {};
 
 ApiErrorNames.UNKNOW_ERROR = "UNKNOW_ERROR";
 ApiErrorNames.REQ_ERROR = "REQ_ERROR";
+ApiErrorNames.LOGIN_INVALID = "LOGIN_INVALID";
 ApiErrorNames.ACCOUNT_NOT_EXIST = "ACCOUNT_NOT_EXIST";
 ApiErrorNames.ACCOUNT_PASSWORD_ERROR = 'ACCOUNT_PASSWORD_ERROR'
 ApiErrorNames.ACCOUNT_EXIST = 'ACCOUNT_EXST'
@@ -31,6 +32,7 @@ error_map.set(ApiErrorNames.UPDATE_FAIL, { code: 12, message: '更新失败！' 
 error_map.set(ApiErrorNames.DELETE_FAIL, { code: 13, message: '删除失败！' });
 error_map.set(ApiErrorNames.GET_FAIL, { code: 14, message: '获取数据失败!' });
 
+error_map.set(ApiErrorNames.LOGIN_INVALID, { code: 20, message: '未登录，请重新登陆!' });
 error_map.set(ApiErrorNames.ACCOUNT_NOT_EXIST, { code: 101, message: '用户不存在' });
 error_map.set(ApiErrorNames.ACCOUNT_PASSWORD_ERROR, { code: 102, message: '帐号密码错误！' });
 error_map.set(ApiErrorNames.ACCOUNT_EXIST, { code: 103, message: '帐号已存在！' });

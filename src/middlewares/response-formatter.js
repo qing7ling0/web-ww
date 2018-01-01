@@ -50,7 +50,7 @@ var urlFilter = function(pattern) {
             await next();
         } catch (error) {
             //如果异常类型是API异常并且通过正则验证的url，将错误信息添加到响应体中返回。
-            if (error instanceof ApiError && reg.test(ctx.originalUrl)) {
+            if (error.code !== null && error.code !== undefined) {
                 ctx.status = 200;
                 ctx.body = {
                     code: error.code,

@@ -13,5 +13,13 @@ module.exports = {
     key: '__LLSESSIONQQ__',
     maxAge: 3600000, // 一个小时
     overwrite: true
+  },
+  upload: {
+    uploadDir: 'uploads',
+    limits: {
+      fileSize:1024*1024*100, // 100M
+      files:10,
+    },
+    fileFilterReg:/\.(gif|jpe?g|png|mp4|avi|zip)$/i
   }
 }

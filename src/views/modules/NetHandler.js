@@ -7,7 +7,7 @@ import utils from '../../base/utils/Utils'
 
 
 const object2String = (object) => {
-  if (!object) return '';
+  if (!object) return '""';
   
   let ret = '';
   if (utils.IsObject(object)) {
@@ -48,10 +48,10 @@ class NetHandler {
      });
   }
 
-  static reqLogin(account, password) {
+  static reqLogin(account, password, check) {
     const graphqlValue =  `
-      mutation Mutation {
-        login(account:"${account}",password:"${password}")${types.userType}
+      mutation Login {
+        login(account:"${account}",password:"${password}",check:${check?true:false})${types.userType}
         
         menus {
           id,name,subMenus{id,name}
@@ -61,7 +61,7 @@ class NetHandler {
         }
       }
     `;
-    return netUtils.graphqlJson(config.GetServerAddress() + '/api', graphqlValue)
+    return netUtils.graphqlJson(config.GetServerAddress() + '/login', graphqlValue)
   }
 
   static reqLogout() {

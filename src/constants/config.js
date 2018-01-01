@@ -45,7 +45,6 @@ module.exports.Menus = [
   },
 ]
 
-
 module.exports.Routers = [
   { id:0, name:'首页', url: '/home' },
   { id:MENU_IDS.sales, name:'进销存管理', url: '/home/sales' },

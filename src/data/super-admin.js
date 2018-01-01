@@ -1,5 +1,5 @@
 module.exports = {
-  __id: 1,
+  _id: "1",
   name: '管理员',
   sex: '男',
   power: 0,

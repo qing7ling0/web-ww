@@ -46,6 +46,7 @@ import * as ActionTypes from '../../../constants/ActionTypes'
 import Actions from '../../../actions'
 import * as validate from '../../../../base/utils/validate'
 import * as constants from '../../../constants/Constants'
+import * as config from '../../../constants/Config'
 import * as common from '../../../modules/common'
 import FormItemComponent from '../../common/FormItemComponent'
 import BaseFormModal from '../../common/BaseFormModal'
@@ -144,6 +145,34 @@ class OrderAddContainer extends Component {
       </Card>
     )
   }
+  
+  renderTest = () => {
+    const uploadButton = (
+      <div>
+        <Icon type={this.state.loading ? 'loading' : 'plus'} />
+        <div className="ant-upload-text">Upload</div>
+      </div>
+    );
+    const imageUrl = this.state.imageUrl;
+    this.handleChange = ({ file, fileList }) => {
+      if (file.status !== 'uploading') {
+        console.log(file, fileList);
+      }
+    }
+    return (
+      <Upload
+        name="order"
+        listType="picture-card"
+        className="avatar-uploader"
+        showUploadList={false}
+        action={config.GetServerAddress() + '/upload'}
+        onChange={this.handleChange}
+        withCredentials="true"
+      >
+        {imageUrl ? <img src={imageUrl} alt="" /> : uploadButton}
+      </Upload>
+    );
+  }
 
   renderCustomer = () => {
     this.options = ORDER_OPTIONS.add(this);
@@ -179,7 +208,7 @@ class OrderAddContainer extends Component {
           title={()=>{
             return (
               <div>
-                <Button type="primary" onClick={()=>{this.setState({addVisible:true})}}>添加</Button>
+                <Button type="primary" onClick={()=>{this.setState({addVisible:true})}} style={{marginRight:10}}>添加</Button>
                 <Button type="primary" onClick={()=>{this.setState({addVisible:true, isRechargeOrder:true})}}>充值</Button>
               </div>
             );
@@ -246,6 +275,7 @@ class OrderAddContainer extends Component {
             {
               this.state.currentStep===0 
               && 
+              // this.renderTest()
               this.renderCustomer()
             }
             {

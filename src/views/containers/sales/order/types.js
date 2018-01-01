@@ -37,7 +37,11 @@ export const listToSelectOptions = (list, valueFormat, labelFormat) => {
 export const getOrderBaseListColumns = function(target) {
   return [
     { title: '编号', dataIndex: 'NID', key: 'NID'},
-    { title: '名称', dataIndex: 'name', key: 'name'},
+    { title: '状态', dataIndex: 'state', key: 'state', render:(item) => {
+      let type = commonUtils.getOrderStatus(item);
+      if (type) return type.label;
+      return '';
+    }},
     { title: '数量', dataIndex: 'count', key: 'count'},
     { title: '门店', dataIndex: 'shop', key: 'shop', render:(item) => item.name},
     { title: '导购', dataIndex: 'guide', key: 'guide', render:(item) => item.name},
@@ -65,18 +69,6 @@ const FOOT_OPTIONS = {
 // 快递信息
 const TRANSPORT_OPTIONS = {
   index:9, title:'快递信息', options:[
-    {type:'input', name:'transport_name', label:'收货人', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-    {type:'input', name:'transport_address', label:'收货地址', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-    {type:'input', name:'transport_phone', label:'收货电话', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-    {type:'input', name:'transport_zipcode', label:'邮编', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-    {type:'select', name:'transport_company', label:'快递公司', itemOptions:{labelLeft:true}, selectItems:constants.BASE_CONSTANTS.TRANSPORT_COMPANYS, options:{defaultActiveFirstOption:true}, rule:{}},
-    {type:'input', name:'transport_id', label:'快递单号', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{}},
-    {type:'number', name:'transport_price', label:'快递费用', options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, itemOptions:{hasFeedback:true, labelLeft:true}, rule:{}},
-  ]
-}
-// 拍照信息
-const PHOTO_OPTIONS = {
-  index:9, title:'图片', options:[
     {type:'input', name:'transport_name', label:'收货人', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
     {type:'input', name:'transport_address', label:'收货地址', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
     {type:'input', name:'transport_phone', label:'收货电话', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},

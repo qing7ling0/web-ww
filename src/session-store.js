@@ -52,6 +52,7 @@ class SessonStore {
 
   async destroy(sid, ctx) {
     this.__timer.delete(sid);
+    console.log('session destroy' + sid);
     return await this.sessionModel.deleteOne({sid:`SESSION:${sid}`});
   }
 }

@@ -27,8 +27,9 @@ import * as validate from '../base/utils/validate'
 import constants from '../constants/constants'
 import DB from '../db/DB'
 import commonData from './common-data'
+import fileData from './file'
 
-import {customerData} from './index'
+import { customerData } from './index'
 // import 
 
 const logUtil = require('../utils/log-utils');
@@ -278,7 +279,13 @@ class SalesData {
           throw new ApiError(ApiErrorNames.ADD_FAIL);
         }
         sub.customer = customer._id;
+        // handle pics
+        let fileIds = sub.pics && sub.pics.map((item)=>item.file);
+        if (fileIds && fileIds.length > 0) {
+          await fileData.update({id:{$in:fileIds}}, {temp:false});
+        }
         sub.sub_order_id = this.createOrderId(sub.type, commonData.createCurrentOrderIndex());
+        sub.state = constants.E_ORDER_STATUS.REVIEW;
         let subOrder = new subOrderModel(sub);
         let newSubOrder = await subOrder.save();
         if (newSubOrder) {

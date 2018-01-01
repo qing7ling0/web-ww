@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import {bindActionCreators} from 'redux'
 
 import {HashRouter,Route,Link, Switch} from 'react-router-dom'
-import { Layout, Row, Col, Avatar } from 'antd';
+import { Layout, Row, Col, Avatar, message } from 'antd';
 const { Header, Content, Sider, Footer } = Layout;
 
 import Actions from '../../actions'
@@ -34,7 +34,7 @@ class MainContainer extends BaseContainer {
     this.navigation = new Navigation(this.props.history);
     const {reqLogin, loginInfo} = this.props;
     if (!loginInfo.user) {
-      reqLogin();
+      reqLogin('', '', true);
     }
   }
 
@@ -49,6 +49,7 @@ class MainContainer extends BaseContainer {
     super.componentWillReceiveProps(nextProps);
     
     if (!nextProps.loginInfo.loading && !nextProps.loginInfo.user) {
+      message.error(nextProps.loginInfo.message);
       this.navigation.replace('/login');
     }
 

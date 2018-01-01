@@ -48,7 +48,7 @@ import DetailComponent from '../../common/DetailComponent'
 import utils from '../../../../utils/utils'
 import * as optionsType from '../types'
 
-class GoodsProfileContainer extends Component {
+class OrderProfileContainer extends Component {
   // 构造函数，在创建组件的时候调用一次
   constructor(props) {
     super(props);
@@ -124,4 +124,4 @@ export default connect(
       reqGoodsShoesProfile: Actions.getGoodsShoesProfile,
     }, dispatch);
   }
-)(GoodsProfileContainer);
+)(OrderProfileContainer);
