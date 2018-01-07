@@ -187,13 +187,7 @@ class SalesData {
 
   // 自订单
   subOrderPopulate(query) {
-    return query
-    .populate('s_xuan_hao').populate('s_material').populate('s_gui_ge')
-    .populate('s_gen_gao').populate('s_out_color').populate('s_in_color')
-    .populate('s_bottom_color').populate('s_bottom_side_color').populate('s_tie_di')
-    .populate('b_material').populate('b_color')
-    .populate('ws_material').populate('ws_style')
-    .populate('shop').populate('guide').populate('customer').exec();
+    return query.populate('shop').populate('guide').populate('customer').exec();
   }
   // 自订单列表
   async getSubOrderList(page, options) {
@@ -202,8 +196,12 @@ class SalesData {
     });
     return list;
   }
+  async getSuborderProfile(id) {
+    return await this.findSubOrder({_id:id});
+  }
 
   async findSubOrder(conditions, fields, options) {
+    console.log('findSubOrder ----------' + JSON.stringify(conditions));
     return await subOrderModel.findOne(conditions, fields, options);
   }
 
@@ -282,7 +280,7 @@ class SalesData {
         // handle pics
         let fileIds = sub.pics && sub.pics.map((item)=>item.file);
         if (fileIds && fileIds.length > 0) {
-          await fileData.update({id:{$in:fileIds}}, {temp:false});
+          await fileData.update({_id:{$in:fileIds}}, {temp:false});
         }
         sub.sub_order_id = this.createOrderId(sub.type, commonData.createCurrentOrderIndex());
         sub.state = constants.E_ORDER_STATUS.REVIEW;
@@ -358,17 +356,57 @@ class SalesData {
     }
   }
   
+  async reviewSubOrder(id, doc, options) {
+    if (!id || !doc || !doc.type) {
+      throw new ApiError(ApiErrorNames.UPDATE_FAIL);
+    }
+    let conditions = {_id:id};
+    if (doc.type === constants.E_ORDER_TYPE.SHOES) { // 鞋子订单到制作样品环节
+      doc.state = constants.E_ORDER_STATUS.TRY;
+    } else if(doc.type === constants.E_ORDER_TYPE.RECHARGE) { // 充值订单直接完成
+      doc.state = constants.E_ORDER_STATUS.COMPLETED;
+    } else { // 其他订单到打包环节
+      doc.state = constants.E_ORDER_STATUS.DELIVERY;
+    }
+    return await this.updateSubOrder(conditions, doc, options);
+  } 
+
   async updateSubOrder(conditions, doc, options) {
     if (doc) {
+      console.log(JSON.stringify(doc));
       if (doc.customer && doc.customer.phone) {
 
         let customer = await this.updateOrAddCustomerByOrder(doc, doc.customer);
         if (!customer) {
           // TODO
           // 必须有用户
-          throw new ApiError(ApiErrorNames.ADD_FAIL);
+          throw new ApiError(ApiErrorNames.UPDATE_FAIL);
         }
         doc.customer = customer._id;
+      }
+      if (doc.pics) {
+        let subOrder = await subOrderModel.findOne(conditions);
+        if (subOrder) {
+          // handle pics
+          let newFileIDS = []; // 新增的图片
+          for(let pic of doc.pics) {
+            newFileIDS.push(pic.file);
+          }
+          let deleteFileIDS = []; // 要删除的图片
+          for(let pic of subOrder.pics) {
+            // console.log('--------------------' + JSON.stringify(subOrder.pics));
+            if (doc.pics.findIndex((item)=>item.file == pic.file) === -1) {
+              deleteFileIDS.push(pic.file);
+            }
+          }
+          if (newFileIDS && newFileIDS.length > 0) {
+            await fileData.update({_id:{$in:newFileIDS}}, {temp:false});
+          }
+          if (deleteFileIDS && deleteFileIDS.length > 0) {
+            console.log('--------------------' + deleteFileIDS);
+            await fileData.update({_id:{$in:deleteFileIDS}}, {temp:true});
+          }
+        }
       }
 
       let ret = await subOrderModel.update(conditions, doc, options);

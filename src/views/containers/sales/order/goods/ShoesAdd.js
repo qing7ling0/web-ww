@@ -70,8 +70,7 @@ class ShoesAdd extends Component {
       pics:[],
       goodsReviewSure:false,
       customReviewSure:false,
-      photoReviewSure:false,
-      footReviewSure:false
+      photoReviewSure:false
     }
   }
 
@@ -79,32 +78,40 @@ class ShoesAdd extends Component {
   componentDidMount(){
     this.props.setGoodsCallback(this.onAdd);
     this.onReqOrderGoodsList(this.props.orderType.key);
-    this.props.reqLastCustomerOrderInfo(this.props.customer._id, this.props.orderType.key, 'lastCustomerOrderInfo')
+    this.props.reqLastCustomerOrderInfo(this.props.customer._id, this.props.orderType.key, 'lastCustomerOrderInfo');
+
+    if (this.props.data) {
+      this.setState({
+        pics:this.props.data.pics||[],
+        customs:this.props.data.s_customs||[],
+      })
+    }
   }
 
-  renderReviewBtn = (isReview, sure, onClick) => {
+  renderReviewBtn = (isReview, sure, onChange) => {
     let cardExtra = null;
     if (isReview) {
       cardExtra = (
-        <Switch checkedChildren="未审核" unCheckedChildren="已审核" checked={sure} />
+        <Switch checkedChildren="已审核" unCheckedChildren="未审核" checked={sure} onChange={onChange} />
       )
     }
     return cardExtra;
   }
 
-  renderBaseForm(item, index, vertical) {
+  renderBaseForm(item, index, vertical, isReviewRender) {
     let span = {sm:24, lg:12};
     if (vertical) {
       span={};
     }
-    let cardExtra = this.renderReviewBtn(this.props.isReview, this.state.goodsReviewSure, ()=> {
-      this.setState({goodsReviewSure:false})
+    let cardExtra = this.renderReviewBtn(this.props.isReview && isReviewRender, this.state.goodsReviewSure, (value)=> {
+      this.setState({goodsReviewSure:value})
     })
     return (
       <Card key={index} title={item.title} bordered={false} noHovering={true} bodyStyle={{padding:0}} extra={cardExtra}>
         <Row>
           {
             item.options.map((item, index) => {
+              if (!item.options) item.options = {};
               item.options.disabled = this.props.isReview&&this.state.goodsReviewSure;
               return <Col key={index} {...span}><FormItemComponent key={item.name} options={item} form={this.props.form} /></Col>
             })
@@ -115,15 +122,13 @@ class ShoesAdd extends Component {
   }
 
   renderFoot(item, index) {
-    let cardExtra = this.renderReviewBtn(this.props.isReview, this.state.footReviewSure, ()=> {
-      this.setState({footReviewSure:false})
-    })
     return (
-      <Card key={index} title={item.title} bordered={false} noHovering={true} extra={cardExtra}>
+      <Card key={index} title={item.title} bordered={false} noHovering={true}>
         <Row>
           {
             item.options.map((item, index) => {
-              item.options.disabled = this.props.isReview&&this.state.footReviewSure;
+              if (!item.options) item.options = {};
+              item.options.disabled = this.props.isReview&&this.state.goodsReviewSure;
               return (<Col key={index} xs={24} sm={12} lg={8}><FormItemComponent key={item.name} options={item} form={this.props.form} /></Col>);
             })
           }
@@ -137,8 +142,8 @@ class ShoesAdd extends Component {
   }
 
   renderPics = () =>{
-    let cardExtra = this.renderReviewBtn(this.props.isReview, this.state.photoReviewSure, ()=> {
-      this.setState({photoReviewSure:false})
+    let cardExtra = this.renderReviewBtn(this.props.isReview, this.state.photoReviewSure, (value)=> {
+      this.setState({photoReviewSure:value})
     })
     let disabled = this.props.isReview&&this.state.photoReviewSure;
     return (
@@ -151,6 +156,7 @@ class ShoesAdd extends Component {
                 <Col span={6}>
                   <Upload
                     name="order"
+                    accept="image/*"
                     listType="picture-card"
                     className="avatar-uploader"
                     showUploadList={false}
@@ -181,7 +187,7 @@ class ShoesAdd extends Component {
                   </Upload>
                 </Col>
                 <Col span={12}>
-                  <TextArea disabled={disabled} placeholder="请输入拍照备注" autosize={{ minRows: 2, maxRows: 10 }} defaultValue={item.desc} onPressEnter={(e)=>{
+                  <TextArea disabled={disabled} placeholder="请输入拍照备注" autosize={{ minRows: 2, maxRows: 10 }} defaultValue={item.desc} onChange={(e)=>{
                     let pics = this.state.pics;
                     let pic = pics[index];
                     if (pic) {
@@ -195,7 +201,7 @@ class ShoesAdd extends Component {
           })
         }
         {
-          disabled ?
+          disabled || constants.BASE_CONSTANTS.ORDER_UPLOAD_PIC_MAX_COUNT<=this.state.pics.length?
           null :
           <Col span={24} style={{paddingTop:20}}>
             <Button type="dashed" onClick={this.onAddPhoto} style={{ width: 120 }}>
@@ -211,17 +217,18 @@ class ShoesAdd extends Component {
     this.options = this.props.orderType.addOptions(this);
     if (this.props.data) {
       let data = {...this.props.data};
-      if (this.props.lastCustomerOrderInfo) {
+      if (this.props.lastCustomerOrderInfo && !this.props.isReview) {
         data.s_foot_size = this.props.lastCustomerOrderInfo.s_foot_size;
       }
       this.options = common.initFormDefaultValues(this.options, data);
+      this.options = this.initFootData(this.options, data);
     } else {
-      if (this.props.lastCustomerOrderInfo) {
+      if (this.props.lastCustomerOrderInfo && !this.props.isReview) {
         let data = { s_foot_size: this.props.lastCustomerOrderInfo.s_foot_size};
         this.options = common.initFormDefaultValues(this.options, data);
       }
     }
-    if (this.props.lastCustomerOrderInfo) {
+    if (this.props.lastCustomerOrderInfo && !this.props.isReview) {
       let data = {}
       const {lastCustomerOrderInfo} = this.props;
       data.s_foot_size = lastCustomerOrderInfo.s_foot_size;
@@ -232,36 +239,13 @@ class ShoesAdd extends Component {
       data.s_right_zhiWei = lastCustomerOrderInfo.s_right_zhiWei;
       data.s_right_fuWei = lastCustomerOrderInfo.s_right_fuWei;
 
-      this.options = this.options.map((item) => {
-        let initValue = function(options, values) {
-          return options.map((sub) => {
-            let value = values[sub.name] || '';
-            if (value._id) {
-              value = value._id;
-            }
-            if (value !== null && value !== undefined && value !== NaN && value !== '') {
-              if (!sub.decoratorOptions) {
-                sub.decoratorOptions = {};
-              }
-              sub.decoratorOptions.initialValue = value;
-            }
-            return sub;
-          })
-        }
-        if (item.left) {
-          item.left.options = initValue(item.left.options, data);
-        }
-        if (item.right) {
-          item.right.options = initValue(item.right.options, data);
-        }
-        return item;
-      })
+      this.options = this.initFootData(this.options, data);
       // this.options = common.initFormDefaultValues(this.options, data);
     }
     let span = {sm:24, lg:12};
 
-    let customExtra = this.renderReviewBtn(this.props.isReview, this.state.customReviewSure, ()=> {
-      this.setState({customReviewSure:false})
+    let customExtra = this.renderReviewBtn(this.props.isReview, this.state.customReviewSure, (value)=> {
+      this.setState({customReviewSure:value})
     })
     let customDisable = this.props.isReview && this.state.customReviewSure;
 
@@ -271,17 +255,21 @@ class ShoesAdd extends Component {
       label:'加急', 
       itemOptions:{labelLeft:true}, 
       selectItems:common.listToSelectOptions(this.props.sales.urgentList, null, (item)=>item.day+'天'), 
-      options:{defaultActiveFirstOption:true, disable:customDisable}, 
-      rule:{required:true}
+      options:{disabled:customDisable}, 
+      rule:{required:true},
+      decoratorOptions:{}
     };
     
+    if (this.props.data && this.props.data.urgent) {
+      urgentOptionItem.decoratorOptions.initialValue = this.props.data.urgent._id;
+    }
 
     return (
       <div>
         <NormalForm>
           {
             this.options.map((item, index) => {
-              return item.left ? this.renderFoot(item,index) : this.renderBaseForm(item, index);
+              return item.left ? this.renderFoot(item,index) : this.renderBaseForm(item, index, false, true);
             })
           }
           {
@@ -347,10 +335,37 @@ class ShoesAdd extends Component {
     );
   }
 
+  initFootData = (options, data) => {
+    return options.map((item) => {
+      let initValue = function(options, values) {
+        return options.map((sub) => {
+          let value = values[sub.name] || '';
+          if (value._id) {
+            value = value._id;
+          }
+          if (value !== null && value !== undefined && value !== NaN && value !== '') {
+            if (!sub.decoratorOptions) {
+              sub.decoratorOptions = {};
+            }
+            sub.decoratorOptions.initialValue = value;
+          }
+          return sub;
+        })
+      }
+      if (item.left) {
+        item.left.options = initValue(item.left.options, data);
+      }
+      if (item.right) {
+        item.right.options = initValue(item.right.options, data);
+      }
+      return item;
+    })
+  }
+
   onUploadPicChange = (index, file) => {
     let pics = this.state.pics;
     let pic = pics[index];
-    if (pic && file.response.data.files && file.response.data.files.length > 0) {
+    if (pic && file.response && file.response.data.files && file.response.data.files.length > 0) {
       pic.file = file.response.data.files[0];
       this.setState({pics:pics})
     }
@@ -372,7 +387,14 @@ class ShoesAdd extends Component {
   }
 
   onAdd = () => {
-    this.props.form.validateFields((err, values) => {
+    if (this.props.isReview) {
+      if (!this.state.customReviewSure || !this.state.goodsReviewSure || !this.state.photoReviewSure) {
+        message.error('还有部分信息未审核，请审核！')
+        return;
+      }
+    }
+
+    this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         if (this.props.onAddSuccess) {
           values.type = this.props.orderType.type;

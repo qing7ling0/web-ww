@@ -47,6 +47,7 @@ const ORDER_MENUS = [
 ]
 const ROOT_URL = common.findRouterById(config.Routers, constants.MENU_IDS.salesOrder).url;
 const ADD_URL = ROOT_URL + '/add';
+const URL_PROFILE = ROOT_URL + '/profile';
 const URL_REG = new RegExp(ROOT_URL + '/list/' +'\\d/') ;
 
 class OrderListContainer extends Component {
@@ -228,23 +229,12 @@ class OrderListContainer extends Component {
             columns={this.columns} 
             dataSource={this.props.list} 
             loading={this.props.loading}
-            rowKey={'_id1'}
+            rowKey={(record)=>record._id}
             onRowClick={this.onRowClick}
             rowSelection={{onChange:this.onRowSelectionChange}}
             pagination={pagination}
           />
         </DataContentComponent>
-        {
-          this.state.reviewModalVisible ?
-          <OrderGoodsReviewModal 
-            title={'订单审核'}
-            isRecharge={false}
-            visible={this.state.reviewModalVisible} 
-            data={this.state.reviewOrderInfo}
-            // onAdd={this.onGoodsAdd}
-            afterClose={()=>this.setState({addVisible:false})}/> 
-          : null
-        }
       </Root>
     );
   }
@@ -296,12 +286,9 @@ class OrderListContainer extends Component {
   }
 
   onRowClick = (record, index, event) => {
-    // this.setState({editVisible:true, editData:record});
+    this.props.history.push(URL_PROFILE+'/' + record._id);
   }
 
-  onRowClick = (record, index, event) => {
-    // this.props.history.push(this.props.match.path+'/' + record._id);
-  }
   onPageChange = (page, pageSize) => {
     // if (this.props.onPageChange) {
     //   this.props.onPageChange(page, pageSize);
@@ -314,7 +301,9 @@ class OrderListContainer extends Component {
   }
 
   onEdit = (record) => {
-    this.setState({reviewModalVisible:true, reviewOrderInfo:record});
+    if (record) {
+      this.setState({reviewModalVisible:true, reviewOrderInfo:JSON.parse(JSON.stringify(record))});
+    }
   }
 
   onMenuClicked = ({item, key}) => {

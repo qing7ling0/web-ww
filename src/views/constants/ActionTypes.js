@@ -58,6 +58,11 @@ export const ORDER_ADD            = 'ORDER_ADD';
 export const ORDER_DELETE         = 'ORDER_DELETE';
 export const ORDER_UPDATE         = 'ORDER_UPDATE';
 export const ORDER_UPDATE_PROFILE_GET = 'ORDER_UPDATE_PROFILE_GET';
+export const ORDER_REVIEW         = 'ORDER_REVIEW';
+export const ORDER_SUB_PROFILE    = 'ORDER_SUB_PROFILE';
+
+export const SUB_ORDER_TRY_FEEDBACK_LIST = 'SUB_ORDER_TRY_FEEDBACK_LIST'
+export const SUB_ORDER_TRY_FEEDBACK_ADD = 'SUB_ORDER_TRY_FEEDBACK_ADD'
 
 // 特殊定制
 export const CUSTOM_LIST_GET      = 'CUSTOM_LIST_GET';

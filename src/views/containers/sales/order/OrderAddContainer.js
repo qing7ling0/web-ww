@@ -246,7 +246,7 @@ class OrderAddContainer extends Component {
 
   renderPaySuccess= () => {
     return <OrderSuccessContainer>
-      <OrderSuccessTitle >下单成功！    </OrderSuccessTitle>
+      <OrderSuccessTitle>下单成功！    </OrderSuccessTitle>
       <Button type="primary" onClick={()=>{
         this.setState({
           currentStep:0,

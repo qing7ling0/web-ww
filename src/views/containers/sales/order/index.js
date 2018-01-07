@@ -64,7 +64,7 @@ class OrderContainer extends Component {
             <Redirect exact from={match.path} to={match.path+'/list/'+ORDER_TYPES[0].key} />
             <Route exact path={`${match.path}/list/:type`} component={OrderListContainer} />
             <Route exact path={`${match.path}/list/:type/:key`} component={OrderListContainer} />
-            <Route path={`${match.path}/profile/:type/:id`} component={OrderProfileContainer} />
+            <Route path={`${match.path}/profile/:id`} component={OrderProfileContainer} />
             <Route path={`${match.path}/add/`} component={OrderAddContainer} />
           </Switch>
         </ContentContainer>

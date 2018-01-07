@@ -12,7 +12,8 @@ import {
 import { 
   materialModel,
   orderModel,
-  goodsModel
+  goodsModel,
+  tryFeedbackModel
 } from '../../models/sales'
 import {salesData} from '../../data/index';
 import * as types from './types';
@@ -22,6 +23,7 @@ const commonUtils = require('../../utils/common-utils')
 const schemasUtils = require('../../utils/schemas-utils')
 
 const material = schemasUtils.createDefaultMutaion('material', types.materialType, types.materialInputType, materialModel);
+const tryFeedback = schemasUtils.createDefaultMutaion('tryFeedback', types.tryFeedbackType, types.tryFeedbackInputType, tryFeedbackModel);
 const goods = schemasUtils.createDefaultMutaion('goods', types.goodsType, types.goodsInputType, goodsModel, {
   add:salesData.addGoods.bind(salesData), 
   remove:salesData.removeGoodsByIds.bind(salesData), 
@@ -69,7 +71,23 @@ const orderUpdate = {
   }
 }
 
+// 审核子订单
+const reviewSuborderUpdate = {
+  type: commonFields.operateResultType,
+  args: {
+    doc: {type: types.subOrderInputType},
+    id: {type: GraphQLString}
+  },
+  async resolve (ctx, params, options) {
+    return await salesData.reviewSubOrder(params.id, params.doc);
+  }
+}
+
+const addTry = {
+
+}
+
 let mutations = {
-  ...material, ...goods, orderAdd, orderRemove, orderUpdate
+  ...material, ...goods, ...tryFeedback, orderAdd, orderRemove, orderUpdate, reviewSuborderUpdate
 };
 export default mutations;

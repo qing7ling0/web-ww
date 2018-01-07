@@ -25,6 +25,7 @@ export const defaultInitFormValue = (options, target) => {
 }
 
 export const listToSelectOptions = (list, valueFormat, labelFormat) => {
+  if (!list) return [];
   return list.map((item) => {
     let ret = {_id:item._id};
     ret.value = valueFormat ? valueFormat(item) : item._id;
@@ -72,7 +73,7 @@ const TRANSPORT_OPTIONS = {
     {type:'input', name:'transport_name', label:'收货人', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
     {type:'input', name:'transport_address', label:'收货地址', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
     {type:'input', name:'transport_phone', label:'收货电话', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-    {type:'input', name:'transport_zipcode', label:'邮编', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+    {type:'input', name:'transport_zipcode', label:'邮编', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}, options:{}},
     {type:'select', name:'transport_company', label:'快递公司', itemOptions:{labelLeft:true}, selectItems:constants.BASE_CONSTANTS.TRANSPORT_COMPANYS, options:{defaultActiveFirstOption:true}, rule:{}},
     {type:'input', name:'transport_id', label:'快递单号', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{}},
     {type:'number', name:'transport_price', label:'快递费用', options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, itemOptions:{hasFeedback:true, labelLeft:true}, rule:{}},
@@ -153,7 +154,17 @@ const getOrderShoesListColumns = function(target) {
 const getOrderShoesOptions = function(target) {
   let endOptions = [];
   if (target.props.customer.sex === constants.BASE_CONSTANTS.SEX_FEMALE) {
-    endOptions.push({type:'select', name:'s_gen_gao', label:'跟高', itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(target.props.sales.genGaoList), options:{defaultActiveFirstOption:true, onChange:target.onNIDPropertyChange}, rule:{required:true}});
+    endOptions.push({
+      type:'select', 
+      name:'s_gen_gao', 
+      label:'跟高', 
+      itemOptions:{labelLeft:true}, 
+      selectItems:listToSelectOptions(target.props.sales.genGaoList), 
+      options:{
+        defaultActiveFirstOption:true, 
+        onChange:(value)=>target.onNIDPropertyChange('s_gen_gao', value)
+      }, 
+      rule:{required:true}});
   }
   return [
     {
@@ -215,14 +226,16 @@ const getOrderShoesOptions = function(target) {
           options:{
             defaultActiveFirstOption:true, 
             onChange:(value)=>target.onNIDPropertyChange('s_bottom_color', value)
-          }, rule:{required:true}},    
+          }, rule:{required:true}
+        },    
         {
           type:'select', name:'s_bottom_side_color', label:'底边颜色', itemOptions:{labelLeft:true}, 
           selectItems:listToSelectOptions(target.props.sales.bottomSideColorList), 
           options:{
             defaultActiveFirstOption:true, 
             onChange:(value)=>target.onNIDPropertyChange('s_bottom_side_color', value)
-          }, rule:{required:true}},       
+          }, rule:{required:true}
+        },       
       ].concat(endOptions).concat([
         {type:'select', name:'s_tie_di', label:'贴底', itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(target.props.sales.shoesTieBianList), options:{defaultActiveFirstOption:true}, rule:{required:true}},    
         {type:'number', name:'price', label:'价格', itemOptions:{labelLeft:true}, options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, rule:{required:true}},    

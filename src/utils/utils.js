@@ -43,13 +43,13 @@ module.exports.diffent = function(newValue, oldValue) {
   return ret;
 }
 
-module.exports.createEditorDoc = function(user) {
+module.exports.createEditorDoc = function(user, doc) {
   if (!user) return null;
-  return {
-    editor_id:user._id,
-    editor_name:user.name,
-    editor_time:moment().format('YYYY-MM-DD HH:mm:ss')
-  }
+  let ret = doc || {};
+  ret.editor_id = user._id;
+  ret.editor_name = user.name;
+  ret.editor_time = moment().format('YYYY-MM-DD HH:mm:ss');
+  return ret;
 }
 
 module.exports.getClientIp = function(req) {

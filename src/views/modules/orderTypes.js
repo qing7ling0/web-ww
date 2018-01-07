@@ -1,7 +1,7 @@
 import * as graphqlTypes from './graphqlTypes'
 
 // 鞋子
-const shoesType = `s_xuan_hao{_id,NID,name}, s_gui_ge{_id,NID,name}, s_material{_id,NID,name}, s_customs{_id, name, price}
+const shoesType = `s_xuan_hao{_id,NID,name}, s_gen_gao{_id,NID,name}, s_gui_ge{_id,NID,name}, s_material{_id,NID,name}, s_customs{_id, name, price}
   s_out_color{_id,NID,name},s_in_color{_id,NID,name},s_bottom_color{_id,NID,name},s_bottom_side_color{_id,NID,name}, s_tie_di{_id,NID,name}
   s_foot_size, s_left_length, s_left_zhiWei, s_left_fuWei, s_right_length,
   s_right_zhiWei, s_right_fuWei`
@@ -17,9 +17,10 @@ const rechargeType = `r_amount`
 const ornamentType = `o_name`
 
 export const subOrderType = `{_id, NID, name, price, count, type, sub_order_id, state, transport_company, transport_id, transport_price, remark, pics{file, desc}, transport_name, transport_phone, transport_address, transport_zipcode,
-  shop{_id,name}, guide{_id,name}, customer{_id,name,phone}, urgent{_id,day,price},
+  shop{_id,name}, guide{_id,name}, customer${graphqlTypes.customerType}, urgent{_id,day,price},
   ${shoesType}, ${beltType}, ${watchStrapType}, ${maintainType}, ${rechargeType}, ${ornamentType}}`
 export const orderType = `{_id, source, pay, pay_type}`
 export const orderDetailType = `{
   _id, source, pay, pay_type, sub_orders${subOrderType}
 }`
+export const suborderTryFeedback = `{_id, message, suborder_id, editor_name, editor_time}`

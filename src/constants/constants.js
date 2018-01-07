@@ -33,6 +33,9 @@ module.exports.USER_TYPES = {
   admin:4, // 管理员
 }
 
+// 每个子订单可以上传的图片最大数量
+module.exports.ORDER_UPLOAD_PIC_MAX_COUNT = 10;
+
 module.exports.SEX_MAN = '男';
 module.exports.SEX_FEMALE = '女';
 
@@ -175,11 +178,13 @@ module.exports.COMMON_DATA_TYPES = {
 
 // 订单状态
 const E_ORDER_STATUS = {
-  REVIEW: '1', // 审核
-  TRY: '2', // 是样品鞋
-  MAKING: '3', // 制作中
-  TRANSPORT: '4', // 物流中
-  SURE: '5', // 客户确认
+  REVIEW: 1, // 审核
+  TRY: 2, // 是样品鞋
+  MAKING: 3, // 制作中
+  DELIVERY:4, // 发货中
+  TRANSPORT: 5, // 已发货，邮寄中
+  SURE: 6, // 客户确认
+  COMPLETED: 7 // 已完成
 }
 module.exports.E_ORDER_STATUS = E_ORDER_STATUS;
 module.exports.ORDER_STATUS_LIST = [

@@ -11,6 +11,7 @@ import {
 import DB from '../db/DB'
 const commonUtils = require('./common-utils')
 const commonFields = require('../schemas/common/common-fields')
+const utils = require('./utils')
 
 export const createDefaultListQuery = (name, type, model, onQuery) => {
   return {
@@ -63,10 +64,14 @@ export const createDefaultMutaion = (tag, type, inputType, model, resolves) => {
       doc: {type:inputType},
     },
     async resolve (ctx, params, options) {
-      if (resolves && resolves.add) {
-        return await resolves.add(params.doc);
+      let doc = params.doc;
+      if (doc && ctx.session && ctx.session.user) {
+        doc = utils.createEditorDoc(ctx.session.user, doc);
       }
-      return await DB.add(model, params.doc);
+      if (resolves && resolves.add) {
+        return await resolves.add(doc);
+      }
+      return await DB.add(model, doc);
     }
   };
   ret[`${tag}Remove`] = {
@@ -102,15 +107,19 @@ export const createDefaultMutaion = (tag, type, inputType, model, resolves) => {
       id: {type:GraphQLString},
     },
     async resolve (ctx, params, options) {
+      let doc = params.doc;
+      if (doc && ctx.session && ctx.session.user) {
+        doc = utils.createEditorDoc(ctx.session.user, doc);
+      }
       if (params.conditions) {
         params.conditions = commonUtils.urlString2Conditions(params.conditions);
       } else {
         params.conditions = {_id:params.id};
       }
       if (resolves && resolves.update) {
-        return await resolves.update(params.conditions, params.doc);
+        return await resolves.update(params.conditions, doc);
       } 
-      return await DB.update(model, params.conditions, params.doc);
+      return await DB.update(model, params.conditions, doc);
     }
   };
   return ret;

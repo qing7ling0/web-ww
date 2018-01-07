@@ -57,6 +57,21 @@ export const updateOrder = createAction(types.ORDER_UPDATE, (query, id, data) =>
 export const getLastCustomerOrderInfo = createAction(types.LAST_CUSTOMER_ORDER_INFO, (tag, query, id) => {
   return netHandler.getLastCustomerOrderInfo(query, orderTypes.orderType, id);
 })
+export const reviewSuborder = createAction(types.ORDER_REVIEW, (id, data) => {
+  return netHandler.updateDefault('reviewSuborder', id, data);
+})
+export const suborderProfile = createAction(types.ORDER_SUB_PROFILE, (id) => {
+  return netHandler.getDefaultProfile('suborderProfile', orderTypes.subOrderType, id);
+})
+
+// 试鞋反馈
+export const getSuborderTryFeedbackList = createAction(types.SUB_ORDER_TRY_FEEDBACK_LIST, (query, suborderId, page) => {
+  let conditions = {suborder_id:suborderId};
+  return netHandler.getDefaultList(query||'tryFeedbackList', orderTypes.suborderTryFeedback, conditions, page?page.page:-1, page?page.pageSize:0);
+})
+export const addSuborderTryFeedback = createAction(types.SUB_ORDER_TRY_FEEDBACK_ADD, (query, data) => {
+  return netHandler.addDefault(query||'tryFeedback', orderTypes.suborderTryFeedback, data);
+})
 
 // 原材料
 export const getMaterialList = createAction(types.MATERIAL_LIST_GET, (conditions) => {

@@ -47,6 +47,16 @@ import * as common from '../../../modules/common'
 import DetailComponent from '../../common/DetailComponent'
 import utils from '../../../../utils/utils'
 import * as optionsType from '../types'
+import OrderShoesProfile from './editor/OrderShoesProfile'
+import OrderGoodsReviewModal from './OrderGoodsReviewModal'
+
+const ORDER_STEPS = [
+  {title: '审核'}, 
+  {title: '试鞋'}, 
+  {title: '制作'}, 
+  {title: '发货'},
+  {title: '完成'},
+];
 
 class OrderProfileContainer extends Component {
   // 构造函数，在创建组件的时候调用一次
@@ -55,9 +65,8 @@ class OrderProfileContainer extends Component {
 
     this.state = {
       visible:false,
+      reviewModalVisible:false
     }
-
-    this.options = optionsType.getGoodsShoesProfileOptions(this);
   }
 
   //在组件挂载之前调用一次。如果在这个函数里面调用setState，本次的render函数可以看到更新后的state，并且只渲染一次
@@ -68,7 +77,7 @@ class OrderProfileContainer extends Component {
   componentWillReceiveProps(nextProps){
   }
   componentDidMount() {
-    this.props.reqGoodsShoesProfile(this.props.match.params.id);
+    this.props.reqSuborderProfile(this.props.match.params.id);
   }
 
   renderCol = (col) => {
@@ -87,13 +96,30 @@ class OrderProfileContainer extends Component {
 
     return null;
   }
+  
+  renderProfile = () => {
+    if (!this.props.profile) {
+      return null;
+    }
+
+    switch(this.props.profile.type) {
+      case constants.BASE_CONSTANTS.E_ORDER_TYPE.SHOES:
+      return (
+        <OrderShoesProfile 
+          profile={this.props.profile}
+          onOpenReview={this.onOpenReview}
+        />
+      )
+    }
+    return null;
+  }
 
   render() {
     return (
       <Root>
         <Card 
           loading={this.props.loading} 
-          title={<ProfileRowTitle>{this.props.profile.name}</ProfileRowTitle>} 
+          title={<ProfileRowTitle>订单详情</ProfileRowTitle>} 
           bordered={false} 
           noHovering={true}
           extra={
@@ -101,27 +127,47 @@ class OrderProfileContainer extends Component {
               this.props.history.goBack();
             }} /></ProfileBtnBack>
           }>
-          <Row>
-            {this.options.map((option) => {
-              return this.renderCol(option);
-            })}
-          </Row>
+            <div>
+              {
+                this.renderProfile()
+              }
+            </div>
         </Card>
+        {
+          this.state.reviewModalVisible ?
+          <OrderGoodsReviewModal 
+            title={'订单审核'}
+            isRecharge={false}
+            visible={this.state.reviewModalVisible} 
+            data={this.props.profile}
+            customer={this.props.profile.customer}
+            onSubmitSuccess={this.onSubmitSuccess}
+            afterClose={()=>this.setState({reviewModalVisible:false})}/> 
+          : null
+        }
       </Root>
     );
   }
 
+  onOpenReview = () => {
+    this.setState({reviewModalVisible:true})
+  }
+
+  onSubmitSuccess = () => {
+    this.setState({reviewModalVisible:false})
+    this.props.reqSuborderProfile(this.props.match.params.id);
+  }
 }
 
 export default connect(
   state => ({
     loading:state.sales.loading,
     result:state.sales.result,
-    profile:state.sales.goodsShoesProfile
+    profile:state.sales.suborderProfile
   }),
   (dispatch) => {
     return bindActionCreators({
-      reqGoodsShoesProfile: Actions.getGoodsShoesProfile,
+      reqSuborderProfile: Actions.suborderProfile,
     }, dispatch);
   }
 )(OrderProfileContainer);

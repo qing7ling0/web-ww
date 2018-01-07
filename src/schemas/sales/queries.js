@@ -15,6 +15,7 @@ import {
   materialModel, 
   goodsModel,
   orderModel,
+  tryFeedbackModel
 } from '../../models/sales'
 
 const DB = require('../../db/DB')
@@ -27,6 +28,7 @@ const TEST = require('../../test/test')
 export const materialList = schemasUtils.createDefaultListQuery('materialList', types.materialType, materialModel, (query) =>{
   return query.populate('color')
 });
+export const tryFeedbackList = schemasUtils.createDefaultListQuery('tryFeedbackList', types.tryFeedbackType, tryFeedbackModel);
 
 export const goodsProfile = {
   type: types.goodsType,
@@ -104,3 +106,13 @@ export const subOrderList = {
     return await salesData.getSubOrderList({page:params.page, pageSize:params.pageSize}, {conditions:params.conditions})
 	}
 }
+
+export const suborderProfile = {
+  type: types.subOrderType,
+  args: {
+    id: {type:GraphQLString},
+  },
+  async resolve (root, params, options) {
+    return await salesData.getSuborderProfile(params.id);
+  }
+};

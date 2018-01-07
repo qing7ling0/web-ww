@@ -41,6 +41,26 @@ export const materialInputType = new GraphQLInputObjectType({
     color: { type: GraphQLString, description:'颜色' },
   }
 });
+
+export const tryFeedbackInputFields = {
+  _id: {type:GraphQLString},
+  suborder_id: {type:GraphQLString, description:'id'},
+  message: {type:GraphQLString, description:'反馈内容'},
+};
+export const tryFeedbackType = new GraphQLObjectType({
+  name: 'tryFeedbackType',
+  fields: {
+    ...tryFeedbackInputFields,
+    ...commonFields.defaultCreateFields
+  }
+});
+export const tryFeedbackInputType = new GraphQLInputObjectType({
+  name: 'tryFeedbackInputType',
+  fields: {
+    ...tryFeedbackInputFields,
+  }
+});
+
 const orderBaseCommonFields = {
   _id: {type:GraphQLString, decription:'ID'},
   name: {type:GraphQLString, decription:'名称'},

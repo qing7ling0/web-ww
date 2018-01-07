@@ -63,6 +63,16 @@ var goodsSchema = new Schema({
 });
 module.exports.goodsModel = mongoose.model('goods', goodsSchema);
 
+// 试鞋反馈
+const tryFeedbackFields = {
+  suborder_id: {type:Schema.Types.ObjectId, ref:'sub_order', decription:'订单ID'},
+  message: {type:String, decription:'内容'},
+  ...baseFields
+};
+
+const tryFeedbackSchema = new Schema(tryFeedbackFields);
+module.exports.tryFeedbackModel = mongoose.model('try_feedback', tryFeedbackSchema);
+
 const orderBaseSchema = new Schema({
   _id: {type:String, decription:'ID'},
   name: {type:String, decription:'名称'},
@@ -159,7 +169,7 @@ const orderGoodsFields = {
 const subOrderSchema = new Schema({
   ...orderGoodsFields,
   type: {type:String, description:'类型'},
-  state: {type:String, decription:'订单状态'},
+  state: {type:Number, decription:'订单状态'},
   pics:[new Schema({
     file:{type:Schema.Types.ObjectId, ref:'file', decription:'图片'},
     desc:{type:String, decription:'说明'}

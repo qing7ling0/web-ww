@@ -25,9 +25,14 @@ const LOADING_ACTIONS = [
   ActionTypes.ORDER_ADD,
   ActionTypes.ORDER_DELETE,
   ActionTypes.ORDER_UPDATE,
+  ActionTypes.ORDER_REVIEW,
   ActionTypes.ORDER_LIST_GET,
   ActionTypes.ORDER_PROFILE_GET,
   ActionTypes.SUB_ORDER_LIST_GET,
+  ActionTypes.ORDER_SUB_PROFILE,
+
+  ActionTypes.SUB_ORDER_TRY_FEEDBACK_LIST,
+  ActionTypes.SUB_ORDER_TRY_FEEDBACK_ADD,
 ];
 
 const initialState = {
@@ -38,13 +43,21 @@ const initialState = {
   goodsDeleteIDS: [],
   goodsShoesProfile:{},
   goodsTypeList: [],
-  goodsStyleList: [],
-  goodsSeasonList: [],
-  goodsXuanhaoList: [],
+  styleList: [],
+  seasonList: [],
+  guiGeList: [],
+  genGaoList: [],
+  shoesTieBianList: [],
+  watchStrapStyleList: [],
+  materialList: [],
+  xuanHaoList: [],
   outColorList: [],
   inColorList: [],
   bottomColorList: [],
   bottomSideColorList: [],
+  customList: [],
+  urgentList: [],
+  maintainList: [],
   materialList: [],
   materialColorList: [],
   materialDeleteIDS: [],
@@ -52,6 +65,7 @@ const initialState = {
   maintainPriceDeleteIDS: [],
   orderList:[],
   subOrderList:[],
+  tryFeedbackList:[],
 };
 
 function createState(state, resState, values) {
@@ -143,6 +157,17 @@ function doActions(state, action) {
       }
       break;
       
+    case ActionTypes.ORDER_SUB_PROFILE:
+      if (action.state === States.Fulfilled && result.code === 0) {
+        let profile = 0;
+        for(let key in data) {
+          if (key.indexOf('Profile') !== -1) {
+            profile = data[key];
+          }
+        }
+        return createState(state, resState, {suborderProfile:profile});
+      }
+    break;
     case ActionTypes.ORDER_PROFILE_GET:
       if (action.state === States.Fulfilled && result.code === 0) {
         let profile = 0;
@@ -204,7 +229,7 @@ function doActions(state, action) {
       }
       break;
 
-    case ActionTypes.MAINTAIN_LIST_GET:
+      case ActionTypes.MAINTAIN_LIST_GET:
       if (action.state === States.Fulfilled && result.code === 0) {
         let list = {};
         for(let key in data) {
@@ -225,6 +250,18 @@ function doActions(state, action) {
           }
         }
         return createState(state, resState, {maintainPriceDeleteIDS:deleteIDS});
+      }
+      break;
+    case ActionTypes.SUB_ORDER_TRY_FEEDBACK_LIST:
+      if (action.state === States.Fulfilled && result.code === 0) {
+        let list = {};
+        for(let key in data) {
+          if (key.indexOf('List') !== -1) {
+            list[key] = data[key].list;
+            list[key+'Page'] = data[key].page;
+          }
+        }
+        return createState(state, resState, list);
       }
       break;
     case ActionTypes.GOODS_BASE_DATAS:

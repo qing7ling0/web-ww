@@ -40,7 +40,7 @@ class FileData {
 
   async update(conditions, doc, options) {
     if (doc) {
-      let ret = await fileModel.update(conditions, doc, options);
+      let ret = await fileModel.updateMany(conditions, doc, options);
       return ret;
     } else {
       throw new ApiError(ApiErrorNames.UPDATE_FAIL);

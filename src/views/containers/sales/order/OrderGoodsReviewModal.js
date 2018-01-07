@@ -31,6 +31,11 @@ import {
 
 import {
   Root,
+  ProfileCol,
+  ProfileColLabel,
+  ProfileColValue,
+  ProfileBtnBack,
+  ProfileRowTitle,
 } from './styled'
 
 import * as graphqlTypes from '../../../modules/graphqlTypes'
@@ -46,6 +51,12 @@ import * as optionsType from '../types'
 import { ORDER_TYPES, listToSelectOptions } from './types';
 
 import ShoesAdd from './goods/ShoesAdd'
+
+const CUSTOMOR_OPTIONS = [
+  {key:'name', label:'名称'},
+  {key:'phone', label:'手机'},
+  {key:'sex', label:'性别'},
+]
 
 const initFormDefaultValues = (options, values) => {
   return options.map((item) => {
@@ -90,14 +101,23 @@ class OrderGoodsReviewModal extends Component {
     }
     this.setState({visible:this.props.visible})
     
-    this.props.reqGetGoodsBaseDatas();
     this.onGoodsAdd = null;
+
+    this.orderType = ORDER_TYPES[0];
+    for(let value of ORDER_TYPES) {
+      if (value.tag === this.state.currentOrderType) {
+        this.orderType = value;
+      }
+    }
+  }
+  componentDidMount() {
+    this.props.reqGetGoodsBaseDatas();
+    if (this.state.currentOrderType) {
+      this.onReqOrderGoodsList(this.state.currentOrderType);
+    }
   }
 
-  renderBody = () => {
-    if (!this.orderType) {
-      return null;
-    }
+  renderGoods = () => {
 
     switch(this.orderType.key) {
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.SHOES:
@@ -112,6 +132,42 @@ class OrderGoodsReviewModal extends Component {
       )
     }
     return null;
+  }
+
+  renderCustomer = () => {
+    return (
+      <Card title="客户信息" bordered={false} noHovering={true} bodyStyle={{padding:0}}>
+        <Row>
+          {
+            CUSTOMOR_OPTIONS.map((item, index) => {
+              return (
+                <ProfileCol xs={24} sm={12} lg={8} key={item.key}>
+                  <ProfileColLabel>{item.label}: </ProfileColLabel>
+                  <ProfileColValue>{this.props.data.customer[item.key]}</ProfileColValue>
+                </ProfileCol>
+              )
+            })
+          }
+        </Row>
+      </Card>
+    )
+  }
+
+  renderBody = () => {
+    if (!this.orderType) {
+      return null;
+    }
+
+    return (
+      <div>
+        {
+          this.renderCustomer()
+        }
+        {
+          this.renderGoods()
+        }
+      </div>
+    );
   }
 
   render() {
@@ -131,7 +187,13 @@ class OrderGoodsReviewModal extends Component {
         onSubmit={this.onSubmit}
         onCancel={this.onCancel}
         modalOptions={{width:'60%'}}
+        actionType={ActionTypes.ORDER_REVIEW}
         onAfterClose={this.props.afterClose || null}
+        loading={this.props.loading}
+        onSubmitSuccess={()=>{
+          this.setState({visible:false})
+          this.props.onSubmitSuccess()
+        }}
       />
     );
   }
@@ -191,11 +253,13 @@ class OrderGoodsReviewModal extends Component {
   }
 
   onAddSuccess = (values) => {
-    if (this.props.onAdd) {
-      values.type = this.state.currentOrderType;
-      this.props.onAdd(values);
-      this.setState({visible:false})
-    }
+    values.type = this.state.currentOrderType;
+    this.props.reqReviewSuborder(this.props.data._id, values);
+    // if (this.props.onAdd) {
+    //   values.type = this.state.currentOrderType;
+    //   this.props.onAdd(values);
+    //   this.setState({visible:false})
+    // }
   }
 }
 
@@ -213,6 +277,7 @@ export default connect(
       reqGetOrderList: Actions.getOrderList,
       reqAddOrder: Actions.addOrder,
       reqGetGoodsList: Actions.getGoodsList,
+      reqReviewSuborder: Actions.reviewSuborder,
       reqGetGoodsBaseDatas: Actions.getGoodsBaseDatas
     }, dispatch);
   }
