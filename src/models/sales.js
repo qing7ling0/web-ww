@@ -16,7 +16,9 @@ const materialFields = {
   ...baseFields
 };
 
-module.exports.materialModel = mongoose.model('material', new Schema(materialFields));
+module.exports.materialModel = mongoose.model('material', new Schema(materialFields,{
+  timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
+}));
 
 // 商品档案
 const goodsBaseFields = {
@@ -60,6 +62,8 @@ var goodsSchema = new Schema({
   ...goodsWatchStrapFields,
   // ...ornamentFields,
   ...baseFields
+},{
+  timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
 });
 module.exports.goodsModel = mongoose.model('goods', goodsSchema);
 
@@ -67,10 +71,14 @@ module.exports.goodsModel = mongoose.model('goods', goodsSchema);
 const tryFeedbackFields = {
   suborder_id: {type:Schema.Types.ObjectId, ref:'sub_order', decription:'订单ID'},
   message: {type:String, decription:'内容'},
+  transport_id: {type:String, decription:'快递单号'},
+  status: {type:Number, decription:'当前反馈状态'},
   ...baseFields
 };
 
-const tryFeedbackSchema = new Schema(tryFeedbackFields);
+const tryFeedbackSchema = new Schema(tryFeedbackFields,{
+  timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
+});
 module.exports.tryFeedbackModel = mongoose.model('try_feedback', tryFeedbackSchema);
 
 const orderBaseSchema = new Schema({
@@ -195,6 +203,8 @@ const subOrderSchema = new Schema({
   customer: {type:Schema.Types.ObjectId, ref:'customer', decription:'客户'},
   order:{type:Schema.Types.ObjectId, ref:'order', decription:'订单信息'},
   ...baseFields
+},{
+  timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
 });
 module.exports.subOrderModel = mongoose.model('sub_order', subOrderSchema);
 
@@ -208,5 +218,7 @@ const orderFields = {
 }
 const orderSchema = new Schema({
   ...orderFields
+},{
+  timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
 });
 module.exports.orderModel = mongoose.model('order', orderSchema);

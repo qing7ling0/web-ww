@@ -230,7 +230,9 @@ class OrderListContainer extends Component {
             dataSource={this.props.list} 
             loading={this.props.loading}
             rowKey={(record)=>record._id}
-            onRowClick={this.onRowClick}
+            onRow={(record, index) => ({
+              onClick: ()=>this.onRowClick(record, index),
+            })}
             rowSelection={{onChange:this.onRowSelectionChange}}
             pagination={pagination}
           />

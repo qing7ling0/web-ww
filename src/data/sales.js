@@ -356,6 +356,23 @@ class SalesData {
     }
   }
   
+  async suborderStateUpdate(id, state) {
+    if (!id || !state) {
+      throw new ApiError(ApiErrorNames.UPDATE_FAIL);
+    }
+
+    let suborder = await subOrderModel.findById(id);
+    if (suborder) {
+      if (suborder.state >= state) {
+        return {n:0,ok:false};
+      } else {
+        // TODO 检查state合法性
+       return await subOrderModel.update({_id:id}, {state:state})
+      }
+    }
+    throw new ApiError(ApiErrorNames.UPDATE_FAIL);
+  }
+
   async reviewSubOrder(id, doc, options) {
     if (!id || !doc || !doc.type) {
       throw new ApiError(ApiErrorNames.UPDATE_FAIL);
@@ -373,7 +390,6 @@ class SalesData {
 
   async updateSubOrder(conditions, doc, options) {
     if (doc) {
-      console.log(JSON.stringify(doc));
       if (doc.customer && doc.customer.phone) {
 
         let customer = await this.updateOrAddCustomerByOrder(doc, doc.customer);
@@ -394,7 +410,6 @@ class SalesData {
           }
           let deleteFileIDS = []; // 要删除的图片
           for(let pic of subOrder.pics) {
-            // console.log('--------------------' + JSON.stringify(subOrder.pics));
             if (doc.pics.findIndex((item)=>item.file == pic.file) === -1) {
               deleteFileIDS.push(pic.file);
             }
@@ -403,7 +418,6 @@ class SalesData {
             await fileData.update({_id:{$in:newFileIDS}}, {temp:false});
           }
           if (deleteFileIDS && deleteFileIDS.length > 0) {
-            console.log('--------------------' + deleteFileIDS);
             await fileData.update({_id:{$in:deleteFileIDS}}, {temp:true});
           }
         }

@@ -79,6 +79,6 @@ export const customerOrderInfo = {
       console.log(error);
     }
 
-    return await salesData.findSubOrder(params.conditions, null)
+    return await salesData.findSubOrder(params.conditions, null, params.options)
 	}
 }

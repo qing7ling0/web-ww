@@ -134,7 +134,7 @@ class OrderAddContainer extends Component {
       span={};
     }
     return (
-      <Card key={index} title={item.title} bordered={false} noHovering={true} bodyStyle={{padding:0}}>
+      <Card key={index} title={item.title} bordered={false}  bodyStyle={{padding:0}}>
         <Row>
           {
             item.options.map((item, index) => {
@@ -271,7 +271,7 @@ class OrderAddContainer extends Component {
           })}
         </OrderSteps>
         <OrderStepContent>
-          <Card noHovering={true}>
+          <Card >
             {
               this.state.currentStep===0 
               && 

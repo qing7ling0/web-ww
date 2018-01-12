@@ -26,7 +26,9 @@ export const customerFields = {
   ...baseFields
 };
 // 店铺
-module.exports.customerModel = mongoose.model('customer', new Schema(customerFields));
+module.exports.customerModel = mongoose.model('customer', new Schema(customerFields,{
+  timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
+}));
 
 // 脚型
 var footSchema = new Schema({
@@ -36,6 +38,8 @@ var footSchema = new Schema({
   zhiWei: {type: Number, decription:'趾围'},
   fuWei: {type: Number, decription:'附维'},
   ...baseFields
+},{
+  timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
 });
 module.exports.footModel = mongoose.model('foot', footSchema);
 
@@ -46,6 +50,8 @@ var beltSchema = new Schema({
   C: {type: Number, decription:'C'},
   D: {type: Number, decription:'D'},
   ...baseFields
+},{
+  timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
 });
 module.exports.beltModel = mongoose.model('belt', beltSchema);
 
@@ -59,5 +65,7 @@ var watchStrapSchema = new Schema({
   F: {type: Number, decription:'F'},
   G: {type: Number, decription:'G'},
   ...baseFields
+},{
+  timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
 });
 module.exports.watchStrapModel = mongoose.model('watch_strap', watchStrapSchema);

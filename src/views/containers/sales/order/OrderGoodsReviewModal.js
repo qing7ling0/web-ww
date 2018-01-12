@@ -136,7 +136,7 @@ class OrderGoodsReviewModal extends Component {
 
   renderCustomer = () => {
     return (
-      <Card title="客户信息" bordered={false} noHovering={true} bodyStyle={{padding:0}}>
+      <Card title="客户信息" bordered={false}  bodyStyle={{padding:0}}>
         <Row>
           {
             CUSTOMOR_OPTIONS.map((item, index) => {

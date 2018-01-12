@@ -48,7 +48,6 @@ module.exports.createEditorDoc = function(user, doc) {
   let ret = doc || {};
   ret.editor_id = user._id;
   ret.editor_name = user.name;
-  ret.editor_time = moment().format('YYYY-MM-DD HH:mm:ss');
   return ret;
 }
 

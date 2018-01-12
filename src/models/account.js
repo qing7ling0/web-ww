@@ -23,6 +23,8 @@ var accountSchema = new Schema({
   last_login_time   : { type:Date, default:moment().format('YYYY-MM-DD HH:mm:ss') },
   last_login_ip     : { type:String, default:'' },
   ...baseFields
+},{
+  timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
 });
 // DB.addPost(userSchema, ['save', 'find']);
 // DB.addPre(userSchema, ['save', 'find']);

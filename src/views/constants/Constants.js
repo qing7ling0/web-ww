@@ -1,4 +1,4 @@
-import baseConstants from '../../constants/constants'
+import * as baseConstants from '../../constants/constants'
 import citys from '../../constants/citys'
 
 export const DEV_SERVER = 'http://127.0.0.1:3001';

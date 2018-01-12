@@ -84,7 +84,9 @@ class AdminsContainer extends Component {
               dataSource={this.props.list} 
               loading={this.props.loading}
               rowKey={'_id'}
-              onRowClick={this.onRowClick}
+              onRow={(record, index) => ({
+                onClick: ()=>this.onRowClick(record, index),
+              })}
               rowSelection={{onChange:this.onRowSelectionChange}}
               pagination={{
                 current:this.props.pageInfo.page,

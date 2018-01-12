@@ -73,6 +73,10 @@ class DB {
                 newPage.pageSize = limit;
             }
 
+            if (!findOptions.sort) {
+                findOptions.sort={create_time:-1}
+            }
+
             let conditions = options.conditions || {};
             if (page && page.pageSize>0 && page.page>-1) {
                 newPage.total = await model.find(conditions).count();

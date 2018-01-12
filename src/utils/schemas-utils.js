@@ -31,14 +31,12 @@ export const createDefaultListQuery = (name, type, model, onQuery) => {
       if (params.conditions) {
         params.conditions = commonUtils.urlString2Conditions(params.conditions);
       }
-      console.log(JSON.stringify(params));
       let ret =[];
       if (params.page > -1) {
         ret = await DB.getList(model, {conditions:params.conditions}, {page:params.page, pageSize:params.pageSize}, onQuery);
       } else {
         ret = await DB.getList(model, {conditions:params.conditions}, null, onQuery);
       }
-      console.log(JSON.stringify(ret));
       return ret;
     }
   }

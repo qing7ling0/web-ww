@@ -17,6 +17,7 @@
         "test": "node lib/test/test.js"
     },
     "devDependencies": {
+        "antd-migration-helper": "^0.3.2",
         "babel-cli": "^6.26.0",
         "babel-core": "^6.26.0",
         "babel-loader": "^7.1.2",
@@ -44,7 +45,7 @@
         "webpack-merge": "^4.1.0"
     },
     "dependencies": {
-        "antd": "^2.13.5",
+        "antd": "^3.1.1",
         "graphql": "^0.11.3",
         "jfum": "^1.0.3",
         "koa": "^2.2.0",

@@ -107,7 +107,7 @@ class ShoesAdd extends Component {
       this.setState({goodsReviewSure:value})
     })
     return (
-      <Card key={index} title={item.title} bordered={false} noHovering={true} bodyStyle={{padding:0}} extra={cardExtra}>
+      <Card key={index} title={item.title} bordered={false}  bodyStyle={{padding:0}} extra={cardExtra}>
         <Row>
           {
             item.options.map((item, index) => {
@@ -123,7 +123,7 @@ class ShoesAdd extends Component {
 
   renderFoot(item, index) {
     return (
-      <Card key={index} title={item.title} bordered={false} noHovering={true}>
+      <Card key={index} title={item.title} bordered={false} >
         <Row>
           {
             item.options.map((item, index) => {

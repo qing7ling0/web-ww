@@ -119,7 +119,7 @@ class OrderGoodsAddModal extends Component {
     if (!this.orderType) {
       return null;
     }
-
+    console.log('renderBody')
     switch(this.orderType.key) {
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.SHOES:
       return (

@@ -98,7 +98,9 @@ const commonFields = {
   ...baseFields
 }
 
-var _commonSchema = new Schema(commonFields);
+var _commonSchema = new Schema(commonFields,{
+  timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
+});
 
 module.exports.commonSchema = _commonSchema;
 module.exports.commonModel = mongoose.model('common', _commonSchema);

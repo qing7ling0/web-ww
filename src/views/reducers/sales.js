@@ -30,6 +30,7 @@ const LOADING_ACTIONS = [
   ActionTypes.ORDER_PROFILE_GET,
   ActionTypes.SUB_ORDER_LIST_GET,
   ActionTypes.ORDER_SUB_PROFILE,
+  ActionTypes.ORDER_SUB_STATE_CHANGE,
 
   ActionTypes.SUB_ORDER_TRY_FEEDBACK_LIST,
   ActionTypes.SUB_ORDER_TRY_FEEDBACK_ADD,
@@ -78,7 +79,7 @@ function doActions(state, action) {
   if (action && action.payload) {
     result = action.payload;
     if (result && result.data) {
-        data = result.data;
+      data = result.data;
     }
   }
   result = result || {code:0, message:''};
@@ -278,6 +279,11 @@ function doActions(state, action) {
       break;
     default:
       break;
+  }
+  if (action.type && LOADING_ACTIONS.indexOf(action.type) !== -1) {
+    if (action.state === States.Fulfilled && result.code === 0) {
+      return createState(state, resState, {...data});
+    }
   }
   return createState(state, resState);
 }

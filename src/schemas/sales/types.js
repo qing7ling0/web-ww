@@ -46,6 +46,8 @@ export const tryFeedbackInputFields = {
   _id: {type:GraphQLString},
   suborder_id: {type:GraphQLString, description:'id'},
   message: {type:GraphQLString, description:'反馈内容'},
+  transport_id : {type:GraphQLString, description:'快递单号'},
+  status:{type:GraphQLInt}
 };
 export const tryFeedbackType = new GraphQLObjectType({
   name: 'tryFeedbackType',

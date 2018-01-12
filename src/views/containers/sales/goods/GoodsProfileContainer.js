@@ -95,7 +95,6 @@ class GoodsProfileContainer extends Component {
           loading={this.props.loading} 
           title={<ProfileRowTitle>{this.props.profile.name}</ProfileRowTitle>} 
           bordered={false} 
-          noHovering={true}
           extra={
             <ProfileBtnBack><Button type="primary" shape="circle" icon="rollback" onClick={()=>{
               this.props.history.goBack();

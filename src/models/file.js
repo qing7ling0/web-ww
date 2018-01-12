@@ -13,6 +13,8 @@ export const fileSchema = new Schema({
   ext: {type:String, decription:'文件扩展名'},
   temp: {type:Boolean, decription:'是否临时文件'},
   ...baseFields
+},{
+  timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
 });
 
 export const fileModel = mongoose.model('file', fileSchema);

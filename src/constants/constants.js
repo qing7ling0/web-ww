@@ -176,21 +176,40 @@ module.exports.COMMON_DATA_TYPES = {
   SHOES_TIE_BIAN:'17', // 贴边
 }
 
+// 试脚鞋反馈状态
+module.exports.E_ORDER_TRY_FEEDBACK_STATUS = {
+  START:10, // 开始
+  TRANSPORT:20, // 发货
+  WAITTING:30, // 等待反馈
+  REVIEW:40, // 重新
+  END:50 // 结束
+}
+
 // 订单状态
 const E_ORDER_STATUS = {
-  REVIEW: 1, // 审核
-  TRY: 2, // 是样品鞋
-  MAKING: 3, // 制作中
-  DELIVERY:4, // 发货中
-  TRANSPORT: 5, // 已发货，邮寄中
-  SURE: 6, // 客户确认
-  COMPLETED: 7 // 已完成
+  REVIEW: 10, // 审核
+  TRY: 20, // 试脚鞋投产
+  TRY_TRANSPORT:202, // 试脚鞋发货
+  MAKING: 30, // 制作中
+  MAKING_1: 301, // 帮面针车
+  MAKING_2: 302, // 复底成型
+  MAKING_3: 303, // 染色水洗
+  MAKING_4: 304, // 品检出货
+  DELIVERY:40, // 发货中
+  TRANSPORT: 50, // 已发货，邮寄中
+  SURE: 60, // 客户确认
+  COMPLETED: 70 // 已完成
 }
 module.exports.E_ORDER_STATUS = E_ORDER_STATUS;
 module.exports.ORDER_STATUS_LIST = [
   {value:E_ORDER_STATUS.REVIEW, label:'审核中'},
-  {value:E_ORDER_STATUS.TRY, label:'试鞋中'},
-  {value:E_ORDER_STATUS.MAKING, label:'制作'},
+  {value:E_ORDER_STATUS.TRY, label:'试脚鞋投产'},
+  {value:E_ORDER_STATUS.TRY_TRANSPORT, label:'试脚鞋制作寄出'},
+  {value:E_ORDER_STATUS.MAKING, label:'正品鞋投产'},
+  {value:E_ORDER_STATUS.MAKING_1, label:'帮面针车'},
+  {value:E_ORDER_STATUS.MAKING_2, label:'复底成型'},
+  {value:E_ORDER_STATUS.MAKING_3, label:'染色水洗'},
+  {value:E_ORDER_STATUS.MAKING_4, label:'品检出货'},
   {value:E_ORDER_STATUS.TRANSPORT, label:'已发货'},
   {value:E_ORDER_STATUS.SURE, label:'已完成'},
 ]

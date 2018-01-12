@@ -104,12 +104,13 @@ class OrderProfileContainer extends Component {
 
     switch(this.props.profile.type) {
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.SHOES:
-      return (
-        <OrderShoesProfile 
-          profile={this.props.profile}
-          onOpenReview={this.onOpenReview}
-        />
-      )
+        console.log('renderProfile')
+        return (
+          <OrderShoesProfile 
+            profile={this.props.profile}
+            onOpenReview={this.onOpenReview}
+          />
+        )
     }
     return null;
   }
@@ -118,10 +119,9 @@ class OrderProfileContainer extends Component {
     return (
       <Root>
         <Card 
-          loading={this.props.loading} 
           title={<ProfileRowTitle>订单详情</ProfileRowTitle>} 
           bordered={false} 
-          noHovering={true}
+          
           extra={
             <ProfileBtnBack><Button type="primary" shape="circle" icon="rollback" onClick={()=>{
               this.props.history.goBack();

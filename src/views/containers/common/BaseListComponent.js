@@ -102,7 +102,9 @@ class BaseListComponent extends Component {
             dataSource={this.state.source} 
             loading={this.props.loading}
             rowKey={'_id'}
-            onRowClick={this.onRowClick}
+            onRow={(record, index) => ({
+              onClick: ()=>this.onRowClick(record, index),
+            })}
             rowSelection={{onChange:this.onRowSelectionChange}}
             pagination={pagination}
           />

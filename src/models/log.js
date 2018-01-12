@@ -16,4 +16,6 @@ export const logFields = {
   ...baseFields
 };
 // 店铺
-module.exports.logModel = mongoose.model('log', new Schema(logFields));
+module.exports.logModel = mongoose.model('log', new Schema(logFields,{
+  timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
+}));

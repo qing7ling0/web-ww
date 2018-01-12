@@ -23,7 +23,9 @@ const SHOP_GUIDE_FIELDS = {
 }
 
 // 店铺导购
-var shopGuideSchema = new Schema(SHOP_GUIDE_FIELDS);
+var shopGuideSchema = new Schema(SHOP_GUIDE_FIELDS,{
+  timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
+});
 module.exports.userShopGuideModel = mongoose.model('user_shop_guide', shopGuideSchema);
 
 // 运营人员
@@ -33,6 +35,8 @@ var operateSchema = new Schema({
   sex: String,
   user_type: {type:Number, default:constants.USER_TYPES.operate},
   ...baseFields,
+},{
+  timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
 });
 module.exports.userOperateModel = mongoose.model('user_operate', operateSchema);
 
@@ -44,6 +48,8 @@ var productionSchema = new Schema({
   step: String,
   user_type: {type:Number, default:constants.USER_TYPES.production},
   ...baseFields,
+},{
+  timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
 });
 module.exports.userProductionModel = mongoose.model('user_production', productionSchema);
 
@@ -54,5 +60,7 @@ var adminSchema = new Schema({
   sex: String,
   user_type: {type:Number, default:constants.USER_TYPES.admin},
   ...baseFields,
+},{
+  timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
 });
 module.exports.userAdminModel = mongoose.model('user_admin', adminSchema);

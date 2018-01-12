@@ -28,7 +28,9 @@ export const shopFields = {
 };
 
 // 店铺
-var shopSchema = new Schema(shopFields);
+var shopSchema = new Schema(shopFields,{
+  timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
+});
 shopSchema.virtual('regionInfo').get(function(){
   return this.country + '/' + this.region + '/' + this.province;
 });
