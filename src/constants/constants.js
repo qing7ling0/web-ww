@@ -180,25 +180,25 @@ module.exports.COMMON_DATA_TYPES = {
 module.exports.E_ORDER_TRY_FEEDBACK_STATUS = {
   START:10, // 开始
   TRANSPORT:20, // 发货
-  WAITTING:30, // 等待反馈
-  REVIEW:40, // 重新
-  END:50 // 结束
+  END:30 // 结束
 }
 
 // 订单状态
 const E_ORDER_STATUS = {
-  REVIEW: 10, // 审核
-  TRY: 20, // 试脚鞋投产
+  REVIEW: 100, // 审核
+  TRY: 200, // 试脚鞋投产
   TRY_TRANSPORT:202, // 试脚鞋发货
-  MAKING: 30, // 制作中
+  MAKING: 300, // 制作中
   MAKING_1: 301, // 帮面针车
   MAKING_2: 302, // 复底成型
   MAKING_3: 303, // 染色水洗
   MAKING_4: 304, // 品检出货
-  DELIVERY:40, // 发货中
-  TRANSPORT: 50, // 已发货，邮寄中
-  SURE: 60, // 客户确认
-  COMPLETED: 70 // 已完成
+  DELIVERY:400, // 发货中
+  TRANSPORT: 500, // 已发货，邮寄中
+  SURE: 600, // 客户确认
+  COMPLETED: 700, // 已完成
+  REJECTED: 1000, // 退货,
+  CANCEL: 2000, // 取消
 }
 module.exports.E_ORDER_STATUS = E_ORDER_STATUS;
 module.exports.ORDER_STATUS_LIST = [
@@ -211,5 +211,7 @@ module.exports.ORDER_STATUS_LIST = [
   {value:E_ORDER_STATUS.MAKING_3, label:'染色水洗'},
   {value:E_ORDER_STATUS.MAKING_4, label:'品检出货'},
   {value:E_ORDER_STATUS.TRANSPORT, label:'已发货'},
-  {value:E_ORDER_STATUS.SURE, label:'已完成'},
+  {value:E_ORDER_STATUS.COMPLETED, label:'已完成'},
+  {value:E_ORDER_STATUS.REJECTED, label:'客户拒绝收货'},
+  {value:E_ORDER_STATUS.CANCEL, label:'已取消'},
 ]

@@ -203,7 +203,8 @@ const orderShoesBaseFields = {
   s_right_length: {type: GraphQLFloat, description:'右脚长度'},
   s_right_zhiWei: {type: GraphQLFloat, decription:'右脚趾围'},
   s_right_fuWei: {type: GraphQLFloat, decription:'右脚附维'},
-  s_design_self: {type: GraphQLBoolean, decription:'是否来样设计'}
+  s_design_self: {type: GraphQLBoolean, decription:'是否来样设计'},
+  s_production_step: {type: GraphQLInt, decription:'正品鞋制作环境'},
 }
 const orderShoesFields = {
   ...orderShoesBaseFields,

@@ -67,6 +67,8 @@ import * as optionsType from '../../types'
 import { ORDER_TYPES, listToSelectOptions } from '../types';
 import { commonUtils } from '../../../../modules/common';
 import ShoesTryStep from './ShoesTryStep'
+import ShoesProductionStep from './ShoesProductionStep'
+import ShoesTransportStep from './ShoesTransportStep'
 
 const DEFAULT_COL_SPAN = {xs:24,sm:12,lg:8};
 
@@ -130,7 +132,10 @@ class OrderShoesProfile extends Component {
   
   componentWillReceiveProps(nextProps){
 
-    if (nextProps.result.type === ActionTypes.ORDER_SUB_STATE_CHANGE && nextProps.loading !== this.props.loading && !nextProps.loading) {
+    if ((nextProps.result.type === ActionTypes.ORDER_SUB_STATE_CHANGE ||
+        nextProps.result.type === ActionTypes.ORDER_SUB_UPDATE
+      )
+      && nextProps.loading !== this.props.loading && !nextProps.loading) {
       if (nextProps.result.code === 0) {
         this.props.reqSuborderProfile(this.props.profile._id);
       }
@@ -150,6 +155,7 @@ class OrderShoesProfile extends Component {
           this.setState({currentStep:0});
         break;
         case constants.BASE_CONSTANTS.E_ORDER_STATUS.TRY:
+        case constants.BASE_CONSTANTS.E_ORDER_STATUS.TRY_TRANSPORT:
           this.setState({currentStep:1});
         break;
         case constants.BASE_CONSTANTS.E_ORDER_STATUS.MAKING:
@@ -333,66 +339,10 @@ class OrderShoesProfile extends Component {
     )
   }
 
-  renderTry = () => {
-    let rendTryAdd = () => {
-      return(
-        <div>
-          <TextArea placeholder="请输入反馈内容" autosize={{ minRows: 2, maxRows: 10 }} onChange={(e)=>{
-            this.setState({tryFeedbackValue:e.target.value})
-          }} />
-          <Row style={{padding:'0.2rem'}}>
-            <Col span='12' style={{textAlign:'center'}}><Button type="primary" onClick={()=>{
-              this.props.addSuborderTryFeedback('', {suborder_id:this.props.profile._id, message:this.state.tryFeedbackValue});
-              this.setState({tryFeedbackAdding:false, tryFeedbackValue:''})
-            }}>确定</Button></Col>
-            <Col span='12' style={{textAlign:'center'}}><Button type="primary" onClick={()=>{
-              this.setState({tryFeedbackAdding:false, tryFeedbackValue:''})
-            }}>取消</Button></Col>
-          </Row>
-        </div>
-      );
-    }
-    // <Table 
-    // columns={[
-    //   {title:'反馈信息', dataIndex:'message', key:'message', width:'70%', render:(value)=>(<pre>{value}</pre>)},
-    //   {title:'时间', dataIndex:'editor_time', key:'editor_time', render:(value)=>(<span style={{width:140}}></span>)},
-    // ]} 
-    // dataSource={this.props.tryFeedbackList}
-    // pagination={false} />
-    return (<Card title='试鞋反馈'  bordered={false} type="inner">
-      <div style={{width:"70%", margin:'0 auto'}}>
-        <div style={{width:"100%", margin:'0.15rem 0'}}>
-            {
-              this.state.tryFeedbackAdding ? 
-              rendTryAdd()
-              : <Button type="dashed" style={{width:'100%'}} onClick={()=>this.setState({tryFeedbackAdding:true})}>新建反馈</Button>
-            }
-        </div>
-        <List
-          header={null}
-          footer={null}
-          bordered
-          dataSource={this.props.tryFeedbackList}
-          renderItem={item => {
-            let msgs = item.message.split('\n');
-            return (<List.Item extra={moment(item.editor_time).format('YYYY-MM-DD HH:mm:ss') + "---" + moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')}>
-              <div style={{paddingBottom:5}}>{msgs.map((item, index) =>(<p style={{padding:0, margin:0, wordBreak:'break-all'}} key={index}>{item}</p>))}</div>
-            </List.Item>)
-          }}
-        />
-        <Row style={{textAlign:'center', paddingTop:20, paddingBottom:20}}>
-          <Popconfirm title="确定到生产阶段吗，确定后无法返回?" onConfirm={()=>{
-            this.props.reqChangeSuborderState(this.props.profile._id, {state:constants.BASE_CONSTANTS.E_ORDER_STATUS.MAKING});
-          }} okText="确定" cancelText="取消">
-            <Button type="primary">下一步</Button>
-          </Popconfirm>
-        </Row>
-      </div>
-    </Card>)
-  }
-
-  renderMake = () => {
-
+  renderCompletedStep = () => {
+    return <OrderSuccessContainer>
+      <OrderSuccessTitle>订单已完成!</OrderSuccessTitle>
+    </OrderSuccessContainer>
   }
 
   render() {
@@ -413,8 +363,22 @@ class OrderShoesProfile extends Component {
             {
               this.state.currentStep===1 
               &&
-              // this.renderTry()
               <ShoesTryStep profile={this.props.profile} />
+            }
+            {
+              this.state.currentStep===2 
+              &&
+              <ShoesProductionStep profile={this.props.profile} />
+            }
+            {
+              this.state.currentStep===3 
+              &&
+              <ShoesTransportStep profile={this.props.profile} />
+            }
+            {
+              this.state.currentStep===4 
+              &&
+              this.renderCompletedStep()
             }
           </Card>
         </OrderStepContent>

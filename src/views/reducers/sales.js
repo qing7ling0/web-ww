@@ -30,10 +30,12 @@ const LOADING_ACTIONS = [
   ActionTypes.ORDER_PROFILE_GET,
   ActionTypes.SUB_ORDER_LIST_GET,
   ActionTypes.ORDER_SUB_PROFILE,
+  ActionTypes.ORDER_SUB_UPDATE,
   ActionTypes.ORDER_SUB_STATE_CHANGE,
 
   ActionTypes.SUB_ORDER_TRY_FEEDBACK_LIST,
   ActionTypes.SUB_ORDER_TRY_FEEDBACK_ADD,
+  ActionTypes.SUB_ORDER_TRY_FEEDBACK_UPDATE,
 ];
 
 const initialState = {

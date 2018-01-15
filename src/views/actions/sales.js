@@ -63,6 +63,9 @@ export const reviewSuborder = createAction(types.ORDER_REVIEW, (id, data) => {
 export const suborderStateChange = createAction(types.ORDER_SUB_STATE_CHANGE, (id, data) => {
   return netHandler.updateDefault('suborderState', id, data);
 })
+export const suborderUpdate = createAction(types.ORDER_SUB_UPDATE, (id, data) => {
+  return netHandler.updateDefault('suborder', id, data);
+})
 export const suborderProfile = createAction(types.ORDER_SUB_PROFILE, (id) => {
   return netHandler.getDefaultProfile('suborderProfile', orderTypes.subOrderType, id);
 })
@@ -75,8 +78,8 @@ export const getSuborderTryFeedbackList = createAction(types.SUB_ORDER_TRY_FEEDB
 export const addSuborderTryFeedback = createAction(types.SUB_ORDER_TRY_FEEDBACK_ADD, (query, data) => {
   return netHandler.addDefault(query||'tryFeedback', orderTypes.suborderTryFeedback, data);
 })
-export const updateSuborderTryFeedback = createAction(types.SUP_ORDER_TRY_FEEDBACK_UPDATE, (query, id, data) => {
-  return netHandler.updateDefault(query||'tryFeedback', orderTypes.suborderTryFeedback, id, data);
+export const updateSuborderTryFeedback = createAction(types.SUB_ORDER_TRY_FEEDBACK_UPDATE, (query, id, data) => {
+  return netHandler.updateDefault(query||'tryFeedback', id, data);
 })
 
 // 原材料

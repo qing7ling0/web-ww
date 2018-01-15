@@ -30,6 +30,7 @@ import commonData from './common-data'
 import fileData from './file'
 
 import { customerData } from './index'
+import { tryFeedbackModel } from '../models/sales';
 // import 
 
 const logUtil = require('../utils/log-utils');
@@ -360,14 +361,17 @@ class SalesData {
     if (!id || !state) {
       throw new ApiError(ApiErrorNames.UPDATE_FAIL);
     }
-
-    let suborder = await subOrderModel.findById(id);
-    if (suborder) {
-      if (suborder.state >= state) {
-        return {n:0,ok:false};
-      } else {
-        // TODO 检查state合法性
-       return await subOrderModel.update({_id:id}, {state:state})
+    if (state === constants.E_ORDER_STATUS.TRY_TRANSPORT) {
+      return await this.subOrderTryShoesMakeComplete(id, state);
+    } else {
+      let suborder = await subOrderModel.findById(id);
+      if (suborder) {
+        if (suborder.state === state) {
+          return {n:0,ok:false};
+        } else {
+          // TODO 检查state合法性
+          return await subOrderModel.update({_id:id}, {state:state})
+        }
       }
     }
     throw new ApiError(ApiErrorNames.UPDATE_FAIL);
@@ -429,6 +433,25 @@ class SalesData {
       throw new ApiError(ApiErrorNames.UPDATE_FAIL);
     }
   }
+
+  async subOrderTryShoesMakeComplete(id, state) {
+    if (!id) {
+      throw new ApiError(ApiErrorNames.UPDATE_FAIL);
+    }
+    let ret = await subOrderModel.update({_id:id}, {state:state});
+    if (ret) {
+      if (ret.ok) {
+        await tryFeedbackModel.updateMany({suborder_id:id}, {status:constants.E_ORDER_TRY_FEEDBACK_STATUS.END});
+        let fd = new tryFeedbackModel({suborder_id:id, status:constants.E_ORDER_TRY_FEEDBACK_STATUS.TRANSPORT});
+        if (fd) {
+          let newFD = await fd.save();
+        } else {
+          throw new ApiError(ApiErrorNames.UPDATE_FAIL);
+        }
+      }
+    }
+    return ret;
+  } 
 }
 
 module.exports = new SalesData()

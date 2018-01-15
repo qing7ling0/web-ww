@@ -94,11 +94,20 @@ const suborderStateUpdate = {
   }
 }
 
-const addTry = {
-
+const suborderUpdate = {
+  type: commonFields.operateResultType,
+  args: {
+    id: {type: GraphQLString},
+    doc: {type: types.subOrderInputType},
+  },
+  async resolve (ctx, params, options) {
+    return await salesData.updateSubOrder({_id:params.id}, params.doc);
+  }
 }
 
 let mutations = {
-  ...material, ...goods, ...tryFeedback, orderAdd, orderRemove, orderUpdate, reviewSuborderUpdate, suborderStateUpdate
+  ...material, ...goods, ...tryFeedback,
+  orderAdd, orderRemove, orderUpdate, 
+  reviewSuborderUpdate, suborderStateUpdate, suborderUpdate
 };
 export default mutations;

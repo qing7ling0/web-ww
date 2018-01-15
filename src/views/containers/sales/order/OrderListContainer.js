@@ -62,12 +62,13 @@ class OrderListContainer extends Component {
       reviewOrderInfo:null,
       page: 0,
       selectRows:[],
-      selectedKeys: [ORDER_MENUS[0].key]
+      selectedKeys: [ORDER_MENUS[0].key],
     }
 
     this.searchWord = '';
     this.searchGuide = '';
     this.searchShop = '';
+    this.orderMenuKey = ORDER_MENUS[0].key,
     this.routerPath = common.findRouterById(config.Routers, constants.MENU_IDS.salesOrder).url;
   }
 
@@ -241,6 +242,8 @@ class OrderListContainer extends Component {
     );
   }
 
+  
+  
   onReqList = (pageInfo) => {
     let con = {};
     if (this.searchOrderId) {
@@ -252,6 +255,13 @@ class OrderListContainer extends Component {
     }
     if (this.searchShop) {
       con.shop = this.searchShop;
+    }
+    if (this.orderMenuKey === '1') {
+      con.state = constants.BASE_CONSTANTS.E_ORDER_STATUS.REVIEW;
+    } else if (this.orderMenuKey === '2') {
+      con.state = {$gt:constants.BASE_CONSTANTS.E_ORDER_STATUS.REVIEW, $lt:constants.BASE_CONSTANTS.E_ORDER_STATUS.COMPLETED};
+    } else if (this.orderMenuKey === '3') {
+      con.state = constants.BASE_CONSTANTS.E_ORDER_STATUS.COMPLETED;
     }
     this.props.reqGetSubOrderList('subOrderList', con, pageInfo);
   }
@@ -309,10 +319,13 @@ class OrderListContainer extends Component {
   }
 
   onMenuClicked = ({item, key}) => {
-    const rootPath = this.props.match.url.match(URL_REG);
-    if (rootPath && rootPath.length > 0) {
-      this.props.history.push(rootPath[0] + key);
-    }
+    this.setState({orderMenuKey:key})
+    // const rootPath = this.props.match.url.match(URL_REG);
+    // if (rootPath && rootPath.length > 0) {
+    //   this.props.history.push(rootPath[0] + key);
+    // }
+    this.orderMenuKey = key;
+    this.onReqList();
   }
 
   onAddClicked = () => {

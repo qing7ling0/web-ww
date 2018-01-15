@@ -70,7 +70,7 @@ module.exports.goodsModel = mongoose.model('goods', goodsSchema);
 // 试鞋反馈
 const tryFeedbackFields = {
   suborder_id: {type:Schema.Types.ObjectId, ref:'sub_order', decription:'订单ID'},
-  message: {type:String, decription:'内容'},
+  message: {type:String, default:'', decription:'内容'},
   transport_id: {type:String, decription:'快递单号'},
   status: {type:Number, decription:'当前反馈状态'},
   ...baseFields
@@ -103,6 +103,7 @@ const shoesFields = {
 
   s_tie_di: {type:orderBaseSchema, decription:'贴底'},
   s_design_self: {type:Boolean, default:false, decription:'是否来样设计'},
+  s_production_step: {type:Number, default:0, decription:'正品鞋生产步骤'},
   s_shoes: {type:Schema.Types.ObjectId, ref:'goods', decription:'商品'},
 
   s_foot_size: {type: Number, description:'尺码'},
