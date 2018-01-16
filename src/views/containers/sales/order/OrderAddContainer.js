@@ -205,6 +205,7 @@ class OrderAddContainer extends Component {
           columns={ORDER_OPTIONS.goodsList(this)} 
           dataSource={this.state.goods}
           showHeader={true}
+          rowKey={(record)=>record._id}
           title={()=>{
             return (
               <div>

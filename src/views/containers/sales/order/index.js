@@ -38,27 +38,27 @@ class OrderContainer extends Component {
     }
   }
 
-  renderHeaderContent = () => {
-    return (
-      <Menu
-        onClick={this.onMenuClicked}
-        mode="horizontal"
-        defaultSelectedKeys={this.state.selectedKeys}
-      >
-        {ORDER_TYPES.map((item) => {
-          return (
-            <Menu.Item key={item.key}>{item.label}</Menu.Item>
-          );
-        })}
-      </Menu>
-    );
-  }
+  // renderHeaderContent = () => {
+  //   return (
+  //     <Menu
+  //       onClick={this.onMenuClicked}
+  //       mode="horizontal"
+  //       defaultSelectedKeys={this.state.selectedKeys}
+  //     >
+  //       {ORDER_TYPES.map((item) => {
+  //         return (
+  //           <Menu.Item key={item.key}>{item.label}</Menu.Item>
+  //         );
+  //       })}
+  //     </Menu>
+  //   );
+  // }
 
   render() {
     let { match } = this.props;
     return (
       <Root>
-        <ContentHeaderComponent willSelectNavKey={constants.MENU_IDS.salesOrder} history={this.props.history} contentRender={this.renderHeaderContent} />
+        <ContentHeaderComponent willSelectNavKey={constants.MENU_IDS.salesOrder} history={this.props.history} />
         <ContentContainer>
           <Switch>
             <Redirect exact from={match.path} to={match.path+'/list/'+ORDER_TYPES[0].key} />

@@ -157,7 +157,7 @@ const getGoodsBeltAddOptions = function(target) {
     {type:'select', name:'sex', label:'性别', selectItems:constants.BASE_CONSTANTS.SEX_DATA, options:{defaultActiveFirstOption:true}, rule:{required:true}},
     
     {type:'select', name:'b_material', label:'材质', selectItems:listToSelectOptions(target.props.sales['materialList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    {type:'select', name:'b_color', label:'颜色', selectItems:listToSelectOptions(target.props.sales['outColorList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
+    {type:'select', name:'b_color', label:'颜色', selectItems:listToSelectOptions(target.props.sales['materialColorList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
  
     {type:'number', name:'maintain_cycle', label:'保养周期', options:{formatter:(value) => `${value}天`, parser:value => value.replace('天', '')}, itemOptions:{hasFeedback:true}, rule:{required:true}},    
     {type:'datePicker', name:'put_date', label:'上架时间', rule:{required:true}},

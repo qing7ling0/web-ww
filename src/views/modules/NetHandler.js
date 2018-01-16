@@ -279,9 +279,9 @@ class NetHandler {
     let pageSize = 0;
     return netUtils.graphqlJson(config.GetServerAddress() + '/api', `
       query Query {
-        goodsStyleList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.GOODS_TYPE}))}")${types.pageListType(types.salesBaseType)}
-        goodsSeasonList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.GOODS_STYLE}))}")${types.pageListType(types.salesBaseType)}
-        goodsTypeList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.GOODS_SEASON}))}")${types.pageListType(types.salesBaseType)}
+        goodsStyleList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.GOODS_STYLE}))}")${types.pageListType(types.salesBaseType)}
+        goodsSeasonList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.GOODS_SEASON}))}")${types.pageListType(types.salesBaseType)}
+        goodsTypeList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.GOODS_TYPE}))}")${types.pageListType(types.salesBaseType)}
         outColorList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.SHOES_OUT_COLOR}))}")${types.pageListType(types.colorType)}
         inColorList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.SHOES_IN_COLOR}))}")${types.pageListType(types.colorType)}
         bottomColorList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.SHOES_BOTTOM_COLOR}))}")${types.pageListType(types.colorType)}

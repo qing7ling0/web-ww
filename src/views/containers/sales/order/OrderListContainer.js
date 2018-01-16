@@ -136,6 +136,13 @@ class OrderListContainer extends Component {
               })
             }
           </SelectInput>
+          <SelectInput placeholder={'请选择订单类型'} allowClear={true} onChange={this.onOrderTypeChange}>
+            {
+              ORDER_TYPES.map((item) => {
+                return <Select.Option key={item.key}>{item.label}</Select.Option>;
+              })
+            }
+          </SelectInput>
         </SearchContainer>
       </div>
     );
@@ -256,6 +263,9 @@ class OrderListContainer extends Component {
     if (this.searchShop) {
       con.shop = this.searchShop;
     }
+    if (this.searchOrderType) {
+      con.type = this.searchOrderType;
+    }
     if (this.orderMenuKey === '1') {
       con.state = constants.BASE_CONSTANTS.E_ORDER_STATUS.REVIEW;
     } else if (this.orderMenuKey === '2') {
@@ -345,6 +355,11 @@ class OrderListContainer extends Component {
 
   onShopChange = (value) => {
     this.searchShop = value;
+    this.onReqList(this.props.pageInfo);
+  }
+
+  onOrderTypeChange = (value) => {
+    this.searchOrderType = value;
     this.onReqList(this.props.pageInfo);
   }
 

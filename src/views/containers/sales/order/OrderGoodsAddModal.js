@@ -46,6 +46,7 @@ import * as optionsType from '../types'
 import { ORDER_TYPES, listToSelectOptions } from './types';
 
 import ShoesAdd from './goods/ShoesAdd'
+import BeltAdd from './goods/BeltAdd'
 
 const initFormDefaultValues = (options, values) => {
   return options.map((item) => {
@@ -124,6 +125,15 @@ class OrderGoodsAddModal extends Component {
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.SHOES:
       return (
         <ShoesAdd 
+          data={this.props.data} 
+          orderType={this.orderType} 
+          setGoodsCallback={this.onSetGoodsAddCallback} 
+          onAddSuccess={this.onAddSuccess}
+          customer={this.props.customer} />
+      )
+      case constants.BASE_CONSTANTS.E_ORDER_TYPE.BELT:
+      return (
+        <BeltAdd 
           data={this.props.data} 
           orderType={this.orderType} 
           setGoodsCallback={this.onSetGoodsAddCallback} 

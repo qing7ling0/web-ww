@@ -256,7 +256,7 @@ class ShoesAdd extends Component {
       itemOptions:{labelLeft:true}, 
       selectItems:common.listToSelectOptions(this.props.sales.urgentList, null, (item)=>item.day+'天'), 
       options:{disabled:customDisable}, 
-      rule:{required:true},
+      rule:{},
       decoratorOptions:{}
     };
     
@@ -532,25 +532,6 @@ class ShoesAdd extends Component {
       }
     }
     forms.setFieldsValue({NID:nid});
-  }
-
-  getShoes = () => {
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        let shoesInfo = values;
-        shoesInfo.s_material = this.getValueFromListById(this.props.sales.materialList, shoesInfo.s_material);
-        shoesInfo.s_xuan_hao = this.getValueFromListById(this.props.sales.xuanHaoList, shoesInfo.s_xuan_hao);
-        shoesInfo.s_gui_ge = this.getValueFromListById(this.props.sales.guiGeList, shoesInfo.s_gui_ge);
-        shoesInfo.s_out_color = this.getValueFromListById(this.props.sales.outColorList, shoesInfo.s_out_color);
-        shoesInfo.s_in_color = this.getValueFromListById(this.props.sales.inColorList, shoesInfo.s_in_color);
-        shoesInfo.s_bottom_color = this.getValueFromListById(this.props.sales.bottomColorList, shoesInfo.s_bottom_color);
-        shoesInfo.s_bottom_side_color = this.getValueFromListById(this.props.sales.bottomSideColorList, shoesInfo.s_bottom_side_color);
-        shoesInfo.s_gen_gao = this.getValueFromListById(this.props.sales.genGaoList, shoesInfo.s_gen_gao);
-        shoesInfo.s_tie_di = this.getValueFromListById(this.props.sales.shoesTieBianList, shoesInfo.s_tie_di);
-      }
-    })
-    // const {form:forms} = this.props;
-    // let shoesInfo = forms.getFieldsValue();
   }
 
   getValueFromListById = (list, id, checkFn) => {

@@ -37,6 +37,7 @@ export const listToSelectOptions = (list, valueFormat, labelFormat) => {
 // 订单基础表
 export const getOrderBaseListColumns = function(target) {
   return [
+    { title: '订单号', dataIndex: 'sub_order_id', key: 'sub_order_id'},
     { title: '编号', dataIndex: 'NID', key: 'NID'},
     { title: '状态', dataIndex: 'state', key: 'state', render:(item) => {
       let type = commonUtils.getOrderStatus(item);
@@ -212,7 +213,8 @@ const getOrderShoesOptions = function(target) {
           options:{
             defaultActiveFirstOption:true, 
             onChange:(value)=>target.onNIDPropertyChange('s_out_color', value)
-          }, rule:{required:true}},    
+          }, rule:{required:true}
+        },    
         {
           type:'select', name:'s_in_color', label:'内里颜色', itemOptions:{labelLeft:true}, 
           selectItems:listToSelectOptions(target.props.sales.inColorList), 
@@ -260,7 +262,7 @@ const getOrderBeltOptions = function(target) {
         {
           type:'select', name:'NID', label:'货号', 
           itemOptions:{labelLeft:true}, 
-          selectItems:listToSelectOptions(target.props.sales.goodsBeltList), 
+          selectItems:listToSelectOptions(target.props.sales.goodsBeltList, (item)=>item.NID, (item)=>item.NID+'-'+item.name), 
           decoratorOptions:{initialValue:target.state.NID},
           options:{
             defaultActiveFirstOption:true,
@@ -271,13 +273,21 @@ const getOrderBeltOptions = function(target) {
             onSelect:target.onNIDSelect,
           }, 
           rule:{required:true}
-        },  
+        }, 
         {type:'select', name:'b_material', label:'材质', itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(target.props.sales.materialList), options:{defaultActiveFirstOption:true}, rule:{required:true}},    
-        {type:'select', name:'b_color', label:'颜色', itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(target.props.sales.materialColorList), options:{defaultActiveFirstOption:true}, rule:{required:true}},    
-        {type:'input', name:'b_A', label:'A', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-        {type:'input', name:'b_B', label:'B', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-        {type:'input', name:'b_C', label:'C', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-        {type:'input', name:'b_D', label:'D', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+        {
+          type:'select', name:'b_color', label:'颜色', itemOptions:{labelLeft:true}, 
+          selectItems:listToSelectOptions(target.props.sales.materialColorList), 
+          options:{
+            defaultActiveFirstOption:true, 
+            onChange:(value)=>target.onNIDPropertyChange('b_color', value)
+          }, rule:{required:true}
+        },    
+        {type:'number', name:'price', label:'价格', itemOptions:{labelLeft:true}, options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, rule:{required:true}},    
+        {type:'number', name:'b_A', label:'A', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+        {type:'number', name:'b_B', label:'B', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+        {type:'number', name:'b_C', label:'C', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+        {type:'number', name:'b_D', label:'D', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
       ]
     },
   ];

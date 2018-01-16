@@ -16,9 +16,11 @@ import {
   Radio,
   Slider, Upload,
   Modal,
-  Row,Col
+  Row,Col,
+  Input
 } from 'antd'
 
+const TextArea = Input.TextArea;
 const FormItem = Form.Item;
 const Option = Select.Option;
 const RadioButton = Radio.Button;
@@ -35,7 +37,9 @@ import {
   ProfileColLabel,
   ProfileColValue,
   ProfileBtnBack,
-  ProfileRowTitle
+  ProfileRowTitle,
+  PhotoDeleteBtn,
+  PhotoUploadBtnCotnainer
 } from '../styled'
 
 import * as graphqlTypes from '../../../../modules/graphqlTypes'
@@ -44,6 +48,7 @@ import * as ActionTypes from '../../../../constants/ActionTypes'
 import Actions from '../../../../actions'
 import * as validate from '../../../../../base/utils/validate'
 import * as constants from '../../../../constants/Constants'
+import * as config from '../../../../constants/Config'
 import * as common from '../../../../modules/common'
 import FormItemComponent from '../../../common/FormItemComponent'
 import BaseFormModal from '../../../common/BaseFormModal'
@@ -61,7 +66,11 @@ class BeltAdd extends Component {
       currentOrderType:'',
       data:{},
       customs:[],
-      selectShoes:{}, // 当前选择的鞋子
+      selectGoods:{}, // 当前选择的鞋子
+      pics:[],
+      goodsReviewSure:false,
+      customReviewSure:false,
+      photoReviewSure:false
     }
   }
 
@@ -69,19 +78,41 @@ class BeltAdd extends Component {
   componentDidMount(){
     this.props.setGoodsCallback(this.onAdd);
     this.onReqOrderGoodsList(this.props.orderType.key);
-    this.props.reqLastCustomerOrderInfo(this.props.customer._id, this.props.orderType.key, 'lastCustomerOrderInfo')
+    this.props.reqLastCustomerOrderInfo(this.props.customer._id, this.props.orderType.key, 'lastCustomerOrderInfo');
+
+    if (this.props.data) {
+      this.setState({
+        pics:this.props.data.pics||[],
+        customs:this.props.data.s_customs||[],
+      })
+    }
   }
 
-  renderBaseForm(item, index, vertical) {
+  renderReviewBtn = (isReview, sure, onChange) => {
+    let cardExtra = null;
+    if (isReview) {
+      cardExtra = (
+        <Switch checkedChildren="已审核" unCheckedChildren="未审核" checked={sure} onChange={onChange} />
+      )
+    }
+    return cardExtra;
+  }
+
+  renderBaseForm(item, index, vertical, isReviewRender) {
     let span = {sm:24, lg:12};
     if (vertical) {
       span={};
     }
+    let cardExtra = this.renderReviewBtn(this.props.isReview && isReviewRender, this.state.goodsReviewSure, (value)=> {
+      this.setState({goodsReviewSure:value})
+    })
     return (
-      <Card key={index} title={item.title} bordered={false}  bodyStyle={{padding:0}}>
+      <Card key={index} title={item.title} bordered={false}  bodyStyle={{padding:0}} extra={cardExtra}>
         <Row>
           {
             item.options.map((item, index) => {
+              if (!item.options) item.options = {};
+              item.options.disabled = this.props.isReview&&this.state.goodsReviewSure;
               return <Col key={index} {...span}><FormItemComponent key={item.name} options={item} form={this.props.form} /></Col>
             })
           }
@@ -96,6 +127,8 @@ class BeltAdd extends Component {
         <Row>
           {
             item.options.map((item, index) => {
+              if (!item.options) item.options = {};
+              item.options.disabled = this.props.isReview&&this.state.goodsReviewSure;
               return (<Col key={index} xs={24} sm={12} lg={8}><FormItemComponent key={item.name} options={item} form={this.props.form} /></Col>);
             })
           }
@@ -108,162 +141,197 @@ class BeltAdd extends Component {
     )
   }
 
-  render() {
-    this.options = this.props.orderType.addOptions(this);
-    if (this.props.data) {
-      let data = {...this.props.data};
-      if (this.props.lastCustomerOrderInfo) {
-        data.s_foot_size = this.props.lastCustomerOrderInfo.s_foot_size;
-      }
-      this.options = common.initFormDefaultValues(this.options, data);
-    } else {
-      if (this.props.lastCustomerOrderInfo) {
-        let data = { s_foot_size: this.props.lastCustomerOrderInfo.s_foot_size};
-        this.options = common.initFormDefaultValues(this.options, data);
-      }
-    }
-    if (this.props.lastCustomerOrderInfo) {
-      let data = {}
-      const {lastCustomerOrderInfo} = this.props;
-      data.s_foot_size = lastCustomerOrderInfo.s_foot_size;
-      data.s_left_length = lastCustomerOrderInfo.s_left_length;
-      data.s_left_zhiWei = lastCustomerOrderInfo.s_left_zhiWei;
-      data.s_left_fuWei = lastCustomerOrderInfo.s_left_fuWei;
-      data.s_right_length = lastCustomerOrderInfo.s_right_length;
-      data.s_right_zhiWei = lastCustomerOrderInfo.s_right_zhiWei;
-      data.s_right_fuWei = lastCustomerOrderInfo.s_right_fuWei;
-
-      this.options = this.options.map((item) => {
-        let initValue = function(options, values) {
-          return options.map((sub) => {
-            let value = values[sub.name] || '';
-            if (value._id) {
-              value = value._id;
-            }
-            if (value !== null && value !== undefined && value !== NaN && value !== '') {
-              if (!sub.decoratorOptions) {
-                sub.decoratorOptions = {};
-              }
-              sub.decoratorOptions.initialValue = value;
-            }
-            return sub;
+  renderPics = () =>{
+    let cardExtra = this.renderReviewBtn(this.props.isReview, this.state.photoReviewSure, (value)=> {
+      this.setState({photoReviewSure:value})
+    })
+    let disabled = this.props.isReview&&this.state.photoReviewSure;
+    return (
+      <Row>
+        <Col><span style={{float:'right'}}>{cardExtra}</span><ContentTitle>拍照信息</ContentTitle></Col>
+        {
+          this.state.pics.map((item,index) => {
+            return (
+              <Row key={index} style={{marginTop:20}}>
+                <Col span={6}>
+                  <Upload
+                    name="order"
+                    accept="image/*"
+                    listType="picture-card"
+                    className="avatar-uploader"
+                    showUploadList={false}
+                    style={{padding:0, position:'relative'}}
+                    action={config.GetServerAddress() + '/upload'}
+                    onChange={({file, fileList})=>this.onUploadPicChange(index, file)}
+                    withCredentials={true}
+                    disabled={disabled}
+                  >
+                    {
+                      item.file ? 
+                      <div style={{width:'100%', height:'100%', position:'relative'}}>
+                        <img src={config.GetServerAddress() + '/file/'+item.file} alt="" style={{width:'100%', height:'100%'}} /> 
+                        {
+                          disabled ? null :
+                          <PhotoDeleteBtn icon='minus' type="danger" shape="circle" size="small" ghost onClick={(e)=>{
+                            e.stopPropagation();
+                            this.onRemovePhoto(index);
+                          }} />
+                        }
+                      </div>
+                      :
+                      <PhotoUploadBtnCotnainer>
+                        <Icon type='plus' />
+                        <div className="ant-upload-text">Upload</div>
+                      </PhotoUploadBtnCotnainer>
+                    }
+                  </Upload>
+                </Col>
+                <Col span={12}>
+                  <TextArea disabled={disabled} placeholder="请输入拍照备注" autosize={{ minRows: 2, maxRows: 10 }} defaultValue={item.desc} onChange={(e)=>{
+                    let pics = this.state.pics;
+                    let pic = pics[index];
+                    if (pic) {
+                      pic.desc = e.target.value;
+                      this.setState({pics:pics})
+                    }
+                  }} />
+                </Col>
+              </Row>
+            );
           })
         }
-        if (item.left) {
-          item.left.options = initValue(item.left.options, data);
+        {
+          disabled || constants.BASE_CONSTANTS.ORDER_UPLOAD_PIC_MAX_COUNT<=this.state.pics.length?
+          null :
+          <Col span={24} style={{paddingTop:20}}>
+            <Button type="dashed" onClick={this.onAddPhoto} style={{ width: 120 }}>
+              <Icon type="plus" /> 增加
+            </Button>
+          </Col>
         }
-        if (item.right) {
-          item.right.options = initValue(item.right.options, data);
-        }
-        return item;
-      })
-      // this.options = common.initFormDefaultValues(this.options, data);
+      </Row>
+    )
+  }
+
+  render() {
+    this.options = this.props.orderType.addOptions(this);
+    let beltSize = {};
+    if (this.props.lastCustomerOrderInfo && !this.props.isReview) {
+      beltSize.b_A = this.props.lastCustomerOrderInfo.b_A;
+      beltSize.b_B = this.props.lastCustomerOrderInfo.b_B;
+      beltSize.b_C = this.props.lastCustomerOrderInfo.b_C;
+      beltSize.b_D = this.props.lastCustomerOrderInfo.b_D;
     }
+    if (this.props.data) {
+      let data = {...this.props.data, ...beltSize};
+      this.options = common.initFormDefaultValues(this.options, data);
+    } else {
+      if (this.props.lastCustomerOrderInfo && !this.props.isReview) {
+        this.options = common.initFormDefaultValues(this.options, beltSize);
+      }
+    }
+
     let span = {sm:24, lg:12};
+
+    let customExtra = this.renderReviewBtn(this.props.isReview, this.state.customReviewSure, (value)=> {
+      this.setState({customReviewSure:value})
+    })
+    let customDisable = this.props.isReview && this.state.customReviewSure;
+
     let urgentOptionItem = {
       type:'select', 
       name:'urgent', 
       label:'加急', 
       itemOptions:{labelLeft:true}, 
       selectItems:common.listToSelectOptions(this.props.sales.urgentList, null, (item)=>item.day+'天'), 
-      options:{defaultActiveFirstOption:true}, 
-      rule:{required:true}
+      options:{disabled:customDisable}, 
+      rule:{},
+      decoratorOptions:{}
     };
-    // return (<div></div>)
+    
+    if (this.props.data && this.props.data.urgent) {
+      urgentOptionItem.decoratorOptions.initialValue = this.props.data.urgent._id;
+    }
+
     return (
       <div>
         <NormalForm>
           {
             this.options.map((item, index) => {
-              return item.left ? this.renderFoot(item,index) : this.renderBaseForm(item, index);
+              return this.renderBaseForm(item, index, false, true);
             })
           }
-          
-          <Row>
-            <Col><ContentTitle>特殊定制</ContentTitle></Col>
-            {
-              this.state.customs.map((item,index) => {
-                return (
-                  <Col key={index} span={24}>
-                    <ProfileCol span={8}>
-                      <ProfileColLabel>收费内容：</ProfileColLabel>
-                      <ProfileColValue>
-                        <Select style={{ width:120 }} value={item.name} 
-                          onChange={(value) => {
-                            this.onCustomChange(index, value)
-                          }}>
-                          {
-                            this.props.sales.customList.map((item) => {
-                              if (this.state.customs.findIndex((value)=>value._id === item._id) === -1) {
-                                return item;
-                              }
-                              return null;
-                            }).map((item) => {
-                              if (!item) return null;
-                              return <Option key={item._id} value={item._id}>{item.name}</Option>
-                            })
-                          }
-                        </Select>
-                        <Button icon="delete" size="small" shape="circle" style={{marginLeft:'0.1rem'}} onClick={()=>{
-                          let cus = this.state.customs;
-                          cus.splice(index, 1);
-                          this.setState({customs:cus});
-                        }} />
-                      </ProfileColValue>
-                    </ProfileCol>
-                    <ProfileCol span={8}>
-                      <ProfileColLabel>价  格：</ProfileColLabel>
-                      <ProfileColValue>
-                        {this.state.customs[index].price} RMB
-                      </ProfileColValue>
-                    </ProfileCol>
-                  </Col>
-                );
-              })
-            }
-            <Col {...span} style={{paddingTop:20}}>
-              <Button type="dashed" onClick={this.addCustom} style={{ width: 120 }}>
-                <Icon type="plus" /> 增加
-              </Button>
-            </Col>
-          </Row>
+          {
+            this.renderPics()
+          }
           <FormItemComponent key={urgentOptionItem.name} options={urgentOptionItem} form={this.props.form} />
         </NormalForm>
       </div>
     );
   }
 
+  onUploadPicChange = (index, file) => {
+    let pics = this.state.pics;
+    let pic = pics[index];
+    if (pic && file.response && file.response.data.files && file.response.data.files.length > 0) {
+      pic.file = file.response.data.files[0];
+      this.setState({pics:pics})
+    }
+  }
+
+  onAddPhoto = () => {
+    let pics = this.state.pics;
+    pics.push({file:'', desc:''});
+    this.setState({pics:pics});
+  }
+  onRemovePhoto = (index) => {
+    let pics = this.state.pics;
+    pics.splice(index, 1);
+    this.setState({pics:pics});
+  }
+
   onReqOrderGoodsList = (type) => {
-    this.props.reqGetGoodsList('goodsShoesList:goodsList', graphqlTypes.goodsType, {goods:type}, {page:-1, pageSize:0});
+    this.props.reqGetGoodsList('goodsBeltList:goodsList', graphqlTypes.goodsType, {goods:type}, {page:-1, pageSize:0});
   }
 
   onAdd = () => {
-    this.props.form.validateFields((err, values) => {
+    if (this.props.isReview) {
+      if (!this.state.customReviewSure || !this.state.goodsReviewSure || !this.state.photoReviewSure) {
+        message.error('还有部分信息未审核，请审核！')
+        return;
+      }
+    }
+
+    this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         if (this.props.onAddSuccess) {
           values.type = this.props.orderType.type;
-          let shoesInfo = values;
-          shoesInfo.s_material = this.getValueFromListById(this.props.sales.materialList, shoesInfo.s_material);
-          shoesInfo.s_xuan_hao = this.getValueFromListById(this.props.sales.xuanHaoList, shoesInfo.s_xuan_hao);
-          shoesInfo.s_gui_ge = this.getValueFromListById(this.props.sales.guiGeList, shoesInfo.s_gui_ge);
-          shoesInfo.s_out_color = this.getValueFromListById(this.props.sales.outColorList, shoesInfo.s_out_color);
-          shoesInfo.s_in_color = this.getValueFromListById(this.props.sales.inColorList, shoesInfo.s_in_color);
-          shoesInfo.s_bottom_color = this.getValueFromListById(this.props.sales.bottomColorList, shoesInfo.s_bottom_color);
-          shoesInfo.s_bottom_side_color = this.getValueFromListById(this.props.sales.bottomSideColorList, shoesInfo.s_bottom_side_color);
-          shoesInfo.s_gen_gao = this.getValueFromListById(this.props.sales.genGaoList, shoesInfo.s_gen_gao);
-          shoesInfo.s_tie_di = this.getValueFromListById(this.props.sales.shoesTieBianList, shoesInfo.s_tie_di);
-          if (shoesInfo.s_material) {
-            shoesInfo.s_material = {...shoesInfo.s_material};
-            shoesInfo.s_material.count = null;
-            if (shoesInfo.s_material.color) {
-              shoesInfo.s_material.color = shoesInfo.s_material.color.name;
+          let beltInfo = values;
+          beltInfo.b_material = this.getValueFromListById(this.props.sales.materialList, beltInfo.b_material);
+          beltInfo.b_color = this.getValueFromListById(this.props.sales.materialColorList, beltInfo.b_color);
+          // beltInfo.b_A = this.getValueFromListById(this.props.sales.guiGeList, beltInfo.s_gui_ge);
+          // beltInfo.b_B = this.getValueFromListById(this.props.sales.outColorList, beltInfo.s_out_color);
+          // beltInfo.b_C = this.getValueFromListById(this.props.sales.inColorList, beltInfo.s_in_color);
+          // beltInfo.b_D = this.getValueFromListById(this.props.sales.bottomColorList, beltInfo.s_bottom_color);
+
+          if (beltInfo.b_material) {
+            beltInfo.b_material = {...beltInfo.b_material};
+            beltInfo.b_material.count = null;
+            if (beltInfo.b_material.color) {
+              beltInfo.b_material.color = beltInfo.b_material.color.name;
             }
           }
-          shoesInfo.s_customs = this.state.customs;
-          if (shoesInfo.urgent) {
-            shoesInfo.urgent = this.getValueFromListById(this.props.sales.urgentList, shoesInfo.urgent);
+          if (beltInfo.urgent) {
+            beltInfo.urgent = this.getValueFromListById(this.props.sales.urgentList, beltInfo.urgent);
           }
-          this.props.onAddSuccess(shoesInfo);
+          if (this.state.pics) {
+            let pics = this.state.pics.map((item)=>{
+              if (item.file) return item;
+            })
+            beltInfo.pics = pics;
+          }
+
+          this.props.onAddSuccess(beltInfo);
           return true;
         }
       }
@@ -286,38 +354,6 @@ class BeltAdd extends Component {
     return null;
   }
 
-  getUnusedCustom = () => {
-    for(let cus of this.props.sales.customList) {
-      let index = this.state.customs.findIndex((value) => {
-        return value._id === cus._id;
-      });
-      if (index === -1) {
-        return this.filterEditorProperty(cus);
-      }
-    }
-
-    return null;
-  }
-
-  addCustom = () => {
-    let unusedCus = this.getUnusedCustom();
-    if (unusedCus !== null) {
-      let customs = this.state.customs;
-      customs.push(unusedCus);
-      this.setState({customs:customs}); 
-    }
-  }
-
-  onCustomChange = (index, value) => {
-    if (index < 0 || index >= this.state.customs.length) return;
-    let customs = this.state.customs;
-    let cus = this.getValueFromListById(this.props.sales.customList, value);
-    if (cus && this.state.customs.findIndex((value)=>value._id === cus._id) === -1) {
-      customs[index] = cus;
-      this.setState({customs:customs}); 
-    }
-  }
-
   onNIDFocus = (value) => {
 
   }
@@ -325,69 +361,36 @@ class BeltAdd extends Component {
 
   }
   onNIDSelect = (value, option) => {
-    for(let i=0; i<this.props.sales.goodsShoesList.length; i++) {
-      let shoes = this.props.sales.goodsShoesList[i];
-      if (shoes.NID === value) {
+    for(let i=0; i<this.props.sales.goodsBeltList.length; i++) {
+      let belt = this.props.sales.goodsBeltList[i];
+      if (belt.NID === value) {
         const {form:forms} = this.props;
-        forms.setFieldsValue({NID:shoes.NID});
-        forms.setFieldsValue({s_material:shoes.s_material._id});
-        forms.setFieldsValue({s_xuan_hao:shoes.s_xuan_hao._id});
-        forms.setFieldsValue({s_gui_ge:shoes.s_gui_ge._id});
-        forms.setFieldsValue({s_out_color:shoes.s_out_color._id});
-        forms.setFieldsValue({s_in_color:shoes.s_in_color._id});
-        forms.setFieldsValue({s_bottom_color:shoes.s_bottom_color._id});
-        forms.setFieldsValue({s_bottom_side_color:shoes.s_bottom_side_color._id});
-        forms.setFieldsValue({price:shoes.price});
-        if (this.props.customer.sex === constants.BASE_CONSTANTS.SEX_FEMALE) {
-          forms.setFieldsValue({s_gen_gao:shoes.s_gen_gao._id});
-        }
+        forms.setFieldsValue({NID:belt.NID});
+        forms.setFieldsValue({b_material:belt.b_material._id});
+        forms.setFieldsValue({b_color:belt.b_color._id});
+        forms.setFieldsValue({price:belt.price});
 
-        this.setState({selectShoes:shoes});
+        this.setState({selectGoods:belt});
       }
     }
   }
 
   onNIDPropertyChange = (key, value) => {
     const {form:forms} = this.props;
-    let shoesInfo = forms.getFieldsValue();
-    shoesInfo[key] = value;
-    shoesInfo.s_material = this.getValueFromListById(this.props.sales.materialList, shoesInfo.s_material);
-    shoesInfo.s_xuan_hao = this.getValueFromListById(this.props.sales.xuanHaoList, shoesInfo.s_xuan_hao);
-    shoesInfo.s_gui_ge = this.getValueFromListById(this.props.sales.guiGeList, shoesInfo.s_gui_ge);
-    shoesInfo.s_out_color = this.getValueFromListById(this.props.sales.outColorList, shoesInfo.s_out_color);
-    shoesInfo.s_in_color = this.getValueFromListById(this.props.sales.inColorList, shoesInfo.s_in_color);
-    shoesInfo.s_bottom_color = this.getValueFromListById(this.props.sales.bottomColorList, shoesInfo.s_bottom_color);
-    shoesInfo.s_bottom_side_color = this.getValueFromListById(this.props.sales.bottomSideColorList, shoesInfo.s_bottom_side_color);
-    shoesInfo.s_gen_gao = this.getValueFromListById(this.props.sales.genGaoList, shoesInfo.s_gen_gao);
-    let nid = commonUtils.createGoodsNID(this.props.orderType.key, shoesInfo, this.props.customer.sex);
+    let beltInfo = forms.getFieldsValue();
+    beltInfo[key] = value;
+    beltInfo.b_material = this.getValueFromListById(this.props.sales.materialList, beltInfo.b_material);
+    beltInfo.b_color = this.getValueFromListById(this.props.sales.materialColorList, beltInfo.b_color);
+    let nid = commonUtils.createGoodsNID(this.props.orderType.key, beltInfo, this.props.customer.sex);
     if (nid !== constants.BASE_CONSTANTS.NULL_NID) {
-      let shoes = this.getValueFromListById(this.props.sales.goodsShoesList, 0, (item)=>item.NID === nid);
-      if (shoes) {
-        forms.setFieldsValue({price:shoes.price});
+      let belt = this.getValueFromListById(this.props.sales.goodsBeltList, 0, (item)=>item.NID === nid);
+      if (belt) {
+        forms.setFieldsValue({price:belt.price});
       } else {
-        forms.setFieldsValue({price:null});
+        forms.setFieldsValue({price:0});
       }
     }
     forms.setFieldsValue({NID:nid});
-  }
-
-  getShoes = () => {
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        let shoesInfo = values;
-        shoesInfo.s_material = this.getValueFromListById(this.props.sales.materialList, shoesInfo.s_material);
-        shoesInfo.s_xuan_hao = this.getValueFromListById(this.props.sales.xuanHaoList, shoesInfo.s_xuan_hao);
-        shoesInfo.s_gui_ge = this.getValueFromListById(this.props.sales.guiGeList, shoesInfo.s_gui_ge);
-        shoesInfo.s_out_color = this.getValueFromListById(this.props.sales.outColorList, shoesInfo.s_out_color);
-        shoesInfo.s_in_color = this.getValueFromListById(this.props.sales.inColorList, shoesInfo.s_in_color);
-        shoesInfo.s_bottom_color = this.getValueFromListById(this.props.sales.bottomColorList, shoesInfo.s_bottom_color);
-        shoesInfo.s_bottom_side_color = this.getValueFromListById(this.props.sales.bottomSideColorList, shoesInfo.s_bottom_side_color);
-        shoesInfo.s_gen_gao = this.getValueFromListById(this.props.sales.genGaoList, shoesInfo.s_gen_gao);
-        shoesInfo.s_tie_di = this.getValueFromListById(this.props.sales.shoesTieBianList, shoesInfo.s_tie_di);
-      }
-    })
-    // const {form:forms} = this.props;
-    // let shoesInfo = forms.getFieldsValue();
   }
 
   getValueFromListById = (list, id, checkFn) => {
