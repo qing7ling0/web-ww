@@ -284,7 +284,7 @@ const orderWatchStrapInputFields = {
 // 护理
 const orderMaintainBaseFields = {
   m_name:{type:GraphQLString, decription:'护理内容'},
-  m_price:{type:GraphQLString, decription:'护理价格'},
+  m_price:{type:GraphQLFloat, decription:'护理价格'},
   m_time:{type:GraphQLFloat, decription:'护理时间'},
   m_color:{type:GraphQLString, decription:'颜色'},
   m_demo:{type:GraphQLString, decription:'样品'},

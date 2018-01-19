@@ -56,7 +56,7 @@ import * as optionsType from '../../types'
 import { ORDER_TYPES, listToSelectOptions } from '../types';
 import { commonUtils } from '../../../../modules/common';
 
-class ShoesAdd extends Component {
+class WatchStrapAdd extends Component {
   // 构造函数，在创建组件的时候调用一次
   constructor(props) {
     super(props);
@@ -66,13 +66,12 @@ class ShoesAdd extends Component {
       currentOrderType:'',
       data:{},
       customs:[],
-      selectShoes:{}, // 当前选择的鞋子
+      selectGoods:{}, // 当前选择的鞋子
       pics:[],
       goodsReviewSure:false,
       customReviewSure:false,
       photoReviewSure:false
     }
-    this.isDesign = true;
   }
 
   //在组件挂载之前调用一次。如果在这个函数里面调用setState，本次的render函数可以看到更新后的state，并且只渲染一次
@@ -216,33 +215,25 @@ class ShoesAdd extends Component {
 
   render() {
     this.options = this.props.orderType.addOptions(this);
+    let watchStrapSize = {};
+    if (this.props.lastCustomerOrderInfo && !this.props.isReview) {
+      watchStrapSize.ws_A = this.props.lastCustomerOrderInfo.ws_A;
+      watchStrapSize.ws_B = this.props.lastCustomerOrderInfo.ws_B;
+      watchStrapSize.ws_C = this.props.lastCustomerOrderInfo.ws_C;
+      watchStrapSize.ws_D = this.props.lastCustomerOrderInfo.ws_D;
+      watchStrapSize.ws_E = this.props.lastCustomerOrderInfo.ws_E;
+      watchStrapSize.ws_F = this.props.lastCustomerOrderInfo.ws_F;
+      watchStrapSize.ws_G = this.props.lastCustomerOrderInfo.ws_G;
+    }
     if (this.props.data) {
-      let data = {...this.props.data};
-      if (this.props.lastCustomerOrderInfo && !this.props.isReview) {
-        data.s_foot_size = this.props.lastCustomerOrderInfo.s_foot_size;
-      }
+      let data = {...this.props.data, ...watchStrapSize};
       this.options = common.initFormDefaultValues(this.options, data);
-      this.options = this.initFootData(this.options, data);
     } else {
       if (this.props.lastCustomerOrderInfo && !this.props.isReview) {
-        let data = { s_foot_size: this.props.lastCustomerOrderInfo.s_foot_size};
-        this.options = common.initFormDefaultValues(this.options, data);
+        this.options = common.initFormDefaultValues(this.options, watchStrapSize);
       }
     }
-    if (this.props.lastCustomerOrderInfo && !this.props.isReview) {
-      let data = {}
-      const {lastCustomerOrderInfo} = this.props;
-      data.s_foot_size = lastCustomerOrderInfo.s_foot_size;
-      data.s_left_length = lastCustomerOrderInfo.s_left_length;
-      data.s_left_zhiWei = lastCustomerOrderInfo.s_left_zhiWei;
-      data.s_left_fuWei = lastCustomerOrderInfo.s_left_fuWei;
-      data.s_right_length = lastCustomerOrderInfo.s_right_length;
-      data.s_right_zhiWei = lastCustomerOrderInfo.s_right_zhiWei;
-      data.s_right_fuWei = lastCustomerOrderInfo.s_right_fuWei;
 
-      this.options = this.initFootData(this.options, data);
-      // this.options = common.initFormDefaultValues(this.options, data);
-    }
     let span = {sm:24, lg:12};
 
     let customExtra = this.renderReviewBtn(this.props.isReview, this.state.customReviewSure, (value)=> {
@@ -270,97 +261,16 @@ class ShoesAdd extends Component {
         <NormalForm>
           {
             this.options.map((item, index) => {
-              return item.left ? this.renderFoot(item,index) : this.renderBaseForm(item, index, false, true);
+              return this.renderBaseForm(item, index, false, true);
             })
           }
           {
             this.renderPics()
           }
-          <Row>
-            <Col><span style={{float:'right'}}>{customExtra}</span><ContentTitle>特殊定制</ContentTitle></Col>
-            {
-              this.state.customs.map((item,index) => {
-                return (
-                  <Col key={index} span={24}>
-                    <ProfileCol span={8}>
-                      <ProfileColLabel>收费内容：</ProfileColLabel>
-                      <ProfileColValue>
-                        <Select disabled={customDisable} style={{ width:120 }} value={item.name} 
-                          onChange={(value) => {
-                            this.onCustomChange(index, value)
-                          }}>
-                          {
-                            this.props.sales.customList.map((item) => {
-                              if (this.state.customs.findIndex((value)=>value._id === item._id) === -1) {
-                                return item;
-                              }
-                              return null;
-                            }).map((item) => {
-                              if (!item) return null;
-                              return <Option key={item._id} value={item._id}>{item.name}</Option>
-                            })
-                          }
-                        </Select>
-                        {
-                          customDisable ? null :
-                          <Button icon="delete" size="small" shape="circle" style={{marginLeft:'0.1rem'}} onClick={()=>{
-                            let cus = this.state.customs;
-                            cus.splice(index, 1);
-                            this.setState({customs:cus});
-                          }} />
-                        }
-                      </ProfileColValue>
-                    </ProfileCol>
-                    <ProfileCol span={8}>
-                      <ProfileColLabel>价  格：</ProfileColLabel>
-                      <ProfileColValue>
-                        {this.state.customs[index].price} RMB
-                      </ProfileColValue>
-                    </ProfileCol>
-                  </Col>
-                );
-              })
-            }
-            {
-              customDisable ? null :
-              <Col {...span} style={{paddingTop:20}}>
-                <Button type="dashed" onClick={this.addCustom} style={{ width: 120 }}>
-                  <Icon type="plus" /> 增加
-                </Button>
-              </Col>
-            }
-          </Row>
           <FormItemComponent key={urgentOptionItem.name} options={urgentOptionItem} form={this.props.form} />
         </NormalForm>
       </div>
     );
-  }
-
-  initFootData = (options, data) => {
-    return options.map((item) => {
-      let initValue = function(options, values) {
-        return options.map((sub) => {
-          let value = values[sub.name] || '';
-          if (value._id) {
-            value = value._id;
-          }
-          if (value !== null && value !== undefined && value !== NaN && value !== '') {
-            if (!sub.decoratorOptions) {
-              sub.decoratorOptions = {};
-            }
-            sub.decoratorOptions.initialValue = value;
-          }
-          return sub;
-        })
-      }
-      if (item.left) {
-        item.left.options = initValue(item.left.options, data);
-      }
-      if (item.right) {
-        item.right.options = initValue(item.right.options, data);
-      }
-      return item;
-    })
   }
 
   onUploadPicChange = (index, file) => {
@@ -384,7 +294,7 @@ class ShoesAdd extends Component {
   }
 
   onReqOrderGoodsList = (type) => {
-    this.props.reqGetGoodsList('goodsShoesList:goodsList', graphqlTypes.goodsType, {goods:type}, {page:-1, pageSize:0});
+    this.props.reqGetGoodsList('goodsWatchStrapList:goodsList', graphqlTypes.goodsType, {goods:type}, {page:-1, pageSize:0});
   }
 
   onAdd = () => {
@@ -399,35 +309,32 @@ class ShoesAdd extends Component {
       if (!err) {
         if (this.props.onAddSuccess) {
           values.type = this.props.orderType.type;
-          let shoesInfo = values;
-          shoesInfo.s_material = this.getValueFromListById(this.props.sales.materialList, shoesInfo.s_material);
-          shoesInfo.s_xuan_hao = this.getValueFromListById(this.props.sales.xuanHaoList, shoesInfo.s_xuan_hao);
-          shoesInfo.s_gui_ge = this.getValueFromListById(this.props.sales.guiGeList, shoesInfo.s_gui_ge);
-          shoesInfo.s_out_color = this.getValueFromListById(this.props.sales.outColorList, shoesInfo.s_out_color);
-          shoesInfo.s_in_color = this.getValueFromListById(this.props.sales.inColorList, shoesInfo.s_in_color);
-          shoesInfo.s_bottom_color = this.getValueFromListById(this.props.sales.bottomColorList, shoesInfo.s_bottom_color);
-          shoesInfo.s_bottom_side_color = this.getValueFromListById(this.props.sales.bottomSideColorList, shoesInfo.s_bottom_side_color);
-          shoesInfo.s_gen_gao = this.getValueFromListById(this.props.sales.genGaoList, shoesInfo.s_gen_gao);
-          shoesInfo.s_tie_di = this.getValueFromListById(this.props.sales.shoesTieBianList, shoesInfo.s_tie_di);
-          if (shoesInfo.s_material) {
-            shoesInfo.s_material = {...shoesInfo.s_material};
-            shoesInfo.s_material.count = null;
-            if (shoesInfo.s_material.color) {
-              shoesInfo.s_material.color = shoesInfo.s_material.color.name;
+          let watchStrapInfo = values;
+          watchStrapInfo.ws_material = this.getValueFromListById(this.props.sales.materialList, watchStrapInfo.ws_material);
+          watchStrapInfo.ws_style = this.getValueFromListById(this.props.sales.watchStrapStyleList, watchStrapInfo.ws_style);
+          // watchStrapInfo.b_A = this.getValueFromListById(this.props.sales.guiGeList, watchStrapInfo.s_gui_ge);
+          // watchStrapInfo.b_B = this.getValueFromListById(this.props.sales.outColorList, watchStrapInfo.s_out_color);
+          // watchStrapInfo.b_C = this.getValueFromListById(this.props.sales.inColorList, watchStrapInfo.s_in_color);
+          // watchStrapInfo.b_D = this.getValueFromListById(this.props.sales.bottomColorList, watchStrapInfo.s_bottom_color);
+
+          if (watchStrapInfo.ws_material) {
+            watchStrapInfo.ws_material = {...watchStrapInfo.ws_material};
+            watchStrapInfo.ws_material.count = null;
+            if (watchStrapInfo.ws_material.color) {
+              watchStrapInfo.ws_material.color = watchStrapInfo.ws_material.color.name;
             }
           }
-          shoesInfo.s_customs = this.state.customs;
-          if (shoesInfo.urgent) {
-            shoesInfo.urgent = this.getValueFromListById(this.props.sales.urgentList, shoesInfo.urgent);
+          if (watchStrapInfo.urgent) {
+            watchStrapInfo.urgent = this.getValueFromListById(this.props.sales.urgentList, watchStrapInfo.urgent);
           }
           if (this.state.pics) {
             let pics = this.state.pics.map((item)=>{
               if (item.file) return item;
             })
-            shoesInfo.pics = pics;
+            watchStrapInfo.pics = pics;
           }
 
-          this.props.onAddSuccess(shoesInfo);
+          this.props.onAddSuccess(watchStrapInfo);
           return true;
         }
       }
@@ -450,84 +357,40 @@ class ShoesAdd extends Component {
     return null;
   }
 
-  getUnusedCustom = () => {
-    for(let cus of this.props.sales.customList) {
-      let index = this.state.customs.findIndex((value) => {
-        return value._id === cus._id;
-      });
-      if (index === -1) {
-        return this.filterEditorProperty(cus);
-      }
-    }
-
-    return null;
-  }
-
-  addCustom = () => {
-    let unusedCus = this.getUnusedCustom();
-    if (unusedCus !== null) {
-      let customs = this.state.customs;
-      customs.push(unusedCus);
-      this.setState({customs:customs}); 
-    }
-  }
-
-  onCustomChange = (index, value) => {
-    if (index < 0 || index >= this.state.customs.length) return;
-    let customs = this.state.customs;
-    let cus = this.getValueFromListById(this.props.sales.customList, value);
-    if (cus && this.state.customs.findIndex((value)=>value._id === cus._id) === -1) {
-      customs[index] = cus;
-      this.setState({customs:customs}); 
-    }
-  }
-
   onNIDFocus = (value) => {
     // TODO 检查NID合法性
+
   }
   onNIDChange = (value) => {
     // TODO 检查NID合法性
+
   }
   onNIDSelect = (value, option) => {
-    for(let i=0; i<this.props.sales.goodsShoesList.length; i++) {
-      let shoes = this.props.sales.goodsShoesList[i];
-      if (shoes.NID === value) {
+    for(let i=0; i<this.props.sales.goodsWatchStrapList.length; i++) {
+      let watchStrap = this.props.sales.goodsWatchStrapList[i];
+      if (watchStrap.NID === value) {
         const {form:forms} = this.props;
-        forms.setFieldsValue({NID:shoes.NID});
-        forms.setFieldsValue({s_material:shoes.s_material.name});
-        forms.setFieldsValue({s_xuan_hao:shoes.s_xuan_hao.name});
-        forms.setFieldsValue({s_gui_ge:shoes.s_gui_ge.name});
-        forms.setFieldsValue({s_out_color:shoes.s_out_color.name});
-        forms.setFieldsValue({s_in_color:shoes.s_in_color.name});
-        forms.setFieldsValue({s_bottom_color:shoes.s_bottom_color.name});
-        forms.setFieldsValue({s_bottom_side_color:shoes.s_bottom_side_color.name});
-        forms.setFieldsValue({price:shoes.price});
-        if (this.props.customer.sex === constants.BASE_CONSTANTS.SEX_FEMALE) {
-          forms.setFieldsValue({s_gen_gao:shoes.s_gen_gao.name});
-        }
+        forms.setFieldsValue({NID:watchStrap.NID});
+        forms.setFieldsValue({ws_material:watchStrap.ws_material._id});
+        forms.setFieldsValue({ws_style:watchStrap.ws_style._id});
+        forms.setFieldsValue({price:watchStrap.price});
 
-        this.setState({selectShoes:shoes});
+        this.setState({selectGoods:watchStrap});
       }
     }
   }
 
   onNIDPropertyChange = (key, value) => {
     const {form:forms} = this.props;
-    let shoesInfo = forms.getFieldsValue();
-    shoesInfo[key] = value;
-    shoesInfo.s_material = this.getValueFromListById(this.props.sales.materialList, shoesInfo.s_material);
-    shoesInfo.s_xuan_hao = this.getValueFromListById(this.props.sales.xuanHaoList, shoesInfo.s_xuan_hao);
-    shoesInfo.s_gui_ge = this.getValueFromListById(this.props.sales.guiGeList, shoesInfo.s_gui_ge);
-    shoesInfo.s_out_color = this.getValueFromListById(this.props.sales.outColorList, shoesInfo.s_out_color);
-    shoesInfo.s_in_color = this.getValueFromListById(this.props.sales.inColorList, shoesInfo.s_in_color);
-    shoesInfo.s_bottom_color = this.getValueFromListById(this.props.sales.bottomColorList, shoesInfo.s_bottom_color);
-    shoesInfo.s_bottom_side_color = this.getValueFromListById(this.props.sales.bottomSideColorList, shoesInfo.s_bottom_side_color);
-    shoesInfo.s_gen_gao = this.getValueFromListById(this.props.sales.genGaoList, shoesInfo.s_gen_gao);
-    let nid = commonUtils.createGoodsNID(this.props.orderType.key, shoesInfo, this.props.customer.sex);
+    let watchStrapInfo = forms.getFieldsValue();
+    watchStrapInfo[key] = value;
+    watchStrapInfo.ws_material = this.getValueFromListById(this.props.sales.materialList, watchStrapInfo.ws_material);
+    watchStrapInfo.ws_style = this.getValueFromListById(this.props.sales.watchStrapStyleList, watchStrapInfo.ws_style);
+    let nid = commonUtils.createGoodsNID(this.props.orderType.key, watchStrapInfo, this.props.customer.sex);
     if (nid !== constants.BASE_CONSTANTS.NULL_NID) {
-      let shoes = this.getValueFromListById(this.props.sales.goodsShoesList, 0, (item)=>item.NID === nid);
-      if (shoes) {
-        forms.setFieldsValue({price:shoes.price});
+      let watchStrap = this.getValueFromListById(this.props.sales.goodsWatchStrapList, 0, (item)=>item.NID === nid);
+      if (watchStrap) {
+        forms.setFieldsValue({price:watchStrap.price});
       } else {
         forms.setFieldsValue({price:null});
       }
@@ -574,4 +437,4 @@ export default connect(
       reqLastCustomerOrderInfo: Actions.lastCustomerOrderInfo
     }, dispatch);
   }
-)(Form.create()(ShoesAdd));
+)(Form.create()(WatchStrapAdd));

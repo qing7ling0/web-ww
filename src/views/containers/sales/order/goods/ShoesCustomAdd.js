@@ -1,3 +1,7 @@
+/**
+ * 来样设计
+ */
+
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import {bindActionCreators} from 'redux'
@@ -56,7 +60,7 @@ import * as optionsType from '../../types'
 import { ORDER_TYPES, listToSelectOptions } from '../types';
 import { commonUtils } from '../../../../modules/common';
 
-class ShoesAdd extends Component {
+class ShoesCustomAdd extends Component {
   // 构造函数，在创建组件的时候调用一次
   constructor(props) {
     super(props);
@@ -72,7 +76,6 @@ class ShoesAdd extends Component {
       customReviewSure:false,
       photoReviewSure:false
     }
-    this.isDesign = true;
   }
 
   //在组件挂载之前调用一次。如果在这个函数里面调用setState，本次的render函数可以看到更新后的state，并且只渲染一次
@@ -494,16 +497,16 @@ class ShoesAdd extends Component {
       if (shoes.NID === value) {
         const {form:forms} = this.props;
         forms.setFieldsValue({NID:shoes.NID});
-        forms.setFieldsValue({s_material:shoes.s_material.name});
-        forms.setFieldsValue({s_xuan_hao:shoes.s_xuan_hao.name});
-        forms.setFieldsValue({s_gui_ge:shoes.s_gui_ge.name});
-        forms.setFieldsValue({s_out_color:shoes.s_out_color.name});
-        forms.setFieldsValue({s_in_color:shoes.s_in_color.name});
-        forms.setFieldsValue({s_bottom_color:shoes.s_bottom_color.name});
-        forms.setFieldsValue({s_bottom_side_color:shoes.s_bottom_side_color.name});
+        forms.setFieldsValue({s_material:shoes.s_material._id});
+        forms.setFieldsValue({s_xuan_hao:shoes.s_xuan_hao._id});
+        forms.setFieldsValue({s_gui_ge:shoes.s_gui_ge._id});
+        forms.setFieldsValue({s_out_color:shoes.s_out_color._id});
+        forms.setFieldsValue({s_in_color:shoes.s_in_color._id});
+        forms.setFieldsValue({s_bottom_color:shoes.s_bottom_color._id});
+        forms.setFieldsValue({s_bottom_side_color:shoes.s_bottom_side_color._id});
         forms.setFieldsValue({price:shoes.price});
         if (this.props.customer.sex === constants.BASE_CONSTANTS.SEX_FEMALE) {
-          forms.setFieldsValue({s_gen_gao:shoes.s_gen_gao.name});
+          forms.setFieldsValue({s_gen_gao:shoes.s_gen_gao._id});
         }
 
         this.setState({selectShoes:shoes});

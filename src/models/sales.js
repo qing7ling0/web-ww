@@ -150,7 +150,7 @@ const watchStrapFields = {
 const maintainFields = {
   m_maintain: {type:Schema.Types.ObjectId, ref:'common', decription:'商品'},
   m_name:{type:String, decription:'护理内容'},
-  m_price:{type:String, decription:'护理价格'},
+  m_price:{type:Number, decription:'护理价格'},
   m_time:{type:Number, decription:'护理时间'},
   m_color:{type:String, decription:'颜色'},
   m_demo:{type:String, decription:'样品'},

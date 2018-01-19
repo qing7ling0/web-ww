@@ -355,9 +355,11 @@ class BeltAdd extends Component {
   }
 
   onNIDFocus = (value) => {
+    // TODO 检查NID合法性
 
   }
   onNIDChange = (value) => {
+    // TODO 检查NID合法性
 
   }
   onNIDSelect = (value, option) => {
@@ -387,7 +389,7 @@ class BeltAdd extends Component {
       if (belt) {
         forms.setFieldsValue({price:belt.price});
       } else {
-        forms.setFieldsValue({price:0});
+        forms.setFieldsValue({price:null});
       }
     }
     forms.setFieldsValue({NID:nid});

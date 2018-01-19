@@ -7,7 +7,7 @@ import utils from '../../base/utils/Utils'
 
 
 const object2String = (object) => {
-  if (!object) return '""';
+  if (object === undefined || object === null) return '""';
   
   let ret = '';
   if (utils.IsObject(object)) {

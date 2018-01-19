@@ -12,6 +12,7 @@ const AutoCompleteOption = AutoComplete.Option;
 import * as constants from '../../constants/Constants'
 
 import {FormItemLabel,FormItemNormal,FormItemLabelLeft} from './common.styled'
+import FormTextComponent from './FormTextComponent'
 
 const defaultFormItemLayout = {
   labelCol: { span: 6 },
@@ -64,6 +65,11 @@ export default class FormItemComponent extends Component {
         childOptions.placeholder = childOptions.placeholder || `输入${options.label}`;
         child = (
           <InputNumber {...childOptions}/>
+        );
+      break;
+      case 'text':
+        child = (
+          <FormTextComponent {...childOptions}/>
         );
       break;
       case 'select':
