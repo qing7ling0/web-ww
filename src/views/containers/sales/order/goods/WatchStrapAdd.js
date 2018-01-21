@@ -78,7 +78,9 @@ class WatchStrapAdd extends Component {
   componentDidMount(){
     this.props.setGoodsCallback(this.onAdd);
     this.onReqOrderGoodsList(this.props.orderType.key);
-    this.props.reqLastCustomerOrderInfo(this.props.customer._id, this.props.orderType.key, 'lastCustomerOrderInfo');
+    if (!this.props.isReview) {
+      this.props.reqLastCustomerOrderInfo(this.props.customerId, this.props.orderType.key, 'lastWatchStrapCustomerOrderInfo');
+    }
 
     if (this.props.data) {
       this.setState({
@@ -216,6 +218,13 @@ class WatchStrapAdd extends Component {
   render() {
     this.options = this.props.orderType.addOptions(this);
     let watchStrapSize = {};
+    watchStrapSize.ws_A = '';
+    watchStrapSize.ws_B = '';
+    watchStrapSize.ws_C = '';
+    watchStrapSize.ws_D = '';
+    watchStrapSize.ws_E = '';
+    watchStrapSize.ws_F = '';
+    watchStrapSize.ws_G = '';
     if (this.props.lastCustomerOrderInfo && !this.props.isReview) {
       watchStrapSize.ws_A = this.props.lastCustomerOrderInfo.ws_A;
       watchStrapSize.ws_B = this.props.lastCustomerOrderInfo.ws_B;
@@ -226,10 +235,10 @@ class WatchStrapAdd extends Component {
       watchStrapSize.ws_G = this.props.lastCustomerOrderInfo.ws_G;
     }
     if (this.props.data) {
-      let data = {...this.props.data, ...watchStrapSize};
+      let data = {...this.props.data};
       this.options = common.initFormDefaultValues(this.options, data);
     } else {
-      if (this.props.lastCustomerOrderInfo && !this.props.isReview) {
+      if (!this.props.isReview) {
         this.options = common.initFormDefaultValues(this.options, watchStrapSize);
       }
     }
@@ -267,7 +276,10 @@ class WatchStrapAdd extends Component {
           {
             this.renderPics()
           }
-          <FormItemComponent key={urgentOptionItem.name} options={urgentOptionItem} form={this.props.form} />
+          <Row>
+            <Col><span style={{float:'right'}}>{customExtra}</span><ContentTitle>加急</ContentTitle></Col>
+            <FormItemComponent key={urgentOptionItem.name} options={urgentOptionItem} form={this.props.form} />
+          </Row>
         </NormalForm>
       </div>
     );
@@ -299,7 +311,7 @@ class WatchStrapAdd extends Component {
 
   onAdd = () => {
     if (this.props.isReview) {
-      if (!this.state.customReviewSure || !this.state.goodsReviewSure || !this.state.photoReviewSure) {
+      if (!this.state.goodsReviewSure || !this.state.customReviewSure || !this.state.photoReviewSure) {
         message.error('还有部分信息未审核，请审核！')
         return;
       }
@@ -394,6 +406,8 @@ class WatchStrapAdd extends Component {
       } else {
         forms.setFieldsValue({price:null});
       }
+    } else {
+      forms.setFieldsValue({price:null});
     }
     forms.setFieldsValue({NID:nid});
   }
@@ -426,7 +440,7 @@ export default connect(
     shopList:state.shop.shopList,
     guideList:state.shop.shopGuideList,
     customerList:state.customer.customerList,
-    lastCustomerOrderInfo:state.customer.lastCustomerOrderInfo
+    lastCustomerOrderInfo:state.customer.lastWatchStrapCustomerOrderInfo
   }),
   (dispatch) => {
     return bindActionCreators({

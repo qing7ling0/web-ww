@@ -65,14 +65,16 @@ export const checkPasswordInput = function(password) {
   return null;
 }
 
-export const initFormDefaultValues = (options, values) => {
+export const initFormDefaultValues = (options, values, getValue) => {
   return options.map((item) => {
     item.options = item.options.map((sub) => {
       let value = values[sub.name] || '';
-      if (value._id) {
+      if (getValue) {
+        value = getValue(value);
+      } else if (value._id) {
         value = value._id;
       }
-      if (value !== null && value !== undefined && value !== NaN && value !== '') {
+      if (value !== null && value !== undefined && value !== NaN) {
         if (!sub.decoratorOptions) {
           sub.decoratorOptions = {};
         }

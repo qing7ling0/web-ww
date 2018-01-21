@@ -16,7 +16,7 @@ module.exports.MENU_IDS = {
   salesMaterial:        401, // 原材料
   salesItems:           402, // 商品
   salesOrder:           403, // 订单
-  salesMaintainPrices:  404, // 保养价目
+  salesSampleGoods:     404, // 库存
   salesItemsBase:       405, // 商品基础数据
   system:               9, // 系统管理
   systemSetting:        901, // 系统设置
@@ -205,7 +205,7 @@ module.exports.ORDER_STATUS_LIST = [
   {value:E_ORDER_STATUS.REVIEW, label:'审核中'},
   {value:E_ORDER_STATUS.TRY, label:'试脚鞋投产'},
   {value:E_ORDER_STATUS.TRY_TRANSPORT, label:'试脚鞋制作寄出'},
-  {value:E_ORDER_STATUS.MAKING, label:'正品鞋投产'},
+  {value:E_ORDER_STATUS.MAKING, label:'制作中'},
   {value:E_ORDER_STATUS.MAKING_1, label:'帮面针车'},
   {value:E_ORDER_STATUS.MAKING_2, label:'复底成型'},
   {value:E_ORDER_STATUS.MAKING_3, label:'染色水洗'},

@@ -4,6 +4,7 @@ import * as ActionTypes from '../constants/ActionTypes';
 import { States } from '../../base/modules/ReduxState'
 import results from './results'
 import baseUtils from '../../base/utils/Utils'
+import * as constants from '../constants/Constants'
 
 const LOADING_ACTIONS = [
   ActionTypes.GOODS_ADD,
@@ -11,6 +12,12 @@ const LOADING_ACTIONS = [
   ActionTypes.GOODS_UPDATE,
   ActionTypes.GOODS_LIST_GET,
   ActionTypes.GOODS_PROFILE_GET,
+
+  ActionTypes.SAMPLE_GOODS_ADD,
+  ActionTypes.SAMPLE_GOODS_DELETE,
+  ActionTypes.SAMPLE_GOODS_UPDATE,
+  ActionTypes.SAMPLE_GOODS_LIST_GET,
+  ActionTypes.SAMPLE_GOODS_PROFILE_GET,
 
   ActionTypes.SALES_ADD,
   ActionTypes.SALES_DELETE,
@@ -27,10 +34,10 @@ const LOADING_ACTIONS = [
   ActionTypes.ORDER_UPDATE,
   ActionTypes.ORDER_REVIEW,
   ActionTypes.ORDER_LIST_GET,
-  ActionTypes.ORDER_PROFILE_GET,
   ActionTypes.SUB_ORDER_LIST_GET,
   ActionTypes.ORDER_SUB_PROFILE,
   ActionTypes.ORDER_SUB_UPDATE,
+  ActionTypes.ORDER_SUB_CANCEL,
   ActionTypes.ORDER_SUB_STATE_CHANGE,
 
   ActionTypes.SUB_ORDER_TRY_FEEDBACK_LIST,
@@ -39,10 +46,11 @@ const LOADING_ACTIONS = [
 ];
 
 const initialState = {
-  loading:false,
+  loading:false,  
   result: {code:0, message:'', type:0},
   goodsShoesList: [],
-  goodsShoesListPage: {page:0,pageSize:0,total:0},
+  goodsShoesListPage: {page:0,pageSize:constants.DEFAULT_PAGE_SIZE,total:0},
+  subOrderListPage: {page:0,pageSize:constants.DEFAULT_PAGE_SIZE,total:0},
   goodsDeleteIDS: [],
   goodsShoesProfile:{},
   goodsTypeList: [],
@@ -106,6 +114,7 @@ function doActions(state, action) {
     //   }
     //   break;
     case ActionTypes.GOODS_LIST_GET:
+    case ActionTypes.SAMPLE_GOODS_LIST_GET:
       if (action.state === States.Fulfilled && result.code === 0) {
         let list = {};
         for(let key in data) {
@@ -117,6 +126,7 @@ function doActions(state, action) {
         return createState(state, resState, list);
       }
       break;
+    case ActionTypes.SAMPLE_GOODS_DELETE:
     case ActionTypes.GOODS_DELETE:
       if (action.state === States.Fulfilled && result.code === 0) {
         let deleteIDS = 0;
@@ -129,7 +139,8 @@ function doActions(state, action) {
       }
       break;
       
-    case ActionTypes.GOODS_SHOES_PROFILE_GET:
+    case ActionTypes.SAMPLE_GOODS_PROFILE_GET:
+    case ActionTypes.GOODS_PROFILE_GET:
       if (action.state === States.Fulfilled && result.code === 0) {
         return createState(state, resState, {...data});
       }

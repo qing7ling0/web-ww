@@ -79,7 +79,9 @@ class ShoesAdd extends Component {
   componentDidMount(){
     this.props.setGoodsCallback(this.onAdd);
     this.onReqOrderGoodsList(this.props.orderType.key);
-    this.props.reqLastCustomerOrderInfo(this.props.customer._id, this.props.orderType.key, 'lastCustomerOrderInfo');
+    if (!this.props.isReview) {
+      this.props.reqLastCustomerOrderInfo(this.props.customerId, constants.BASE_CONSTANTS.E_ORDER_TYPE.SHOES, 'lastShoesCustomerOrderInfo');
+    }
 
     if (this.props.data) {
       this.setState({
@@ -87,6 +89,11 @@ class ShoesAdd extends Component {
         customs:this.props.data.s_customs||[],
       })
     }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    
+    this.props.setGoodsCallback(this.onAdd);
   }
 
   renderReviewBtn = (isReview, sure, onChange) => {
@@ -105,7 +112,17 @@ class ShoesAdd extends Component {
       span={};
     }
     let cardExtra = this.renderReviewBtn(this.props.isReview && isReviewRender, this.state.goodsReviewSure, (value)=> {
-      this.setState({goodsReviewSure:value})
+      if (value) {
+        if (this.checkGoodsOK()) {
+          this.props.form.validateFieldsAndScroll((err, values) => {
+            if (!err) {
+              this.setState({goodsReviewSure:true});
+            }
+          })
+        }
+      } else {
+        this.setState({goodsReviewSure:false})
+      }
     })
     return (
       <Card key={index} title={item.title} bordered={false}  bodyStyle={{padding:0}} extra={cardExtra}>
@@ -218,30 +235,38 @@ class ShoesAdd extends Component {
     this.options = this.props.orderType.addOptions(this);
     if (this.props.data) {
       let data = {...this.props.data};
-      if (this.props.lastCustomerOrderInfo && !this.props.isReview) {
-        data.s_foot_size = this.props.lastCustomerOrderInfo.s_foot_size;
-      }
-      this.options = common.initFormDefaultValues(this.options, data);
+      this.options = common.initFormDefaultValues(this.options, data, (value)=>{
+        if (value&&value.hasOwnProperty('name')) {
+          return value.name;
+        } else return value;
+      });
       this.options = this.initFootData(this.options, data);
     } else {
+      let data = {s_foot_size:''};
       if (this.props.lastCustomerOrderInfo && !this.props.isReview) {
-        let data = { s_foot_size: this.props.lastCustomerOrderInfo.s_foot_size};
-        this.options = common.initFormDefaultValues(this.options, data);
+        data = { s_foot_size: this.props.lastCustomerOrderInfo.s_foot_size};
       }
-    }
-    if (this.props.lastCustomerOrderInfo && !this.props.isReview) {
-      let data = {}
-      const {lastCustomerOrderInfo} = this.props;
-      data.s_foot_size = lastCustomerOrderInfo.s_foot_size;
-      data.s_left_length = lastCustomerOrderInfo.s_left_length;
-      data.s_left_zhiWei = lastCustomerOrderInfo.s_left_zhiWei;
-      data.s_left_fuWei = lastCustomerOrderInfo.s_left_fuWei;
-      data.s_right_length = lastCustomerOrderInfo.s_right_length;
-      data.s_right_zhiWei = lastCustomerOrderInfo.s_right_zhiWei;
-      data.s_right_fuWei = lastCustomerOrderInfo.s_right_fuWei;
-
-      this.options = this.initFootData(this.options, data);
-      // this.options = common.initFormDefaultValues(this.options, data);
+      this.options = common.initFormDefaultValues(this.options, data);
+      let footData = {}
+      footData.s_left_length = '';
+      footData.s_left_zhiWei = '';
+      footData.s_left_fuWei = '';
+      footData.s_right_length = '';
+      footData.s_right_zhiWei = '';
+      footData.s_right_fuWei = '';
+  
+      if (this.props.lastCustomerOrderInfo && !this.props.isReview) {
+        const {lastCustomerOrderInfo} = this.props;
+        footData.s_left_length = lastCustomerOrderInfo.s_left_length;
+        footData.s_left_zhiWei = lastCustomerOrderInfo.s_left_zhiWei;
+        footData.s_left_fuWei = lastCustomerOrderInfo.s_left_fuWei;
+        footData.s_right_length = lastCustomerOrderInfo.s_right_length;
+        footData.s_right_zhiWei = lastCustomerOrderInfo.s_right_zhiWei;
+        footData.s_right_fuWei = lastCustomerOrderInfo.s_right_fuWei;
+      }
+      if (!this.props.isReview) {
+        this.options = this.initFootData(this.options, footData);
+      }
     }
     let span = {sm:24, lg:12};
 
@@ -363,6 +388,15 @@ class ShoesAdd extends Component {
     })
   }
 
+  checkGoodsOK = () => {
+    let NID = this.props.form.getFieldValue('NID');
+    if (NID === constants.BASE_CONSTANTS.NULL_NID) {
+      message.error('请确定编号是否已有');
+      return false;
+    }
+    return true;
+  }
+
   onUploadPicChange = (index, file) => {
     let pics = this.state.pics;
     let pic = pics[index];
@@ -384,7 +418,7 @@ class ShoesAdd extends Component {
   }
 
   onReqOrderGoodsList = (type) => {
-    this.props.reqGetGoodsList('goodsShoesList:goodsList', graphqlTypes.goodsType, {goods:type}, {page:-1, pageSize:0});
+    this.props.reqGetGoodsList('goodsShoesList:goodsList', graphqlTypes.goodsType, {goods:constants.BASE_CONSTANTS.E_ORDER_TYPE.SHOES}, {page:-1, pageSize:0});
   }
 
   onAdd = () => {
@@ -400,15 +434,15 @@ class ShoesAdd extends Component {
         if (this.props.onAddSuccess) {
           values.type = this.props.orderType.type;
           let shoesInfo = values;
-          shoesInfo.s_material = this.getValueFromListById(this.props.sales.materialList, shoesInfo.s_material);
-          shoesInfo.s_xuan_hao = this.getValueFromListById(this.props.sales.xuanHaoList, shoesInfo.s_xuan_hao);
-          shoesInfo.s_gui_ge = this.getValueFromListById(this.props.sales.guiGeList, shoesInfo.s_gui_ge);
-          shoesInfo.s_out_color = this.getValueFromListById(this.props.sales.outColorList, shoesInfo.s_out_color);
-          shoesInfo.s_in_color = this.getValueFromListById(this.props.sales.inColorList, shoesInfo.s_in_color);
-          shoesInfo.s_bottom_color = this.getValueFromListById(this.props.sales.bottomColorList, shoesInfo.s_bottom_color);
-          shoesInfo.s_bottom_side_color = this.getValueFromListById(this.props.sales.bottomSideColorList, shoesInfo.s_bottom_side_color);
-          shoesInfo.s_gen_gao = this.getValueFromListById(this.props.sales.genGaoList, shoesInfo.s_gen_gao);
-          shoesInfo.s_tie_di = this.getValueFromListById(this.props.sales.shoesTieBianList, shoesInfo.s_tie_di);
+          shoesInfo.s_material = this.getValueFromListByName(this.props.sales.materialList, shoesInfo.s_material);
+          shoesInfo.s_xuan_hao = this.getValueFromListByName(this.props.sales.xuanHaoList, shoesInfo.s_xuan_hao);
+          shoesInfo.s_gui_ge = this.getValueFromListByName(this.props.sales.guiGeList, shoesInfo.s_gui_ge);
+          shoesInfo.s_out_color = this.getValueFromListByName(this.props.sales.outColorList, shoesInfo.s_out_color);
+          shoesInfo.s_in_color = this.getValueFromListByName(this.props.sales.inColorList, shoesInfo.s_in_color);
+          shoesInfo.s_bottom_color = this.getValueFromListByName(this.props.sales.bottomColorList, shoesInfo.s_bottom_color);
+          shoesInfo.s_bottom_side_color = this.getValueFromListByName(this.props.sales.bottomSideColorList, shoesInfo.s_bottom_side_color);
+          shoesInfo.s_gen_gao = this.getValueFromListByName(this.props.sales.genGaoList, shoesInfo.s_gen_gao);
+          shoesInfo.s_tie_di = this.getValueFromListByName(this.props.sales.shoesTieBianList, shoesInfo.s_tie_di);
           if (shoesInfo.s_material) {
             shoesInfo.s_material = {...shoesInfo.s_material};
             shoesInfo.s_material.count = null;
@@ -421,8 +455,8 @@ class ShoesAdd extends Component {
             shoesInfo.urgent = this.getValueFromListById(this.props.sales.urgentList, shoesInfo.urgent);
           }
           if (this.state.pics) {
-            let pics = this.state.pics.map((item)=>{
-              if (item.file) return item;
+            let pics = this.state.pics.filter((item)=>{
+              return item.file;
             })
             shoesInfo.pics = pics;
           }
@@ -515,14 +549,14 @@ class ShoesAdd extends Component {
     const {form:forms} = this.props;
     let shoesInfo = forms.getFieldsValue();
     shoesInfo[key] = value;
-    shoesInfo.s_material = this.getValueFromListById(this.props.sales.materialList, shoesInfo.s_material);
-    shoesInfo.s_xuan_hao = this.getValueFromListById(this.props.sales.xuanHaoList, shoesInfo.s_xuan_hao);
-    shoesInfo.s_gui_ge = this.getValueFromListById(this.props.sales.guiGeList, shoesInfo.s_gui_ge);
-    shoesInfo.s_out_color = this.getValueFromListById(this.props.sales.outColorList, shoesInfo.s_out_color);
-    shoesInfo.s_in_color = this.getValueFromListById(this.props.sales.inColorList, shoesInfo.s_in_color);
-    shoesInfo.s_bottom_color = this.getValueFromListById(this.props.sales.bottomColorList, shoesInfo.s_bottom_color);
-    shoesInfo.s_bottom_side_color = this.getValueFromListById(this.props.sales.bottomSideColorList, shoesInfo.s_bottom_side_color);
-    shoesInfo.s_gen_gao = this.getValueFromListById(this.props.sales.genGaoList, shoesInfo.s_gen_gao);
+    shoesInfo.s_material = this.getValueFromListByName(this.props.sales.materialList, shoesInfo.s_material);
+    shoesInfo.s_xuan_hao = this.getValueFromListByName(this.props.sales.xuanHaoList, shoesInfo.s_xuan_hao);
+    shoesInfo.s_gui_ge = this.getValueFromListByName(this.props.sales.guiGeList, shoesInfo.s_gui_ge);
+    shoesInfo.s_out_color = this.getValueFromListByName(this.props.sales.outColorList, shoesInfo.s_out_color);
+    shoesInfo.s_in_color = this.getValueFromListByName(this.props.sales.inColorList, shoesInfo.s_in_color);
+    shoesInfo.s_bottom_color = this.getValueFromListByName(this.props.sales.bottomColorList, shoesInfo.s_bottom_color);
+    shoesInfo.s_bottom_side_color = this.getValueFromListByName(this.props.sales.bottomSideColorList, shoesInfo.s_bottom_side_color);
+    shoesInfo.s_gen_gao = this.getValueFromListByName(this.props.sales.genGaoList, shoesInfo.s_gen_gao);
     let nid = commonUtils.createGoodsNID(this.props.orderType.key, shoesInfo, this.props.customer.sex);
     if (nid !== constants.BASE_CONSTANTS.NULL_NID) {
       let shoes = this.getValueFromListById(this.props.sales.goodsShoesList, 0, (item)=>item.NID === nid);
@@ -531,6 +565,8 @@ class ShoesAdd extends Component {
       } else {
         forms.setFieldsValue({price:null});
       }
+    } else {
+      forms.setFieldsValue({price:null});
     }
     forms.setFieldsValue({NID:nid});
   }
@@ -553,6 +589,31 @@ class ShoesAdd extends Component {
     }
     return this.filterEditorProperty(ret);
   }
+  getValueFromListByName = (list, name, checkFn) => {
+    if (!list) return null;
+    if (!name) return {_id:'', NID:'', name:''};
+    name = name.trim();
+
+    let ret = null;
+    for(let item of list) {
+      if (checkFn) {
+        if (checkFn(item)) {
+          ret = item;
+          break;
+        }
+      } else {
+        if (item.name && item.name.trim() === name) {
+          ret = item;
+          break;
+        }
+      }
+    }
+    if (ret) {
+      return this.filterEditorProperty(ret);
+    } else {
+      return {_id:'', NID:'', name:name};
+    }
+  }
 }
 
 export default connect(
@@ -563,7 +624,7 @@ export default connect(
     shopList:state.shop.shopList,
     guideList:state.shop.shopGuideList,
     customerList:state.customer.customerList,
-    lastCustomerOrderInfo:state.customer.lastCustomerOrderInfo
+    lastCustomerOrderInfo:state.customer.lastShoesCustomerOrderInfo
   }),
   (dispatch) => {
     return bindActionCreators({

@@ -14,7 +14,7 @@ export const API_CODE_LOGIN_ERROR = 1; // 登录错误
 
 export const MENU_IDS = baseConstants.MENU_IDS;
 
-export const DEFAULT_PAGE_SIZE = 2; // 分页每页数据个数
+export const DEFAULT_PAGE_SIZE = 20; // 分页每页数据个数
 
 export const CITYS = citys.citys;
 

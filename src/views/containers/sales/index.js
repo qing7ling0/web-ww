@@ -6,6 +6,7 @@ import GoodsContainer from './goods/index'
 import CommonContainer from './common/index'
 import MaintainContainer from './maintain/index'
 import OrderContainer from './order/index'
+import SampleGoodsContainer from './sample/index'
 
 import * as config from '../../constants/Config'
 import * as constants from '../../constants/Constants'
@@ -35,6 +36,12 @@ export default [
     path={common.findRouterById(config.Routers, constants.MENU_IDS.salesItemsBase).url} 
     strict={true}
     component={CommonContainer}
+  />),
+  (<Route 
+    key={constants.MENU_IDS.salesSampleGoods} 
+    path={common.findRouterById(config.Routers, constants.MENU_IDS.salesSampleGoods).url} 
+    strict={true}
+    component={SampleGoodsContainer}
   />),
   (<Redirect 
     key={constants.MENU_IDS.sales} 

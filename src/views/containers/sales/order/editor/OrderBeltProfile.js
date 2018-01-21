@@ -68,53 +68,28 @@ import BaseFormModal from '../../../common/BaseFormModal'
 import * as optionsType from '../../types'
 import { ORDER_TYPES, listToSelectOptions } from '../types';
 import { commonUtils } from '../../../../modules/common';
-import ShoesTryStep from './ShoesTryStep'
-import ShoesProductionStep from './ShoesProductionStep'
+import ProductionStep from './ProductionStep'
 import TransportStep from './TransportStep'
 
 const DEFAULT_COL_SPAN = {xs:24,sm:12,lg:8};
 
 const ORDER_STEPS = [
-  {title: '审核'}, 
-  {title: '试鞋'}, 
-  {title: '制作'}, 
+  {title: '审核'},
+  {title: '制作中'},
   {title: '发货'},
   {title: '完成'},
 ];
 
 // 基础
-const ORDER_SHOES = [
+const ORDER_BELT = [
   { title: '编号', dataIndex: 'NID', key: 'NID'},
   { title: '价格', dataIndex: 'price', key: 'price_label', render:(item) => item+' RMB'},
-  { title: '分类', dataIndex: 'type', key: 'type_label', render:(item) => item.name},
-  { title: '系列', dataIndex: 'style', key: 'style_label', render:(item) => item.name},
-  { title: '季节', dataIndex: 'season', key: 'season_label', render:(item) => item.name},
-  { title: '性别', dataIndex: 'sex', key: 'sex'},
-  { title: '楦号', dataIndex: 's_xuan_hao', key: 's_xuan_hao', render:(item) => item.name},
-  { title: '规格', dataIndex: 's_gui_ge', key: 's_gui_ge', render:(item) => item.name},
-  { title: '跟高', dataIndex: 's_gen_gao', key: 's_gen_gao', render:(item) => item.name},
-  { title: '材质', dataIndex: 's_material', key: 's_material', render:(item) => item.name},
-  { title: '鞋面颜色', dataIndex: 's_out_color', key: 's_out_color', render:(item) => item.name},
-  { title: '里皮颜色', dataIndex: 's_in_color', key: 's_in_color', render:(item) => item.name},
-  { title: '鞋底颜色', dataIndex: 's_bottom_color', key: 's_bottom_color', render:(item) => item.name},
-  { title: '底边颜色', dataIndex: 's_bottom_side_color', key: 's_bottom_side_color', render:(item) => item.name}
-]
-
-// 尺寸
-const ORDER_SHOES_FOOT = [
-  { 
-    title: '尺寸', dataIndex: 's_foot_size', key: 's_foot_size', span:24,
-    left:[
-      {title: '长度', dataIndex: 's_left_length', key: 's_left_length', span:24},
-      {title: '趾围', dataIndex: 's_left_zhiWei', key: 's_left_zhiWei', span:24},
-      {title: '附维', dataIndex: 's_left_fuWei', key: 's_left_fuWei', span:24},
-    ],
-    right:[
-      {title: '长度', dataIndex: 's_right_length', key: 's_right_length', span:24},
-      {title: '趾围', dataIndex: 's_right_zhiWei', key: 's_right_zhiWei', span:24},
-      {title: '附维', dataIndex: 's_right_fuWei', key: 's_right_fuWei', span:24},
-    ],
-  }
+  { title: '材质', dataIndex: 'b_material', key: 'b_material', render:(item) => item.name},
+  { title: '颜色', dataIndex: 'b_out_color', key: 'b_out_color', render:(item) => item.name},
+  { title: 'A', dataIndex: 'b_A', key: 'b_A'},
+  { title: 'B', dataIndex: 'b_B', key: 'b_B'},
+  { title: 'C', dataIndex: 'b_C', key: 'b_C'},
+  { title: 'D', dataIndex: 'b_D', key: 'b_D'},
 ]
 
 // 快递信息
@@ -125,7 +100,7 @@ const ORDER_TRANSPORT = [
 ]
 
 
-class OrderShoesProfile extends Component {
+class OrderBeltProfile extends Component {
   // 构造函数，在创建组件的时候调用一次
   constructor(props) {
     super(props);
@@ -155,7 +130,6 @@ class OrderShoesProfile extends Component {
 
   componentDidMount(){
     this.resetStep(this.props.profile);
-    this.props.getSuborderTryFeedbackList(null, this.props.profile._id);
   }
 
   resetStep = (profile) => {
@@ -164,20 +138,16 @@ class OrderShoesProfile extends Component {
         case constants.BASE_CONSTANTS.E_ORDER_STATUS.REVIEW:
           this.setState({currentStep:0});
         break;
-        case constants.BASE_CONSTANTS.E_ORDER_STATUS.TRY:
-        case constants.BASE_CONSTANTS.E_ORDER_STATUS.TRY_TRANSPORT:
-          this.setState({currentStep:1});
-        break;
         case constants.BASE_CONSTANTS.E_ORDER_STATUS.MAKING:
-          this.setState({currentStep:2});
+          this.setState({currentStep:1});
         break;
         case constants.BASE_CONSTANTS.E_ORDER_STATUS.DELIVERY:
         case constants.BASE_CONSTANTS.E_ORDER_STATUS.TRANSPORT:
         case constants.BASE_CONSTANTS.E_ORDER_STATUS.SURE:
-          this.setState({currentStep:3});
+          this.setState({currentStep:2});
         break;
         case constants.BASE_CONSTANTS.E_ORDER_STATUS.COMPLETED:
-          this.setState({currentStep:4});
+          this.setState({currentStep:3});
         break;
       }
     }
@@ -201,40 +171,13 @@ class OrderShoesProfile extends Component {
     return null;
   }
 
-  renderShoes = () => {
+  renderBelt = () => {
     return (
-      <Card title="鞋子信息"  style={{marginBottom:20}} bordered={false} type="inner">
+      <Card title="皮带信息"  style={{marginBottom:20}} bordered={false} type="inner">
         <Row>
-          {ORDER_SHOES.map((option, index) => {
+          {ORDER_BELT.map((option, index) => {
             return this.renderCol(option, index);
           })}
-        </Row>
-      </Card>
-    );
-  }
-
-  renderFooter = () => {
-    return (
-      <Card title={`尺寸：${this.props.profile.s_foot_size}`}  style={{marginBottom:20}} bordered={false} type="inner">
-        <Row>
-          <Col xs={{span:24}} sm={{span:8, offset:2}}>
-            <Card title="左脚"  bordered={false} type="inner">
-              <Row>
-                {ORDER_SHOES_FOOT[0].left.map((option, index) => {
-                  return this.renderCol(option, index);
-                })}
-              </Row>
-            </Card>
-          </Col>
-          <Col xs={{span:24}} sm={{span:8, offset:2}} type="inner">
-            <Card title="右脚"  bordered={false}>
-              <Row>
-                {ORDER_SHOES_FOOT[0].right.map((option, index) => {
-                  return this.renderCol(option, index);
-                })}
-              </Row>
-            </Card>
-          </Col>
         </Row>
       </Card>
     );
@@ -290,30 +233,9 @@ class OrderShoesProfile extends Component {
     )
   }
 
-  renderCustoms = () => {
+  renderUrgent = () => {
     return (
-      <Card title="特殊定制" bordered={false} type="inner" >
-        {
-          this.props.profile.s_customs 
-          ?
-          this.props.profile.s_customs.map((item, index) => {
-            return (
-              <Row key={index}>
-                <ProfileCol span={8}>
-                  <ProfileColLabel>收费内容：</ProfileColLabel>
-                  <ProfileColValue>{item.name}</ProfileColValue>
-                </ProfileCol>
-                <ProfileCol span={8}>
-                  <ProfileColLabel>价  格：</ProfileColLabel>
-                  <ProfileColValue>
-                    {item.price} RMB
-                  </ProfileColValue>
-                </ProfileCol>
-              </Row>
-            )
-          })
-          : "无"
-        }
+      <Card title="加急" bordered={false} type="inner" >
         <Row>
           {
             this.props.profile.urgent
@@ -340,36 +262,7 @@ class OrderShoesProfile extends Component {
     )
   }
 
-  renderFeedbackList = () => {
-    let list = this.props.tryFeedbackList.map((item) => {
-      if (item && item.message) {
-        return item;
-      }
-      return null;
-    })
-    return (
-      <Card title='反馈记录'>
-        <List
-          header={null}
-          footer={null}
-          bordered
-          dataSource={list}
-          renderItem={item => {
-            if (item && item.message) {
-              let msgs = item.message.split('\n');
-              return (<List.Item extra={moment(item.editor_time).format('YYYY-MM-DD HH:mm:ss')}>
-                <div style={{paddingBottom:5}}>{msgs.map((item, index) =>(<p style={{padding:0, margin:0, wordBreak:'break-all'}} key={index}>{item}</p>))}</div>
-              </List.Item>)
-            } else {
-              return <div style={{height:0}}></div>;
-            }
-          }}
-        />
-      </Card>
-    )
-  }
-
-  renderTransform = () => {
+  renderTransport = () => {
     return (
       <Card title="快递信息"  style={{marginBottom:20}} bordered={false} type="inner">
         <Row>
@@ -386,25 +279,17 @@ class OrderShoesProfile extends Component {
       <Collapse defaultActiveKey={['']}>
         <Panel header="订单详情" key="1">
           {
-            this.renderShoes()
-          }
-          {
-            this.renderFooter()
+            this.renderBelt()
           }
           {
             this.renderPics()
           }
           {
-            this.renderCustoms()
+            this.renderUrgent()
           }
           {
-            this.state.currentStep > 1 ?
-            this.renderFeedbackList()
-            : null
-          }
-          {
-            this.state.currentStep > 3 ?
-            this.renderTransform()
+            this.state.currentStep > 2 ?
+            this.renderTransport()
             : null
           }
         </Panel>
@@ -416,16 +301,13 @@ class OrderShoesProfile extends Component {
     return (
       <div>
         {
-          this.renderShoes()
-        }
-        {
-          this.renderFooter()
+          this.renderBelt()
         }
         {
           this.renderPics()
         }
         {
-          this.renderCustoms()
+          this.renderUrgent()
         }
         <Row style={{textAlign:'center', paddingTop:20, paddingBottom:20}}>
           <Button type="primary" onClick={()=>{
@@ -460,20 +342,18 @@ class OrderShoesProfile extends Component {
             {
               this.state.currentStep===1 
               &&
-              <ShoesTryStep profile={this.props.profile} />
+              <ProductionStep profile={this.props.profile} />
             }
             {
-              this.state.currentStep===2 
+              this.state.currentStep===2
               &&
-              <ShoesProductionStep profile={this.props.profile} />
+              <TransportStep 
+                profile={this.props.profile}
+                message="表带已完成请发货!"
+              />
             }
             {
-              this.state.currentStep===3 
-              &&
-              <TransportStep profile={this.props.profile} message="正品鞋制作完成，请发货！" />
-            }
-            {
-              this.state.currentStep===4 
+              this.state.currentStep===3
               &&
               this.renderCompletedStep()
             }
@@ -531,4 +411,4 @@ export default connect(
       reqSuborderProfile: Actions.suborderProfile,
     }, dispatch);
   }
-)(OrderShoesProfile);
+)(OrderBeltProfile);

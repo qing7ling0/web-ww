@@ -194,6 +194,65 @@ export const goodsInputType = new GraphQLInputObjectType({
   }
 })
 
+const sampleGoodsInputFields = {
+  NID: {type:GraphQLString, description:'编号'},
+  type: {type: GraphQLString, decription:'类型'},
+  count: {type: GraphQLInt, decription:'数量'},
+}
+
+// 样品鞋数据
+const sampleShoesFields = {
+  s_right: {type:GraphQLBoolean, decription:'右脚'},
+  s_foot_size: {type:GraphQLFloat, decription:'尺码'},
+  s_length: {type: GraphQLFloat, description:'长度'},
+  s_zhiWei: {type: GraphQLFloat, decription:'趾围'},
+  s_fuWei: {type: GraphQLFloat, decription:'附维'},
+}
+const sampleBeltFields = {
+  b_A: {type: GraphQLFloat, decription:'皮带测量数据A'},
+  b_B: {type: GraphQLFloat, decription:'皮带测量数据B'},
+  b_C: {type: GraphQLFloat, decription:'皮带测量数据C'},
+  b_D: {type: GraphQLFloat, decription:'皮带测量数据D'},
+}
+const sampleWatchStrapFields = {
+  ws_A: {type: GraphQLFloat, decription:'表带测量数据A'},
+  ws_B: {type: GraphQLFloat, decription:'表带测量数据B'},
+  ws_C: {type: GraphQLFloat, decription:'表带测量数据C'},
+  ws_D: {type: GraphQLFloat, decription:'表带测量数据D'},
+  ws_E: {type: GraphQLFloat, decription:'表带测量数据E'},
+  ws_F: {type: GraphQLFloat, decription:'表带测量数据F'},
+  ws_G: {type: GraphQLFloat, decription:'表带测量数据G'},
+}
+const sampleOrnamentFields = {
+  o_name: {type: GraphQLString, decription:'名称'},
+}
+
+export const sampleGoodsType = new GraphQLObjectType({
+  name: 'sampleGoodsType',
+  fields: {
+    _id: {type:GraphQLString},
+    ...sampleGoodsInputFields,
+    ...sampleBeltFields,
+    ...sampleShoesFields,
+    ...sampleWatchStrapFields,
+    ...sampleOrnamentFields,
+    shop: {type:shopTypes.shopType, ref:'shop', decription:'店铺'},
+    ...commonFields.defaultCreateFields,
+  }
+})
+export const sampleGoodsInputType = new GraphQLInputObjectType({
+  name: 'sampleGoodsInputType',
+  fields: {
+    _id: {type:GraphQLString},
+    ...sampleGoodsInputFields,
+    ...sampleBeltFields,
+    ...sampleShoesFields,
+    ...sampleWatchStrapFields,
+    ...sampleOrnamentFields,
+    shop: {type:GraphQLString}
+  }
+})
+
 // 鞋
 const orderShoesBaseFields = {
   s_foot_size: {type: GraphQLFloat, description:'尺码'},
@@ -339,7 +398,6 @@ const subOrderBaseFields = {
   transport_zipcode: {type:GraphQLString, decription:'邮编'},
   transport_price:{type:GraphQLFloat, decription:'快递费用'},
   remark:{type:GraphQLString, ddecription:'备注'},
-  
 }
 
 export const orderPicType = new GraphQLObjectType({

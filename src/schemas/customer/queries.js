@@ -44,7 +44,7 @@ export const customerList = {
 	}
 }
 
-export const customerDetail = {
+export const customerProfile = {
 	type: types.customerType,
   args: {
     conditions: {type:GraphQLString}
@@ -60,10 +60,13 @@ export const customerDetail = {
 export const customerOrderInfo = {
 	type: salesTypes.subOrderType,
   args: {
+    id:{type:GraphQLString},
     conditions: {type:GraphQLString},
     options:{type:GraphQLString}
   },
 	async resolve (root, params, options) {
+    if (!params.id) return null;
+
     try {
       if (params.conditions) {
         params.conditions = commonUtils.urlString2Conditions(params.conditions);
@@ -75,6 +78,7 @@ export const customerOrderInfo = {
       } else {
         params.options = {};
       }
+      params.conditions.customer = params.id;
     } catch(error) {
       console.log(error);
     }

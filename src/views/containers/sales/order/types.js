@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
-import { Icon, Button } from 'antd'
+import { 
+  Icon, 
+  Button,
+  Popconfirm
+} from 'antd'
 import styled from 'styled-components'
 import moment from 'moment'
 
@@ -41,6 +45,11 @@ export const getOrderBaseListColumns = function(target) {
     { title: '编号', dataIndex: 'NID', key: 'NID'},
     { title: '状态', dataIndex: 'state', key: 'state', render:(item) => {
       let type = commonUtils.getOrderStatus(item);
+      if (type) return type.label;
+      return '';
+    }},
+    { title: '订单类型', dataIndex: 'type', key: 'type', render:(item) => {
+      let type = commonUtils.getOrderType(item);
       if (type) return type.label;
       return '';
     }},
@@ -189,74 +198,74 @@ const getOrderShoesOptions = function(target) {
         },    
         {
           type:'select', name:'s_xuan_hao', label:'楦型', itemOptions:{labelLeft:true}, 
-          selectItems:listToSelectOptions(target.props.sales.xuanHaoList), 
+          selectItems:listToSelectOptions(target.props.sales.xuanHaoList, (item)=>item.name), 
           options:{
             defaultActiveFirstOption:true, 
-            mode:target.isDesign?"combobox":"default", 
-            filterOption:!target.isDesign, 
+            mode:"combobox", 
+            filterOption:false, 
             onChange:(value)=>target.onNIDPropertyChange('s_xuan_hao', value)
           }, 
           rule:{required:true}
         },    
         {
           type:'select', name:'s_gui_ge', label:'规格', itemOptions:{labelLeft:true}, 
-          selectItems:listToSelectOptions(target.props.sales.guiGeList), 
+          selectItems:listToSelectOptions(target.props.sales.guiGeList, (item)=>item.name), 
           options:{
             defaultActiveFirstOption:true,
-            mode:target.isDesign?"combobox":"default", 
-            filterOption:!target.isDesign, 
+            mode:"combobox", 
+            filterOption:false, 
             onChange:(value)=>target.onNIDPropertyChange('s_gui_ge', value)
           }, 
           rule:{required:true}},    
         {
           type:'select', name:'s_material', label:'材料', itemOptions:{labelLeft:true}, 
-          selectItems:listToSelectOptions(target.props.sales.materialList), 
+          selectItems:listToSelectOptions(target.props.sales.materialList, (item)=>item.name), 
           options:{
             defaultActiveFirstOption:true, 
-            mode:target.isDesign?"combobox":"default", 
-            filterOption:!target.isDesign, 
+            mode:"combobox", 
+            filterOption:false, 
             onChange:(value)=>target.onNIDPropertyChange('s_material', value)
           }, 
           rule:{required:true}},    
         {
           type:'select', name:'s_out_color', label:'鞋面颜色', itemOptions:{labelLeft:true}, 
-          selectItems:listToSelectOptions(target.props.sales.outColorList), 
+          selectItems:listToSelectOptions(target.props.sales.outColorList, (item)=>item.name), 
           options:{
             defaultActiveFirstOption:true, 
-            mode:target.isDesign?"combobox":"default", 
-            filterOption:!target.isDesign, 
+            mode:"combobox", 
+            filterOption:false, 
             onChange:(value)=>target.onNIDPropertyChange('s_out_color', value)
           }, 
           rule:{required:true}
         },    
         {
           type:'select', name:'s_in_color', label:'内里颜色', itemOptions:{labelLeft:true}, 
-          selectItems:listToSelectOptions(target.props.sales.inColorList), 
+          selectItems:listToSelectOptions(target.props.sales.inColorList, (item)=>item.name), 
           options:{
             defaultActiveFirstOption:true, 
-            mode:target.isDesign?"combobox":"default", 
-            filterOption:!target.isDesign, 
+            mode:"combobox", 
+            filterOption:false, 
             onChange:(value)=>target.onNIDPropertyChange('s_in_color', value)
           }, 
           rule:{required:true}},    
         {
           type:'select', name:'s_bottom_color', label:'鞋底颜色', itemOptions:{labelLeft:true}, 
-          selectItems:listToSelectOptions(target.props.sales.bottomColorList), 
+          selectItems:listToSelectOptions(target.props.sales.bottomColorList, (item)=>item.name), 
           options:{
             defaultActiveFirstOption:true, 
-            mode:target.isDesign?"combobox":"default", 
-            filterOption:!target.isDesign, 
+            mode:"combobox", 
+            filterOption:false, 
             onChange:(value)=>target.onNIDPropertyChange('s_bottom_color', value)
           }, 
           rule:{required:true}
         },    
         {
           type:'select', name:'s_bottom_side_color', label:'底边颜色', itemOptions:{labelLeft:true}, 
-          selectItems:listToSelectOptions(target.props.sales.bottomSideColorList), 
+          selectItems:listToSelectOptions(target.props.sales.bottomSideColorList, (item)=>item.name), 
           options:{
             defaultActiveFirstOption:true, 
-            mode:target.isDesign?"combobox":"default", 
-            filterOption:!target.isDesign, 
+            mode:"combobox", 
+            filterOption:false, 
             onChange:(value)=>target.onNIDPropertyChange('s_bottom_side_color', value)
           }, 
           rule:{required:true}
@@ -264,11 +273,11 @@ const getOrderShoesOptions = function(target) {
       ].concat(endOptions).concat([
         {
           type:'select', name:'s_tie_di', label:'贴底', itemOptions:{labelLeft:true}, 
-          selectItems:listToSelectOptions(target.props.sales.shoesTieBianList), 
+          selectItems:listToSelectOptions(target.props.sales.shoesTieBianList, (item)=>item.name), 
           options:{
             defaultActiveFirstOption:true,
-            mode:target.isDesign?"combobox":"default", 
-            filterOption:!target.isDesign, 
+            mode:"combobox", 
+            filterOption:false, 
           }, 
           rule:{required:true}
         },    
@@ -482,18 +491,31 @@ const getOrderListColumns = function(target) {
   let options = getOrderBaseListColumns();
   
   options.push({ title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
-    return (
-      <div>
-        <OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
-          e.stopPropagation();
-          target.onDelete([record._id])
-        }} />
-        <OpeateBtn type="primary" shape="circle" icon="edit" size="large" onClick={(e)=>{
-          e.stopPropagation();
-          target.onEdit(record);
-        }} />
-      </div>
-    );
+    if (record.state === constants.BASE_CONSTANTS.E_ORDER_STATUS.COMPLETED || record.state === constants.BASE_CONSTANTS.E_ORDER_STATUS.CANCEL) {
+      return null;
+    } else {
+      return (
+        <div>
+          <OpeateBtn type="primary" shape="circle" icon="edit" size="default" onClick={(e)=>{
+            e.stopPropagation();
+            target.onEdit(record);
+          }} />
+          <Popconfirm 
+            title="是否取消订单?" 
+            onConfirm={(e)=>{
+              e.stopPropagation();
+              target.onCancel(record._id)
+            }}
+            okText="确定" 
+            cancelText="取消"
+          >
+            <OpeateBtn type="primary" shape="circle" icon="close" size="default" onClick={(e)=>{
+              e.stopPropagation();
+            }} />
+          </Popconfirm>
+        </div>
+      );
+    }
   }})
   return options;
 }
@@ -524,7 +546,10 @@ const getOrderAddStepCustomerOptions = function(target) {
             onFocus:target.onCustomerPhoneFocus,
             onSelect:target.onCustomerPhoneSelect,
           }, 
-          rule:{required:true}
+          rule:{
+            required:true,
+            validator:target.checkPhone
+          }
         },            
         {
           type:'select', name:'name', label:'姓名',
@@ -631,7 +656,7 @@ const getOrderAddStepGoodsListColumns = function(target) {
         <div>
           <OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
             e.stopPropagation();
-            target.onGoodsDelete([record._id])
+            target.onGoodsDelete(record)
           }} />
           <OpeateBtn type="primary" shape="circle" icon="edit" size="large" onClick={(e)=>{
             e.stopPropagation();
@@ -647,6 +672,7 @@ const getOrderAddOptions = function(target) {
   let options = [];
   switch(target.props.orderType.key) {
     case BASE_CONSTANTS.E_ORDER_TYPE.SHOES:
+    case BASE_CONSTANTS.E_ORDER_TYPE.DESIGN:
       options = getOrderShoesOptions(target);
     break;
     case BASE_CONSTANTS.E_ORDER_TYPE.BELT:
@@ -740,5 +766,13 @@ export const ORDER_TYPES = [
     listOptions:getOrderListColumns,
     addOptions:getOrderAddOptions,
     editOptions:getOrderEditOptions,
-  }
+  },
+  {
+    key:BASE_CONSTANTS.E_ORDER_TYPE.DESIGN,
+    listTag:'orderShoesList:orderList', tag:'orderList', label:'来样设计', 
+    graphqlType:graphqlTypes.orderType,
+    listOptions:getOrderListColumns,
+    addOptions:getOrderAddOptions,
+    editOptions:getOrderEditOptions,
+  },
 ]

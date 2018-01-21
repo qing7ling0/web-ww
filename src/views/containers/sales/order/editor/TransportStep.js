@@ -77,11 +77,12 @@ const TRANSPORT_OPTIONS = [
       return com.label;
     }
 
-    return null;
+    return '未填写';
   }},
-  {key:'transport_id', label:'快递单号'},
-  {key:'transport_address', label:'快递地址'},
+  {key:'transport_id', label:'快递单号', render:(value)=>value||'未填写'},
+  {key:'transport_address', label:'快递地址', render:(value)=>value||'未填写'},
 ];
+
 const TRANSPORT_INPUT_OPTIONS = (target) => { 
   return [
     {
@@ -94,8 +95,16 @@ const TRANSPORT_INPUT_OPTIONS = (target) => {
       }, 
       rule:{required:true}
     },
-    {type:'input', name:'transport_id', label:'快递单号', decoratorOptions:{initialValue:target.props.profile.transport_id}, itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-    {type:'input', name:'transport_address', label:'快递地址', decoratorOptions:{initialValue:target.props.profile.transport_address}, itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+    {
+      type:'input',  name:'transport_id', label:'快递单号',
+      decoratorOptions:{initialValue:target.props.profile.transport_id}, 
+      itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}
+    },
+    {
+      type:'input', name:'transport_address', label:'快递地址', 
+      decoratorOptions:{initialValue:target.props.profile.transport_address}, 
+      itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}
+    },
   ];
 }
 const ShoesContent = styled.div`
@@ -150,7 +159,7 @@ class ShoesTransportStep extends Component {
   renderTransport = () => {
     return (<div style={{width:'100%'}}>
       <Row>
-        <ShoesContent>正品鞋制作完成，请发货！</ShoesContent>
+        <ShoesContent>{this.props.message}</ShoesContent>
       </Row>
       <Row>
         <Card 
@@ -169,7 +178,6 @@ class ShoesTransportStep extends Component {
       </Row>
       <Row style={{textAlign:'center'}}>
         <Button style={{margin:'0.2rem 0.15rem'}} type="primary" onClick={()=> {
-          // this.setState({modify:true});
           this.props.reqChangeSuborderState(this.props.profile._id, {state:constants.BASE_CONSTANTS.E_ORDER_STATUS.COMPLETED});
         }}>已验货,完成订单!</Button>
       </Row>
@@ -212,12 +220,6 @@ export default connect(
   state => ({
     loading:state.sales.loading,
     result:state.sales.result,
-    sales:state.sales,
-    shopList:state.shop.shopList,
-    guideList:state.shop.shopGuideList,
-    customerList:state.customer.customerList,
-    lastCustomerOrderInfo:state.customer.lastCustomerOrderInfo,
-    tryFeedbackList:state.sales.tryFeedbackList
   }),
   (dispatch) => {
     return bindActionCreators({

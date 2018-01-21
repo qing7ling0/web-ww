@@ -24,3 +24,4 @@ export const orderDetailType = `{
   _id, source, pay, pay_type, sub_orders${subOrderType}
 }`
 export const suborderTryFeedback = `{_id, message, suborder_id, transport_id, status, editor_name, editor_time, create_time}`
+export const sampleGoodsType=`{_id, type, NID, shop{_id,name}, s_right, s_foot_size, s_length, s_fuWei, s_zhiWei, b_A, b_B, b_C, b_D, ws_A, ws_B, ws_C, ws_D, ws_E, ws_F, ws_G, o_name}`

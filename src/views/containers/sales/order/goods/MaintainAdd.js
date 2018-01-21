@@ -254,7 +254,10 @@ class MaintainAdd extends Component {
           {
             this.renderPics()
           }
-          <FormItemComponent key={urgentOptionItem.name} options={urgentOptionItem} form={this.props.form} />
+          <Row>
+            <Col><span style={{float:'right'}}>{customExtra}</span><ContentTitle>加急</ContentTitle></Col>
+            <FormItemComponent key={urgentOptionItem.name} options={urgentOptionItem} form={this.props.form} />
+          </Row>
         </NormalForm>
       </div>
     );
@@ -286,7 +289,7 @@ class MaintainAdd extends Component {
 
   onAdd = () => {
     if (this.props.isReview) {
-      if (!this.state.goodsReviewSure || !this.state.photoReviewSure) {
+      if (!this.state.goodsReviewSure || !this.state.customReviewSure || !this.state.photoReviewSure) {
         message.error('还有部分信息未审核，请审核！')
         return;
       }

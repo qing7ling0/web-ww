@@ -4,6 +4,7 @@ import config from '../constants/Config.js';
 import netHandler from '../modules/NetHandler'
 import * as graphqlTypes from '../modules/graphqlTypes'
 import * as orderTypes from '../modules/orderTypes'
+import { OrderSteps } from '../containers/sales/order/styled';
 
 
 // 基础数据
@@ -37,6 +38,26 @@ export const updateGoods = createAction(types.GOODS_UPDATE, (tag, id, data) => {
 export const getGoodsProfile = createAction(types.GOODS_PROFILE_GET, (tag, id) => {
   return netHandler.getDefaultProfile(tag, graphqlTypes.goodsType, id);
 });
+export const getGoodsProfileByNID = createAction(types.GOODS_PROFILE_GET, (nid, tag) => {
+  return netHandler.getGoodsByNID(tag||'goodsProfile:goodsProfileByNID', graphqlTypes.goodsType, nid);
+});
+
+// 库存
+export const getSampleGoodsList = createAction(types.SAMPLE_GOODS_LIST_GET, (tag, conditions, page={page:-1,pageSize:0}) => {
+  return netHandler.getDefaultList(tag, orderTypes.sampleGoodsType, conditions, page.page, page.pageSize);
+})
+export const addSampleGoods = createAction(types.SAMPLE_GOODS_ADD, (tag, data) => {
+  return netHandler.addDefault(tag, orderTypes.sampleGoodsType, data);
+})
+export const deleteSampleGoods = createAction(types.SAMPLE_GOODS_DELETE, (tag, ids) => {
+  return netHandler.deleteDefault(tag, ids);
+})
+export const updateSampleGoods = createAction(types.SAMPLE_GOODS_UPDATE, (tag, id, data) => {
+  return netHandler.updateDefault(tag, id, data);
+})
+export const getSampleGoodsProfile = createAction(types.SAMPLE_GOODS_PROFILE_GET, (id, tag) => {
+  return netHandler.getDefaultProfile(tag||"sampleGoodsProfile", orderTypes.sampleGoodsType, id);
+});
 
 // 订单
 export const getOrderList = createAction(types.ORDER_LIST_GET, (query, conditions, page) => {
@@ -65,6 +86,9 @@ export const suborderStateChange = createAction(types.ORDER_SUB_STATE_CHANGE, (i
 })
 export const suborderUpdate = createAction(types.ORDER_SUB_UPDATE, (id, data) => {
   return netHandler.updateDefault('suborder', id, data);
+})
+export const suborderCancel = createAction(types.ORDER_SUB_CANCEL, (id) => {
+  return netHandler.cancelSuborder(id);
 })
 export const suborderProfile = createAction(types.ORDER_SUB_PROFILE, (id) => {
   return netHandler.getDefaultProfile('suborderProfile', orderTypes.subOrderType, id);

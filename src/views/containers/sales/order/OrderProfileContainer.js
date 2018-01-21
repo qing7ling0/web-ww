@@ -48,6 +48,7 @@ import DetailComponent from '../../common/DetailComponent'
 import utils from '../../../../utils/utils'
 import * as optionsType from '../types'
 import OrderShoesProfile from './editor/OrderShoesProfile'
+import OrderBaseProfile from './editor/OrderBaseProfile'
 import OrderGoodsReviewModal from './OrderGoodsReviewModal'
 
 const ORDER_STEPS = [
@@ -103,12 +104,24 @@ class OrderProfileContainer extends Component {
     }
 
     switch(this.props.profile.type) {
+      case constants.BASE_CONSTANTS.E_ORDER_TYPE.DESIGN:
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.SHOES:
-        console.log('renderProfile')
         return (
           <OrderShoesProfile 
             profile={this.props.profile}
             onOpenReview={this.onOpenReview}
+          />
+        )
+      
+      case constants.BASE_CONSTANTS.E_ORDER_TYPE.BELT:
+      case constants.BASE_CONSTANTS.E_ORDER_TYPE.ORNAMENT:
+      case constants.BASE_CONSTANTS.E_ORDER_TYPE.MAINTAIN:
+      case constants.BASE_CONSTANTS.E_ORDER_TYPE.WATCH_STRAP:
+        return (
+          <OrderBaseProfile 
+            profile={this.props.profile}
+            onOpenReview={this.onOpenReview}
+            orderKey={this.props.profile.type}
           />
         )
     }
@@ -163,11 +176,13 @@ export default connect(
   state => ({
     loading:state.sales.loading,
     result:state.sales.result,
-    profile:state.sales.suborderProfile
+    profile:state.sales.suborderProfile,
+    customer:state.customer.customerProfile
   }),
   (dispatch) => {
     return bindActionCreators({
       reqSuborderProfile: Actions.suborderProfile,
+      reqGetCustomerProfile:Actions.getCustomer
     }, dispatch);
   }
 )(OrderProfileContainer);

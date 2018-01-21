@@ -103,6 +103,7 @@ const goodsOrnamentType = ``
 export const goodsType=`{${goodsBaseType}, ${goodsShoesType}, ${goodsBeltType}, ${goodsWatchStrapType}, ${goodsOrnamentType}}`
 
 
+
 export const orderBaseFields = `
   _id,
   type,

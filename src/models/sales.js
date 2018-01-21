@@ -56,16 +56,69 @@ var goodsWatchStrapFields = {
   ws_style: {type:Schema.Types.ObjectId, ref:'common', description:'类型，男女'},
 };
 var goodsSchema = new Schema({
-  ...goodsBaseFields,
-  ...goodsShoesFields,
-  ...goodsBeltFields,
-  ...goodsWatchStrapFields,
-  // ...ornamentFields,
-  ...baseFields
-},{
-  timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
+    ...goodsBaseFields,
+    ...goodsShoesFields,
+    ...goodsBeltFields,
+    ...goodsWatchStrapFields,
+    ...ornamentFields,
+    ...baseFields
+  },{
+    timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
 });
 module.exports.goodsModel = mongoose.model('goods', goodsSchema);
+
+const sampleBaseFields = {
+  NID: {type:String, decription:'编号'},
+  type: {type: String, decription:'类型'},
+  shop: {type:Schema.Types.ObjectId, ref:'shop', description:'店铺'},
+  count: {type: Number, decription:'数量'},
+}
+// 样品鞋数据
+const sampleShoesFields = {
+  s_right: {type:Boolean, decription:'右脚'},
+  s_foot_size: {type:Number, decription:'尺码'},
+  s_length: {type: Number, description:'长度'},
+  s_zhiWei: {type: Number, decription:'趾围'},
+  s_fuWei: {type: Number, decription:'附维'},
+}
+// 样品皮带数据
+const sampleBeltFields = {
+  b_A: {type: Number, decription:'皮带测量数据A'},
+  b_B: {type: Number, decription:'皮带测量数据B'},
+  b_C: {type: Number, decription:'皮带测量数据C'},
+  b_D: {type: Number, decription:'皮带测量数据D'},
+}
+// 样品表带数据
+const sampleWatchStrapFields = {
+  ws_A: {type: Number, decription:'表带测量数据A'},
+  ws_B: {type: Number, decription:'表带测量数据B'},
+  ws_C: {type: Number, decription:'表带测量数据C'},
+  ws_D: {type: Number, decription:'表带测量数据D'},
+  ws_E: {type: Number, decription:'表带测量数据E'},
+  ws_F: {type: Number, decription:'表带测量数据F'},
+  ws_G: {type: Number, decription:'表带测量数据G'},
+}
+// 样品配饰数据
+const sampleOrnamentFields = {
+  o_name: {type: String, decription:'名称'},
+}
+
+const sampleFields = {
+  ...sampleBaseFields,
+  ...sampleShoesFields,
+  ...sampleBeltFields,
+  ...sampleWatchStrapFields,
+  ...sampleOrnamentFields,
+  ...baseFields
+}
+module.exports.sampleGoodsModel = mongoose.model('sample_goods', 
+  new Schema(
+    sampleFields,
+    {
+      timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
+    }
+  )
+);
 
 // 试鞋反馈
 const tryFeedbackFields = {

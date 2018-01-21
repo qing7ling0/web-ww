@@ -227,18 +227,26 @@ class NetHandler {
 
   static getLastCustomerOrderInfo(id, orderType, tag, graphqlType) {
     let conditions ={};
-    conditions.customer = id;
     conditions.type = orderType;
     let options = {sort:{create_time:"desc"}}
     let query = `
       query Query {
-        ${tag}:customerOrderInfo(conditions:"${encodeURIComponent(JSON.stringify(conditions))}", options:"${encodeURIComponent(JSON.stringify(options))}")${graphqlType}
+        ${tag}:customerOrderInfo(id:"${id}", conditions:"${encodeURIComponent(JSON.stringify(conditions))}", options:"${encodeURIComponent(JSON.stringify(options))}")${graphqlType}
       }
     `;
     return netUtils.graphqlJson(config.GetServerAddress() + '/api', query);
   }
 
-  static  getGoodsShoesList(pageIndex, pageSize=constants.DEFAULT_PAGE_SIZE, conditions) {
+  static getGoodsByNID(tag, type, nid) {
+    let query = `
+      query Query {
+        ${tag}(nid:"${nid}")${type}
+      }
+    `;
+    return netUtils.graphqlJson(config.GetServerAddress() + '/api', query);
+  }
+
+  static getGoodsShoesList(pageIndex, pageSize=constants.DEFAULT_PAGE_SIZE, conditions) {
     let _conditions = '';
     if (conditions) {
       _conditions = `, conditions: "${encodeURIComponent(conditions)}"`
@@ -269,6 +277,15 @@ class NetHandler {
     let mut = `
       mutation Mutation {
         goodsShoesUpdate (doc:${object2String(data)}) ${types.resultType}
+      }
+    `    
+    return netUtils.graphqlJson(config.GetServerAddress() + '/api', mut);
+  }
+
+  static cancelSuborder(id) {
+    let mut = `
+      mutation Mutation {
+        suborderCancel (id:"${id}") ${types.resultType}
       }
     `    
     return netUtils.graphqlJson(config.GetServerAddress() + '/api', mut);

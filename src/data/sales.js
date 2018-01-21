@@ -16,7 +16,8 @@ import {
   goodsModel,
   orderModel,
   customerModel,
-  subOrderModel
+  subOrderModel,
+  sampleGoodsModel
 } from '../models/index.js'
 
 import { ApiError, ApiErrorNames } from '../error/api-errors'
@@ -31,6 +32,7 @@ import fileData from './file'
 
 import { customerData } from './index'
 import { tryFeedbackModel } from '../models/sales';
+import { subOrderType } from '../schemas/sales/types';
 // import 
 
 const logUtil = require('../utils/log-utils');
@@ -107,6 +109,47 @@ class SalesData {
     }
   }
 
+  async addGoodsBySuborder(suborder) {
+    if (suborder) {
+      let createBase = function(suborder) {
+        let ret = {};
+        ret.NID = suborder.NID;
+        ret.name ='';
+        ret.goods = suborder.type;
+        ret.price = suborder.price;
+        ret.pics = [];
+        ret.sex = suborder.sex;
+        ret.hide = false;
+        ret.put_date = moment().format("YYYY-MM-DD HH:mm:ss");
+        return ret;
+      }
+      let goods = createBase(suborder);
+      if (suborder.type === constants.E_ORDER_TYPE.SHOES) {
+        goods.s_material = suborder.s_material && suborder.s_material._id || '';
+        goods.s_xuan_hao = suborder.s_xuan_hao && suborder.s_xuan_hao._id || '';
+        goods.s_gui_ge = suborder.s_gui_ge && suborder.s_gui_ge._id || '';
+        goods.s_in_color = suborder.s_in_color && suborder.s_in_color._id || '';
+        goods.s_out_color = suborder.s_out_color && suborder.s_out_color._id || '';
+        goods.s_bottom_color = suborder.s_bottom_color && suborder.s_bottom_color._id || '';
+        goods.s_bottom_side_color = suborder.s_bottom_side_color && suborder.s_bottom_side_color._id || '';
+        goods.s_gen_gao = suborder.s_gen_gao && suborder.s_gen_gao._id || '';
+      } else if (suborder.type === constants.E_ORDER_TYPE.BELT){
+        goods.b_material = suborder.b_material && suborder.b_material._id || '';
+        goods.b_color = suborder.b_color && suborder.b_color._id || '';
+      } else if (suborder.type === constants.E_ORDER_TYPE.WATCH_STRAP){
+        goods.ws_material = suborder.ws_material && suborder.ws_material._id || '';
+        goods.ws_style = suborder.ws_style && suborder.ws_style._id || '';
+      } else if (suborder.type === constants.E_ORDER_TYPE.ORNAMENT){
+        goods.o_name = suborder.o_name || '';
+      }
+
+      if (goods) {
+        let _goodsM = new goodsModel(goods);
+        await _goodsM.save();
+      }
+    }
+  }
+
   async updateGoods(conditions, doc, options) {
     if (doc) {
       let NIDChange = false;
@@ -137,6 +180,7 @@ class SalesData {
           }
         }
       }
+      let ret = await goodsModel.update(conditions, doc, options);
       if (NIDChange) {
         let goods = await this.goodsPopulate(goodsModel.findOne(conditions));
         if (goods) {
@@ -144,7 +188,6 @@ class SalesData {
           await goodsModel.findOneAndUpdate({_id:goods._id}, {NID:NID});
         }
       }
-      let ret = await goodsModel.update(conditions, doc, options);
       return ret;
     } else {
       throw new ApiError(ApiErrorNames.UPDATE_FAIL);
@@ -173,6 +216,15 @@ class SalesData {
     });
     return profile;
   }
+
+  async getGoodsProfileByNID(nid) {
+    if (!nid) return null;
+    console.log(nid)
+    const profile = await DB.findOne(goodsModel, {NID:nid}, (query)=>{
+      return this.goodsPopulate(query);
+    });
+    return profile;
+  }
   
   orderPopulate(query) {
     return query
@@ -187,8 +239,8 @@ class SalesData {
   }
 
   // 自订单
-  subOrderPopulate(query) {
-    return query.populate('shop').populate('guide').populate('customer').exec();
+  async subOrderPopulate(query) {
+    return query.populate('shop').populate('guide').populate('customer');
   }
   // 自订单列表
   async getSubOrderList(page, options) {
@@ -202,8 +254,12 @@ class SalesData {
   }
 
   async findSubOrder(conditions, fields, options) {
-    console.log('findSubOrder ----------' + JSON.stringify(conditions));
-    return await subOrderModel.findOne(conditions, fields, options);
+    let query = subOrderModel.findOne(conditions, fields, options);
+    if (query) {
+      return await this.subOrderPopulate(query);
+    } else {
+      return null;
+    }
   }
 
   async updateOrAddCustomerByOrder(order, customerDoc) {
@@ -244,7 +300,7 @@ class SalesData {
   async addOrder(doc, options={}) {
     if (doc) {
       
-      if (!doc.pay || !doc.pay_type) {
+      if (doc.pay!==0 && !doc.pay || !doc.pay_type) {
         // 必须有支付信息
         throw new ApiError(ApiErrorNames.ADD_FAIL);
       }
@@ -378,16 +434,25 @@ class SalesData {
   }
 
   async reviewSubOrder(id, doc, options) {
-    if (!id || !doc || !doc.type) {
+    if (!id || !doc || !doc.type || !doc.NID || doc.NID === constants.NULL_NID) {
       throw new ApiError(ApiErrorNames.UPDATE_FAIL);
     }
+    
+    let goods = await this.getGoodsProfileByNID(doc.NID);
+    if (!goods) {
+      // 如果商品里面没有此商品则添加
+      await this.addGoodsBySuborder(doc);
+    } else {
+      console.log(goods);
+    }
+
     let conditions = {_id:id};
     if (doc.type === constants.E_ORDER_TYPE.SHOES) { // 鞋子订单到制作样品环节
       doc.state = constants.E_ORDER_STATUS.TRY;
     } else if(doc.type === constants.E_ORDER_TYPE.RECHARGE) { // 充值订单直接完成
       doc.state = constants.E_ORDER_STATUS.COMPLETED;
     } else { // 其他订单到打包环节
-      doc.state = constants.E_ORDER_STATUS.DELIVERY;
+      doc.state = constants.E_ORDER_STATUS.MAKING;
     }
     return await this.updateSubOrder(conditions, doc, options);
   } 
@@ -452,6 +517,97 @@ class SalesData {
     }
     return ret;
   } 
+
+  async cancelSuborder(id) {
+    if (!id) {
+      throw new ApiError(ApiErrorNames.UPDATE_FAIL);
+    }
+    let suborder = await subOrderModel.findById(id);
+
+    if (!suborder) throw new ApiError(ApiErrorNames.UPDATE_FAIL);
+
+    if (suborder.state >= constants.E_ORDER_STATUS.MAKING_4) { // 东西没有制作完成，无法转入样品
+      if (suborder.type === constants.E_ORDER_TYPE.SHOES ||
+        suborder.type === constants.E_ORDER_TYPE.BELT ||
+        suborder.type === constants.E_ORDER_TYPE.WATCH_STRAP ||
+        suborder.type === constants.E_ORDER_TYPE.ORNAMENT 
+      ) {
+        if (suborder.type === constants.E_ORDER_TYPE.SHOES) {
+          let list = this.createSample(suborder);
+          for(let item of list) {
+            let sample = new sampleGoodsModel(item);
+            sample.count = 1;
+            let newSample = await sample.save();
+            // TODO 这里出错需要还原
+          }
+        }
+      }
+    }
+    let ret = await subOrderModel.update({_id:id}, {state:constants.E_ORDER_STATUS.CANCEL});
+
+    return ret;
+  }
+
+  /**
+   * 根据订单创建样品库
+   * 
+   * @param {*} suborder 
+   * 
+   * @returns list
+   */
+  createSample(suborder) {
+    let list = [];
+
+    let createBase = function(suborder) {
+      let ret = {};
+      ret.NID = suborder.NID;
+      ret.shop = suborder.shop&&suborder.shop.toString() || '';
+      ret.type = suborder.type;
+      return ret;
+    }
+    if (suborder.type === constants.E_ORDER_TYPE.SHOES) {
+      for(let i=0; i<2; i++) {
+        let shoes = createBase(suborder);
+        shoes.s_foot_size = suborder.s_foot_size;
+        shoes.s_right = i===0;
+        if (i===0) {
+          shoes.s_right = true;
+          shoes.s_length = suborder.s_right_length;
+          shoes.s_zhiWei = suborder.s_right_zhiWei;
+          shoes.s_fuWei = suborder.s_right_fuWei;
+        } else {
+          shoes.s_right = false;
+          shoes.s_length = suborder.s_left_length;
+          shoes.s_zhiWei = suborder.s_left_zhiWei;
+          shoes.s_fuWei = suborder.s_left_fuWei;
+        }
+
+        list.push(shoes);
+      }
+    } else if (suborder.type === constants.E_ORDER_TYPE.BELT){
+      let belt = createBase(suborder);
+      belt.b_A = suborder.b_A;
+      belt.b_B = suborder.b_B;
+      belt.b_C = suborder.b_C;
+      belt.b_D = suborder.b_D;
+      list.push(belt);
+    } else if (suborder.type === constants.E_ORDER_TYPE.WATCH_STRAP){
+      let ws = createBase(suborder);
+      ws.ws_A = suborder.ws_A;
+      ws.ws_B = suborder.ws_B;
+      ws.ws_C = suborder.ws_C;
+      ws.ws_D = suborder.ws_D;
+      ws.ws_E = suborder.ws_E;
+      ws.ws_F = suborder.ws_F;
+      ws.ws_G = suborder.ws_G;
+      list.push(ws);
+    } else if (suborder.type === constants.E_ORDER_TYPE.ORNAMENT){
+      let ornament = createBase(suborder);
+      list.push(ornament);
+    }
+
+    return list;
+  }
 }
 
 module.exports = new SalesData()

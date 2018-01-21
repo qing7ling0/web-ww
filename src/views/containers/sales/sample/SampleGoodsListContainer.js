@@ -26,16 +26,17 @@ import * as common from '../../../modules/common'
 import * as constants from '../../../constants/Constants'
 import * as config from '../../../constants/Config'
 import utils from '../../../../utils/utils'
-import GoodsAddModal from './GoodsAddModal'
-import GoodsEditModal from './GoodsEditModal'
+import SampleGoodsAddModal from './SampleGoodsAddModal'
+import SampleGoodsEditModal from './SampleGoodsEditModal'
 import { commonUtils } from '../../../modules/common';
 import { GOODS_TYPES } from './types'
 
-const ROOT_URL = common.findRouterById(config.Routers, constants.MENU_IDS.salesItems).url;
+const ROOT_URL = common.findRouterById(config.Routers, constants.MENU_IDS.salesSampleGoods).url;
 const ADD_URL = ROOT_URL + '/add';
 const URL_PROFILE = ROOT_URL + '/profile';
 const URL_REG = new RegExp(ROOT_URL + '/list/' +'\\d/') ;
-class GoodsListContainer extends Component {
+
+class SampleGoodsListContainer extends Component {
   // 构造函数，在创建组件的时候调用一次
   constructor(props) {
     super(props);
@@ -48,13 +49,13 @@ class GoodsListContainer extends Component {
     }
 
     this.searchWord = '';
-    this.goodsType = GOODS_TYPES[0];
+    this.sampleGoodsType = GOODS_TYPES[0];
   }
 
   componentWillMount(){
     for(let value of GOODS_TYPES) {
       if (value.key === this.props.match.params.type) {
-        this.goodsType = value;
+        this.sampleGoodsType = value;
       }
     }
     this.props.reqGetGoodsBaseDatas();
@@ -64,7 +65,7 @@ class GoodsListContainer extends Component {
     if(nextProps.match.params.type !== this.props.match.params.type) {
       for(let value of GOODS_TYPES) {
         if (value.key === nextProps.match.params.type) {
-          this.goodsType = value;
+          this.sampleGoodsType = value;
         }
       }
       this.onReqList();
@@ -72,7 +73,7 @@ class GoodsListContainer extends Component {
   }
 
   render() {
-    this.options = this.goodsType.listOptions(this);
+    this.options = this.sampleGoodsType.listOptions(this);
 
     return (
       <BaseListComponent
@@ -86,7 +87,7 @@ class GoodsListContainer extends Component {
           this.onReqList(pageInfo);
         }}
         hasSearch={true}
-        searchPlaceholder={`请输入${this.goodsType.label}名称`}
+        searchPlaceholder={`请输入${this.sampleGoodsType.label}名称`}
         onSearch={(value)=>{
           this.searchWord = value;
           this.onReqList(this.props.pageInfo);
@@ -97,22 +98,22 @@ class GoodsListContainer extends Component {
         addVisible={this.state.addVisible}
         editVisible={this.state.editVisible}
         addNode={
-          <GoodsAddModal 
-            title={`添加${this.goodsType.label}`} 
+          <SampleGoodsAddModal 
+            title={`添加${this.sampleGoodsType.label}`} 
             pageInfo={this.props.pageInfo} 
             visible={this.state.addVisible} 
-            goodsType={this.goodsType} 
+            sampleGoodsType={this.sampleGoodsType} 
             onAdd={this.onAdd}
             onSubmitSuccess={this.onReqList}
             afterClose={()=>this.setState({addVisible:false})}/> 
         }
         editNode={
-          <GoodsEditModal 
-            title={`编辑${this.goodsType.label}`} 
+          <SampleGoodsEditModal 
+            title={`编辑${this.sampleGoodsType.label}`} 
             data={this.state.editData} 
             pageInfo={this.props.pageInfo} 
             visible={this.state.editVisible} 
-            goodsType={this.goodsType} 
+            sampleGoodsType={this.sampleGoodsType} 
             onEdit={this.onEdit}
             onSubmitSuccess={this.onReqList}
             afterClose={()=>this.setState({editVisible:false})}/> 
@@ -121,10 +122,10 @@ class GoodsListContainer extends Component {
     );
   }
   currentList = () => {
-    let listKey = this.goodsType.listTag;
-    let index = this.goodsType.listTag.indexOf(':');
+    let listKey = this.sampleGoodsType.listTag;
+    let index = this.sampleGoodsType.listTag.indexOf(':');
     if (index > -1) {
-      listKey = this.goodsType.listTag.substring(0, index);
+      listKey = this.sampleGoodsType.listTag.substring(0, index);
     }
     for(let key in this.props.sales) {
       if (listKey === key) {
@@ -136,31 +137,31 @@ class GoodsListContainer extends Component {
 
   onReqList = (pageInfo) => {
     let con = {
-      goods:this.goodsType.key
+      type:this.sampleGoodsType.key
     };
     if (this.searchWord) {
       con = {};
       con.name = {$regex:`/${this.searchWord}/i`}
     }
-    this.props.reqGetGoodsList(this.goodsType.listTag, this.goodsType.graphqlType, con, pageInfo);
+    this.props.reqGetSampleGoodsList(this.sampleGoodsType.listTag, con, pageInfo);
   }
   onReqUpdate = (id, data) => {
     if (data) {
-      data.goods = this.goodsType.key;
+      data.type = this.sampleGoodsType.key;
     }
-    this.props.reqUpdateGoods(this.goodsType.tag, id, data);
+    this.props.reqUpdateSampleGoods(this.sampleGoodsType.tag, id, data);
   }
   onReqAdd = (data) => {
     if (data) {
-      data.goods = this.goodsType.key;
+      data.type = this.sampleGoodsType.key;
     }
-    this.props.reqAddGoods(this.goodsType.tag, this.goodsType.graphqlType, data);
+    this.props.reqAddSampleGoods(this.sampleGoodsType.tag, data);
   }
   onReqRemove = (ids) => {
-    this.props.reqDeleteGoods(this.goodsType.tag, ids);
+    this.props.reqDeleteSampleGoods(this.sampleGoodsType.tag, ids);
   }
   onReqProfile = (id) => {
-    this.props.reqGetGoodsProfile(this.goodsType.tag, id);
+    this.props.reqGetSampleGoodsProfile(this.sampleGoodsType.tag, id);
   }
 
   onAdd = (values) => {
@@ -189,7 +190,7 @@ class GoodsListContainer extends Component {
   }
 
   onRowClick = (record, index, event) => {
-    // this.props.history.push(URL_PROFILE+'/' + record._id);
+    this.props.history.push(URL_PROFILE+'/' + record._id);
   }
 
   onEditClick = (record) => {
@@ -201,17 +202,17 @@ export default connect(
   state => ({
     sales:state.sales,
     loading:state.sales.loading,
-    pageInfo:state.sales.goodsListPage,
-    deleteIDS:state.sales.goodsDeleteIDS
+    pageInfo:state.sales.sampleGoodsListPage,
+    deleteIDS:state.sales.sampleGoodsDeleteIDS
   }),
   (dispatch) => {
     return bindActionCreators({
-      reqGetGoodsList: Actions.getGoodsList,
-      reqAddGoods: Actions.addGoods,
-      reqDeleteGoods: Actions.deleteGoods,
-      reqUpdateGoods: Actions.updateGoods,
-      reqGetGoodsProfile: Actions.getGoodsProfile,
+      reqGetSampleGoodsList: Actions.getSampleGoodsList,
+      reqAddSampleGoods: Actions.addSampleGoods,
+      reqDeleteSampleGoods: Actions.deleteSampleGoods,
+      reqUpdateSampleGoods: Actions.updateSampleGoods,
+      reqGetSampleGoodsProfile: Actions.getSampleGoodsProfile,
       reqGetGoodsBaseDatas: Actions.getGoodsBaseDatas
     }, dispatch);
   }
-)(GoodsListContainer);
+)(SampleGoodsListContainer);

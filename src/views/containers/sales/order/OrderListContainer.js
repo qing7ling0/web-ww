@@ -43,7 +43,8 @@ const ORDER_MENUS = [
   {key:'1', label:'需审核'},
   {key:'2', label:'制作中'},
   {key:'3', label:'已完成'},
-  {key:'4', label:'全部'}
+  {key:'4', label:'已取消'},
+  {key:'5', label:'全部'}
 ]
 const ROOT_URL = common.findRouterById(config.Routers, constants.MENU_IDS.salesOrder).url;
 const ADD_URL = ROOT_URL + '/add';
@@ -91,6 +92,9 @@ class OrderListContainer extends Component {
     this.props.reqCustomerList(0, 10000);
     this.props.reqShopList(0, 100);
     this.props.reqShopGuideList(0, 1000);
+  }
+
+  componentDidMount() {
     this.onReqList();
   }
   
@@ -121,7 +125,7 @@ class OrderListContainer extends Component {
         </Menu>
         <SearchContainer>
           <ButtonOp type="primary" onClick={this.onAddClicked}>添加</ButtonOp>
-          <SearchInput placeholder={'请输入订单号'} onSearch={this.onSearchOrderID}/>
+          <SearchInput placeholder={'请输入订单号'} onSearch={this.onSearchOrderID} enterButton />
           <SelectInput showSearch={true} placeholder={'请选择导购'} allowClear={true} optionFilterProp='children' onChange={this.onGudieChange}>
             {
               this.props.guideList.map((item) => {
@@ -159,66 +163,12 @@ class OrderListContainer extends Component {
     );
   }
 
-  /**
-   * 
-    render() {
-    const columns = optionsType.getOrderListOptions(this);
-    const list = this.props.orderList;
-    return (
-      <BaseListComponent
-        columns={columns} 
-        dataSource={list} 
-        loading={this.props.loading}
-        onRowClick={this.onRowClick}
-        onBtnAddClicked={()=>{
-          this.props.history.push(this.routerPath+'/add/' + this.props.match.params.type);
-          // this.setState({addVisible:true});
-        }}
-        pageInfo={this.props.pageInfo}
-        onGetList={(pageInfo)=>{
-          this.onReqList(pageInfo);
-        }}
-        hasSearch={true}
-        searchPlaceholder={`请输入${this.orderType.label}`}
-        onSearch={(value)=>{
-          this.searchWord = value;
-          this.onReqList(this.props.pageInfo);
-        }}
-        onDelItems={this.props.reqDeleteOrder}
-        deleteIDS={this.props.orderDeleteIDS}
-        addVisible={this.state.addVisible}
-        editVisible={this.state.editVisible}
-        addNode={
-          <OrderAddModal 
-            orderType={this.orderType} 
-            title={`添加${this.orderType.label}`} 
-            pageInfo={this.props.pageInfo} 
-            visible={this.state.addVisible} 
-            onSubmitSuccess={this.onReqList}
-            onAdd={this.onAdd}
-            afterClose={()=>this.setState({addVisible:false})}/> 
-        }
-        editNode={
-          <OrderEditModal 
-          orderType={this.orderType} 
-          title={`编辑${this.orderType.label}`} 
-          data={this.state.editData} 
-          pageInfo={this.props.pageInfo} 
-          visible={this.state.editVisible} 
-          onSubmitSuccess={this.onReqList}
-          onEdit={this.onEdit}
-          afterClose={()=>this.setState({editVisible:false})}/> }
-      />
-    );
-  }
-  */
-
   render() {
     let pagination = false;
     if (this.props.pageInfo && this.props.pageInfo.pageSize) {
       pagination = {
         current:this.props.pageInfo.page,
-        pageSize:constants.DEFAULT_PAGE_SIZE,
+        pageSize:this.props.pageInfo.pageSize,
         onChange:this.onPageChange,
         showTotal:total => `Total:${total}`,
         total: this.props.pageInfo.total
@@ -241,7 +191,6 @@ class OrderListContainer extends Component {
             onRow={(record, index) => ({
               onClick: ()=>this.onRowClick(record, index),
             })}
-            rowSelection={{onChange:this.onRowSelectionChange}}
             pagination={pagination}
           />
         </DataContentComponent>
@@ -249,9 +198,8 @@ class OrderListContainer extends Component {
     );
   }
 
-  
-  
   onReqList = (pageInfo) => {
+    pageInfo = pageInfo || this.props.pageInfo;
     let con = {};
     if (this.searchOrderId) {
       // con.sub_order_id=this.orderType.id;
@@ -272,6 +220,8 @@ class OrderListContainer extends Component {
       con.state = {$gt:constants.BASE_CONSTANTS.E_ORDER_STATUS.REVIEW, $lt:constants.BASE_CONSTANTS.E_ORDER_STATUS.COMPLETED};
     } else if (this.orderMenuKey === '3') {
       con.state = constants.BASE_CONSTANTS.E_ORDER_STATUS.COMPLETED;
+    } else if (this.orderMenuKey === '4') {
+      con.state = constants.BASE_CONSTANTS.E_ORDER_STATUS.CANCEL;
     }
     this.props.reqGetSubOrderList('subOrderList', con, pageInfo);
   }
@@ -292,8 +242,8 @@ class OrderListContainer extends Component {
     this.onReqRemove(ids);
   }
   
-  onDelete = (ids) => {
-    this.onReqRemove(ids);
+  onCancel = (id) => {
+    this.props.reqCancelSuborder(id);
   }
 
   onAdd = (values) => {
@@ -308,7 +258,7 @@ class OrderListContainer extends Component {
   }
 
   onRowClick = (record, index, event) => {
-    this.props.history.push(URL_PROFILE+'/' + record._id);
+    // this.props.history.push(URL_PROFILE+'/' + record._id);
   }
 
   onPageChange = (page, pageSize) => {
@@ -324,7 +274,8 @@ class OrderListContainer extends Component {
 
   onEdit = (record) => {
     if (record) {
-      this.setState({reviewModalVisible:true, reviewOrderInfo:JSON.parse(JSON.stringify(record))});
+      this.props.history.push(URL_PROFILE+'/' + record._id);
+      // this.setState({reviewModalVisible:true, reviewOrderInfo:JSON.parse(JSON.stringify(record))});
     }
   }
 
@@ -369,7 +320,7 @@ export default connect(
   state => ({
     sales:state.sales,
     loading:state.sales.loading,
-    pageInfo:state.sales.orderListPage,
+    pageInfo:state.sales.subOrderListPage,
     list:state.sales.subOrderList,
     deleteIDS:state.sales.orderDeleteIDS,
     shopList:state.shop.shopList,
@@ -382,6 +333,7 @@ export default connect(
       reqGetOrderList: Actions.getOrderList,
       reqGetSubOrderList: Actions.getSubOrderList,
       reqDeleteOrder: Actions.deleteOrder,
+      reqCancelSuborder: Actions.suborderCancel,
       reqAddOrder: Actions.addOrder,
       reqUpdateOrder: Actions.updateOrder,
       reqGetOrderProfile: Actions.getOrderProfile,

@@ -51,6 +51,10 @@ import * as optionsType from '../types'
 import { ORDER_TYPES, listToSelectOptions } from './types';
 
 import ShoesAdd from './goods/ShoesAdd'
+import BeltAdd from './goods/BeltAdd'
+import WatchStrapAdd from './goods/WatchStrapAdd'
+import MaintainAdd from './goods/MaintainAdd'
+import OrnamentAdd from './goods/OrnamentAdd'
 
 const CUSTOMOR_OPTIONS = [
   {key:'name', label:'名称'},
@@ -96,8 +100,8 @@ class OrderGoodsReviewModal extends Component {
     if (this.props.isRecharge) {
       this.state.currentOrderType = constants.BASE_CONSTANTS.E_ORDER_TYPE.RECHARGE;
     }
-    if (this.props.isEditMode) {
-      this.state.currentOrderType = this.props.orderType;
+    if (this.props.data) {
+      this.state.currentOrderType = this.props.data.type;
     }
     this.setState({visible:this.props.visible})
     
@@ -118,16 +122,66 @@ class OrderGoodsReviewModal extends Component {
   }
 
   renderGoods = () => {
+    if (!this.orderType) {
+      return null;
+    }
 
     switch(this.orderType.key) {
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.SHOES:
+      case constants.BASE_CONSTANTS.E_ORDER_TYPE.DESIGN:
       return (
         <ShoesAdd 
           data={this.props.data} 
+          isReview={true}
           orderType={this.orderType} 
           setGoodsCallback={this.onSetGoodsAddCallback} 
           onAddSuccess={this.onAddSuccess}
+          isDesigon={(this.orderType.key===constants.BASE_CONSTANTS.E_ORDER_TYPE.DESIGN)}
+          customerId={this.props.customerId}
+          customer={this.props.customer} />
+      )
+      case constants.BASE_CONSTANTS.E_ORDER_TYPE.BELT:
+      return (
+        <BeltAdd 
+          data={this.props.data} 
+          orderType={this.orderType} 
           isReview={true}
+          setGoodsCallback={this.onSetGoodsAddCallback} 
+          onAddSuccess={this.onAddSuccess}
+          customerId={this.props.customerId}
+          customer={this.props.customer} />
+      )
+      case constants.BASE_CONSTANTS.E_ORDER_TYPE.WATCH_STRAP:
+      return (
+        <WatchStrapAdd 
+          data={this.props.data} 
+          orderType={this.orderType} 
+          isReview={true}
+          setGoodsCallback={this.onSetGoodsAddCallback} 
+          onAddSuccess={this.onAddSuccess}
+          customerId={this.props.customerId}
+          customer={this.props.customer} />
+      )
+      case constants.BASE_CONSTANTS.E_ORDER_TYPE.MAINTAIN:
+      return (
+        <MaintainAdd 
+          data={this.props.data} 
+          orderType={this.orderType} 
+          isReview={true}
+          setGoodsCallback={this.onSetGoodsAddCallback} 
+          onAddSuccess={this.onAddSuccess}
+          customerId={this.props.customerId}
+          customer={this.props.customer} />
+      )
+      case constants.BASE_CONSTANTS.E_ORDER_TYPE.ORNAMENT:
+      return (
+        <OrnamentAdd 
+          data={this.props.data} 
+          orderType={this.orderType} 
+          isReview={true}
+          setGoodsCallback={this.onSetGoodsAddCallback} 
+          onAddSuccess={this.onAddSuccess}
+          customerId={this.props.customerId}
           customer={this.props.customer} />
       )
     }

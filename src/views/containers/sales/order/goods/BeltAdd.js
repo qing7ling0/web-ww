@@ -78,7 +78,9 @@ class BeltAdd extends Component {
   componentDidMount(){
     this.props.setGoodsCallback(this.onAdd);
     this.onReqOrderGoodsList(this.props.orderType.key);
-    this.props.reqLastCustomerOrderInfo(this.props.customer._id, this.props.orderType.key, 'lastCustomerOrderInfo');
+    if (!this.props.isReview) {
+      this.props.reqLastCustomerOrderInfo(this.props.customerId, this.props.orderType.key, 'lastBeltCustomerOrderInfo');
+    }
 
     if (this.props.data) {
       this.setState({
@@ -221,12 +223,17 @@ class BeltAdd extends Component {
       beltSize.b_B = this.props.lastCustomerOrderInfo.b_B;
       beltSize.b_C = this.props.lastCustomerOrderInfo.b_C;
       beltSize.b_D = this.props.lastCustomerOrderInfo.b_D;
+    } else {
+      beltSize.b_A = '';
+      beltSize.b_B = '';
+      beltSize.b_C = '';
+      beltSize.b_D = '';
     }
     if (this.props.data) {
-      let data = {...this.props.data, ...beltSize};
+      let data = {...this.props.data};
       this.options = common.initFormDefaultValues(this.options, data);
     } else {
-      if (this.props.lastCustomerOrderInfo && !this.props.isReview) {
+      if (!this.props.isReview) {
         this.options = common.initFormDefaultValues(this.options, beltSize);
       }
     }
@@ -264,7 +271,10 @@ class BeltAdd extends Component {
           {
             this.renderPics()
           }
-          <FormItemComponent key={urgentOptionItem.name} options={urgentOptionItem} form={this.props.form} />
+          <Row>
+            <Col><span style={{float:'right'}}>{customExtra}</span><ContentTitle>加急</ContentTitle></Col>
+            <FormItemComponent key={urgentOptionItem.name} options={urgentOptionItem} form={this.props.form} />
+          </Row>
         </NormalForm>
       </div>
     );
@@ -296,7 +306,7 @@ class BeltAdd extends Component {
 
   onAdd = () => {
     if (this.props.isReview) {
-      if (!this.state.customReviewSure || !this.state.goodsReviewSure || !this.state.photoReviewSure) {
+      if (!this.state.goodsReviewSure || !this.state.customReviewSure || !this.state.photoReviewSure) {
         message.error('还有部分信息未审核，请审核！')
         return;
       }
@@ -391,6 +401,8 @@ class BeltAdd extends Component {
       } else {
         forms.setFieldsValue({price:null});
       }
+    } else {
+      forms.setFieldsValue({price:null});
     }
     forms.setFieldsValue({NID:nid});
   }
@@ -423,7 +435,7 @@ export default connect(
     shopList:state.shop.shopList,
     guideList:state.shop.shopGuideList,
     customerList:state.customer.customerList,
-    lastCustomerOrderInfo:state.customer.lastCustomerOrderInfo
+    lastCustomerOrderInfo:state.customer.lastBeltCustomerOrderInfo
   }),
   (dispatch) => {
     return bindActionCreators({

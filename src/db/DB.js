@@ -145,6 +145,19 @@ class DB {
             throw new ApiError(ApiErrorNames.DELETE_FAIL);
         }
     }
+    
+    static async findOne(model, conditions, onQuery) {
+        if (conditions && model) {
+            if (onQuery) {
+                let query = model.findOne(conditions);
+                return await onQuery(query);
+            } else {
+                return await model.findOne(conditions);
+            }
+        } else {
+            throw new ApiError(ApiErrorNames.DELETE_FAIL);
+        }
+    }
 
     static async findById(model, id, onQuery) {
         if (id && model) {

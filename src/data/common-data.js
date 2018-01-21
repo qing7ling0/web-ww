@@ -77,20 +77,22 @@ class CommonData {
   }
 
   createCurrentOrderIndex() {
-    let _time = new Date().getTime() / 1000;
+    let _time = Math.floor(new Date().getTime() / 1000);
+    // console.log('createCurrentOrderIndex' + _time)
     if (!CommonData.currentOrderTime) {
       CommonData.currentOrderTime = _time;
-      CommonData.currentOrderIndex = 1001;
+      CommonData.currentOrderIndex = 101;
     } else {
       if (_time !== CommonData.currentOrderTime) {
         CommonData.currentOrderTime = _time;
-        CommonData.currentOrderIndex = 1001;
+        CommonData.currentOrderIndex = 101;
       } else {
-        if (!CommonData.currentOrderIndex) CommonData.currentOrderIndex = 1001;
+        if (!CommonData.currentOrderIndex) CommonData.currentOrderIndex = 101;
       }
     }
     return CommonData.currentOrderIndex++;
   }
 }
-
+CommonData.currentOrderTime = 0;
+CommonData.currentOrderIndex = 101;
 module.exports = new CommonData();

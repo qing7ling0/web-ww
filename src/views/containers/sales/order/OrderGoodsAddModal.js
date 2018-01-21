@@ -89,8 +89,8 @@ class OrderGoodsAddModal extends Component {
     if (this.props.isRecharge) {
       this.state.currentOrderType = constants.BASE_CONSTANTS.E_ORDER_TYPE.RECHARGE;
     }
-    if (this.props.isEditMode) {
-      this.state.currentOrderType = this.props.orderType;
+    if (this.props.data) {
+      this.state.currentOrderType = this.props.data.type;
     }
     this.setState({visible:this.props.visible})
     
@@ -102,7 +102,7 @@ class OrderGoodsAddModal extends Component {
     return (
       <div>
         {
-          this.props.isRecharge || this.props.isEditMode ? null
+          this.props.isRecharge || this.props.data ? null
           :
           <Select style={{ width:120, marginBottom:20 }} defaultValue={this.state.currentOrderType} onChange={this.onChange}>
             {
@@ -123,15 +123,17 @@ class OrderGoodsAddModal extends Component {
     if (!this.orderType) {
       return null;
     }
-    console.log('renderBody')
     switch(this.orderType.key) {
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.SHOES:
+      case constants.BASE_CONSTANTS.E_ORDER_TYPE.DESIGN:
       return (
         <ShoesAdd 
           data={this.props.data} 
           orderType={this.orderType} 
           setGoodsCallback={this.onSetGoodsAddCallback} 
           onAddSuccess={this.onAddSuccess}
+          isDesigon={(this.orderType.key===constants.BASE_CONSTANTS.E_ORDER_TYPE.DESIGN)}
+          customerId={this.props.customerId}
           customer={this.props.customer} />
       )
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.BELT:
@@ -141,6 +143,7 @@ class OrderGoodsAddModal extends Component {
           orderType={this.orderType} 
           setGoodsCallback={this.onSetGoodsAddCallback} 
           onAddSuccess={this.onAddSuccess}
+          customerId={this.props.customerId}
           customer={this.props.customer} />
       )
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.WATCH_STRAP:
@@ -150,6 +153,7 @@ class OrderGoodsAddModal extends Component {
           orderType={this.orderType} 
           setGoodsCallback={this.onSetGoodsAddCallback} 
           onAddSuccess={this.onAddSuccess}
+          customerId={this.props.customerId}
           customer={this.props.customer} />
       )
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.MAINTAIN:
@@ -159,6 +163,7 @@ class OrderGoodsAddModal extends Component {
           orderType={this.orderType} 
           setGoodsCallback={this.onSetGoodsAddCallback} 
           onAddSuccess={this.onAddSuccess}
+          customerId={this.props.customerId}
           customer={this.props.customer} />
       )
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.ORNAMENT:
@@ -168,6 +173,7 @@ class OrderGoodsAddModal extends Component {
           orderType={this.orderType} 
           setGoodsCallback={this.onSetGoodsAddCallback} 
           onAddSuccess={this.onAddSuccess}
+          customerId={this.props.customerId}
           customer={this.props.customer} />
       )
     }
@@ -203,7 +209,7 @@ class OrderGoodsAddModal extends Component {
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.SHOES:
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.DESIGN:
         con = {
-          goods:type
+          goods:constants.BASE_CONSTANTS.E_ORDER_TYPE.SHOES
         };
         this.props.reqGetGoodsList('goodsShoesList:goodsList', graphqlTypes.goodsType, con, {page:-1, pageSize:0});
       break;

@@ -42,14 +42,14 @@ export const createDefaultListQuery = (name, type, model, onQuery) => {
   }
 }
 
-export const createDefaultProfileQuery = (type, model) => {
+export const createDefaultProfileQuery = (type, model, onQuery) => {
   return {
     type: type,
     args: {
       id: {type:GraphQLString},
     },
     async resolve (root, params, options) {
-      return await DB.findById(model, params.id);
+      return await DB.findById(model, params.id, onQuery);
     }
   };
 }

@@ -4,6 +4,7 @@ import * as ActionTypes from '../constants/ActionTypes';
 import { States } from '../../base/modules/ReduxState'
 import results from './results'
 import baseUtils from '../../base/utils/Utils'
+import * as constants from '../constants/Constants'
 
 const LOADING_ACTIONS = [
   ActionTypes.CUSTOMER_ADD,
@@ -15,17 +16,18 @@ const LOADING_ACTIONS = [
   ActionTypes.CUSTOMER_GUIDE_DELETE,
   ActionTypes.CUSTOMER_GUIDE_UPDATE,
   ActionTypes.CUSTOMER_GUIDE_LIST_GET,
+  ActionTypes.CUSTOMER_PROFILE_GET,
 ];
 
 const initialState = {
   loading:false,
   result: {code:0, message:'', type:0},
   customerList: [],
-  customerListPage: {page:0,pageSize:0,total:0},
+  customerListPage: {page:0,pageSize:constants.DEFAULT_PAGE_SIZE,total:0},
   customerDeleteIDS: [],
 
   customerGuideList: [],
-  customerGuideListPage: {page:0,pageSize:0,total:0},
+  customerGuideListPage: {page:0,pageSize:constants.DEFAULT_PAGE_SIZE,total:0},
   customerGuideDeleteIDS: [],
 };
 
@@ -73,12 +75,13 @@ function doActions(state, action) {
       if (action.state === States.Fulfilled && result.code === 0) {
         return createState(state, resState, {customerGuideDeleteIDS:data.deleteCustomerGuide});
       }
-        break;
+      break;
     case ActionTypes.LAST_CUSTOMER_ORDER_INFO:
+    case ActionTypes.CUSTOMER_PROFILE_GET:
       if (action.state === States.Fulfilled && result.code === 0) {
         return createState(state, resState, {...data});
       }
-        break;
+      break;
     default:
       break;
   }

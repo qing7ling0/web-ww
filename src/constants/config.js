@@ -9,7 +9,7 @@ module.exports.Menus = [
       {id:MENU_IDS.salesItems, name:'商品'},
       {id:MENU_IDS.salesOrder, name:'订单'},
       {id:MENU_IDS.salesMaterial, name:'原材料'},
-      {id:MENU_IDS.salesMaintainPrices, name:'维修保养'},
+      {id:MENU_IDS.salesSampleGoods, name:'库存'},
       {id:MENU_IDS.salesItemsBase, name:'基础数据管理'},
     ]
   },
@@ -51,6 +51,7 @@ module.exports.Routers = [
   { id:MENU_IDS.salesItems, name:'商品', url: '/home/sales/items' },
   { id:MENU_IDS.salesOrder, name:'订单', url: '/home/sales/order' },
   { id:MENU_IDS.salesMaterial, name:'原材料', url: '/home/sales/material' },
+  { id:MENU_IDS.salesSampleGoods, name:'库存', url: '/home/sales/sample' },
   { id:MENU_IDS.salesItemsBase, name:'基础数据管理', url: '/home/sales/base' },
 
   { id:MENU_IDS.customer, name: '客户管理', url: '/home/customer' },

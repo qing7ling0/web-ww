@@ -13,7 +13,8 @@ import {
   materialModel,
   orderModel,
   goodsModel,
-  tryFeedbackModel
+  tryFeedbackModel,
+  sampleGoodsModel
 } from '../../models/sales'
 import {salesData} from '../../data/index';
 import * as types from './types';
@@ -24,6 +25,7 @@ const schemasUtils = require('../../utils/schemas-utils')
 
 const material = schemasUtils.createDefaultMutaion('material', types.materialType, types.materialInputType, materialModel);
 const tryFeedback = schemasUtils.createDefaultMutaion('tryFeedback', types.tryFeedbackType, types.tryFeedbackInputType, tryFeedbackModel);
+const sampleGoods = schemasUtils.createDefaultMutaion('sampleGoods', types.sampleGoodsType, types.sampleGoodsInputType, sampleGoodsModel);
 const goods = schemasUtils.createDefaultMutaion('goods', types.goodsType, types.goodsInputType, goodsModel, {
   add:salesData.addGoods.bind(salesData), 
   remove:salesData.removeGoodsByIds.bind(salesData), 
@@ -105,9 +107,19 @@ const suborderUpdate = {
   }
 }
 
+const suborderCancel = {
+  type: commonFields.operateResultType,
+  args: {
+    id: {type: GraphQLString},
+  },
+  async resolve (ctx, params, options) {
+    return await salesData.cancelSuborder(params.id);
+  }
+}
+
 let mutations = {
-  ...material, ...goods, ...tryFeedback,
+  ...material, ...goods, ...tryFeedback, ...sampleGoods,
   orderAdd, orderRemove, orderUpdate, 
-  reviewSuborderUpdate, suborderStateUpdate, suborderUpdate
+  reviewSuborderUpdate, suborderStateUpdate, suborderUpdate, suborderCancel
 };
 export default mutations;

@@ -205,11 +205,19 @@ class OrderAddContainer extends Component {
           columns={ORDER_OPTIONS.goodsList(this)} 
           dataSource={this.state.goods}
           showHeader={true}
-          rowKey={(record)=>record._id}
+          rowKey={(record, index)=>index}
           title={()=>{
             return (
               <div>
-                <Button type="primary" onClick={()=>{this.setState({addVisible:true})}} style={{marginRight:10}}>添加</Button>
+                <Button 
+                  type="primary" 
+                  onClick={()=>{
+                    this.setState({addVisible:true, editGoods:null})
+                  }} 
+                  style={{marginRight:10}}
+                >
+                  添加
+                </Button>
                 <Button type="primary" onClick={()=>{this.setState({addVisible:true, isRechargeOrder:true})}}>充值</Button>
               </div>
             );
@@ -222,7 +230,9 @@ class OrderAddContainer extends Component {
             isRecharge={this.state.isRechargeOrder}
             visible={this.state.addVisible} 
             customer={this.state.customer}
+            customerId={this.state.customerId}
             onAdd={this.onGoodsAdd}
+            data={this.state.editGoods}
             afterClose={()=>this.setState({addVisible:false})}/> 
           : null
         }
@@ -374,8 +384,45 @@ class OrderAddContainer extends Component {
     }
   }
 
+  onGoodsDelete = (goods) => {
+    let _goods = this.state.goods;
+    for(let i=0; i<_goods.length; i++) {
+      if (_goods[i] === goods) {
+        _goods.splice(i, 1);
+        break;
+      }
+    }
+    this.setState({goods:_goods});
+  }
+
+  onGoodsEdit = (goods) => {
+    this.setState({addVisible:true, editGoods:goods});
+  }
+
   onPrev = () => {
     this.setState({currentStep:Math.max(0,this.state.currentStep-1)})
+  }  
+  
+  checkPhone = (rule, value, callback) => {
+    if (validate.isMobile(value)) {
+      callback();
+    } else {
+      callback("手机号不合法")
+    }
+  }
+
+  onGoodsAdd = (values) => {
+    let _goods = this.state.goods;
+    if (this.state.editGoods) {
+      for(let i=0; i<_goods.length; i++) {
+        if (_goods[i] === this.state.editGoods) {
+          _goods.splice(i, 1);
+          break;
+        }
+      }
+    }
+    _goods.push(values);
+    this.setState({goods:_goods, editGoods:null});
   }
 
   onNext = (values) => {
@@ -391,7 +438,15 @@ class OrderAddContainer extends Component {
           customer[key] = values[key];
         }
       }
-      this.setState({stepOneValues:values, customer:customer, order:order, currentStep:this.state.currentStep+1});
+      let customer_id = '';
+      for(let value of this.props.customerList) {
+        if (value.phone === customer.phone) {
+          customer_id = value._id;
+          break;
+        }
+      }
+
+      this.setState({stepOneValues:values, customer:customer, customerId:customer_id, order:order, currentStep:this.state.currentStep+1});
     } else if (this.state.currentStep === 1) {
       
       this.setState({currentStep:this.state.currentStep+1});
@@ -423,12 +478,6 @@ class OrderAddContainer extends Component {
     // }
     // order.customer = customer;
     // this.props.reqAddOrder(this.orderType.query, order);
-  }
-
-  onGoodsAdd = (values) => {
-    let goods = this.state.goods;
-    goods.push(values);
-    this.setState({goods:goods});
   }
 }
 
