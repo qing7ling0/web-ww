@@ -34,6 +34,7 @@ var operateSchema = new Schema({
   account: {type: Schema.Types.ObjectId, ref:'account'},
   sex: String,
   user_type: {type:Number, default:constants.USER_TYPES.operate},
+  power_type: {type:Number, default:constants.POWER_TYPES.MANAGER_NORMAL},
   ...baseFields,
 },{
   timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }

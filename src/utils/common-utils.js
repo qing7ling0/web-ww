@@ -1,5 +1,6 @@
 
 import constants from '../constants/constants'
+import config from '../constants/config'
 import transportCompanys from '../constants/transport'
 
 export const getMarketLevel = function(id) {
@@ -147,5 +148,42 @@ export const createGoodsNID = function(type, data, sex) {
     case constants.GOODS_ORNAMENT:
       
     return NID;
+  }
+}
+
+const getPowerByType = function(powerId, powerType) {
+  for(let powerInfo of config.Powers) {
+    if (powerInfo.id == powerId) {
+      for(let power of powerInfo.powers) {
+        if (power.id == powerType) {
+          let ret = {...power.power};
+          ret.canOperate = ret.add || ret.edit;
+          return ret;
+        }
+      }
+    }
+  }
+
+  return {};
+}
+
+export const getPowerByType = getPowerByType;
+
+export const getPower= function(user, powerId) {
+  let powerType = 0;
+  switch(type) {
+    case constants.USER_TYPES.shopGuide:
+      powerType = user.manager ? constants.POWER_TYPES.SHOP_MANAGER : constants.POWER_TYPES.SHOP_GUIDE;
+      return getPowerByType(powerId, powerType);
+    case constants.USER_TYPES.operate:
+      powerType = constants.POWER_TYPES.MANAGER_NORMAL;
+      return getPowerByType(powerId, powerType);
+    case constants.USER_TYPES.production:
+      powerType = constants.POWER_TYPES.FACTORY_PRODUCTION;
+      return getPowerByType(powerId, powerType);
+    case constants.USER_TYPES.admin:
+      return {view:true, add:true, edit:true}
+    default:
+    break;
   }
 }

@@ -15,6 +15,7 @@ import { ApiError, ApiErrorNames } from '../error/api-errors'
 import utils from '../utils/utils'
 import baseUtils from '../base/utils/utils'
 import constants from '../constants/constants'
+import config from '../constants/config'
 // import 
 
 const logUtil = require('../utils/log-utils');
@@ -385,6 +386,7 @@ class UserData {
   types() {
     return constants.USER_TYPES;
   }
+
 }
 
 module.exports = new UserData();

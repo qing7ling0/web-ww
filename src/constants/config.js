@@ -1,4 +1,4 @@
-const {MENU_IDS} = require('./constants')
+const {MENU_IDS, POWER_TYPES} = require('./constants')
 
 module.exports.Menus = [
   {
@@ -68,4 +68,118 @@ module.exports.Routers = [
   { id:MENU_IDS.system, url: '/home/system', name:'系统管理' },
   { id:MENU_IDS.systemSetting, name:'设置', url: '/home/system/setting' },
   { id:MENU_IDS.systemAdmin, name:'管理员账号', url: '/home/system/admins' },
+]
+
+module.exports.Powers = [
+  { 
+    id:MENU_IDS.salesItems, 
+    powers:[
+      { id:POWER_TYPES.SALE_MANAGER, power:{view:true} },
+      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true} },
+      { id:POWER_TYPES.SHOP_GUIDE, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_NORMAL, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.FACTORY_PRODUCTION, power:{view:true} },
+    ]
+  },
+  { 
+    id:MENU_IDS.salesOrder, 
+    powers:[
+      { id:POWER_TYPES.SALE_MANAGER, power:{view:true} },
+      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true, add:true} },
+      { id:POWER_TYPES.SHOP_GUIDE, power:{view:true, add:true} },
+      { id:POWER_TYPES.MANAGER_NORMAL, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.FACTORY_PRODUCTION, power:{view:true} },
+    ]
+  },
+  { 
+    id:MENU_IDS.salesMaterial, 
+    powers:[
+      { id:POWER_TYPES.SALE_MANAGER, power:{view:true} },
+      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true} },
+      { id:POWER_TYPES.SHOP_GUIDE, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_NORMAL, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.FACTORY_PRODUCTION, power:{view:true, add:true, edit:true} },
+    ]
+  },
+  { 
+    id:MENU_IDS.salesSampleGoods, 
+    powers:[
+      { id:POWER_TYPES.SALE_MANAGER, power:{view:true} },
+      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true} },
+      { id:POWER_TYPES.SHOP_GUIDE, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_NORMAL, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.FACTORY_PRODUCTION, power:{view:true} },
+    ]
+  },
+  { 
+    id:MENU_IDS.salesItemsBase, 
+    powers:[
+      { id:POWER_TYPES.SALE_MANAGER, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.SHOP_GUIDE, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_NORMAL, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.FACTORY_PRODUCTION, power:{view:true} },
+    ]
+  },
+  
+  { 
+    id:MENU_IDS.customerInfo, 
+    powers:[
+      { id:POWER_TYPES.SALE_MANAGER, power:{view:true} },
+      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true} },
+      { id:POWER_TYPES.SHOP_GUIDE, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_NORMAL, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.FACTORY_PRODUCTION, power:{view:false} },
+    ]
+  },
+  { 
+    id:MENU_IDS.customerBuy, 
+    powers:[
+      { id:POWER_TYPES.SALE_MANAGER, power:{view:true} },
+      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true} },
+      { id:POWER_TYPES.SHOP_GUIDE, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_NORMAL, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.FACTORY_PRODUCTION, power:{view:false} },
+    ]
+  },
+
+  { 
+    id:MENU_IDS.shopInfo, 
+    powers:[
+      { id:POWER_TYPES.SALE_MANAGER, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.SHOP_GUIDE, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_NORMAL, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.FACTORY_PRODUCTION, power:{view:false} },
+    ]
+  },
+  { 
+    id:MENU_IDS.shopGuide, 
+    powers:[
+      { id:POWER_TYPES.SALE_MANAGER, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.SHOP_GUIDE, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_NORMAL, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.FACTORY_PRODUCTION, power:{view:false} },
+    ]
+  },
+  { 
+    id:MENU_IDS.systemSetting, 
+    powers:[
+      { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
+    ]
+  },
+  { 
+    id:MENU_IDS.systemAdmin, 
+    powers:[]
+  }
 ]

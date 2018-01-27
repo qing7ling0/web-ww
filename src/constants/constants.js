@@ -23,6 +23,16 @@ module.exports.MENU_IDS = {
   systemAdmin:          902, // 管理员账号管理
 }
 
+module.exports.POWER_TYPES = {
+  SALE_MANAGER:1, // 销售经理/区域经理/销售总监
+  SHOP_MANAGER:2, // 店长
+  SHOP_GUIDE:3, // 导购
+  MANAGER_NORMAL:4, // 普通经理权限
+  MANAGER_SENIOR:5, // 高级经理权限
+  FACTORY_PRODUCTION:6, // 工厂制作人员
+  ADMINISTRTOR:1000 // 系统管理员
+}
+
 /**
  * 用户类型
  */
