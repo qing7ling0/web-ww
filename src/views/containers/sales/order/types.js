@@ -315,7 +315,18 @@ const getOrderBeltOptions = function(target) {
           }, 
           rule:{required:true}
         }, 
-        {type:'select', name:'b_material', label:'材质', itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(target.props.sales.materialList), options:{defaultActiveFirstOption:true}, rule:{required:true}},    
+        {
+          type:'select', 
+          name:'b_material', 
+          label:'材质', 
+          itemOptions:{labelLeft:true}, 
+          selectItems:listToSelectOptions(target.props.sales.materialList), 
+          options:{
+            defaultActiveFirstOption:true,
+            onChange:(value)=>target.onNIDPropertyChange('b_material', value)
+          }, 
+          rule:{required:true}
+        },    
         {
           type:'select', name:'b_color', label:'颜色', itemOptions:{labelLeft:true}, 
           selectItems:listToSelectOptions(target.props.sales.materialColorList), 
@@ -489,34 +500,35 @@ const getOrderRechargeOptions = function(target) {
 
 const getOrderListColumns = function(target) {
   let options = getOrderBaseListColumns();
-  
-  options.push({ title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
-    if (record.state === constants.BASE_CONSTANTS.E_ORDER_STATUS.COMPLETED || record.state === constants.BASE_CONSTANTS.E_ORDER_STATUS.CANCEL) {
-      return null;
-    } else {
-      return (
-        <div>
-          <OpeateBtn type="primary" shape="circle" icon="edit" size="default" onClick={(e)=>{
-            e.stopPropagation();
-            target.onEdit(record);
-          }} />
-          <Popconfirm 
-            title="是否取消订单?" 
-            onConfirm={(e)=>{
+  if (target.power && target.power.canOperate) {
+    options.push({ title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
+      if (record.state === constants.BASE_CONSTANTS.E_ORDER_STATUS.COMPLETED || record.state === constants.BASE_CONSTANTS.E_ORDER_STATUS.CANCEL) {
+        return null;
+      } else {
+        return (
+          <div>
+            <OpeateBtn type="primary" shape="circle" icon="edit" size="default" onClick={(e)=>{
               e.stopPropagation();
-              target.onCancel(record._id)
-            }}
-            okText="确定" 
-            cancelText="取消"
-          >
-            <OpeateBtn type="primary" shape="circle" icon="close" size="default" onClick={(e)=>{
-              e.stopPropagation();
+              target.onEdit(record);
             }} />
-          </Popconfirm>
-        </div>
-      );
-    }
-  }})
+            <Popconfirm 
+              title="是否取消订单?" 
+              onConfirm={(e)=>{
+                e.stopPropagation();
+                target.onCancel(record._id)
+              }}
+              okText="确定" 
+              cancelText="取消"
+            >
+              <OpeateBtn type="primary" shape="circle" icon="close" size="default" onClick={(e)=>{
+                e.stopPropagation();
+              }} />
+            </Popconfirm>
+          </div>
+        );
+      }
+    }})
+  }
   return options;
 }
 

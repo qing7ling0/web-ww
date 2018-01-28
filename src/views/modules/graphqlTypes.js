@@ -15,6 +15,7 @@ export const userType = `
     leave_time,
     editor_name,
     editor_time,
+    user_type,
     account {
       _id,
       account
@@ -24,6 +25,7 @@ export const userType = `
     _id,
     name,
     sex,
+    user_type,
     editor_name,
     editor_time,
     account {
@@ -36,6 +38,7 @@ export const userType = `
     name,
     sex,
     step,
+    user_type,
     editor_name,
     editor_time,
     account {
@@ -47,6 +50,7 @@ export const userType = `
     _id,
     name,
     sex,
+    user_type,
     editor_name,
     editor_time,
     account {
@@ -79,8 +83,11 @@ export const shopType = `{
 
 export const customerType = `{
   _id,name,phone,sex,birthday,weixin,weixin_code_pic,country,city,address,zipcode,
-  vip_card_date,vip_card_shop,vip_card_guide,vip_level,join_type,
+  vip_card_date,vip_card_shop,vip_card_guide,vip_level,vip_exp,balance,join_type,
 }`
+
+export const rechargeType = `{_id, mount, reward}`
+export const vipLevelType = `{_id, level, exp, discount}`
 
 export const materialType = `{_id, name, NID, color{_id,name}, count}`
 export const salesBaseType = `{_id, name, NID, editor_name, editor_time}`

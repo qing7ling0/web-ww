@@ -33,6 +33,7 @@ import fileData from './file'
 import { customerData } from './index'
 import { tryFeedbackModel } from '../models/sales';
 import { subOrderType } from '../schemas/sales/types';
+import { commonModel } from '../models/common';
 // import 
 
 const logUtil = require('../utils/log-utils');
@@ -282,7 +283,7 @@ class SalesData {
       if (customer.weixin !== customerDoc.weixin) {
         _customerData.weixin = customerDoc.weixin;
       }
-      await customerModel.findOneAndUpdate(customer._id, _customerData);
+      await customerModel.findOneAndUpdate({_id:customer._id}, _customerData);
       return customer;
     } else { // 添加客户
       _customerData = {...customerDoc}
@@ -297,9 +298,62 @@ class SalesData {
     return null;
   }
 
+  async recharge(customer, sub) {
+    let rewardList = await commonData.getCommonList(constants.COMMON_DATA_TYPES.RECHARGE_REWARD) || [];
+    rewardList = rewardList && rewardList.list || [];
+    if (rewardList) {
+      rewardList.sort((a,b)=>a.mount>b.mount?-1:1);
+    }
+    sub.r_reward = 0;
+    for(let reward of rewardList) {
+      if (sub.r_amount >= reward.mount) {
+        sub.r_reward = reward.reward; // 充值奖励
+        break;
+      }
+    }
+    sub.state = constants.E_ORDER_STATUS.COMPLETED; // 充值订单直接完成
+
+    let mount = sub.r_amount + sub.r_reward;
+    // 计算vip等级
+    let vipLevelList = await commonData.getCommonList(constants.COMMON_DATA_TYPES.VIP) || [];
+    vipLevelList = vipLevelList && vipLevelList.list || [];
+    vipLevelList.sort((a,b)=>a.level>b.level?1:-1);
+
+    let exp = customer.vip_exp;
+    let balance = customer.balance + mount;
+    let recharge = customer.recharge + sub.r_amount;
+    let rechargeReward = customer.recharge_reward + sub.r_reward;
+    exp += mount;
+    let vipLevel = 0;
+    for(let lv of vipLevelList) {
+      if (exp >= lv.exp) {
+        vipLevel = lv.level;
+        break;
+      }
+    }
+    await customerModel.findOneAndUpdate({_id:customer._id}, {vip_level:vipLevel, vip_exp:exp, balance:balance, recharge:recharge, recharge_reward:rechargeReward});
+
+    return sub;
+  }
+
+  // 支付支付金额
+  async pay(customer, payInfo) {
+    payInfo.real_pay_price = (payInfo.undiscount_mount + payInfo.discount * payInfo.discount_mount).toFixed(2);
+    payInfo.discount_price = payInfo.discount_mount+payInfo.undiscount_mount - payInfo.real_pay_price;
+    if (!payInfo.select_store_card) return payInfo; // 只有选择从充值卡中支付才去计算
+    if (!customer) return payInfo; // 如果不是会员则不用扣除金钱了
+
+    let canUseBalance = customer&&customer.balance || 0;
+    if (canUseBalance < payInfo.real_pay_price) {
+      throw new ApiError(ApiErrorNames.MOUNT_NOT_ENOUGH);
+    }
+    let balance = customer.balance - payInfo.real_pay_price;
+    await customerModel.findOneAndUpdate({_id:customer._id}, {balance:balance});
+    return payInfo;
+  }
+
   async addOrder(doc, options={}) {
     if (doc) {
-      
       if (doc.pay!==0 && !doc.pay || !doc.pay_type) {
         // 必须有支付信息
         throw new ApiError(ApiErrorNames.ADD_FAIL);
@@ -311,6 +365,15 @@ class SalesData {
         throw new ApiError(ApiErrorNames.ADD_FAIL);
       }
 
+      let payInfo = {
+        discount_mount:0, // 可以打折部分的金额
+        undiscount_mount:0, // 不可以打折的金额
+        real_pay_price:0,
+        discount_price:0,
+        discount:1,
+        select_store_card:doc.store_card_select,
+      }
+      let customerInfo = null;
       for(let sub of subOrders) {
         if (!sub.customer || !sub.customer.phone) {
           // TODO
@@ -322,8 +385,50 @@ class SalesData {
           // 必须有类型
           throw new ApiError(ApiErrorNames.ADD_FAIL);
         }
+
+        if (customerInfo === null) {
+          customerInfo = await customerModel.findOne({phone:sub.customer.phone});
+        }
+
+        // 计算价格
+        payInfo.discount_mount += sub.price;
+        if (doc.s_customs) {
+          for(let c of doc.s_customs) {
+            payInfo.undiscount_mount += c.price;
+          }
+        }
+        if (doc.urgent) {
+          payInfo.undiscount_mount += doc.urgent.price;
+        }
       }
+
+      // 查找vip等级
+      let vipLevel = -1;
+      if (customerInfo) {
+        vipLevel = customerInfo.vip_level || 0;
+      }
+
+      // 查找vip对应的折扣，首次购买没有折扣,因为首次不是会员
+      let vipLevelList = await commonData.getCommonList(constants.COMMON_DATA_TYPES.VIP);
       
+      vipLevelList = vipLevelList && vipLevelList.list || [];
+      console.log(vipLevelList)
+      vipLevelList.sort((a,b)=>a.level>b.level?1:-1);
+      if (vipLevel > -1) {
+        for(let lv of vipLevelList) {
+          if (lv.level === vipLevel) {
+            payInfo.discount = lv.discount / 10;
+            break;
+          }
+        }
+      }
+
+      // 开始计算支付，主要是从储值卡中扣除
+      await this.pay(customerInfo, payInfo);
+      doc.system_price = payInfo.discount_mount + payInfo.undiscount_mount;
+      doc.real_pay_price = payInfo.real_pay_price;
+      doc.discount_price = payInfo.discount_price;
+
       let customers = [];
       let newSubOrders = [];
       for(let sub of subOrders) {
@@ -341,6 +446,9 @@ class SalesData {
         }
         sub.sub_order_id = this.createOrderId(sub.type, commonData.createCurrentOrderIndex());
         sub.state = constants.E_ORDER_STATUS.REVIEW;
+        if (sub.type === constants.E_ORDER_TYPE.RECHARGE) { // 充值订单
+          sub = await this.recharge(customer, sub);
+        }
         let subOrder = new subOrderModel(sub);
         let newSubOrder = await subOrder.save();
         if (newSubOrder) {
@@ -356,7 +464,6 @@ class SalesData {
         // 添加失败
         throw new ApiError(ApiErrorNames.ADD_FAIL);
       }
-
       doc.sub_orders = newSubOrders;
       let order = new orderModel(doc);
       if (order) {

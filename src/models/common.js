@@ -82,6 +82,19 @@ const shoesTieBianFields = {
   name:{type:String, description:'名称'}
 }
 
+// 充值奖励
+const rechargeRewardFields = {
+  mount: {type:Number, description:'梯次'},
+  reward: {type:Number, description:'奖励'},
+}
+
+// vip等级
+const VIPFields = {
+  level: {type:Number}, // 等级
+  exp: {type:Number}, // 升级经验
+  discount:{type:Number}, // 享受的折扣
+}
+
 const commonFields = {
   ...commonBaseFields,
   ...colorFields,
@@ -95,6 +108,8 @@ const commonFields = {
   ...genGaoFields,
   ...guiGeFields,
   ...watchStrapStyleFields,
+  ...rechargeRewardFields,
+  ...VIPFields,
   ...baseFields
 }
 

@@ -93,6 +93,19 @@ const watchStrapStyleFields = {
   name:{type:GraphQLString, description:'名称'}
 }
 
+// 充值奖励
+const rechargeRewardFields = {
+  mount: {type:GraphQLInt, description:'梯次'},
+  reward: {type:GraphQLInt, description:'奖励'},
+}
+
+// vip等级
+const VIPFields = {
+  level: {type:GraphQLInt}, // 等级
+  exp: {type:GraphQLInt}, // 升级经验
+  discount:{type:GraphQLFloat}, // 享受的折扣
+}
+
 const commonTypeFields = {
   ...commonBaseFields,
   ...colorFields,
@@ -103,7 +116,9 @@ const commonTypeFields = {
   ...goodsStyleFields,
   ...goodsSeasonFields,
   ...xuanHaoFields,
-  ...watchStrapStyleFields
+  ...watchStrapStyleFields,
+  ...rechargeRewardFields,
+  ...VIPFields
 }
 
 export const commonType = new GraphQLObjectType({

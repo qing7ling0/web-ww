@@ -76,6 +76,7 @@ class CommonListContainer extends Component {
     const list = this.currentList();
     return (
       <BaseListComponent
+        canOperate={this.canOperate()}
         columns={this.options} 
         dataSource={list} 
         loading={this.props.loading}
@@ -190,13 +191,18 @@ class CommonListContainer extends Component {
   onRowClick = (record, index, event) => {
     this.setState({editVisible:true, editData:record});
   }
+  canOperate = () => {
+    this.power = commonUtils.getPower(this.props.user, constants.MENU_IDS.salesItemsBase)
+    return this.power && this.power.canOperate;
+  }
 }
 
 export default connect(
   state => ({
     sales:state.sales,
     loading:state.sales.loading,
-    deleteIDS:state.sales.goodsBaseDeleteIDS
+    deleteIDS:state.sales.goodsBaseDeleteIDS,
+    user:state.app.loginInfo.user
   }),
   (dispatch) => {
     return bindActionCreators({

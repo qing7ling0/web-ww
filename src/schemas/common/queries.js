@@ -18,7 +18,7 @@ const schemasUtils = require('../../utils/schemas-utils')
 export const menus = {
 	type: new GraphQLList(types.menu),
 	async resolve (ctx, params, options) {
-    return await commonData.getMenus(ctx, params);
+    return await commonData.getMenus(ctx.session.user);
 	}
 }
 

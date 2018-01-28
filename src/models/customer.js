@@ -21,7 +21,11 @@ export const customerFields = {
   vip_card_date: {type: Date, default:moment().format('YYYY-MM-DD'), description:'开卡日期'},
   vip_card_shop: {type: String, description:'开卡门店'},
   vip_card_guide: {type: String, description:'开卡导购'},
-  vip_level: {type: Number},
+  vip_level: {type: Number, default:0},
+  vip_exp: {type:Number, default:0},
+  balance:{type:Number, default:0, description:'余额'},
+  recharge:{type:Number, default:0, description:'充值的数量'},
+  recharge_reward:{type:Number, default:0, description:'充值赠送部分'},
   join_type: { type:String, description:'加入方式' },
   ...baseFields
 };

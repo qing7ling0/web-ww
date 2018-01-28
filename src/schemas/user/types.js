@@ -50,6 +50,7 @@ const userCommonFields = {
   account: {type: _accountType},
   editor_name: {type:GraphQLString},
   editor_time: {type:GraphQLString},
+  user_type:{type:GraphQLInt}
 }
 
 const userCommonInputFields = {

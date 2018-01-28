@@ -26,6 +26,7 @@ import ContentHeaderComponent from '../../common/ContentHeaderComponent'
 import DataContentComponent from '../../common/DataContentComponent'
 import BaseListComponent from '../../common/BaseListComponent'
 import * as common from '../../../modules/common'
+import { commonUtils } from '../../../modules/common';
 import * as constants from '../../../constants/Constants'
 import ShopAddModal from './ShopAddModal'
 import ShopEditModal from './ShopEditModal'
@@ -77,6 +78,7 @@ class ShopListContainer extends Component {
         <ContentContainer>
           <BaseListComponent
             columns={columns} 
+            canOperate={this.canOperate()}
             dataSource={this.props.list} 
             loading={this.props.loading}
             onRowClick={this.onRowClick}
@@ -129,7 +131,12 @@ class ShopListContainer extends Component {
   }
 
   onRowClick = (record, index, event) => {
+    if (!this.canOperate()) return;
     this.setState({editVisible:true, editData:record});
+  }
+  canOperate = () => {
+    this.power = commonUtils.getPower(this.props.user, constants.MENU_IDS.shopInfo)
+    return this.power && this.power.canOperate;
   }
 }
 
@@ -138,7 +145,8 @@ export default connect(
     list:state.shop.shopList,
     loading:state.shop.loading,
     pageInfo:state.shop.shopListPage,
-    shopDeleteIDS:state.shop.shopDeleteIDS
+    shopDeleteIDS:state.shop.shopDeleteIDS,
+    user:state.app.loginInfo.user
   }),
   (dispatch) => {
     return bindActionCreators({

@@ -30,6 +30,7 @@ import * as common from '../../../modules/common'
 import * as constants from '../../../constants/Constants'
 import GuideAddModal from './GuideAddModal'
 import GuideEditModal from './GuideEditModal'
+import { commonUtils } from '../../../modules/common';
 
 class GuideListContainer extends Component {
   // 构造函数，在创建组件的时候调用一次
@@ -91,6 +92,7 @@ class GuideListContainer extends Component {
           </SearchContainer>
           <BaseListComponent
             columns={columns} 
+            canOperate={this.canOperate()}
             dataSource={this.props.list} 
             loading={this.props.loading}
             onRowClick={this.onRowClick}
@@ -166,6 +168,10 @@ class GuideListContainer extends Component {
   onRowClick = (record, index, event) => {
     this.setState({editVisible:true, editData:record});
   }
+  canOperate = () => {
+    this.power = commonUtils.getPower(this.props.user, constants.MENU_IDS.shopGuide)
+    return this.power && this.power.canOperate;
+  }
 }
 
 export default connect(
@@ -174,7 +180,8 @@ export default connect(
     shopList:state.shop.shopList,
     loading:state.shop.loading,
     pageInfo:state.shop.shopGuideListPage,
-    shopDeleteIDS:state.shop.shopGuideDeleteIDS
+    shopDeleteIDS:state.shop.shopGuideDeleteIDS,
+    user:state.app.loginInfo.user
   }),
   (dispatch) => {
     return bindActionCreators({

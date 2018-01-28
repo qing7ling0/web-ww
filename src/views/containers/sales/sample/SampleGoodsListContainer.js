@@ -77,6 +77,7 @@ class SampleGoodsListContainer extends Component {
 
     return (
       <BaseListComponent
+        canOperate={this.canOperate()}
         columns={this.options} 
         dataSource={this.currentList()} 
         loading={this.props.loading}
@@ -194,7 +195,12 @@ class SampleGoodsListContainer extends Component {
   }
 
   onEditClick = (record) => {
+    if (!this.canOperate()) return;
     this.setState({editVisible:true, editData:record});
+  }
+  canOperate = () => {
+    this.power = commonUtils.getPower(this.props.user, constants.MENU_IDS.salesSampleGoods)
+    return this.power && this.power.canOperate;
   }
 }
 
@@ -203,7 +209,8 @@ export default connect(
     sales:state.sales,
     loading:state.sales.loading,
     pageInfo:state.sales.sampleGoodsListPage,
-    deleteIDS:state.sales.sampleGoodsDeleteIDS
+    deleteIDS:state.sales.sampleGoodsDeleteIDS,
+    user:state.app.loginInfo.user
   }),
   (dispatch) => {
     return bindActionCreators({

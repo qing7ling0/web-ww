@@ -18,9 +18,14 @@ module.exports.MENU_IDS = {
   salesOrder:           403, // 订单
   salesSampleGoods:     404, // 库存
   salesItemsBase:       405, // 商品基础数据
+  salesTable:           406, // 销售报表
   system:               9, // 系统管理
   systemSetting:        901, // 系统设置
   systemAdmin:          902, // 管理员账号管理
+
+  activity:10, // 活动
+  activityRecharge:     1001, // 充值奖励
+  activityVIP:          1002, // vip等级
 }
 
 module.exports.POWER_TYPES = {
@@ -183,7 +188,9 @@ module.exports.COMMON_DATA_TYPES = {
   WATCH_STRAP_STYLE:'14', // 表带类型
   SHOES_GEN_GAO:'15', // 跟高
   SHOES_GUI_GE:'16', // 规格
-  SHOES_TIE_BIAN:'17', // 贴边
+  SHOES_TIE_BIAN:'17', // 贴边,
+  RECHARGE_REWARD:'18', // 充值奖励
+  VIP:'19', // VIP等级
 }
 
 // 试脚鞋反馈状态

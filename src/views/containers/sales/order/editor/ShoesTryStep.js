@@ -184,7 +184,7 @@ class ShoesTryStep extends Component {
         <ShoesContent>试脚鞋投产中</ShoesContent>
       </Row>
       <Row style={{textAlign:'center'}}>
-        <ShoesContentBtn type="primary" onClick={()=>{
+        <ShoesContentBtn type="primary" disabled={!this.props.canOperate} onClick={()=>{
           this.props.reqChangeSuborderState(this.props.profile._id, {state:constants.BASE_CONSTANTS.E_ORDER_STATUS.TRY_TRANSPORT});
         }}>制作完成去发货</ShoesContentBtn>
       </Row>
@@ -205,7 +205,7 @@ class ShoesTryStep extends Component {
       <Row style={{width:'60%', textAlign:'center', margin:'0 auto'}}>
         <Input 
           placeholder="请输入快递单号" 
-          disabled={!isModify} 
+          disabled={!isModify &&  !this.props.canOperate}
           defaultValue={transportId} 
           onChange={(e)=>this.setState({inputTransportId:e.target.value})}
           addonBefore={'快递单号'}
@@ -221,18 +221,18 @@ class ShoesTryStep extends Component {
       <Row style={{width:'60%', textAlign:'center', margin:'0.2rem auto'}}>
         {
           this.state.currentFeedback && this.state.currentFeedback.message ?
-          <Button style={{margin:'0 0.15rem'}} type="primary" onClick={()=> {
+          <Button style={{margin:'0 0.15rem'}} disabled={!this.props.canOperate} type="primary" onClick={()=> {
             this.props.reqUpdateSuborderTryFeedback(null, this.state.currentFeedback._id, {status:constants.BASE_CONSTANTS.E_ORDER_TRY_FEEDBACK_STATUS.END})
           }}>修改试脚鞋</Button>
           :
-          <Button style={{margin:'0 0.15rem'}} type="primary" onClick={()=> {
+          <Button style={{margin:'0 0.15rem'}} type="primary" disabled={!this.props.canOperate} onClick={()=> {
             this.setState({tryFeedbackAdding:true, tryFeedbackValue:''});
           }}>填写反馈内容</Button>
         }
         <Popconfirm title="确定到正品鞋投产阶段吗，确定后无法返回?" onConfirm={()=>{
           this.props.reqChangeSuborderState(this.props.profile._id, {state:constants.BASE_CONSTANTS.E_ORDER_STATUS.MAKING});
         }} okText="确定" cancelText="取消">
-          <Button style={{margin:'0 0.15rem'}} type="primary">正品投产</Button>
+          <Button style={{margin:'0 0.15rem'}} type="primary" disabled={!this.props.canOperate}>正品投产</Button>
         </Popconfirm>
       </Row>
       {this.renderFeedBackList()}
@@ -273,9 +273,9 @@ class ShoesTryStep extends Component {
             this.state.currentStep === 1 ?
             <div style={{width:"100%", margin:'0.15rem 0'}}>
                 {
-                  this.state.tryFeedbackAdding ? 
+                  this.state.tryFeedbackAdding && this.props.canOperate ? 
                   rendTryAdd()
-                  : <Button type="dashed" style={{width:'100%'}} onClick={()=>this.setState({tryFeedbackAdding:true})}>{this.state.currentFeedback&&this.state.currentFeedback.message ? '修改当前反馈' : '新建反馈'}</Button>
+                  : <Button type="dashed" disabled={!this.props.canOperate} style={{width:'100%'}} onClick={()=>this.setState({tryFeedbackAdding:true})}>{this.state.currentFeedback&&this.state.currentFeedback.message ? '修改当前反馈' : '新建反馈'}</Button>
                 }
             </div>
             : null

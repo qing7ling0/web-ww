@@ -367,11 +367,15 @@ class OrderBeltProfile extends Component {
         {
           this.renderUrgent()
         }
-        <Row style={{textAlign:'center', paddingTop:20, paddingBottom:20}}>
-          <Button type="primary" onClick={()=>{
-            this.props.onOpenReview()
-          }}>审核</Button>
-        </Row>
+        {
+          this.props.canOperate ?
+          <Row style={{textAlign:'center', paddingTop:20, paddingBottom:20}}>
+            <Button type="primary" onClick={()=>{
+              this.props.onOpenReview()
+            }}>审核</Button>
+          </Row>
+          : null
+        }
       </div>
     )
   }
@@ -410,12 +414,13 @@ class OrderBeltProfile extends Component {
             {
               this.state.currentStep===1 
               &&
-              <ProductionStep profile={this.props.profile} />
+              <ProductionStep canOperate={this.props.canOperate} profile={this.props.profile} />
             }
             {
               this.state.currentStep===2
               &&
               <TransportStep 
+                canOperate={this.props.canOperate}
                 profile={this.props.profile}
                 message={`${this.options.title}已完成请发货!`}
               />

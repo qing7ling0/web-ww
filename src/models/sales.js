@@ -213,6 +213,7 @@ const maintainFields = {
 // 充值
 const rechargeFields = {
   r_amount:{type:Number, decription:'充值金额'},
+  r_reward:{type:Number, decription:'奖励金额'}
 }
 
 // 配饰
@@ -265,9 +266,17 @@ module.exports.subOrderModel = mongoose.model('sub_order', subOrderSchema);
 const orderFields = {
   order_id: {type:String, description:'订单ID'},
   source: {type:String, description:'来源'},
+  shop: {type:Schema.Types.ObjectId, ref:'shop', decription:'店铺'},
+  guide: {type:Schema.Types.ObjectId, ref:'user_shop_guide', decription:'导购'},
+  customer: {type:Schema.Types.ObjectId, ref:'customer', decription:'客户'},
   pay:{type:Number, decription:'支付金额'},
   pay_type:{type:String, decription:'支付方式'},
+  store_card_selected:{type:Boolean, decription:'储值卡是否选择', default:false},
+  cash_ticket_NID:{type:String, decription:'代金券ID', default:''},
   sub_orders:[{type:Schema.Types.ObjectId, ref:'sub_order', decription:'子订单'}],
+  system_price:{type:Number, default:0, decription:'吊牌价格'},
+  real_pay_price:{type:Number, default:0, decription:'实际支付价格'},
+  discount_price:{type:Number, default:0, decription:'实际优惠了多少'},
   ...baseFields
 }
 const orderSchema = new Schema({
@@ -276,3 +285,18 @@ const orderSchema = new Schema({
   timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
 });
 module.exports.orderModel = mongoose.model('order', orderSchema);
+
+// 代金券
+const cashTicketFields = {
+  NID: {type:String}, // 编号
+  start_time:{type:Date, default:moment().format('YYYY-MM-DD')}, // 开始时间
+  expire_time: {type:Date, default:moment().format('YYYY-MM-DD')}, // 过期时间
+  mount: {type:Number, default:0}, // 面额
+  least_mount: {type:Number, default:0}, // 达到多少钱可以使用
+}
+const cashTicketSchema = new Schema({
+  ...cashTicketFields
+},{
+  timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
+});
+module.exports.cashTicketModel = mongoose.model('cash_ticket', orderSchema);

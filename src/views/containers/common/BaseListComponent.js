@@ -30,6 +30,7 @@ class BaseListComponent extends Component {
     onSearch: () => {},
     hasSearch: false,
     searchPlaceholder:'',
+    canOperate:false
   }
 
   // 构造函数，在创建组件的时候调用一次
@@ -80,6 +81,7 @@ class BaseListComponent extends Component {
     return (
       <Root>
         <DataContentComponent
+          canOperate={this.props.canOperate}
           hasSearch={this.props.hasSearch}
           searchPlaceholder={this.props.searchPlaceholder}
           listener={(e, value)=>{
@@ -105,7 +107,7 @@ class BaseListComponent extends Component {
             onRow={(record, index) => ({
               onClick: ()=>this.onRowClick(record, index),
             })}
-            rowSelection={{onChange:this.onRowSelectionChange}}
+            rowSelection={this.props.canOperate ? {onChange:this.onRowSelectionChange}:null}
             pagination={pagination}
           />
         </DataContentComponent>

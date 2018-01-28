@@ -29,6 +29,7 @@ class DataContentComponent extends Component {
     listener: null,
     hasSearch: false,
     searchPlaceholder:'',
+    canOperate:false,
   }
 
 
@@ -51,8 +52,16 @@ class DataContentComponent extends Component {
       } else {
         header = (
           <TableHeader>
-            <ButtonOp type="primary" onClick={(e)=>this.onClick(e, 'add')}>添加</ButtonOp>
-            <ButtonOp type="primary" onClick={(e)=>this.onClick(e, 'delArray')}>批量删除</ButtonOp>
+            {
+              this.props.canOperate ?
+              <ButtonOp type="primary" onClick={(e)=>this.onClick(e, 'add')}>添加</ButtonOp>
+              : null
+            }
+            {
+              this.props.canOperate ?
+              <ButtonOp type="primary" onClick={(e)=>this.onClick(e, 'delArray')}>批量删除</ButtonOp>
+              : null
+            }
             {this.props.hasSearch ? <SearchOp placeholder={this.props.searchPlaceholder} onSearch={this.onSearch}/> : null}
           </TableHeader>
         );

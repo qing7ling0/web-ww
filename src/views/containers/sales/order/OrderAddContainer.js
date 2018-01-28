@@ -54,6 +54,7 @@ import * as optionsType from '../types'
 import { ORDER_TYPES, ORDER_OPTIONS } from './types'
 
 import OrderGoodsAddModal from './OrderGoodsAddModal'
+import OrderRechargeModal from './OrderRechargeModal'
 import OrderPayComponent from './components/OrderPayComponent'
 
 
@@ -212,13 +213,13 @@ class OrderAddContainer extends Component {
                 <Button 
                   type="primary" 
                   onClick={()=>{
-                    this.setState({addVisible:true, editGoods:null})
+                    this.setState({addVisible:true, isRechargeOrder:false, editGoods:null})
                   }} 
                   style={{marginRight:10}}
                 >
                   添加
                 </Button>
-                <Button type="primary" onClick={()=>{this.setState({addVisible:true, isRechargeOrder:true})}}>充值</Button>
+                <Button type="primary" onClick={()=>{this.setState({addVisible:false, isRechargeOrder:true})}}>充值</Button>
               </div>
             );
           }}
@@ -235,6 +236,18 @@ class OrderAddContainer extends Component {
             data={this.state.editGoods}
             afterClose={()=>this.setState({addVisible:false})}/> 
           : null
+        }
+        {
+          this.state.isRechargeOrder ?
+          <OrderRechargeModal 
+            title={'充值'}
+            visible={this.state.isRechargeOrder} 
+            customer={this.state.customer}
+            customerId={this.state.customerId}
+            order={this.state.order}
+            afterClose={()=>this.setState({isRechargeOrder:false})}/> 
+          : null
+          
         }
         <NextContainer>
           <BtnNext type="primary" onClick={()=>{this.onPrev()}}>上一步</BtnNext>
@@ -438,10 +451,13 @@ class OrderAddContainer extends Component {
           customer[key] = values[key];
         }
       }
+      
       let customer_id = '';
       for(let value of this.props.customerList) {
         if (value.phone === customer.phone) {
           customer_id = value._id;
+          customer.vip_level = value.vip_level;
+          customer.balance = value.balance;
           break;
         }
       }

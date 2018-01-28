@@ -5,11 +5,31 @@ import {
 
 import DB from '../db/DB'
 import { ApiError, ApiErrorNames } from '../error/api-errors'
+import Menu from 'antd/lib/menu';
+import * as commonUtils from '../utils/common-utils'
 
 class CommonData {
 
-  async getMenus() {
-    return Menus;
+  async getMenus(user) {
+    if (!user) return [];
+    let menuList = [];
+    Menus.forEach((item) => {
+      if (item.subMenus) {
+        let subList = [];
+        item.subMenus.forEach(sub=>{
+          let power = commonUtils.getPower(user, sub.id);
+          if (power.view) {
+            subList.push(sub);
+          }
+        })
+        if (subList.length > 0) {
+          let menu = {...item};
+          menu.subMenus = subList;
+          menuList.push(menu);
+        }
+      }
+    })
+    return menuList;
   }
 
   async getRouters() {

@@ -44,6 +44,7 @@ import * as ActionTypes from '../../../constants/ActionTypes'
 import Actions from '../../../actions'
 import * as constants from '../../../constants/Constants'
 import * as common from '../../../modules/common'
+import { commonUtils } from '../../../modules/common';
 import DetailComponent from '../../common/DetailComponent'
 import utils from '../../../../utils/utils'
 import * as optionsType from '../types'
@@ -109,6 +110,7 @@ class OrderProfileContainer extends Component {
         return (
           <OrderShoesProfile 
             profile={this.props.profile}
+            canOperate={this.canOperate()}
             onOpenReview={this.onOpenReview}
           />
         )
@@ -119,6 +121,7 @@ class OrderProfileContainer extends Component {
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.WATCH_STRAP:
         return (
           <OrderBaseProfile 
+            canOperate={this.canOperate()}
             profile={this.props.profile}
             onOpenReview={this.onOpenReview}
             orderKey={this.props.profile.type}
@@ -170,6 +173,11 @@ class OrderProfileContainer extends Component {
     this.setState({reviewModalVisible:false})
     this.props.reqSuborderProfile(this.props.match.params.id);
   }
+
+  canOperate = () => {
+    this.power = commonUtils.getPower(this.props.user, constants.MENU_IDS.salesItems)
+    return this.power && this.power.canOperate;
+  }
 }
 
 export default connect(
@@ -177,7 +185,8 @@ export default connect(
     loading:state.sales.loading,
     result:state.sales.result,
     profile:state.sales.suborderProfile,
-    customer:state.customer.customerProfile
+    customer:state.customer.customerProfile,
+    user:state.app.loginInfo.user
   }),
   (dispatch) => {
     return bindActionCreators({

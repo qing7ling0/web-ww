@@ -459,13 +459,21 @@ export const subOrderInputType = new GraphQLInputObjectType({
 const orderBaseFields = {
   source: {type:GraphQLString, description:'来源'},
   pay:{type:GraphQLFloat, decription:'支付金额'},
-  pay_type:{type:GraphQLString, decription:'支付方式'}
+  pay_type:{type:GraphQLString, decription:'支付方式'},
+  store_card_selected:{type:GraphQLBoolean, decription:'储值卡是否选择'},
+  cash_ticket_NID:{type:GraphQLString, decription:'代金券ID', default:''},
 }
 export const orderType = new GraphQLObjectType({
   name: 'orderType',
   fields: {
     _id: {type:GraphQLString},
     ...orderBaseFields,
+    shop: {type:shopTypes.shopType, ref:'shop', decription:'店铺'},
+    guide: {type:userTypes.userShopGuideType, ref:'user_shop_guide', decription:'导购'},
+    customer: {type:customerTypes.customerType, ref:'customer', decription:'客户'},
+    system_price:{type:GraphQLFloat, decription:'吊牌价格'},
+    real_pay_price:{type:GraphQLFloat, decription:'实际支付价格'},
+    discount_price:{type:GraphQLFloat, decription:'实际优惠了多少'},
     sub_orders:{type:new GraphQLList(GraphQLString)},
     ...commonFields.defaultCreateFields
   }
@@ -483,6 +491,9 @@ export const orderInputType = new GraphQLInputObjectType({
   name: 'orderInputType',
   fields: {
     ...orderBaseFields,
+    shop: {type:GraphQLString, decription:'店铺'},
+    guide: {type:GraphQLString, decription:'导购'},
+    customer: {type:customerTypes.customerInputType, decription:'客户id'},
     sub_orders:{type:new GraphQLList(subOrderInputType)},
   }
 });

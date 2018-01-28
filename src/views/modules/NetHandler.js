@@ -313,7 +313,9 @@ class NetHandler {
         shoesTieBianList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.SHOES_TIE_BIAN}))}")${types.pageListType(types.shoesTieBianType)}
         watchStrapStyleList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.WATCH_STRAP_STYLE}))}")${types.pageListType(types.watchStrapStyleType)}
         materialList(page:${pageIndex}, pageSize:${pageSize})${types.pageListType(types.materialType)}
-        
+        rechargeList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.RECHARGE_REWARD}))}")${types.pageListType(types.rechargeType)}
+        vipLevelList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.VIP}))}")${types.pageListType(types.vipLevelType)}
+
       }
   `);
   }

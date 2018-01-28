@@ -66,6 +66,7 @@ class MaterialListContainer extends Component {
   render() {
     return (
       <BaseListComponent
+        canOperate={this.canOperate()}
         columns={this.options} 
         dataSource={this.props.list} 
         loading={this.props.loading}
@@ -148,7 +149,12 @@ class MaterialListContainer extends Component {
   }
 
   onRowClick = (record, index, event) => {
+    if (!this.canOperate()) return;
     this.setState({editVisible:true, editData:record});
+  }
+  canOperate = () => {
+    this.power = commonUtils.getPower(this.props.user, constants.MENU_IDS.salesMaterial)
+    return this.power && this.power.canOperate;
   }
 }
 
@@ -157,7 +163,8 @@ export default connect(
     sales:state.sales,
     loading:state.sales.loading,
     deleteIDS:state.sales.materialDeleteIDS,
-    list:state.sales.materialList
+    list:state.sales.materialList,
+    user:state.app.loginInfo.user
   }),
   (dispatch) => {
     return bindActionCreators({

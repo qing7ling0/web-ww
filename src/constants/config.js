@@ -6,11 +6,12 @@ module.exports.Menus = [
     name: '进销存管理',
     icon: 'database',
     subMenus: [
+      {id:MENU_IDS.salesTable, name:'销售报表'},
       {id:MENU_IDS.salesItems, name:'商品'},
       {id:MENU_IDS.salesOrder, name:'订单'},
       {id:MENU_IDS.salesMaterial, name:'原材料'},
       {id:MENU_IDS.salesSampleGoods, name:'库存'},
-      {id:MENU_IDS.salesItemsBase, name:'基础数据管理'},
+      {id:MENU_IDS.salesItemsBase, name:'基础数据管理'}
     ]
   },
   {
@@ -35,6 +36,15 @@ module.exports.Menus = [
     ]
   },
   {
+    id:MENU_IDS.activity, 
+    name: '活动管理',
+    icon: 'activity',
+    subMenus: [
+      {id:MENU_IDS.activityRecharge, name:'充值奖励'},
+      {id:MENU_IDS.activityVIP, name:'VIP等级'}
+    ]
+  },
+  {
     id:MENU_IDS.system, 
     name:'系统管理',
     icon: 'setting',
@@ -48,6 +58,7 @@ module.exports.Menus = [
 module.exports.Routers = [
   { id:0, name:'首页', url: '/home' },
   { id:MENU_IDS.sales, name:'进销存管理', url: '/home/sales' },
+  { id:MENU_IDS.salesTable, name:'报表', url: '/home/sales/table' },
   { id:MENU_IDS.salesItems, name:'商品', url: '/home/sales/items' },
   { id:MENU_IDS.salesOrder, name:'订单', url: '/home/sales/order' },
   { id:MENU_IDS.salesMaterial, name:'原材料', url: '/home/sales/material' },
@@ -68,6 +79,10 @@ module.exports.Routers = [
   { id:MENU_IDS.system, url: '/home/system', name:'系统管理' },
   { id:MENU_IDS.systemSetting, name:'设置', url: '/home/system/setting' },
   { id:MENU_IDS.systemAdmin, name:'管理员账号', url: '/home/system/admins' },
+
+  { id:MENU_IDS.activity, url: '/home/activity', name:'活动管理' },
+  { id:MENU_IDS.activityRecharge, name:'充值奖励', url: '/home/activity/recharge' },
+  { id:MENU_IDS.activityVIP, name:'VIP等级管理', url: '/home/activity/vip' },
 ]
 
 module.exports.Powers = [
@@ -76,10 +91,21 @@ module.exports.Powers = [
     powers:[
       { id:POWER_TYPES.SALE_MANAGER, power:{view:true} },
       { id:POWER_TYPES.SHOP_MANAGER, power:{view:true} },
-      { id:POWER_TYPES.SHOP_GUIDE, power:{view:true} },
+      { id:POWER_TYPES.SHOP_GUIDE, power:{view:false} },
       { id:POWER_TYPES.MANAGER_NORMAL, power:{view:true} },
       { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
       { id:POWER_TYPES.FACTORY_PRODUCTION, power:{view:true} },
+    ]
+  },
+  { 
+    id:MENU_IDS.salesItems, 
+    powers:[
+      { id:POWER_TYPES.SALE_MANAGER, power:{view:true} },
+      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true} },
+      { id:POWER_TYPES.SHOP_GUIDE, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_NORMAL, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.FACTORY_PRODUCTION, power:{view:false} },
     ]
   },
   { 
@@ -172,6 +198,25 @@ module.exports.Powers = [
       { id:POWER_TYPES.FACTORY_PRODUCTION, power:{view:false} },
     ]
   },
+
+  { 
+    id:MENU_IDS.activityRecharge, 
+    powers:[
+      { id:POWER_TYPES.SALE_MANAGER, power:{view:true} },
+      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true} },
+      { id:POWER_TYPES.SHOP_GUIDE, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_NORMAL, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
+    ]
+  },
+  { 
+    id:MENU_IDS.activityVIP, 
+    powers:[
+      { id:POWER_TYPES.MANAGER_NORMAL, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
+    ]
+  },
+
   { 
     id:MENU_IDS.systemSetting, 
     powers:[

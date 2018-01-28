@@ -65,20 +65,22 @@ const getGoodsShoesProfileOptions = function(target) {
 }
 const getGoodsShoesListOptions = function(target) {
   let options = getGoodsShoesBaseColumns(target);
-  options.push({ title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
-    return (
-      <div>
-        <OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
-          e.stopPropagation();
-          target.onDelete([record._id])
-        }} />
-        <OpeateBtn type="primary" shape="circle" icon="edit" size="large" onClick={(e)=>{
-          e.stopPropagation();
-          target.onEditClick(record);
-        }} />
-      </div>
-    );
-  }})
+  if (target.canOperate()) {
+    options.push({ title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
+      return (
+        <div>
+          <OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
+            e.stopPropagation();
+            target.onDelete([record._id])
+          }} />
+          <OpeateBtn type="primary" shape="circle" icon="edit" size="large" onClick={(e)=>{
+            e.stopPropagation();
+            target.onEditClick(record);
+          }} />
+        </div>
+      );
+    }})
+  }
   return options;
 }
 const getGoodsShoesAddOptions = function(target) {

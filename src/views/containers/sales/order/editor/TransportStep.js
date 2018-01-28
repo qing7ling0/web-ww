@@ -166,7 +166,7 @@ class ShoesTransportStep extends Component {
           title="快递信息" 
           style={{width:'70%', margin:'0 auto'}}
           extra={
-            <Button style={{margin:'0 0.15rem'}} type="primary" onClick={()=> {
+            <Button style={{margin:'0 0.15rem'}} type="primary" disabled={!this.props.canOperate} onClick={()=> {
               this.setState({modify:true});
             }}>{this.props.profile.transport_id ? "修改" : '填写'}</Button>
           }
@@ -177,7 +177,7 @@ class ShoesTransportStep extends Component {
         </Card>
       </Row>
       <Row style={{textAlign:'center'}}>
-        <Button style={{margin:'0.2rem 0.15rem'}} type="primary" onClick={()=> {
+        <Button style={{margin:'0.2rem 0.15rem'}} disabled={!this.props.canOperate} type="primary" onClick={()=> {
           this.props.reqChangeSuborderState(this.props.profile._id, {state:constants.BASE_CONSTANTS.E_ORDER_STATUS.COMPLETED});
         }}>已验货,完成订单!</Button>
       </Row>

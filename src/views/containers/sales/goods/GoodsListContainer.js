@@ -96,6 +96,7 @@ class GoodsListContainer extends Component {
         deleteIDS={this.props.deleteIDS}
         addVisible={this.state.addVisible}
         editVisible={this.state.editVisible}
+        canOperate={this.canOperate()}
         addNode={
           <GoodsAddModal 
             title={`添加${this.goodsType.label}`} 
@@ -193,7 +194,13 @@ class GoodsListContainer extends Component {
   }
 
   onEditClick = (record) => {
-    this.setState({editVisible:true, editData:record});
+    if (this.canOperate())
+      this.setState({editVisible:true, editData:record});
+  }
+
+  canOperate = () => {
+    this.power = commonUtils.getPower(this.props.user, constants.MENU_IDS.salesItems)
+    return this.power && this.power.canOperate;
   }
 }
 
@@ -202,7 +209,8 @@ export default connect(
     sales:state.sales,
     loading:state.sales.loading,
     pageInfo:state.sales.goodsListPage,
-    deleteIDS:state.sales.goodsDeleteIDS
+    deleteIDS:state.sales.goodsDeleteIDS,
+    user:state.app.loginInfo.user
   }),
   (dispatch) => {
     return bindActionCreators({

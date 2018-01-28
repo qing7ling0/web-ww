@@ -38,13 +38,20 @@ const listToSelectOptions = (list, valueFormat, labelFormat) => {
 
 // 基础
 const getSalesBaseListOptions = function(target) {
-  return [
+  let options = [
     { title: '名称', dataIndex: 'name', key: 'name', className:"table-column-left"},
-    { title: '编辑人', dataIndex: 'editor_name', width:'120', key: 'editor_name'},
-    { title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
-      return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={()=>target.onDelete([record._id])} />);
-    }}
+    { title: '编辑人', dataIndex: 'editor_name', width:'120', key: 'editor_name'}
   ]
+
+  if (target.canOperate()) {
+    options.push({
+      title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
+        return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={()=>target.onDelete([record._id])} />);
+      }
+    })
+  }
+
+  return options;
 }
 const getSalesBaseAddOptions = function(target) {
   return [
@@ -58,7 +65,7 @@ const getSalesBaseEditOptions = function(target) {
 
 // 基础
 const getNIDBaseListOptions = function(target) {
-  return [
+  let options = [
     { title: '名称', dataIndex: 'name', key: 'name', className:"table-column-left"},
     { title: '编号', dataIndex: 'NID', key: 'NID', className:"table-column-left"},
     { title: '编辑人', dataIndex: 'editor_name', key: 'editor_name', width:120},
@@ -66,11 +73,20 @@ const getNIDBaseListOptions = function(target) {
       return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={()=>target.onDelete([record._id])} />);
     }}
   ]
+  if (target.canOperate()) {
+    options.push({
+      title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
+        return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={()=>target.onDelete([record._id])} />);
+      }
+    })
+  }
+
+  return options;
 }
 const getNIDBaseAddOptions = function(target) {
   return [
     {type:'input', name:'name', label:'名称', itemOptions:{hasFeedback:true}, rule:{required:true}},
-    {type:'input', name:'NID', label:'编号', itemOptions:{hasFeedback:true}, rule:{required:true}},
+    {type:'input', name:'NID', label:'编号', itemOptions:{hasFeedback:true}, rule:{required:true}}
   ];
 }
 const getNIDBaseEditOptions = function(target) {
@@ -80,14 +96,20 @@ const getNIDBaseEditOptions = function(target) {
 
 // 特殊定制
 const getCustomListOptions = function(target) {
-  return [
+  let options = [
     { title: '名称', dataIndex: 'name', key: 'name'},
     { title: '价格', dataIndex: 'price', key: 'price', render:(text)=>text+'RMB'},
-    { title: '编辑人', dataIndex: 'editor_name', width:120, key: 'editor_name'},
-    { title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
-      return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={()=>target.onDelete([record._id])} />);
-    }}
+    { title: '编辑人', dataIndex: 'editor_name', width:120, key: 'editor_name'}
   ]
+  if (target.canOperate()) {
+    options.push({
+      title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
+        return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={()=>target.onDelete([record._id])} />);
+      }
+    })
+  }
+
+  return options;
 }
 const getCustomAddOptions = function(target) {
   return [
@@ -102,14 +124,20 @@ const getCustomEditOptions = function(target) {
 
 // 加急
 const getUrgentListOptions = function(target) {
-  return [
+  let options = [
     { title: '天数', dataIndex: 'day', key: 'day'},
     { title: '价格', dataIndex: 'price', key: 'price', render:(text)=>text+'RMB'},
-    { title: '编辑人', dataIndex: 'editor_name', key: 'editor_name', width:120},
-    { title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
-      return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={()=>target.onDelete([record._id])} />);
-    }}
+    { title: '编辑人', dataIndex: 'editor_name', key: 'editor_name', width:120}
   ]
+  if (target.canOperate()) {
+    options.push({
+      title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
+        return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={()=>target.onDelete([record._id])} />);
+      }
+    })
+  }
+
+  return options;
 }
 const getUrgentAddOptions = function(target) {
   return [
@@ -133,17 +161,19 @@ const getMaterialBaseColumns = function(target) {
 }
 const getMaterialListOptions = function(target) {
   let options = getMaterialBaseColumns(target);
-  options.push({ title: '编辑人', dataIndex: 'editor_name', key: 'editor_name', width:120});
-  options.push({ title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
-    return (
-      <div>
-        <OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
-          e.stopPropagation();
-          target.onDelete([record._id])
-        }} />
-      </div>
-    );
-  }})
+  if (target.canOperate()) {
+    options.push({ title: '编辑人', dataIndex: 'editor_name', key: 'editor_name', width:120});
+    options.push({ title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
+      return (
+        <div>
+          <OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
+            e.stopPropagation();
+            target.onDelete([record._id])
+          }} />
+        </div>
+      );
+    }})
+  }
   return options;
 }
 const getMaterialAddOptions = function(target) {
@@ -181,18 +211,20 @@ const getMaintainBaseColumns = function(target) {
 }
 const getMaintainListOptions = function(target) {
   let options = getMaintainBaseColumns(target);
-  options.push({ title: '编辑人', dataIndex: 'editor_name', key: 'editor_name'});
-  options.push({ title: '编辑时间', dataIndex: 'editor_time', key: 'editor_time'});
-  options.push({ title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
-    return (
-      <div>
-        <OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
-          e.stopPropagation();
-          target.onDelete([record._id])
-        }} />
-      </div>
-    );
-  }})
+  if (target.canOperate) {
+    options.push({ title: '编辑人', dataIndex: 'editor_name', key: 'editor_name'});
+    options.push({ title: '编辑时间', dataIndex: 'editor_time', key: 'editor_time'});
+    options.push({ title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
+      return (
+        <div>
+          <OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
+            e.stopPropagation();
+            target.onDelete([record._id])
+          }} />
+        </div>
+      );
+    }})
+  }
   return options;
 }
 const getMaintainAddOptions = function(target) {

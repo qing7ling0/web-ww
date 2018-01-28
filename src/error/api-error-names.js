@@ -18,6 +18,8 @@ ApiErrorNames.UPDATE_FAIL = 'UPDATE_FAIL'
 ApiErrorNames.DELETE_FAIL = 'DELETE_FAIL'
 ApiErrorNames.UPDATE_SUCCESS = 'UPDATE_SUCCESS'
 
+ApiErrorNames.MOUNT_NOT_ENOUGH = 'MOUNT_NOT_ENOUGH'
+
 /**
  * API错误名称对应的错误信息
  */
@@ -37,6 +39,9 @@ error_map.set(ApiErrorNames.ACCOUNT_NOT_EXIST, { code: 101, message: '用户不�
 error_map.set(ApiErrorNames.ACCOUNT_PASSWORD_ERROR, { code: 102, message: '帐号密码错误！' });
 error_map.set(ApiErrorNames.ACCOUNT_EXIST, { code: 103, message: '帐号已存在！' });
 error_map.set(ApiErrorNames.ACCOUNT_SESSION_EXPIRE, { code: 104, message: '时间过长，请重新登陆!' });
+
+
+error_map.set(ApiErrorNames.MOUNT_NOT_ENOUGH, { code: 999, message: '储值卡余额不足，请充值!' });
 
 //根据错误名称获取错误信息
 ApiErrorNames.getErrorInfo = (error_name) => {

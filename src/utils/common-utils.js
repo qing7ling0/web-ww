@@ -151,7 +151,7 @@ export const createGoodsNID = function(type, data, sex) {
   }
 }
 
-const getPowerByType = function(powerId, powerType) {
+const _getPowerByType = function(powerId, powerType) {
   for(let powerInfo of config.Powers) {
     if (powerInfo.id == powerId) {
       for(let power of powerInfo.powers) {
@@ -167,11 +167,12 @@ const getPowerByType = function(powerId, powerType) {
   return {};
 }
 
-export const getPowerByType = getPowerByType;
+export const getPowerByType = _getPowerByType;
 
 export const getPower= function(user, powerId) {
+  if (!user) return {};
   let powerType = 0;
-  switch(type) {
+  switch(user.user_type) {
     case constants.USER_TYPES.shopGuide:
       powerType = user.manager ? constants.POWER_TYPES.SHOP_MANAGER : constants.POWER_TYPES.SHOP_GUIDE;
       return getPowerByType(powerId, powerType);
@@ -182,8 +183,10 @@ export const getPower= function(user, powerId) {
       powerType = constants.POWER_TYPES.FACTORY_PRODUCTION;
       return getPowerByType(powerId, powerType);
     case constants.USER_TYPES.admin:
-      return {view:true, add:true, edit:true}
+      return {view:true, add:true, edit:true, canOperate:true}
     default:
     break;
   }
+
+  return {};
 }

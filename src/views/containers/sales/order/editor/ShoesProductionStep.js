@@ -132,7 +132,7 @@ class ShoesProductionStep extends Component {
   renderProduction = () =>{
     return (
       <div style={{width:'60%', margin:'0 auto', textAlign:'center'}}>
-        <Button style={{margin:'0 auto'}} type="primary" onClick={()=> {
+        <Button style={{margin:'0 auto'}}  disabled={!this.props.canOperate} type="primary" onClick={()=> {
           // this.setState({modify:true});
           this.props.reqSuborderUpdate(this.props.profile._id, {s_production_step:this.props.profile.s_production_step+1})
         }}>下一环节</Button>
@@ -147,7 +147,7 @@ class ShoesProductionStep extends Component {
       </Row>
       <Row style={{textAlign:'center'}}>
         <div style={{width:'60%', margin:'0 auto', textAlign:'center'}}>
-          <Button style={{margin:'0 auto'}} type="primary" onClick={()=> {
+          <Button style={{margin:'0 auto'}} disabled={!this.props.canOperate} type="primary" onClick={()=> {
             // this.setState({modify:true});
             this.props.reqSuborderUpdate(this.props.profile._id, {s_production_step:4, state:constants.BASE_CONSTANTS.E_ORDER_STATUS.TRANSPORT})
           }}>去发货</Button>

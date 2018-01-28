@@ -2,7 +2,7 @@ module.exports = {
   _id: "1",
   name: '管理员',
   sex: '男',
-  power: 0,
+  power: 1000,
   user_type: 4,
   account: {
     account: 'lq-1212',

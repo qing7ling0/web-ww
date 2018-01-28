@@ -427,11 +427,15 @@ class OrderShoesProfile extends Component {
         {
           this.renderCustoms()
         }
-        <Row style={{textAlign:'center', paddingTop:20, paddingBottom:20}}>
-          <Button type="primary" onClick={()=>{
-            this.props.onOpenReview()
-          }}>审核</Button>
-        </Row>
+        {
+          this.props.canOperate ?
+          <Row style={{textAlign:'center', paddingTop:20, paddingBottom:20}}>
+            <Button type="primary" onClick={()=>{
+              this.props.onOpenReview()
+            }}>审核</Button>
+          </Row>
+          :null
+        }
       </div>
     )
   }
@@ -460,17 +464,17 @@ class OrderShoesProfile extends Component {
             {
               this.state.currentStep===1 
               &&
-              <ShoesTryStep profile={this.props.profile} />
+              <ShoesTryStep canOperate={this.props.canOperate} profile={this.props.profile} />
             }
             {
               this.state.currentStep===2 
               &&
-              <ShoesProductionStep profile={this.props.profile} />
+              <ShoesProductionStep canOperate={this.props.canOperate}  profile={this.props.profile} />
             }
             {
               this.state.currentStep===3 
               &&
-              <TransportStep profile={this.props.profile} message="正品鞋制作完成，请发货！" />
+              <TransportStep canOperate={this.props.canOperate}  profile={this.props.profile} message="正品鞋制作完成，请发货！" />
             }
             {
               this.state.currentStep===4 

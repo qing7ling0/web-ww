@@ -124,7 +124,11 @@ class OrderListContainer extends Component {
           })}
         </Menu>
         <SearchContainer>
-          <ButtonOp type="primary" onClick={this.onAddClicked}>添加</ButtonOp>
+          {
+            this.canOperate() ?
+            <ButtonOp type="primary" onClick={this.onAddClicked}>添加</ButtonOp>
+            :null
+          }
           <SearchInput placeholder={'请输入订单号'} onSearch={this.onSearchOrderID} enterButton />
           <SelectInput showSearch={true} placeholder={'请选择导购'} allowClear={true} optionFilterProp='children' onChange={this.onGudieChange}>
             {
@@ -314,6 +318,11 @@ class OrderListContainer extends Component {
     this.onReqList(this.props.pageInfo);
   }
 
+  canOperate = () => {
+    this.power = commonUtils.getPower(this.props.user, constants.MENU_IDS.salesItems)
+    return this.power && this.power.canOperate;
+  }
+
 }
 
 export default connect(
@@ -326,7 +335,8 @@ export default connect(
     shopList:state.shop.shopList,
     guideList:state.shop.shopGuideList,
     customerList:state.customer.customerList,
-    goodsShoesList:state.sales.goodsShoesList
+    goodsShoesList:state.sales.goodsShoesList,
+    user:state.app.loginInfo.user
   }),
   (dispatch) => {
     return bindActionCreators({
