@@ -81,6 +81,7 @@ class BaseListComponent extends Component {
     return (
       <Root>
         <DataContentComponent
+          headerRender={this.props.headerRender}
           canOperate={this.props.canOperate}
           hasSearch={this.props.hasSearch}
           searchPlaceholder={this.props.searchPlaceholder}

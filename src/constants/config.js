@@ -2,6 +2,14 @@ const {MENU_IDS, POWER_TYPES} = require('./constants')
 
 module.exports.Menus = [
   {
+    id:MENU_IDS.report, 
+    name: '销售报表',
+    icon: 'database',
+    subMenus: [
+      {id:MENU_IDS.reportTable, name:'销售报表'},
+    ]
+  },
+  {
     id:MENU_IDS.sales, 
     name: '进销存管理',
     icon: 'database',
@@ -57,8 +65,11 @@ module.exports.Menus = [
 
 module.exports.Routers = [
   { id:0, name:'首页', url: '/home' },
+
+  { id:MENU_IDS.report, name:'报表系统', url: '/home/report' },
+  { id:MENU_IDS.reportTable, name:'销售报表', url: '/home/report/table' },
+
   { id:MENU_IDS.sales, name:'进销存管理', url: '/home/sales' },
-  { id:MENU_IDS.salesTable, name:'报表', url: '/home/sales/table' },
   { id:MENU_IDS.salesItems, name:'商品', url: '/home/sales/items' },
   { id:MENU_IDS.salesOrder, name:'订单', url: '/home/sales/order' },
   { id:MENU_IDS.salesMaterial, name:'原材料', url: '/home/sales/material' },
@@ -87,6 +98,17 @@ module.exports.Routers = [
 
 module.exports.Powers = [
   { 
+    id:MENU_IDS.reportTable, 
+    powers:[
+      { id:POWER_TYPES.SALE_MANAGER, power:{view:true} },
+      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true} },
+      { id:POWER_TYPES.SHOP_GUIDE, power:{view:false} },
+      { id:POWER_TYPES.MANAGER_NORMAL, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.FACTORY_PRODUCTION, power:{view:false} },
+    ]
+  },
+  { 
     id:MENU_IDS.salesItems, 
     powers:[
       { id:POWER_TYPES.SALE_MANAGER, power:{view:true} },
@@ -95,17 +117,6 @@ module.exports.Powers = [
       { id:POWER_TYPES.MANAGER_NORMAL, power:{view:true} },
       { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
       { id:POWER_TYPES.FACTORY_PRODUCTION, power:{view:true} },
-    ]
-  },
-  { 
-    id:MENU_IDS.salesItems, 
-    powers:[
-      { id:POWER_TYPES.SALE_MANAGER, power:{view:true} },
-      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true} },
-      { id:POWER_TYPES.SHOP_GUIDE, power:{view:true} },
-      { id:POWER_TYPES.MANAGER_NORMAL, power:{view:true} },
-      { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
-      { id:POWER_TYPES.FACTORY_PRODUCTION, power:{view:false} },
     ]
   },
   { 

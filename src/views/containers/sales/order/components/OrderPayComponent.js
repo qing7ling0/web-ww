@@ -16,8 +16,7 @@ import {
   Radio,
   Slider, Upload,
   Modal,
-  Row,Col,
-  Checkbox
+  Row,Col
 } from 'antd'
 
 const FormItem = Form.Item;
@@ -68,14 +67,6 @@ class OrderPayComponent extends Component {
       submitOrdering:false,
       pay_type:'0',
     }
-    this.payInfo ={
-      customPrice:0,
-      urgentPrice:0,
-      price:0,
-      realPrice:0,
-      discountPrice:0,
-      discount:1,
-    }
   }
 
   //在组件挂载之前调用一次。如果在这个函数里面调用setState，本次的render函数可以看到更新后的state，并且只渲染一次
@@ -83,10 +74,6 @@ class OrderPayComponent extends Component {
     if (constants.BASE_CONSTANTS.PAY_TYPE.length > 0) {
       this.setState({pay_type:constants.BASE_CONSTANTS.PAY_TYPE[0].value})
     }
-  }
-
-  componentDidMount() {
-    this.calcPayMount();
   }
 
   componentWillReceiveProps(nextProps){
@@ -135,23 +122,6 @@ class OrderPayComponent extends Component {
   }
 
   render() {
-    this.calcPayMount();
-    let payInfo = this.payInfo;
-    let priceText = `${payInfo.price}`;
-    if (payInfo.discount < 1) {
-      priceText += `x${payInfo.discount}`
-    }
-    if (payInfo.customPrice) {
-      priceText += `+${payInfo.customPrice.toFixed(2)}`;
-    }
-    if (payInfo.urgentPrice) {
-      priceText += `+${payInfo.urgentPrice.toFixed(2)}`;
-    }
-    if (payInfo.urgentPrice || payInfo.customPrice) {
-      let payPrice = payInfo.urgentPrice + payInfo.realPrice+payInfo.customPrice;
-      priceText += `=${new Number(payPrice).toFixed(2)}`
-    }
-
     return (
       <div>
         <Table
@@ -166,33 +136,28 @@ class OrderPayComponent extends Component {
                   <Row>
                     <ProfileCol span={24}>
                       <ProfileColLabel>合计：</ProfileColLabel>
-                      <ProfileColValue>{priceText}RMB</ProfileColValue>
+                      <ProfileColValue>{this.calcPayMount()}</ProfileColValue>
                     </ProfileCol>
                       <ProfileCol span={24}>
                         <ProfileColLabel>优惠：</ProfileColLabel>
-                        <ProfileColValue>{payInfo.discountPrice.toFixed(2)}RBM</ProfileColValue>
+                        <ProfileColValue>{this.calcDiscountMount()}</ProfileColValue>
                       </ProfileCol>
                   </Row>
                 </Col>
                 <Col span={6}>
-                  <Row>
-                    <Select defaultValue={this.state.pay_type} onChange={(value)=>{
-                      this.setState({pay_type:value});
-                    }}>
-                      {
-                        constants.BASE_CONSTANTS.PAY_TYPE.map((item, index) => {
-                          return <Option key={item.value}>{item.label}</Option>
-                        })
-                      }
-                    </Select>
-                  </Row>
-                  <Row>
-                    <Checkbox onChange={(value)=>this.setState({select_store_card:value.target.checked})}>是否使用储值卡</Checkbox>
-                  </Row>
+                  <Select defaultValue={this.state.pay_type} onChange={(value)=>{
+                    this.setState({pay_type:value});
+                  }}>
+                    {
+                      constants.BASE_CONSTANTS.PAY_TYPE.map((item, index) => {
+                        return <Option key={item.value}>{item.label}</Option>
+                      })
+                    }
+                  </Select>
                 </Col>
-                {/* <Col span={6}>
+                <Col span={6}>
                   <Button type="primary" onClick={()=>this.handleSelectDiscount}>选择优惠券</Button>
-                </Col> */}
+                </Col>
               </Row>
             );
           }}
@@ -221,51 +186,27 @@ class OrderPayComponent extends Component {
   }
 
   calcPayMount = ()=> {
-    let payInfo = this.payInfo;
-    payInfo.price = 0;
-    payInfo.realPrice = 0;
-    payInfo.customPrice = 0;
-    payInfo.urgentPrice = 0;
-    payInfo.discountPrice = 0;
-
     let price = 0;
     for(let good of this.props.goods) {
-      payInfo.price += good.price;
+      price += good.price;
       if (good.s_customs) {
         for(let cus of good.s_customs) {
-          payInfo.customPrice += cus.price;
+          price += cus.price;
         }
       }
 
       if (good.urgent) {
-        payInfo.urgentPrice = good.urgent.price;
+        price += good.urgent.price;
       }
     }
-
-    let discount = 1;
-    if (!this.state.select_store_card) {
-      let list = this.props.sales.vipLevelList || [];
-      for(let lv of list) {
-        if (lv.level === this.props.customer.vip_level) {
-          discount = lv.discount/10;
-          break;
-        }
-      }
-    }
-    payInfo.discount = discount;
-    payInfo.realPrice = (payInfo.price * discount);
-    payInfo.discountPrice = (payInfo.price - payInfo.realPrice);
+    return Math.max(0, price-this.calcDiscountMount());
   }
 
   handlePay = () => {
-    this.calcPayMount();
-    let payInfo = this.payInfo;
     let order = {};
     order.source = this.props.order.source;
-    order.pay = payInfo.realPrice + payInfo.customPrice + payInfo.urgentPrice;
+    order.pay = this.calcPayMount();
     order.pay_type = this.state.pay_type;
-    order.store_card_selected = this.state.select_store_card;
-    order.cash_ticket_NID = ''; // 代金券
 
     let subOrders = [];
     for(let good of this.props.goods) {

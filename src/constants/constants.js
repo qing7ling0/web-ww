@@ -3,22 +3,28 @@ const transportCompanys = require('./transport')
 // 菜单标识
 module.exports.MENU_IDS = {
   orga:                 1, // 组织架构
+
   shop:                 2, // 门店
   shopInfo:             201, // 门店信息
   shopGuide:            202, // 门店导购
   shopSales:            203, // 门店促销
+
   customer:             3, // 客户
   customerInfo:         301, // 客户信息
   customerBuy:          302, // 客户消费表
   customerOrder:        303, // 客户订单
   customerFeedback:     304, // 客户反馈记录
+
   sales:                4, // 进销存管理【商品，原材料，保养维护价目表】
   salesMaterial:        401, // 原材料
   salesItems:           402, // 商品
   salesOrder:           403, // 订单
   salesSampleGoods:     404, // 库存
   salesItemsBase:       405, // 商品基础数据
-  salesTable:           406, // 销售报表
+
+  report:               5,
+  reportTable:          501, // 销售报表
+  
   system:               9, // 系统管理
   systemSetting:        901, // 系统设置
   systemAdmin:          902, // 管理员账号管理
@@ -232,3 +238,14 @@ module.exports.ORDER_STATUS_LIST = [
   {value:E_ORDER_STATUS.REJECTED, label:'客户拒绝收货'},
   {value:E_ORDER_STATUS.CANCEL, label:'已取消'},
 ]
+
+// 报表类型
+module.exports.E_REPORT_TYPES = {
+  SALES:'1', // 订单表
+  GOODS:'2', // 商品销售表
+  FOOTER:'3', // 鞋子尺码表
+  STOCK:'4', // 进销存
+  NEI_GUA:'5', // 内挂销售表
+  CUSTOMER_BUY:'6', // 客户购买表
+  CUSTOMER:'7', // vip客户表
+}

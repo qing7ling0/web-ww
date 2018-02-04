@@ -157,6 +157,10 @@ class ReportData {
 
     return ret;
   }
+
+  getSalesReport(){
+    
+  }
 }
 
 let report = new ReportData();
