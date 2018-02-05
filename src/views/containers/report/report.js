@@ -33,7 +33,7 @@ export class Report {
   getSalesReport(list) {
     let statisticsCols = []
     let sumCols = [];
-    SALSE_STATISTICS_COLS.forEach((item) => {
+    SHOP_SALSE_STATISTICS_COLS.forEach((item) => {
       if (item.sum) {
         sumCols.push(item);
       } else {
@@ -43,17 +43,20 @@ export class Report {
 
     list = list.map((item,index) => {
       if (!item.customer || item.customer.vip_level) {
+        if (!item.customer) item.customer = {};
         item.customer.vip_level = 0;
       }
       item.count = 1;
+
+      return item;
     })
 
-    return getReportList(list, statisticsCols, sumCols);
+    return this.getReportList(list, statisticsCols, sumCols);
   }
   
   getReportList(list, statisticsCols, sumCols, sort) {
-    let ret = analyse(list, statisticsCols);
-    ret = sum(list, ret, statisticsCols, sumCols)
+    let ret = this.analyse(list, statisticsCols);
+    ret = this.sum(list, ret, statisticsCols, sumCols)
     if (sort) {
       ret.sort(sort);
     }
@@ -62,26 +65,29 @@ export class Report {
 
   sum(list, statistics, statisticsCols, sumCols) {
     let retList = [];
-    for(let key,value in statistics) {
-      let keyList = key.split('|');
-      let item = {};
-      for(let index in statisticsCols) {
-        item[statisticsCols[index]] = keyList[index];
-      }
-      for(let index of value) {
-        let data = list[index];
-        for(let col of sumCols) {
-          if (!item[col]) {
-            item[col] = 0;
-          }
-          item[col] += data[col]||0;
+      for(let key in statistics) {
+        let keyList = key.split('|');
+        let item = {};
+        item.prices = {};
+        for(let index in statisticsCols) {
+          item[statisticsCols[index]] = keyList[index];
         }
+        for(let index of statistics[key]) {
+          let data = list[index];
+          for(let col of sumCols) {
+            if (!item[col.key]) {
+              item[col.key] = 0;
+              item.prices[col.key] = [];
+            }
+            item[col.key] += data[col.key]||0;
+            item.prices[col.key].push(data[col.key]);
+          }
+        }
+
+        retList.push(item);
       }
 
-      retList.push(item);
-    }
-
-    return retList;
+      return retList;
   }
 
   analyse(list, statisticsCols) {
@@ -92,7 +98,7 @@ export class Report {
       let key = '';
       for(let col of statisticsCols) {
         if (key) key += '|';
-        key += data[col]
+        key += data[col.key]
       }
       if (!ret[key]) {
         ret[key] = [];

@@ -11,10 +11,7 @@ import ContentHeaderComponent from '../../common/ContentHeaderComponent'
 import DataContentComponent from '../../common/DataContentComponent'
 
 import ReportListContainer from './ReportListContainer'
-
-const REPORT_TYPES = {
-
-}
+import {TYPES} from './types'
 
 class ReportContainer extends Component {
   // 构造函数，在创建组件的时候调用一次
@@ -24,7 +21,7 @@ class ReportContainer extends Component {
     this.state = {
       loading: false,
       success: true,
-      selectedKeys: [REPORT_TYPES[0].key]
+      selectedKeys: [TYPES[0].key]
     }
   }
   
@@ -44,7 +41,7 @@ class ReportContainer extends Component {
         mode="horizontal"
         defaultSelectedKeys={this.state.selectedKeys}
       >
-        {REPORT_TYPES.map((item) => {
+        {TYPES.map((item) => {
           return (
             <Menu.Item key={item.key}>{item.label}</Menu.Item>
           );

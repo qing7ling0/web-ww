@@ -491,9 +491,6 @@ export const orderInputType = new GraphQLInputObjectType({
   name: 'orderInputType',
   fields: {
     ...orderBaseFields,
-    shop: {type:GraphQLString, decription:'店铺'},
-    guide: {type:GraphQLString, decription:'导购'},
-    customer: {type:customerTypes.customerInputType, decription:'客户id'},
     sub_orders:{type:new GraphQLList(subOrderInputType)},
   }
 });

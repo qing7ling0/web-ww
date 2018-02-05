@@ -4,6 +4,7 @@ import shop from '../shop/index'
 import customer from '../customer/index'
 import sales from '../sales/index'
 import activity from '../activity/index'
+import report from '../report/index'
 
 let routers = [];
 
@@ -13,3 +14,4 @@ export default routers
   .concat(customer)
   .concat(sales)
   .concat(activity)
+  .concat(report)

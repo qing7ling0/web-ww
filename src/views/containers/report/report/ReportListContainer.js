@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import {bindActionCreators} from 'redux'
 import moment from 'moment'
+import styled from 'styled-components'
 
 import {
   Card,
@@ -10,7 +11,9 @@ import {
   message,
   Table,
 	Button,
-	DatePicker
+  DatePicker,
+  Select,
+  Input,
 } from 'antd'
 
 import {
@@ -22,13 +25,12 @@ import {
 } from './styled'
 
 const {RangePicker} = DatePicker;
+const Search = Input.Search;
 
 import Actions from '../../../actions'
 import BaseListComponent from '../../common/BaseListComponent'
 import * as common from '../../../modules/common'
 import * as constants from '../../../constants/Constants'
-import ReportAddModal from './ReportAddModal'
-import ReportEditModal from './ReportEditModal'
 import { commonUtils } from '../../../modules/common';
 import {TYPES} from './types'
 import utils from '../../../../utils/utils'
@@ -133,20 +135,17 @@ class ReportListContainer extends Component {
   currentList = () => {
 		let listKey = this.itemType.listKey;
 		let list = this.props.sales[listKey] || [];
-    return this.itemType.getReport();
+    return this.itemType.getReport(this, list);
   }
 
+
+
   onReqList = () => {
+    let con = {};
     if (this.searchWord) {
-      con = {};
-      con.name = {$regex:`/${this.searchWord}/i`}
+      // con.name = {$regex:`/${this.searchWord}/i`}
 		}
-		switch(this.itemType.key) {
-			case constants.BASE_CONSTANTS.E_REPORT_TYPES.SALES:
-				this.props.reqGetOrderList('orderList', );
-			break;
-		}
-    // this.props.reqGetSalesBaseList(this.itemType.listTag, this.itemType.graphqlType, con);
+    return this.itemType.getList(this, con);
   }
 
   onReqUpdate = (id, data) => {

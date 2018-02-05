@@ -85,7 +85,7 @@ export const orderList = {
     name: 'orderList',
     fields: {
       page: {type:commonFields.defaultPageType},
-      list: {type:new GraphQLList(types.orderDetailType)}
+      list: {type:new GraphQLList(types.orderType)}
     }
   }),
   args: {

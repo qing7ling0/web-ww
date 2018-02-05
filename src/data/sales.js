@@ -465,6 +465,11 @@ class SalesData {
         throw new ApiError(ApiErrorNames.ADD_FAIL);
       }
       doc.sub_orders = newSubOrders;
+      if (subOrders && subOrders.length>0) {
+        doc.customer = newSubOrders[0].customer;
+        doc.shop = newSubOrders[0].shop;
+        doc.guide = newSubOrders[0].guide;
+      }
       let order = new orderModel(doc);
       if (order) {
         let newOrder = await order.save(options);

@@ -47,19 +47,24 @@ const getListOptions = function(cols, target) {
     return { title: item.label, dataIndex: item.key, key: item.key, className:"table-column-left", render:item.render};
   });
 }
+
 export const TYPES = [
   {
     key:BASE_CONSTANTS.E_REPORT_TYPES.SALES,
     label:'门店销售报表',
-    listOptions:getListOptions.bind(SHOP_SALSE_STATISTICS_COLS),
+    listOptions:getListOptions.bind(undefined, SHOP_SALSE_STATISTICS_COLS),
     listKey:'orderList',
-    cols:SHOP_SALSE_STATISTICS_COLS
+    cols:SHOP_SALSE_STATISTICS_COLS,
+    getReport:(target, list)=>target.report.getSalesReport(list),
+    getList:(target, con)=>target.props.reqGetOrderList('orderList', con)
   },
   {
     key:BASE_CONSTANTS.E_REPORT_TYPES.GOODS,
     label:'商品销售报表',
-    listOptions:getListOptions.bind(GOODS_STATISTICS_COLS),
+    listOptions:getListOptions.bind(undefined,GOODS_STATISTICS_COLS),
     listKey:'subOrderList',
-    cols:GOODS_STATISTICS_COLS
+    cols:GOODS_STATISTICS_COLS,
+    getReport:(target, list)=>target.report.getSalesReport(list),
+    getList:(target, con)=>target.props.reqGetSubOrderList('subOrderList', con)
   },
 ]
