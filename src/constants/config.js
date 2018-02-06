@@ -14,7 +14,6 @@ module.exports.Menus = [
     name: '进销存管理',
     icon: 'database',
     subMenus: [
-      {id:MENU_IDS.salesTable, name:'销售报表'},
       {id:MENU_IDS.salesItems, name:'商品'},
       {id:MENU_IDS.salesOrder, name:'订单'},
       {id:MENU_IDS.salesMaterial, name:'原材料'},

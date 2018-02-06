@@ -10,7 +10,8 @@ import * as orderTypes from '../../../modules/orderTypes'
 import { 
   Report, 
   SHOP_SALSE_STATISTICS_COLS,
-  GOODS_STATISTICS_COLS 
+  GOODS_STATISTICS_COLS,
+  FOOTER_STATISTICS_COLS
 } from '../report.js'
 
 const {BASE_CONSTANTS} = constants;
@@ -64,7 +65,20 @@ export const TYPES = [
     listOptions:getListOptions.bind(undefined,GOODS_STATISTICS_COLS),
     listKey:'subOrderList',
     cols:GOODS_STATISTICS_COLS,
-    getReport:(target, list)=>target.report.getSalesReport(list),
+    getReport:(target, list)=>target.report.getGoodsSalesReport(list),
     getList:(target, con)=>target.props.reqGetSubOrderList('subOrderList', con)
+  },
+  {
+    key:BASE_CONSTANTS.E_REPORT_TYPES.FOOTER,
+    label:'VIP脚型数据',
+    listOptions:getListOptions.bind(undefined, FOOTER_STATISTICS_COLS),
+    listKey:'shoesOrderList',
+    cols:FOOTER_STATISTICS_COLS,
+    getReport:(target, list)=>target.report.getFooterReport(list),
+    getList:(target, con)=>{
+      if (!con) con = {};
+      con.type = constants.BASE_CONSTANTS.E_ORDER_TYPE.SHOES;
+      target.props.reqGetSubOrderList('shoesOrderList:subOrderList', con)
+    }
   },
 ]

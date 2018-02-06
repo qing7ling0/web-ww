@@ -64,6 +64,10 @@ class ReportContainer extends Component {
       </Root>
     );
   }
+  
+  onMenuClicked = ({item, key}) => {
+    this.props.history.replace(this.props.match.path+'/' + key);
+  }
 }
 
 export default ReportContainer;

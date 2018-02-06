@@ -82,7 +82,7 @@ class ReportListContainer extends Component {
           this.itemType = value;
         }
       }
-      // this.onReqList();
+      this.onReqList();
     }
   }
 
@@ -144,6 +144,7 @@ class ReportListContainer extends Component {
       this.onReqList();
     }
   }
+
   onShopChange = (value) => {
     this.shop = value;
     this.onReqList();
@@ -164,59 +165,6 @@ class ReportListContainer extends Component {
 
     return this.itemType.getList(this, con);
   }
-
-  onReqUpdate = (id, data) => {
-    if (data) {
-      data.type = this.itemType.key;
-    }
-    this.props.reqUpdateSalesBase(this.itemType.tag, id, data);
-  }
-  
-  onReqAdd = (data) => {
-    if (data) {
-      data.type = this.itemType.key;
-    }
-    this.props.reqAddSalesBase(this.itemType.tag, this.itemType.graphqlType, data);
-  }
-
-  onReqRemove = (ids) => {
-    this.props.reqDeleteSalesBase(this.itemType.tag, ids);
-  }
-
-  onItemConver = (item, index) => {
-    item.editor_time = moment(item.editor_time).format('YYYY-MM-DD HH:mm:ss');
-    return item;
-  }
-  
-  onDelete = (ids) => {
-    this.onReqRemove(ids);
-  }
-
-  onAdd = (values) => {
-    if (values.NID === undefined) {
-      values.NID = '0';
-    }
-    this.onReqAdd(values);
-  }
-
-  onEdit = (values) => {
-    values = utils.diffent(values, this.state.editData);
-    if (values) {
-      if (values.NID === undefined) {
-        values.NID = '0';
-      }
-      this.onReqUpdate(this.state.editData._id, values);
-    }
-  }
-
-  onRowClick = (record, index, event) => {
-    if (!this.canOperate()) return;
-    this.setState({editVisible:true, editData:record});
-  }
-  canOperate = () => {
-    this.power = commonUtils.getPower(this.props.user, constants.MENU_IDS.activityVIP)
-    return this.power && this.power.canOperate;
-  }
 }
 
 export default connect(
@@ -226,6 +174,9 @@ export default connect(
     deleteIDS:state.sales.goodsBaseDeleteIDS,
     user:state.app.loginInfo.user,
     shopList:state.shop.shopList,
+    orderList:state.sales.orderList,
+    subOrderList:state.sales.subOrderList,
+    shoesOrderList:state.sales.shoesOrderList,
   }),
   (dispatch) => {
     return bindActionCreators({
