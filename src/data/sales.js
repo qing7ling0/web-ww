@@ -466,9 +466,9 @@ class SalesData {
       }
       doc.sub_orders = newSubOrders;
       if (subOrders && subOrders.length>0) {
-        doc.customer = newSubOrders[0].customer;
-        doc.shop = newSubOrders[0].shop;
-        doc.guide = newSubOrders[0].guide;
+        doc.customer = subOrders[0].customer;
+        doc.shop = subOrders[0].shop;
+        doc.guide = subOrders[0].guide;
       }
       let order = new orderModel(doc);
       if (order) {

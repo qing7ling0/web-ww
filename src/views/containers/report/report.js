@@ -2,14 +2,14 @@ import moment from 'moment'
 
 // 门店销售报表
 export const SHOP_SALSE_STATISTICS_COLS = [
-  {key:'create_date', sum:false, label:'时间', render:item=>item&&moment(item).format("YYYY-MM-DD")||''},
+  {key:'create_time', sum:false, label:'时间'},
   {key:'shop', sum:false, label:'门店', render:item=>item&&item.name || ''},
   {key:'guide', sum:false, label:'导购', render:item=>item&&item.name || ''},
   {key:'vip_level', sum:false, label:'会员等级', render:item=>item&&item.vip_level || 0},
-  {key:'count', sum:true, label:'销售数量', render:item=>item || 1},
-  {key:'system_price', sum:true, label:'吊牌金额', render:item=>item || ''},
-  {key:'real_pay_price', sum:true, label:'销售金额', render:item=>item || ''},
-  {key:'discount_price', sum:true, label:'折扣金额', render:item=>item || ''},
+  {key:'count', sum:true, label:'销售数量', render:item=>item || 0},
+  {key:'system_price', sum:true, label:'吊牌金额', render:item=>item+'元' || '0元'},
+  {key:'real_pay_price', sum:true, label:'销售金额', render:item=>item+'元' || '0元'},
+  {key:'discount_price', sum:true, label:'折扣金额', render:item=>item+'元' || '0元'},
 ]
 
 // 门店销售报表
@@ -35,18 +35,20 @@ export class Report {
     let sumCols = [];
     SHOP_SALSE_STATISTICS_COLS.forEach((item) => {
       if (item.sum) {
-        sumCols.push(item);
+        sumCols.push(item.key);
       } else {
-        statisticsCols.push(item);
+        statisticsCols.push(item.key);
       }
     })
 
     list = list.map((item,index) => {
-      if (!item.customer || item.customer.vip_level) {
-        if (!item.customer) item.customer = {};
-        item.customer.vip_level = 0;
+      if (!item.customer) {
+        item.vip_level = 0;
+      } else {
+        item.vip_level = item.customer.vip_level || 0;
       }
       item.count = 1;
+      item.create_time = item.create_time&&moment(item.create_time).format("YYYY-MM-DD")||''
 
       return item;
     })
@@ -55,35 +57,46 @@ export class Report {
   }
   
   getReportList(list, statisticsCols, sumCols, sort) {
+    let totalList = [];
+    for(let col of sumCols) {
+      totalList[col] = 0;
+    }
+
     let ret = this.analyse(list, statisticsCols);
-    ret = this.sum(list, ret, statisticsCols, sumCols)
+    ret = this.sum(list, ret, statisticsCols, sumCols, totalList)
     if (sort) {
       ret.sort(sort);
     }
+    totalList[statisticsCols[0]] = '总计:';
+    totalList.key = ret.length;
+    ret.push(totalList);
     return ret;
   }
 
-  sum(list, statistics, statisticsCols, sumCols) {
+  sum(list, statistics, statisticsCols, sumCols, totalSumList) {
     let retList = [];
       for(let key in statistics) {
-        let keyList = key.split('|');
         let item = {};
-        item.prices = {};
-        for(let index in statisticsCols) {
-          item[statisticsCols[index]] = keyList[index];
+        if (statistics[key].length > 0) {
+          for(let col of statisticsCols) {
+            item[col] = list[statistics[key][0]][col];
+          }
         }
         for(let index of statistics[key]) {
           let data = list[index];
           for(let col of sumCols) {
-            if (!item[col.key]) {
-              item[col.key] = 0;
-              item.prices[col.key] = [];
+            if (!item[col]) {
+              item[col] = 0;
             }
-            item[col.key] += data[col.key]||0;
-            item.prices[col.key].push(data[col.key]);
+            if (!totalSumList[col]) {
+              totalSumList[col] = 0;
+            }
+            let v = data[col]||0;
+            item[col] += v;
+            totalSumList[col] += v;
           }
         }
-
+        item.key = retList.length;
         retList.push(item);
       }
 
@@ -98,7 +111,12 @@ export class Report {
       let key = '';
       for(let col of statisticsCols) {
         if (key) key += '|';
-        key += data[col.key]
+        let v = data[col];
+        if (v && v.hasOwnProperty('_id')) {
+          key += v._id;
+        } else {
+          key += v;
+        }
       }
       if (!ret[key]) {
         ret[key] = [];

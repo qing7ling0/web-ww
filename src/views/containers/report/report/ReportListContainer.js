@@ -65,7 +65,10 @@ class ReportListContainer extends Component {
     this.searchWord = '';
     this.options = [];
 		this.itemType = TYPES[0];
-		this.report = new Report();
+    this.report = new Report();
+    
+    this.beganDate = moment(moment().subtract(1, 'M'), dateFormat);
+    this.endDate = moment(moment(), dateFormat);
   }
 
   //在组件挂载之前调用一次。如果在这个函数里面调用setState，本次的render函数可以看到更新后的state，并且只渲染一次
@@ -89,6 +92,7 @@ class ReportListContainer extends Component {
         this.itemType = value;
       }
     }
+    this.props.reqShopList(0, 100);
   }
 
   renderHeader = () => {
@@ -96,10 +100,11 @@ class ReportListContainer extends Component {
       <div>
         <SearchContainer>
 					<RangePicker
-						defaultValue={[moment('2015-01-01', dateFormat), moment('2015-01-01', dateFormat)]}
-						onChange={(datas)=>{}}
+						defaultValue={[this.beganDate, this.endDate]}
+						onChange={this.onDateChange}
 						format={dateFormat}
 					/>
+          <span> </span>
           <SelectInput placeholder={'请选择店铺'} allowClear={true} onChange={this.onShopChange}>
             {
               this.props.shopList.map((item) => {
@@ -114,12 +119,11 @@ class ReportListContainer extends Component {
 
   render() {
     this.options = this.itemType.listOptions(this);
-    const list = this.currentList();
+    this.list = this.currentList();
     return (
       <BaseListComponent
-        canOperate={this.canOperate()}
         columns={this.options} 
-        dataSource={list} 
+        dataSource={this.list} 
         loading={this.props.loading}
         onRowClick={this.onRowClick}
         onGetList={(pageInfo)=>{
@@ -127,9 +131,22 @@ class ReportListContainer extends Component {
         }}
         onDelItems={this.onDelete}
         onItemConver={this.onItemConver}
-        headerRender={this.headerRender}
+        headerRender={this.renderHeader}
       />
     );
+  }
+
+  onDateChange = (datas) => {
+    if (datas && datas.length > 1) {
+      this.beganDate = datas[0];
+      this.endDate = datas[1];
+
+      this.onReqList();
+    }
+  }
+  onShopChange = (value) => {
+    this.shop = value;
+    this.onReqList();
   }
 
   currentList = () => {
@@ -138,13 +155,13 @@ class ReportListContainer extends Component {
     return this.itemType.getReport(this, list);
   }
 
-
-
   onReqList = () => {
     let con = {};
-    if (this.searchWord) {
-      // con.name = {$regex:`/${this.searchWord}/i`}
-		}
+    if (this.shop) {
+      con.shop = this.shop;
+    }
+    con.create_time = {$gt:this.beganDate, $lt:this.endDate};
+
     return this.itemType.getList(this, con);
   }
 
@@ -207,12 +224,14 @@ export default connect(
     sales:state.sales,
     loading:state.sales.loading,
     deleteIDS:state.sales.goodsBaseDeleteIDS,
-    user:state.app.loginInfo.user
+    user:state.app.loginInfo.user,
+    shopList:state.shop.shopList,
   }),
   (dispatch) => {
     return bindActionCreators({
       reqGetOrderList: Actions.getOrderList,
       reqGetSubOrderList: Actions.getSubOrderList,
+      reqShopList:Actions.getShopList,
     }, dispatch);
   }
 )(ReportListContainer);
