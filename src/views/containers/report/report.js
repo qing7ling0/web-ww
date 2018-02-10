@@ -52,7 +52,7 @@ export const FOOTER_STATISTICS_COLS = [
 ]
 
 // 客户订单表
-export const FOOTER_STATISTICS_COLS = [
+export const CUSTOMER_SALES_STATISTICS_COLS = [
   {key:'name', sum:false, label:'名称', render:item=>item || ''},
   {key:'sex', sum:false, label:'性别', render:item=>item || ''},
   {key:'phone', sum:false, label:'手机', render:item=>item || ''},

@@ -23,6 +23,7 @@ const logUtil = require('./utils/log-utils');
 const responseFormatter = require('./middlewares/response-formatter');
 const {fileUpload, fileSend} = require('./middlewares/file-middleware');
 const loginCheck = require('./middlewares/login-check');
+const auth = require('./middlewares/auth');
 const schemas = require('./schemas/index');
 
 const _router = new router();
@@ -58,6 +59,7 @@ const upload = multer({
  });
 
 app.use(session({...config.session, store:_sessionStore}))
+
 // error handler
 onerror(app);
 
@@ -71,7 +73,7 @@ _router.get('/file/:id', fileSend);
 schemas(_router);
 
 // middlewares
-app.use(cors({credentials:true}));
+app.use(cors({credentials:true, expose:'auth'}));
 
 app.use(logger());
 // logger
@@ -97,7 +99,8 @@ app.use(async(ctx, next) => {
 });
 app.use(responseFormatter('^/(api|upload|login)$'));
 app.use(fileUpload);
-app.use(loginCheck);
+// app.use(loginCheck);
+app.use(auth);
 
 // routes
 app.use(_router.routes(), _router.allowedMethods());
