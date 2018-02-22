@@ -23,6 +23,9 @@ const commonFields = require('../common/common-fields')
 const commonUtils = require('../../utils/common-utils')
 const schemasUtils = require('../../utils/schemas-utils')
 
+
+export const customerProfile = schemasUtils.createDefaultProfileQuery(types.customerType, customerModel);
+
 export const customerList = {
 	type: new GraphQLObjectType({
     name: 'customerList',
@@ -41,19 +44,6 @@ export const customerList = {
       params.conditions = commonUtils.urlString2Conditions(params.conditions);
     }
     return await customerData.getList({page:params.page, pageSize:params.pageSize}, {conditions:params.conditions})
-	}
-}
-
-export const customerProfile = {
-	type: types.customerType,
-  args: {
-    conditions: {type:GraphQLString}
-  },
-	async resolve (root, params, options) {
-    if (params.conditions) {
-      params.conditions = commonUtils.urlString2Conditions(params.conditions);
-    }
-    return await customerData.find(params.conditions)
 	}
 }
 
