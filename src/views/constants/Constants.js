@@ -2,7 +2,7 @@ import * as baseConstants from '../../constants/constants'
 import citys from '../../constants/citys'
 
 export const DEV_SERVER = 'http://127.0.0.1:3001';
-export const PROD_SERVER = 'http://127.0.0.1:3001';
+export const PROD_SERVER = 'http://106.14.138.141:3001';
 
 export const ACCOUNT_MAX_LENGTH = baseConstants.ACCOUNT_MAX_LENGTH; // 账号密码最大长度
 export const ACCOUNT_MIN_LENGTH = baseConstants.ACCOUNT_MIN_LENGTH; // 账号密码最小长度
