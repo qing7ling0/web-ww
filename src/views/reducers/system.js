@@ -3,7 +3,7 @@
 import * as ActionTypes from '../constants/ActionTypes';
 import { States } from '../../base/modules/ReduxState'
 import results from './results'
-import baseUtils from '../../base/utils/Utils'
+import baseUtils from '../../base/utils/utils'
 import * as constants from '../constants/Constants'
 
 const LOADING_ACTIONS = [

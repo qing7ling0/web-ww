@@ -21,7 +21,7 @@ import {
 } from './NavComponent.styled'
 import * as constants from '../../../constants/constants'
 
-import utils from '../../../../base/utils/Utils'
+import utils from '../../../../base/utils/utils'
 
 class NavComponent extends BaseComponent {
   // 构造函数，在创建组件的时候调用一次

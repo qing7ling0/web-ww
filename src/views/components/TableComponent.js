@@ -12,7 +12,7 @@ import {
 import Actions from '../actions'
 import BaseComponent from './BaseComponent'
 import * as constants from '../constants/Constants'
-import baseUtils from '../../base/utils/Utils'
+import baseUtils from '../../base/utils/utils'
 
 class BaseContainer extends BaseComponent {
   // 构造函数，在创建组件的时候调用一次

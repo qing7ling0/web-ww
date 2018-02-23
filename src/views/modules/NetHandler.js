@@ -3,7 +3,7 @@ import netUtils from '../../base/utils/NetUtils'
 import * as config from '../constants/Config'
 import * as constants from '../constants/Constants'
 import * as types from './graphqlTypes'
-import utils from '../../base/utils/Utils'
+import utils from '../../base/utils/utils'
 
 
 const object2String = (object) => {

@@ -136,7 +136,7 @@ module.exports.ORDER_TYPE = [
   {value:E_ORDER_TYPE.MAINTAIN, label:'护理', etc:'HL'},
   {value:E_ORDER_TYPE.ORNAMENT, label:'配饰', etc:'PS'},
   {value:E_ORDER_TYPE.RECHARGE, label:'充值', etc:'CZ'},
-  {value:E_ORDER_TYPE.DESIGN, label:'来样设计', etc:'SD'},
+  {value:E_ORDER_TYPE.DESIGN, label:'来样', etc:'SD'},
 ]
 
 module.exports.TRANSPORT_COMPANYS = transportCompanys.companys; // 快递公司
