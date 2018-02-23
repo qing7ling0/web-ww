@@ -27,9 +27,9 @@ module.exports.Menus = [
     icon: 'idcard',
     subMenus: [
       {id:MENU_IDS.customerInfo, name:'客户VIP'},
-      {id:MENU_IDS.customerBuy, name:'消费记录'},
-      {id:MENU_IDS.customerOrder, name:'维修保养订单'},
-      {id:MENU_IDS.customerFeedback, name:'客户反馈'},
+      // {id:MENU_IDS.customerBuy, name:'消费记录'},
+      // {id:MENU_IDS.customerOrder, name:'维修保养订单'},
+      // {id:MENU_IDS.customerFeedback, name:'客户反馈'},
     ]
   },
   {
@@ -39,7 +39,7 @@ module.exports.Menus = [
     subMenus: [
       {id:MENU_IDS.shopInfo, name:'门店'},
       {id:MENU_IDS.shopGuide, name:'导购'},
-      {id:MENU_IDS.shopSales, name:'促销信息'}
+      // {id:MENU_IDS.shopSales, name:'促销信息'}
     ]
   },
   {
@@ -56,7 +56,7 @@ module.exports.Menus = [
     name:'系统管理',
     icon: 'setting',
     subMenus: [
-      {id:MENU_IDS.systemSetting, name:'设置'},
+      // {id:MENU_IDS.systemSetting, name:'设置'},
       {id:MENU_IDS.systemAdmin, name:'管理员账号'}
     ]
   },
