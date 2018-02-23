@@ -121,6 +121,7 @@ class LoginContainer extends BaseContainer {
                   prefix={<Icon type="lock" />} 
                   size="large"
                   value={this.state.password}
+                  type="password"
                   onChange={this.onPasswordChange} />
                 <BtnLogin type="primary" size="large" onClick={this.onLoginBtnClicked}> <Icon type="lock" />登录 </BtnLogin>
               </LoginCard>

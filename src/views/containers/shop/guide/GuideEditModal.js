@@ -62,9 +62,7 @@ class GuideEditModal extends Component {
       {type:'number', name:'height', label:'身高', options:{formatter:(value) => `${value}cm`, parser:value => value.replace('cm', '')}},
       {type:'number', name:'weight', label:'体重', options:{formatter:(value) => `${value}Kg`, parser:value => value.replace('Kg', '')}},
       {type:'datePicker', name:'entry_time', label:'入职日期', rule:{required:true}},
-      {type:'datePicker', name:'leave_time', label:'离职日期'},
-      {type:'input', name:'editor_name', label:'编辑人', options:{disabled:true}},
-      {type:'input', name:'editor_time', label:'编辑时间', options:{disabled:true}},
+      {type:'datePicker', name:'leave_time', label:'离职日期'}
     ];
     this.setState({visible:this.props.visible})
     if (this.props.shopList.length === 0) {

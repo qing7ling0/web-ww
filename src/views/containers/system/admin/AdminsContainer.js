@@ -59,7 +59,6 @@ class AdminsContainer extends Component {
     const columns = [
       { title: '姓名', dataIndex: 'name', key: 'name'},
       { title: '账号', dataIndex: 'account', key: 'account'},
-      { title: '编辑时间', dataIndex: 'editor_time', key: 'editor_time'},
       { title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
         return (<Button type="primary" shape="circle" icon="delete" size="large" onClick={()=>this.onDelete([record._id])} />);
       }}

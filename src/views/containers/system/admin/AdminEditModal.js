@@ -58,10 +58,7 @@ class AdminEditModal extends Component {
     this.options = [
       {type:'input', name:'account', label:'账号', itemOptions:{hasFeedback:true}, rule:{validator:this.checkAccount}},
       {type:'input', name:'password', label:'密码', itemOptions:{hasFeedback:true}, rule:{validator:this.checkPassword}},
-      {type:'input', name:'name', label:'姓名', itemOptions:{hasFeedback:true}, rule:{max:20}},
-      {type:'input', name:'editor_name', label:'编辑人', options:{disabled:true}},
-      {type:'input', name:'editor_time', label:'编辑时间', options:{disabled:true}},
-      
+      {type:'input', name:'name', label:'姓名', itemOptions:{hasFeedback:true}, rule:{max:20}}
     ];
     this.setState({visible:this.props.visible})
   }

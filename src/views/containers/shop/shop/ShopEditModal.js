@@ -65,9 +65,7 @@ class ShopEditModal extends Component {
       {type:'input', name:'address', label:'地址', itemOptions:{hasFeedback:true}, rule:{required:true}},
       {type:'input', name:'zipcode', label:'邮编'},
       {type:'datePicker', name:'close_date', label:'关店时间'},
-      {type:'textarea', name:'close_reason', label:'关店原因'},
-      {type:'input', name:'editor_name', label:'编辑人', options:{disabled:true}},
-      {type:'input', name:'editor_time', label:'编辑时间', options:{disabled:true}},
+      {type:'textarea', name:'close_reason', label:'关店原因'}
     ];
     this.setState({visible:this.props.visible})
   }

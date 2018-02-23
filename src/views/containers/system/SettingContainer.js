@@ -29,7 +29,6 @@ import * as constants from '../../constants/Constants'
 const columns = [
   { title: '账号', dataIndex: 'account', key: 'account'},
   { title: '姓名', dataIndex: 'name', key: 'name'},
-  { title: '编辑时间', dataIndex: 'editor_time', key: 'editor_time'},
   { title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
     return (<a href='javascript:void(0);'>删除</a>);
   }}
