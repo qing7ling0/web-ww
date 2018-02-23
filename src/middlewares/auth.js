@@ -16,7 +16,8 @@ const authSchema = new Schema({
 const authModel = mongoose.model('auth', authSchema);
 
 var auth = async function(ctx, next) {
-  if (/^\/login$/.test(ctx.originalUrl)) {
+  console.log('auth=' + ctx.request.headers.auth + "; url=" + ctx.originalUrl);
+  if (/^\/(login)$/.test(ctx.originalUrl) || /^\/(file)/.test(ctx.originalUrl)) {
     await next();
     if (ctx.session.user){
       let data = {expireTime:new Date().getTime()+EXPIRE_TIME, user:ctx.session.user};
@@ -29,13 +30,21 @@ var auth = async function(ctx, next) {
       await next();
     } else {
       if (ctx.request.headers.auth) {
+        console.log('auth=' + ctx.request.headers.auth);
         let time = new Date().getTime();
+
+        // let superAdmin = require('./super-admin');
+        // if (superAdmin.account.account === params.account) {
+        //   return this.loginSuccess(ctx, superAdmin, true);
+        // }
         let data = await authModel.findById(ctx.request.headers.auth);
         if (!data || data.expireTime < time) {
           throw new ApiError(ApiErrorNames.LOGIN_INVALID);
         } else {
-          await authModel.findByIdAndUpdate(ctx.request.headers.auth, {expireTime:time+EXPIRE_TIME});
-          ctx.response.append('auth', x._id);
+          ctx.session.user = data.user;
+          await next();
+          let au = await authModel.findByIdAndUpdate(ctx.request.headers.auth, {expireTime:time+EXPIRE_TIME});
+          ctx.response.append('auth', au._id);
         }
       } else {
         throw new ApiError(ApiErrorNames.LOGIN_INVALID);

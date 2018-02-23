@@ -92,7 +92,7 @@ const ORDER_SHOES = [
   { title: '性别', dataIndex: 'sex', key: 'sex'},
   { title: '楦号', dataIndex: 's_xuan_hao', key: 's_xuan_hao', render:(item) => item.name},
   { title: '规格', dataIndex: 's_gui_ge', key: 's_gui_ge', render:(item) => item.name},
-  { title: '跟高', dataIndex: 's_gen_gao', key: 's_gen_gao', render:(item) => item.name},
+  { title: '跟高', dataIndex: 's_gen_gao', key: 's_gen_gao', render:(item) => item&&item.name||''},
   { title: '材质', dataIndex: 's_material', key: 's_material', render:(item) => item.name},
   { title: '鞋面颜色', dataIndex: 's_out_color', key: 's_out_color', render:(item) => item.name},
   { title: '里皮颜色', dataIndex: 's_in_color', key: 's_in_color', render:(item) => item.name},

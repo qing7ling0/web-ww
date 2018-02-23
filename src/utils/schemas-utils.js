@@ -47,9 +47,15 @@ export const createDefaultProfileQuery = (type, model, onQuery) => {
     type: type,
     args: {
       id: {type:GraphQLString},
+      conditions: {type:GraphQLString}
     },
     async resolve (root, params, options) {
-      return await DB.findById(model, params.id, onQuery);
+      let id = params.id || '';
+      if (id) {
+        return await DB.findById(model, id, onQuery);
+      }
+      let con = params.conditions && commonUtils.urlString2Conditions(params.conditions) || null;
+      return await DB.findOne(model, con, onQuery);
     }
   };
 }

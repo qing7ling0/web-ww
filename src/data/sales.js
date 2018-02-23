@@ -133,7 +133,9 @@ class SalesData {
         goods.s_out_color = suborder.s_out_color && suborder.s_out_color._id || '';
         goods.s_bottom_color = suborder.s_bottom_color && suborder.s_bottom_color._id || '';
         goods.s_bottom_side_color = suborder.s_bottom_side_color && suborder.s_bottom_side_color._id || '';
-        goods.s_gen_gao = suborder.s_gen_gao && suborder.s_gen_gao._id || '';
+        if(suborder.s_gen_gao && suborder.s_gen_gao._id) {
+          goods.s_gen_gao = suborder.s_gen_gao._id;
+        }
       } else if (suborder.type === constants.E_ORDER_TYPE.BELT){
         goods.b_material = suborder.b_material && suborder.b_material._id || '';
         goods.b_color = suborder.b_color && suborder.b_color._id || '';
