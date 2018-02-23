@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {HashRouter, Route, Redirect} from 'react-router-dom'
 import { connect } from 'react-redux'
 import {bindActionCreators} from 'redux'
 
@@ -21,7 +22,10 @@ import Actions from '../../actions'
 import Navigation from '../../modules/Navigation'
 import BaseContainer from '../../components/BaseContainer'
 import FooterComponent from '../common/FooterComponent'
+
+import * as config from '../../constants/Config'
 import * as constants from '../../constants/Constants'
+import * as common from '../../modules/common'
 
 class LoginContainer extends BaseContainer {
   // 构造函数，在创建组件的时候调用一次
@@ -62,7 +66,8 @@ class LoginContainer extends BaseContainer {
   componentWillReceiveProps(nextProps){
     super.componentWillReceiveProps(nextProps);
     if (nextProps.loginInfo.code === 0) {
-      this.navigation.push("/home");
+      this.navigation.push(common.findRouterById(config.Routers, constants.MENU_IDS.reportTable).url);
+
     }
   }
 

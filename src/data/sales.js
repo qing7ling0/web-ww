@@ -34,6 +34,7 @@ import { customerData } from './index'
 import { tryFeedbackModel } from '../models/sales';
 import { subOrderType } from '../schemas/sales/types';
 import { commonModel } from '../models/common';
+import { fileModel } from '../models/file.js';
 // import 
 
 const logUtil = require('../utils/log-utils');
@@ -604,6 +605,10 @@ class SalesData {
             await fileData.update({_id:{$in:deleteFileIDS}}, {temp:true});
           }
         }
+      }
+
+      if (doc.file) {
+        await fileData.update({_id:doc.file}, {temp:false});
       }
 
       let ret = await subOrderModel.update(conditions, doc, options);

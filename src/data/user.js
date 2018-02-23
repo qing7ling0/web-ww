@@ -354,7 +354,7 @@ class UserData {
     if (params.check) {
       throw new ApiError(ApiErrorNames.LOGIN_INVALID);
     }
-
+    console.log('params.password' + params.password)
     if (!UserData.checkAccount(params.account) || !UserData.checkPassword(params.password)) {
       throw new ApiError(ApiErrorNames.ACCOUNT_PASSWORD_ERROR);
     }

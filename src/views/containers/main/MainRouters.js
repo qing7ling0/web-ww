@@ -1,4 +1,10 @@
-import {HashRouter,Route,Link} from 'react-router-dom'
+import React, { Component } from 'react';
+import {HashRouter, Route, Redirect} from 'react-router-dom'
+
+import * as config from '../../constants/Config'
+import * as constants from '../../constants/Constants'
+import * as common from '../../modules/common'
+
 import system from '../system/index'
 import shop from '../shop/index'
 import customer from '../customer/index'

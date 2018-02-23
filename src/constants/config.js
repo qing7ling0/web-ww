@@ -111,8 +111,8 @@ module.exports.Powers = [
     id:MENU_IDS.salesItems, 
     powers:[
       { id:POWER_TYPES.SALE_MANAGER, power:{view:true} },
-      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true} },
-      { id:POWER_TYPES.SHOP_GUIDE, power:{view:false} },
+      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.SHOP_GUIDE, power:{view:true, add:true, edit:true} },
       { id:POWER_TYPES.MANAGER_NORMAL, power:{view:true} },
       { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
       { id:POWER_TYPES.FACTORY_PRODUCTION, power:{view:true} },
@@ -122,8 +122,8 @@ module.exports.Powers = [
     id:MENU_IDS.salesOrder, 
     powers:[
       { id:POWER_TYPES.SALE_MANAGER, power:{view:true} },
-      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true, add:true} },
-      { id:POWER_TYPES.SHOP_GUIDE, power:{view:true, add:true} },
+      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.SHOP_GUIDE, power:{view:true, add:true, edit:true} },
       { id:POWER_TYPES.MANAGER_NORMAL, power:{view:true} },
       { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
       { id:POWER_TYPES.FACTORY_PRODUCTION, power:{view:true} },
@@ -132,9 +132,9 @@ module.exports.Powers = [
   { 
     id:MENU_IDS.salesMaterial, 
     powers:[
-      { id:POWER_TYPES.SALE_MANAGER, power:{view:true} },
-      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true} },
-      { id:POWER_TYPES.SHOP_GUIDE, power:{view:true} },
+      { id:POWER_TYPES.SALE_MANAGER, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.SHOP_GUIDE, power:{view:true}, add:true, edit:true },
       { id:POWER_TYPES.MANAGER_NORMAL, power:{view:true} },
       { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
       { id:POWER_TYPES.FACTORY_PRODUCTION, power:{view:true, add:true, edit:true} },
@@ -143,9 +143,9 @@ module.exports.Powers = [
   { 
     id:MENU_IDS.salesSampleGoods, 
     powers:[
-      { id:POWER_TYPES.SALE_MANAGER, power:{view:true} },
-      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true} },
-      { id:POWER_TYPES.SHOP_GUIDE, power:{view:true} },
+      { id:POWER_TYPES.SALE_MANAGER, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.SHOP_GUIDE, power:{view:true, add:true, edit:true} },
       { id:POWER_TYPES.MANAGER_NORMAL, power:{view:true} },
       { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
       { id:POWER_TYPES.FACTORY_PRODUCTION, power:{view:true} },
@@ -156,7 +156,7 @@ module.exports.Powers = [
     powers:[
       { id:POWER_TYPES.SALE_MANAGER, power:{view:true, add:true, edit:true} },
       { id:POWER_TYPES.SHOP_MANAGER, power:{view:true, add:true, edit:true} },
-      { id:POWER_TYPES.SHOP_GUIDE, power:{view:true} },
+      { id:POWER_TYPES.SHOP_GUIDE, power:{view:true, add:true, edit:true} },
       { id:POWER_TYPES.MANAGER_NORMAL, power:{view:true} },
       { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
       { id:POWER_TYPES.FACTORY_PRODUCTION, power:{view:true} },

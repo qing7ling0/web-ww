@@ -21,6 +21,7 @@ import ContentContainer from '../../common/ContentComponent'
 import ContentHeaderComponent from '../../common/ContentHeaderComponent'
 import DataContentComponent from '../../common/DataContentComponent'
 import * as constants from '../../../constants/Constants'
+import { commonUtils } from '../../../modules/common';
 import Navigation from '../../../modules/Navigation'
 import AdminAddModal from './AdminAddModal'
 import AdminEditModal from './AdminEditModal'
@@ -67,18 +68,21 @@ class AdminsContainer extends Component {
       <Root>
         <ContentHeaderComponent willSelectNavKey={constants.MENU_IDS.systemAdmin} history={this.props.history} />
         <ContentContainer>
-          <DataContentComponent listener={(e)=>{
-            if (e === 'add') {
-              // let path = `${this.props.history.location.pathname}/edit/0`;
-              // this.navigation.push(path)
-              this.setState({addVisible:true})
-            } else if (e === 'delArray') {
-              let ids = this.state.selectedRows.map((item) => {
-                return item._id;
-              })
-              this.props.reqDeleteAdmin(ids);
-            }
-          }}>
+          <DataContentComponent 
+            canOperate={this.canOperate()}
+            listener={(e)=>{
+              if (e === 'add') {
+                // let path = `${this.props.history.location.pathname}/edit/0`;
+                // this.navigation.push(path)
+                this.setState({addVisible:true})
+              } else if (e === 'delArray') {
+                let ids = this.state.selectedRows.map((item) => {
+                  return item._id;
+                })
+                this.props.reqDeleteAdmin(ids);
+              }
+            }}
+          >
             <Table 
               columns={columns} 
               dataSource={this.props.list} 
@@ -118,8 +122,9 @@ class AdminsContainer extends Component {
   }
 
   onRowClick = (record, index, event) => {
-    // console.log('record' + JSON.stringify(record) + '; index=' + index + '; EVENT=' + event)
-    this.setState({editVisible:true, editData:record});
+    if (this.canOperate()){
+      this.setState({editVisible:true, editData:record});
+    }
   }
 
   onPageChange = (page, pageSize) => {
@@ -127,7 +132,13 @@ class AdminsContainer extends Component {
   }
 
   onDelete = (ids) => {
-    this.props.reqDeleteAdmin(ids);
+    if (this.canOperate())
+      this.props.reqDeleteAdmin(ids);
+  }
+
+  canOperate = () => {
+    this.power = commonUtils.getPower(this.props.user, constants.MENU_IDS.shopInfo)
+    return this.power && this.power.canOperate;
   }
 
 }
@@ -151,7 +162,8 @@ export default connect(
     list:converList(state.system.adminList),
     loading:state.system.loading,
     pageInfo:state.system.adminListPage,
-    adminDeleteIDS:state.system.adminDeleteIDS
+    adminDeleteIDS:state.system.adminDeleteIDS,
+    user:state.app.loginInfo.user
   }),
   (dispatch) => {
     return bindActionCreators({

@@ -422,6 +422,7 @@ export const subOrderType = new GraphQLObjectType({
     ...orderOrnamentFields,
     urgent:{type:orderBaseCommonType, decription:'加急'},
     pics:{type:new GraphQLList(orderPicType)},
+    file:{type:GraphQLString, decription:'工程文件'},
     sub_order_id:{type:GraphQLString, decription:'子订单id'},
     order:{type:GraphQLString},
     shop: {type:shopTypes.shopType, ref:'shop', decription:'店铺'},
@@ -443,6 +444,7 @@ export const subOrderInputType = new GraphQLInputObjectType({
     urgent:{type:orderBaseCommonInputType, ddecription:'加急'},
     shop: {type:GraphQLString, decription:'店铺'},
     guide: {type:GraphQLString, decription:'导购'},
+    file: {type:GraphQLString, decription:'工程文件'},
     customer: {type:customerTypes.customerInputType, decription:'客户id'},
     pics:{type:new GraphQLList(new GraphQLInputObjectType({
         name: 'orderPicInputType',

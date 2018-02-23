@@ -12,6 +12,7 @@
 /dist
 /logs
 /lib
+/uploads
 
 # misc
 .DS_Store

@@ -43,6 +43,7 @@ import * as orderTypes from '../../../modules/orderTypes'
 import * as ActionTypes from '../../../constants/ActionTypes'
 import Actions from '../../../actions'
 import * as validate from '../../../../base/utils/validate'
+import * as config from '../../../constants/Config'
 import * as constants from '../../../constants/Constants'
 import * as common from '../../../modules/common'
 import FormItemComponent from '../../common/FormItemComponent'
@@ -89,7 +90,9 @@ class OrderGoodsReviewModal extends Component {
       visible:false,
       currentOrderType:'',
       data:{},
-      customs:[]
+      customs:[],
+      uploading: false,
+      fileList:[],
     }
     this.orderType = null;
   }
@@ -220,6 +223,43 @@ class OrderGoodsReviewModal extends Component {
         {
           this.renderGoods()
         }
+        <Card title="工程文件" bordered={false}  bodyStyle={{padding:"10px 0 0 0"}}>
+          <Row>
+            <Col span={12}>
+              <Upload
+                name="order"
+                className="avatar-uploader"
+                style={{padding:0, position:'relative'}}
+                action={config.GetServerAddress() + '/upload'}
+                fileList={this.state.fileList}
+                // onChange={({file, fileList})=>this.onUploadFileChange(file)}
+                withCredentials={true}
+                onChange = {(info) => {
+                  let {fileList} = info;
+
+                  const status = info.file.status;
+                  if (status !== 'uploading') {
+                      console.log(info.file, info.fileList);
+                  }
+                  if (info.file.status === 'done') {
+                    message.success(`${info.file.name} 上传成功`);
+                  } else if (info.file.status === 'error') {
+                    message.error(`${info.file.name} 上传失败.`);
+                  }
+
+                  //重新设置state
+                  this.setState( {fileList:[info.file]});
+                }}
+                accept="application/x-zip-compressed"
+              >
+                <Button loading={this.state.uploading}>
+                  <Icon type="upload" /> 点击上传
+                </Button>
+              </Upload>
+              <span>只支持.zip文件</span>
+            </Col>
+          </Row>
+        </Card>
       </div>
     );
   }
@@ -250,6 +290,14 @@ class OrderGoodsReviewModal extends Component {
         }}
       />
     );
+  }
+
+  onUploadFileChange = (file) => {
+    let _file = this.state.file;
+    if (file.response && file.response.data.files && file.response.data.files.length > 0) {
+      _file = file.response.data.files[0];
+      this.setState({fileList:[_file]})
+    }
   }
 
   onReqOrderGoodsList = (type) => {
@@ -307,8 +355,20 @@ class OrderGoodsReviewModal extends Component {
   }
 
   onAddSuccess = (values) => {
-    values.type = this.state.currentOrderType;
-    this.props.reqReviewSuborder(this.props.data._id, values);
+    if (this.state.fileList && this.state.fileList.length > 0 && this.state.fileList[0].status === 'done') {
+      let file = this.state.fileList[0];
+      
+      if (file.response && file.response.data.files && file.response.data.files.length > 0) {
+        let _file = file.response.data.files[0];
+        values.type = this.state.currentOrderType;
+        values.file = _file;
+        this.props.reqReviewSuborder(this.props.data._id, values);
+      } else {
+        message.error('请上传工程文件!');
+      }
+    } else {
+      message.error('请上传工程文件!');
+    }
     // if (this.props.onAdd) {
     //   values.type = this.state.currentOrderType;
     //   this.props.onAdd(values);
