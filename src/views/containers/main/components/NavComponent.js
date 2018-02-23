@@ -19,7 +19,7 @@ import {
   MenuContainer,
   HeaderContainer
 } from './NavComponent.styled'
-import * as constants from '../../../constants/constants'
+import * as constants from '../../../../constants/constants'
 
 import utils from '../../../../base/utils/utils'
 

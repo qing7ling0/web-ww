@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {HashRouter,Route, Redirect} from 'react-router-dom'
 
 import ShopListContainer from './shop/ShopListContainer'
-import GuideListContainer from './guide/guideListContainer'
+import GuideListContainer from './guide/GuideListContainer'
 
 import * as config from '../../constants/Config'
 import * as constants from '../../constants/Constants'
