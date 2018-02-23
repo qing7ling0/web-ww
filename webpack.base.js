@@ -26,7 +26,7 @@ const config = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            title: 'Webpack-template',
+            title: 'Bola Family',
             filename: 'index.html',
             chunks: ['vendor', 'common', 'manifest', 'index'],
             template: './template/index.ejs'
