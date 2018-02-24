@@ -218,6 +218,8 @@ const E_ORDER_STATUS = {
   MAKING_4: 304, // 品检出货
   DELIVERY:400, // 发货中
   TRANSPORT: 500, // 已发货，邮寄中
+  INBOUND: 510, // 已入库
+  OUTBOUND: 520, // 已出库
   SURE: 600, // 客户确认
   COMPLETED: 700, // 已完成
   REJECTED: 1000, // 退货,
@@ -234,6 +236,8 @@ module.exports.ORDER_STATUS_LIST = [
   {value:E_ORDER_STATUS.MAKING_3, label:'染色水洗'},
   {value:E_ORDER_STATUS.MAKING_4, label:'品检出货'},
   {value:E_ORDER_STATUS.TRANSPORT, label:'已发货'},
+  {value:E_ORDER_STATUS.INBOUND, label:'入库'},
+  {value:E_ORDER_STATUS.OUTBOUND, label:'出库'},
   {value:E_ORDER_STATUS.COMPLETED, label:'已完成'},
   {value:E_ORDER_STATUS.REJECTED, label:'客户拒绝收货'},
   {value:E_ORDER_STATUS.CANCEL, label:'已取消'},

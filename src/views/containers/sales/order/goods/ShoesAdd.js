@@ -389,7 +389,10 @@ class ShoesAdd extends Component {
   }
 
   checkGoodsOK = () => {
-    let NID = this.props.form.getFieldValue('NID');
+    let shoesInfo = this.getGoodsInfo(key, value);
+    let NID = commonUtils.createGoodsNID(constants.BASE_CONSTANTS.GOODS_SHOES, shoesInfo, this.props.customer.sex);
+
+    // let NID = this.props.form.getFieldValue('NID');
     if (NID === constants.BASE_CONSTANTS.NULL_NID) {
       message.error('请确定编号是否已有');
       return false;
@@ -433,16 +436,7 @@ class ShoesAdd extends Component {
       if (!err) {
         if (this.props.onAddSuccess) {
           values.type = this.props.orderType.type;
-          let shoesInfo = values;
-          shoesInfo.s_material = this.getValueFromListByName(this.props.sales.materialList, shoesInfo.s_material);
-          shoesInfo.s_xuan_hao = this.getValueFromListByName(this.props.sales.xuanHaoList, shoesInfo.s_xuan_hao);
-          shoesInfo.s_gui_ge = this.getValueFromListByName(this.props.sales.guiGeList, shoesInfo.s_gui_ge);
-          shoesInfo.s_out_color = this.getValueFromListByName(this.props.sales.outColorList, shoesInfo.s_out_color);
-          shoesInfo.s_in_color = this.getValueFromListByName(this.props.sales.inColorList, shoesInfo.s_in_color);
-          shoesInfo.s_bottom_color = this.getValueFromListByName(this.props.sales.bottomColorList, shoesInfo.s_bottom_color);
-          shoesInfo.s_bottom_side_color = this.getValueFromListByName(this.props.sales.bottomSideColorList, shoesInfo.s_bottom_side_color);
-          shoesInfo.s_gen_gao = this.getValueFromListByName(this.props.sales.genGaoList, shoesInfo.s_gen_gao);
-          shoesInfo.s_tie_di = this.getValueFromListByName(this.props.sales.shoesTieBianList, shoesInfo.s_tie_di);
+          let shoesInfo = this.getGoodsInfo(values);
           if (shoesInfo.s_material) {
             shoesInfo.s_material = {...shoesInfo.s_material};
             shoesInfo.s_material.count = null;
@@ -535,7 +529,9 @@ class ShoesAdd extends Component {
         forms.setFieldsValue({s_in_color:shoes.s_in_color.name});
         forms.setFieldsValue({s_bottom_color:shoes.s_bottom_color.name});
         forms.setFieldsValue({s_bottom_side_color:shoes.s_bottom_side_color.name});
-        forms.setFieldsValue({price:shoes.price});
+        if (!this.props.isReview) { // 审核过程不修改价格
+          forms.setFieldsValue({price:shoes.price});
+        }
         if (this.props.customer.sex === constants.BASE_CONSTANTS.SEX_FEMALE) {
           forms.setFieldsValue({s_gen_gao:shoes.s_gen_gao.name});
         }
@@ -545,10 +541,8 @@ class ShoesAdd extends Component {
     }
   }
 
-  onNIDPropertyChange = (key, value) => {
-    const {form:forms} = this.props;
-    let shoesInfo = forms.getFieldsValue();
-    shoesInfo[key] = value;
+  getGoodsInfo = (values)=> {
+    let shoesInfo = values;
     shoesInfo.s_material = this.getValueFromListByName(this.props.sales.materialList, shoesInfo.s_material);
     shoesInfo.s_xuan_hao = this.getValueFromListByName(this.props.sales.xuanHaoList, shoesInfo.s_xuan_hao);
     shoesInfo.s_gui_ge = this.getValueFromListByName(this.props.sales.guiGeList, shoesInfo.s_gui_ge);
@@ -557,16 +551,29 @@ class ShoesAdd extends Component {
     shoesInfo.s_bottom_color = this.getValueFromListByName(this.props.sales.bottomColorList, shoesInfo.s_bottom_color);
     shoesInfo.s_bottom_side_color = this.getValueFromListByName(this.props.sales.bottomSideColorList, shoesInfo.s_bottom_side_color);
     shoesInfo.s_gen_gao = this.getValueFromListByName(this.props.sales.genGaoList, shoesInfo.s_gen_gao);
-    let nid = commonUtils.createGoodsNID(this.props.orderType.key, shoesInfo, this.props.customer.sex);
-    if (nid !== constants.BASE_CONSTANTS.NULL_NID) {
-      let shoes = this.getValueFromListById(this.props.sales.goodsShoesList, 0, (item)=>item.NID === nid);
-      if (shoes) {
-        forms.setFieldsValue({price:shoes.price});
+    return shoesInfo;
+  }
+
+  onNIDPropertyChange = (key, value) => {
+    const {form:forms} = this.props;
+    let shoesInfo = forms.getFieldsValue();
+    if (key) {
+      shoesInfo[key] = value;
+    }
+    shoesInfo = this.getGoodsInfo(shoesInfo);
+
+    let nid = commonUtils.createGoodsNID(constants.BASE_CONSTANTS.GOODS_SHOES, shoesInfo, this.props.customer.sex);
+    if (!this.props.isReview) { // 审核过程不修改价格
+      if (nid !== constants.BASE_CONSTANTS.NULL_NID) {
+        let shoes = this.getValueFromListById(this.props.sales.goodsShoesList, 0, (item)=>item.NID === nid);
+        if (shoes) {
+          forms.setFieldsValue({price:shoes.price});
+        } else {
+          forms.setFieldsValue({price:null});
+        }
       } else {
         forms.setFieldsValue({price:null});
       }
-    } else {
-      forms.setFieldsValue({price:null});
     }
     forms.setFieldsValue({NID:nid});
   }

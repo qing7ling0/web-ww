@@ -177,9 +177,27 @@ class ShoesTransportStep extends Component {
         </Card>
       </Row>
       <Row style={{textAlign:'center'}}>
+      {
+        this.props.profile.state === constants.BASE_CONSTANTS.E_ORDER_STATUS.TRANSPORT ?
+        <Button style={{margin:'0.2rem 0.15rem'}} disabled={!this.props.canOperate} type="primary" onClick={()=> {
+          this.props.reqChangeSuborderState(this.props.profile._id, {state:constants.BASE_CONSTANTS.E_ORDER_STATUS.INBOUND});
+        }}>已收货，入库</Button>
+        : null
+      }
+      {
+        this.props.profile.state === constants.BASE_CONSTANTS.E_ORDER_STATUS.INBOUND ?
+        <Button style={{margin:'0.2rem 0.15rem'}} disabled={!this.props.canOperate} type="primary" onClick={()=> {
+          this.props.reqChangeSuborderState(this.props.profile._id, {state:constants.BASE_CONSTANTS.E_ORDER_STATUS.OUTBOUND});
+        }}>已提货，出库</Button>
+        : null
+      }
+      {
+        this.props.profile.state === constants.BASE_CONSTANTS.E_ORDER_STATUS.OUTBOUND ?
         <Button style={{margin:'0.2rem 0.15rem'}} disabled={!this.props.canOperate} type="primary" onClick={()=> {
           this.props.reqChangeSuborderState(this.props.profile._id, {state:constants.BASE_CONSTANTS.E_ORDER_STATUS.COMPLETED});
         }}>已验货,完成订单!</Button>
+        : null
+      }
       </Row>
     </div>);
   }
