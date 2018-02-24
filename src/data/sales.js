@@ -286,6 +286,18 @@ class SalesData {
       if (customer.weixin !== customerDoc.weixin) {
         _customerData.weixin = customerDoc.weixin;
       }
+      if (customer.country !== customerDoc.country) {
+        _customerData.country = customerDoc.country;
+      }
+      if (customer.city !== customerDoc.city) {
+        _customerData.city = customerDoc.city;
+      }
+      if (customer.address !== customerDoc.address) {
+        _customerData.address = customerDoc.address;
+      }
+      if (customer.zipcode !== customerDoc.zipcode) {
+        _customerData.zipcode = customerDoc.zipcode;
+      }
       await customerModel.findOneAndUpdate({_id:customer._id}, _customerData);
       return customer;
     } else { // 添加客户
@@ -341,7 +353,7 @@ class SalesData {
 
   // 支付支付金额
   async pay(customer, payInfo) {
-    payInfo.real_pay_price = (payInfo.undiscount_mount + payInfo.discount * payInfo.discount_mount).toFixed(2);
+    payInfo.real_pay_price = Math.round((payInfo.undiscount_mount + payInfo.discount * payInfo.discount_mount)*10)/10;
     payInfo.discount_price = payInfo.discount_mount+payInfo.undiscount_mount - payInfo.real_pay_price;
     if (!payInfo.select_store_card) return payInfo; // 只有选择从充值卡中支付才去计算
     if (!customer) return payInfo; // 如果不是会员则不用扣除金钱了
@@ -350,8 +362,9 @@ class SalesData {
     if (canUseBalance < payInfo.real_pay_price) {
       throw new ApiError(ApiErrorNames.MOUNT_NOT_ENOUGH);
     }
+    console.log(payInfo)
     let balance = customer.balance - payInfo.real_pay_price;
-    await customerModel.findOneAndUpdate({_id:customer._id}, {balance:balance});
+    await customerModel.findOneAndUpdate({_id:customer._id}, {$set:{balance:balance}});
     return payInfo;
   }
 
@@ -395,13 +408,13 @@ class SalesData {
 
         // 计算价格
         payInfo.discount_mount += sub.price;
-        if (doc.s_customs) {
-          for(let c of doc.s_customs) {
+        if (sub.s_customs) {
+          for(let c of sub.s_customs) {
             payInfo.undiscount_mount += c.price;
           }
         }
-        if (doc.urgent) {
-          payInfo.undiscount_mount += doc.urgent.price;
+        if (sub.urgent) {
+          payInfo.undiscount_mount += sub.urgent.price;
         }
       }
 
@@ -416,6 +429,7 @@ class SalesData {
       
       vipLevelList = vipLevelList && vipLevelList.list || [];
       console.log(vipLevelList)
+      console.log(vipLevelList)
       vipLevelList.sort((a,b)=>a.level>b.level?1:-1);
       if (vipLevel > -1) {
         for(let lv of vipLevelList) {
@@ -427,6 +441,7 @@ class SalesData {
       }
 
       // 开始计算支付，主要是从储值卡中扣除
+      console.log(payInfo)
       await this.pay(customerInfo, payInfo);
       doc.system_price = payInfo.discount_mount + payInfo.undiscount_mount;
       doc.real_pay_price = payInfo.real_pay_price;

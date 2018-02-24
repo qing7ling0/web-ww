@@ -120,7 +120,7 @@ export const subOrderList = {
       params.conditions = commonUtils.urlString2Conditions(params.conditions);
     }
     // TEST();
-    console.log(JSON.stringify(params.conditions));
+    // console.log(JSON.stringify(params.conditions));
     return await salesData.getSubOrderList({page:params.page, pageSize:params.pageSize}, {conditions:params.conditions})
 	}
 }

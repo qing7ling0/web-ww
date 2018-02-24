@@ -63,7 +63,7 @@ class DB {
             let newPage = {page:-1, pageSize:0, total:0};
             if (page && page.pageSize>0 && page.page>-1) {
                 let skip = 0;
-                let limit = page.page || 100;
+                let limit = page.pageSize || 100;
                 if (page.page) {
                     skip = Math.max(page.page-1,0) * limit;
                 }

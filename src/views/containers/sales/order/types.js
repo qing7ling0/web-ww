@@ -42,7 +42,7 @@ export const listToSelectOptions = (list, valueFormat, labelFormat) => {
 export const getOrderBaseListColumns = function(target) {
   return [
     { title: '订单号', dataIndex: 'sub_order_id', key: 'sub_order_id'},
-    { title: '编号', dataIndex: 'NID', key: 'NID'},
+    { title: '货号', dataIndex: 'NID', key: 'NID'},
     { title: '状态', dataIndex: 'state', key: 'state', render:(item) => {
       let type = commonUtils.getOrderStatus(item);
       if (type) return type.label;
@@ -54,9 +54,9 @@ export const getOrderBaseListColumns = function(target) {
       return '';
     }},
     { title: '数量', dataIndex: 'count', key: 'count'},
-    { title: '门店', dataIndex: 'shop', key: 'shop', render:(item) => item.name},
-    { title: '导购', dataIndex: 'guide', key: 'guide', render:(item) => item.name},
-    { title: '客户', dataIndex: 'customer', key: 'customer', render:(item) => item.name},
+    { title: '门店', dataIndex: 'shop', key: 'shop', render:(item) => item && item.name||''},
+    { title: '导购', dataIndex: 'guide', key: 'guide', render:(item) => item && item.name||''},
+    { title: '客户', dataIndex: 'customer', key: 'customer', render:(item) => item && item.name||''},
     { title: '价格', dataIndex: 'price', key: 'price', render:(item) => item+'RMB'},
   ]
 }
@@ -158,7 +158,7 @@ const getOrderBaseOptions = function(target) {
 const getOrderShoesListColumns = function(target) {
   let options = getOrderBaseListColumns(target);
   return [
-    { title: '编号', dataIndex: 's_NID', key: 'ws_NID'}
+    { title: '货号', dataIndex: 's_NID', key: 'ws_NID'}
   ].concat(options);
 }
 const getOrderShoesOptions = function(target) {
@@ -293,7 +293,7 @@ const getOrderShoesOptions = function(target) {
 const getOrderBeltListColumns = function(target) {
   let options = getOrderBaseListColumns(target);
   return [
-    { title: '编号', dataIndex: 'b_NID', key: 'ws_NID'}
+    { title: '货号', dataIndex: 'b_NID', key: 'ws_NID'}
   ].concat(options);
 }
 const getOrderBeltOptions = function(target) {
@@ -349,7 +349,7 @@ const getOrderBeltOptions = function(target) {
 const getOrderWatchStrapListColumns = function(target) {
   let options = getOrderBaseListColumns(target);
   return [
-    { title: '编号', dataIndex: 'ws_NID', key: 'ws_NID'}
+    { title: '货号', dataIndex: 'ws_NID', key: 'ws_NID'}
   ].concat(options);
 }
 const getOrderWatchStrapOptions = function(target) {
@@ -412,7 +412,7 @@ const getOrderWatchStrapOptions = function(target) {
 const getOrderMaintainListColumns = function(target) {
   let options = getOrderBaseListColumns(target);
   return [
-    { title: '编号', dataIndex: 'm_NID', key: 'm_NID'}
+    { title: '货号', dataIndex: 'm_NID', key: 'm_NID'}
   ].concat(options);
 }
 const getOrderMaintainOptions = function(target) {
@@ -450,7 +450,7 @@ const getOrderMaintainOptions = function(target) {
 const getOrderOrnamentListColumns = function(target) {
   let options = getOrderBaseListColumns(target);
   return [
-    { title: '编号', dataIndex: 'o_NID', key: 'o_NID'}
+    { title: '货号', dataIndex: 'o_NID', key: 'o_NID'}
   ].concat(options);
 }
 const getOrderOrnamentOptions = function(target) {
@@ -588,7 +588,7 @@ const getOrderAddStepCustomerOptions = function(target) {
 const getOrderPayStepGoodsListColumns = function(target) {
 
   return [
-    { title: '编号', dataIndex: 'NID', key: 'NID'},
+    { title: '货号', dataIndex: 'NID', key: 'NID'},
     { title: '类型', dataIndex: 'type', key: 'type', render:(item) => {
       let type = commonUtils.getOrderType(item);
       if (type) return type.label;
@@ -628,7 +628,7 @@ const getOrderPayStepGoodsListColumns = function(target) {
 const getOrderAddStepGoodsListColumns = function(target) {
   let priceRender = target.priceRender || ((item) => item+'RMB');
   return [
-    { title: '编号', dataIndex: 'NID', key: 'NID'},
+    { title: '货号', dataIndex: 'NID', key: 'NID'},
     { title: '类型', dataIndex: 'type', key: 'type', render:(item) => {
       let type = commonUtils.getOrderType(item);
       if (type) return type.label;

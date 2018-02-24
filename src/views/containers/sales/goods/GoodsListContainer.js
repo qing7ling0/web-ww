@@ -136,6 +136,7 @@ class GoodsListContainer extends Component {
   }
 
   onReqList = (pageInfo) => {
+    pageInfo = pageInfo || this.props.pageInfo;
     let con = {
       goods:this.goodsType.key
     };

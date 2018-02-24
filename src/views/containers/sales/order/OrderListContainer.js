@@ -266,11 +266,11 @@ class OrderListContainer extends Component {
   }
 
   onPageChange = (page, pageSize) => {
-    // if (this.props.onPageChange) {
-    //   this.props.onPageChange(page, pageSize);
-    // } else {
-    //   this.props.onGetList({page:page, pageSize:pageSize, total:0})
-    // }
+    if (this.props.onPageChange) {
+      this.props.onPageChange(page, pageSize);
+    } else {
+      this.onReqList({page:page, pageSize:pageSize});
+    }
   }
   onRowSelectionChange = (selectedRowKeys, selectedRows) => {
     this.setState({selectedRows:selectedRows});

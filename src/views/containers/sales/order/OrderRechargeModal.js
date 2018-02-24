@@ -55,7 +55,7 @@ class OrderRechargeModal extends Component {
     }
 
     this.options = [
-      {type:'select', name:'pay_type', label:'来源', itemOptions:{labelLeft:true}, selectItems:constants.BASE_CONSTANTS.PAY_TYPE, options:{defaultActiveFirstOption:true}, rule:{required:true}},
+      {type:'select', name:'pay_type', label:'支付方式', itemOptions:{labelLeft:true}, selectItems:constants.BASE_CONSTANTS.PAY_TYPE, options:{defaultActiveFirstOption:true}, rule:{required:true}},
       {type:'number', name:'r_amount', label:'数额', itemOptions:{labelLeft:true}, options:{onChange:this.onMountChange}, rule:{required:true}},
       {type:'text', name:'reward', label:'赠送', itemOptions:{labelLeft:true}, rule:{required:true}},
     ]

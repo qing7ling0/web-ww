@@ -151,9 +151,9 @@ class HeaderContainer extends BaseComponent {
       <Root>
         <Row>
           <HeadCol span={6} style={{height:64}}>
-            <Button type="primary" onClick={this.toggleCollapsed}>
+            {/* <Button type="primary" onClick={this.toggleCollapsed}>
               <Icon type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'} />
-            </Button>
+            </Button> */}
           </HeadCol>
           <HeadCol span={12}></HeadCol>
           <HeadCol span={6} style={{height:64}}>
