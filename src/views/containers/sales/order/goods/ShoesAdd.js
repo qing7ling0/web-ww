@@ -389,7 +389,7 @@ class ShoesAdd extends Component {
   }
 
   checkGoodsOK = () => {
-    let shoesInfo = this.getGoodsInfo(key, value);
+    let shoesInfo = this.getGoodsInfo(this.props.form.getFieldsValue());
     let NID = commonUtils.createGoodsNID(constants.BASE_CONSTANTS.GOODS_SHOES, shoesInfo, this.props.customer.sex);
 
     // let NID = this.props.form.getFieldValue('NID');
@@ -551,6 +551,7 @@ class ShoesAdd extends Component {
     shoesInfo.s_bottom_color = this.getValueFromListByName(this.props.sales.bottomColorList, shoesInfo.s_bottom_color);
     shoesInfo.s_bottom_side_color = this.getValueFromListByName(this.props.sales.bottomSideColorList, shoesInfo.s_bottom_side_color);
     shoesInfo.s_gen_gao = this.getValueFromListByName(this.props.sales.genGaoList, shoesInfo.s_gen_gao);
+    shoesInfo.s_tie_di = this.getValueFromListByName(this.props.sales.shoesTieBianList, shoesInfo.s_tie_di);
     return shoesInfo;
   }
 
