@@ -163,6 +163,8 @@ export const orderTypes ={
   orderWatchStrap:orderWatchStrapType
 }
 
+export const customerReportType = `{customer ${customerType}, lastCostTime, costCount, costAmount}`
+
 export const pageListType = (itemType) =>{ 
   return`
     {page {page,pageSize,total}

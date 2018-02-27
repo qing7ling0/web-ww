@@ -7,7 +7,8 @@ import {
   GraphQLBoolean,
   GraphQLFloat,
   GraphQLUnionType,
-  GraphQLInputObjectType
+  GraphQLInputObjectType,
+  GraphQLList
 } from 'graphql';
 
  import commonFields from '../common/common-fields'
@@ -37,18 +38,44 @@ export const customerFields = {
   ...customerInputFields,
   ...commonFields.defaultCreateFields
 };
-
+const customerFields = {
+  ...customerFields,
+  pics:{type:new GraphQLList(new GraphQLObjectType({
+    name: 'vipTagsType',
+    fields: {
+      tag:{type:GraphQLString, decription:'标签'}
+    }
+  }))}
+};
 export const customerType = new GraphQLObjectType({
   name: 'customer',
-  fields: {
-    ...customerFields
-  }
+  fields: {...customerFields}
 });
 
 export const customerInputType = new GraphQLInputObjectType({
   name: 'customerInput',
   fields: {
     _id: {type:GraphQLString},
+    tags:{type:new GraphQLList(new GraphQLInputObjectType({
+        name: 'vipTagsInputType',
+        fields: {
+          tag:{type:GraphQLString, decription:'标签'},
+        }
+      }
+    ))},
     ...customerInputFields
+  }
+});
+
+export const customerReportType = new GraphQLObjectType({
+  name: 'customerReport',
+  fields: {
+    customer:{type:new GraphQLObjectType({
+      name: 'customer',
+      fields: {...customerFields}
+    })},
+    lastCostTime: {type: GraphQLString, description:'最后一次消费日期'},
+    costCount: {type:GraphQLInt},
+    costAmount: {type:GraphQLFloat},
   }
 });

@@ -464,6 +464,7 @@ const orderBaseFields = {
   pay_type:{type:GraphQLString, decription:'支付方式'},
   store_card_selected:{type:GraphQLBoolean, decription:'储值卡是否选择'},
   cash_ticket_NID:{type:GraphQLString, decription:'代金券ID', default:''},
+  is_recharge:{type:GraphQLBoolean, decription:'是否充值订单', default:''},
 }
 export const orderType = new GraphQLObjectType({
   name: 'orderType',

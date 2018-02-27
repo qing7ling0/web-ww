@@ -242,11 +242,11 @@ class SalesData {
     return list;
   }
 
-  // 自订单
+  // 子订单
   async subOrderPopulate(query) {
     return query.populate('shop').populate('guide').populate('customer');
   }
-  // 自订单列表
+  // 子订单列表
   async getSubOrderList(page, options) {
     const list = await DB.getList(subOrderModel, options, page, (query)=>{
       return this.subOrderPopulate(query);
@@ -449,6 +449,7 @@ class SalesData {
 
       let customers = [];
       let newSubOrders = [];
+      let isRechargeOrder = false;
       for(let sub of subOrders) {
         let customer = await this.updateOrAddCustomerByOrder(sub, sub.customer);
         if (!customer) {
@@ -466,6 +467,7 @@ class SalesData {
         sub.state = constants.E_ORDER_STATUS.REVIEW;
         if (sub.type === constants.E_ORDER_TYPE.RECHARGE) { // 充值订单
           sub = await this.recharge(customer, sub);
+          isRechargeOrder = true;
         }
         let subOrder = new subOrderModel(sub);
         let newSubOrder = await subOrder.save();
@@ -483,6 +485,7 @@ class SalesData {
         throw new ApiError(ApiErrorNames.ADD_FAIL);
       }
       doc.sub_orders = newSubOrders;
+      doc.is_recharge = isRechargeOrder;
       if (subOrders && subOrders.length>0) {
         doc.customer = subOrders[0].customer;
         doc.shop = subOrders[0].shop;
@@ -741,6 +744,84 @@ class SalesData {
     }
 
     return list;
+  }
+
+  // 获取当前导购的客户消费信息统计
+  getCustomerReportList(guideId, conditions, page) {
+    if (!guideId) {
+      throw new ApiError(ApiErrorNames.GET_FAIL);
+    }
+    let cusCond = {guide:guideId};
+    let minDate = null;
+    let maxDate = null;
+    if (conditions.dateMin) {
+      let minDate = new Date(conditions.dateMin);
+    }
+    if (conditions.dateMax) {
+      maxDate = new Date(conditions.dateMax);
+    }
+    if (minDate && maxDate) {
+      cusCond.birthday = {$gte:minDate, $lte:maxDate};
+    } else if (minDate && !maxDate) {
+      cusCond.birthday = {$gte:minDate};
+    } else if (!minDate && maxDate) {
+      cusCond.birthday = {$lte:maxDate};
+    }
+    if (conditions.phone) {
+      cusCond = {
+        phone: cusCond.phone
+      }
+    }
+    let customers = await customerData.getList(page, {
+      conditions: cusCond
+    });
+
+    if (customers && customers.length > 0) {
+      let cIds = customers.map(item=>item._id);
+      let orderCond = {customer:{$in:cIds}};
+      orderCond.is_recharge = false;
+
+      let aggOptions = [
+        { $match: orderCond },
+        { $group: {"_id": { "customer": "$customer"}, "costCount":{$sum:1}, "costAmount":{$sum:"$real_pay_price"}}},
+      ];
+      let costMatch = null;
+      if (conditions.costMin && conditions.costMax) {
+        aggOptions.push({
+          $match: {"costAmount":{$gte:conditions.costMin, $lte:conditions.costMax}}
+        })
+      } else if (conditions.costMin && !conditions.costMax) {
+        aggOptions.push({
+          $match: {"costAmount":{$gte:conditions.costMin}}
+        })
+      } else if (!conditions.costMin && conditions.costMax) {
+        aggOptions.push({
+          $match: {"costAmount":{$lte:conditions.costMax}}
+        })
+      }
+      let orders = await orderModel.aggregate(aggOptions);
+      let newOrders = await orderModel.populate(orders, {path:'customer', model:'customer'});
+      for(let order of newOrders) {
+        if (order.customer) {
+          order.lastCostTime = '';
+          let lastOrder = await orderModel.findOne({customer:order.customer._id}, null, {sort:{create_time:-1}});
+          if (lastOrder) {
+            order.lastCostTime = lastOrder.create_time;
+          }
+        }
+      }
+      if (conditions.day) { // 最后一次消费到今天的天数
+        newOrders = newOrders.filter((item)=> {
+          if (order.lastCostTime) {
+            return moment().isBefore(moment(order.lastCostTime).add(conditions.day, 'days'));
+          } 
+          return false;
+        })
+      }
+      return newOrders;
+    } else {
+      return [];
+    }
   }
 }
 

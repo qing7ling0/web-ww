@@ -277,6 +277,7 @@ const orderFields = {
   system_price:{type:Number, default:0, decription:'吊牌价格'},
   real_pay_price:{type:Number, default:0, decription:'实际支付价格'},
   discount_price:{type:Number, default:0, decription:'实际优惠了多少'},
+  is_recharge:{type:Boolean, default:false, decription:'是否是充值订单'},
   ...baseFields
 }
 const orderSchema = new Schema({

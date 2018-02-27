@@ -27,6 +27,10 @@ export const customerFields = {
   recharge:{type:Number, default:0, description:'充值的数量'},
   recharge_reward:{type:Number, default:0, description:'充值赠送部分'},
   join_type: { type:String, description:'加入方式' },
+  tags:[new Schema({
+    tag:{type: Schema.Types.ObjectId, ref:'common', description:'标签'}
+  })],
+  guide: {type: Schema.Types.ObjectId, ref:'user_shop_guide', description:'导购'},
   ...baseFields
 };
 // 店铺

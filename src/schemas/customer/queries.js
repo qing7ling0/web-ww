@@ -76,3 +76,26 @@ export const customerOrderInfo = {
     return await salesData.findSubOrder(params.conditions, null, params.options)
 	}
 }
+
+// 获取当前导购的客户消费信息
+export const customerReportList = {
+  type: types.customerReportType,
+  args: {
+    id:{type:GraphQLString},
+    conditions: {type:GraphQLString}
+  },
+	async resolve (root, params, options) {
+    if (!params.id) return null;
+    try {
+      if (params.conditions) {
+        params.conditions = commonUtils.urlString2Conditions(params.conditions);
+      } else {
+        params.conditions = {};
+      }
+    } catch(error) {
+      console.log(error);
+    }
+
+    return await salesData.getCustomerReportList(params.id, params.conditions, {page:params.page||0, pageSize:params.pageSize||0});
+	}
+}
