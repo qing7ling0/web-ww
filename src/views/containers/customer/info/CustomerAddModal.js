@@ -61,11 +61,24 @@ class CustomerAddModal extends Component {
       {type:'input', name:'country', label:'国家', itemOptions:{hasFeedback:true}},
       {type:'input', name:'city', label:'城市', itemOptions:{hasFeedback:true}},
       {type:'input', name:'address', label:'地址', itemOptions:{hasFeedback:true}},
+      {type:'input', name:'zipcode', label:'邮编', itemOptions:{hasFeedback:true}},
       {type:'datePicker', name:'vip_card_date', label:'开卡日期'},
-      {type:'select', name:'vip_card_shop', label:'开卡门店', selectItems:this.props.shopList, options:{defaultActiveFirstOption:true}},
-      {type:'select', name:'vip_card_guide', label:'开卡导购', selectItems:this.props.guideList, options:{defaultActiveFirstOption:true}},
+      {type:'select', name:'vip_card_shop', label:'开卡门店', selectItems:common.listToSelectOptions(this.props.shopList), options:{defaultActiveFirstOption:true}},
+      {type:'select', name:'vip_card_guide', label:'开卡导购', selectItems:common.listToSelectOptions(this.props.guideList), options:{defaultActiveFirstOption:true}},
+      {
+        type:'select', name:'tags', label:'客户标签', 
+        selectItems:common.listToSelectOptions(this.props.customerTagList.filter(item=>!item.hide)), 
+        options:{
+          defaultActiveFirstOption:true,
+          mode:"tags",
+          tokenSeparators:[',']
+        }
+      },
     ];
     this.setState({visible:this.props.visible})
+  }
+
+  componentDidMount() {
     this.props.reqShopList(0, 1000);
     this.props.reqShopGuideList(0, 1000);
   }
@@ -100,9 +113,12 @@ class CustomerAddModal extends Component {
         values.birthday = values.birthday.format('YYYY-MM-DD')
       }
       if (values.vip_card_date) {
-        values.vip_card_date = values.vip_card_date.format('YYYY-MM-DD')
+        values.vip_card_date = values.vip_card_date.format('YYYY-MM-DD HH:mm:ss')
       }
-
+      values.join_type = constants.BASE_CONSTANTS.E_CUSTOMER_TYPE.ADMIN;
+      if (values.tags) {
+        values.tags = values.tags.map(tag=>{return {tag:tag}})
+      }
       this.props.reqAddCustomer(values);
     }
   }
@@ -122,6 +138,7 @@ export default connect(
     result:state.customer.result,
     shopList:state.shop.shopList,
     guideList:state.shop.shopGuideList,
+    customerTagList:state.sales.customerTagList||[]
   }),
   (dispatch) => {
     return bindActionCreators({

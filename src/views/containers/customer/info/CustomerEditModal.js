@@ -38,7 +38,8 @@ import * as constants from '../../../constants/Constants'
 import * as common from '../../../modules/common'
 import FormItemComponent from '../../common/FormItemComponent'
 import BaseFormModal from '../../common/BaseFormModal'
-import utils from '../../../../utils/utils'
+import utils from '../../../../utils/utils';
+import BaseUtils from '../../../../base/utils/utils';
 
 class CustomerEditModal extends Component {
   // 构造函数，在创建组件的时候调用一次
@@ -61,23 +62,41 @@ class CustomerEditModal extends Component {
       {type:'input', name:'country', label:'国家', itemOptions:{hasFeedback:true}},
       {type:'input', name:'city', label:'城市', itemOptions:{hasFeedback:true}},
       {type:'input', name:'address', label:'地址', itemOptions:{hasFeedback:true}},
+      {type:'input', name:'zipcode', label:'邮编', itemOptions:{hasFeedback:true}},
       {type:'datePicker', name:'vip_card_date', label:'开卡日期'},
-      {type:'select', name:'vip_card_shop', label:'开卡门店', selectItems:this.props.shopList, options:{defaultActiveFirstOption:true}},
-      {type:'select', name:'vip_card_guide', label:'开卡导购', selectItems:this.props.guideList, options:{defaultActiveFirstOption:true}},
+      {type:'select', name:'vip_card_shop', label:'开卡门店', selectItems:common.listToSelectOptions(this.props.shopList), options:{defaultActiveFirstOption:true}},
+      {type:'select', name:'vip_card_guide', label:'开卡导购', selectItems:common.listToSelectOptions(this.props.guideList), options:{defaultActiveFirstOption:true}},
+      {
+        type:'select', name:'tags', label:'客户标签', 
+        selectItems:common.listToSelectOptions(this.props.customerTagList.filter(item=>!item.hide)), 
+        options:{
+          defaultActiveFirstOption:true,
+          mode:"tags",
+          tokenSeparators:[',']
+        }
+      },
     ];
     this.setState({visible:this.props.visible})
+  }
+
+  componentDidMount() {
+    this.props.reqShopList(0, 1000);
+    this.props.reqShopGuideList(0, 1000);
   }
 
   componentWillReceiveProps(nextProps){
   }
 
   render() {
-    let _options = this.options.map((item, index) => {
-      if (!item.decoratorOptions) {
-        item.decoratorOptions = {};
+    let _options = common.initFormDefaultValues(this.options, this.props.data, (value)=>{
+      if (BaseUtils.IsArray(value)) 
+      {
+        return value.map(item=>item.tag);
       }
-      item.decoratorOptions.initialValue = this.props.data[item.name];
-      return item;
+      if (value._id) {
+        return value._id;
+      }
+      return value;
     });
     return (
       <BaseFormModal
@@ -108,6 +127,9 @@ class CustomerEditModal extends Component {
         values.vip_card_date = values.vip_card_date.format('YYYY-MM-DD')
       }
       values._id = this.props.data._id;
+      if (values.tags) {
+        values.tags = values.tags.map(tag=>{return {tag:tag}})
+      }
       this.props.reqUpdateCustomer(values);
     }
   }
@@ -124,11 +146,16 @@ class CustomerEditModal extends Component {
 export default connect(
   state => ({
     loading:state.customer.loading,
-    result:state.customer.result
+    shopList:state.shop.shopList,
+    guideList:state.shop.shopGuideList,
+    result:state.customer.result,
+    customerTagList:state.sales.customerTagList||[]
   }),
   (dispatch) => {
     return bindActionCreators({
       reqGetCustomerList: Actions.getCustomerList,
+      reqShopList:Actions.getShopList,
+      reqShopGuideList:Actions.getShopGuideList,
       reqUpdateCustomer: Actions.updateCustomer
     }, dispatch);
   }

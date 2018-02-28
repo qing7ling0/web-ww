@@ -12,6 +12,7 @@ import {
 import * as types from './types';
 import {userData, shopData} from '../../data/index';
 const commonFields = require('../common/common-fields')
+const utils = require('../../utils/utils')
 
 
 export const addShop = {
@@ -23,6 +24,9 @@ export const addShop = {
     }
   },
   async resolve (ctx, params, options) {
+    if (params.doc && ctx.session && ctx.session.user) {
+      params.doc = utils.createEditorDoc(ctx.session.user, params.doc);
+    }
     const shop = await shopData.add(params.doc)
     ctx.result = '添加成功！';
     return shop;
@@ -52,6 +56,9 @@ export const updateShop = {
     doc: {type: types.shopInputType},
   },
   async resolve (ctx, params, options) {
+    if (params.doc && ctx.session && ctx.session.user) {
+      params.doc = utils.createEditorDoc(ctx.session.user, params.doc);
+    }
     return await shopData.update({_id:params.doc._id}, params.doc);
   }
 }

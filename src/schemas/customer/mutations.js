@@ -16,6 +16,7 @@ import {
 } from '../../models/customer'
 const commonFields = require('../common/common-fields')
 const schemasUtils = require('../../utils/schemas-utils')
+const utils = require('../../utils/utils')
 
 const addCustomer = {
   type: types.customerType,
@@ -26,6 +27,9 @@ const addCustomer = {
     }
   },
   async resolve (ctx, params, options) {
+    if (params.doc && ctx.session && ctx.session.user) {
+      params.doc = utils.createEditorDoc(ctx.session.user, params.doc);
+    }
     const customer = await customerData.add(params.doc)
     ctx.result = '添加成功！';
     return customer;
@@ -54,6 +58,9 @@ const updateCustomer = {
     doc: {type: types.customerInputType},
   },
   async resolve (ctx, params, options) {
+    if (params.doc && ctx.session && ctx.session.user) {
+      params.doc = utils.createEditorDoc(ctx.session.user, params.doc);
+    }
     return await customerData.update({_id:params.doc._id}, params.doc);
   }
 }

@@ -27,6 +27,7 @@ module.exports.Menus = [
     icon: 'idcard',
     subMenus: [
       {id:MENU_IDS.customerInfo, name:'客户VIP'},
+      {id:MENU_IDS.customerTags, name:'客户标签'},
       // {id:MENU_IDS.customerBuy, name:'消费记录'},
       // {id:MENU_IDS.customerOrder, name:'维修保养订单'},
       // {id:MENU_IDS.customerFeedback, name:'客户反馈'},
@@ -80,6 +81,7 @@ module.exports.Routers = [
   { id:MENU_IDS.customerBuy, name:'消费记录', url: '/home/curstomer/buy' },
   { id:MENU_IDS.customerOrder, name:'维修保养订单', url: '/home/curstomer/order' },
   { id:MENU_IDS.customerFeedback, name:'客户反馈', url: '/home/curstomer/feedback' },
+  { id:MENU_IDS.customerTags, name:'客户标签', url: '/home/curstomer/tag' },
 
   { id:MENU_IDS.shop, name: '门店管理', url: '/home/shop' },
   { id:MENU_IDS.shopInfo, name:'门店', url: '/home/shop/info' },
@@ -180,6 +182,17 @@ module.exports.Powers = [
       { id:POWER_TYPES.SALE_MANAGER, power:{view:true} },
       { id:POWER_TYPES.SHOP_MANAGER, power:{view:true} },
       { id:POWER_TYPES.SHOP_GUIDE, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_NORMAL, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.FACTORY_PRODUCTION, power:{view:false} },
+    ]
+  },
+  { 
+    id:MENU_IDS.customerTags, 
+    powers:[
+      { id:POWER_TYPES.SALE_MANAGER, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.SHOP_GUIDE, power:{view:true, add:true, edit:true} },
       { id:POWER_TYPES.MANAGER_NORMAL, power:{view:true} },
       { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
       { id:POWER_TYPES.FACTORY_PRODUCTION, power:{view:false} },

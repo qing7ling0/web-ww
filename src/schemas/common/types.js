@@ -125,6 +125,7 @@ export const commonType = new GraphQLObjectType({
   name: 'commonType',
   fields: {
     _id: { type: GraphQLString },
+    hide: {type:GraphQLBoolean, description:'是否删除了'},
     ...commonTypeFields,
     ...commonFields.defaultCreateFields
   }

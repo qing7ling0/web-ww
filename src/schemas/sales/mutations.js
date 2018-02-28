@@ -22,6 +22,7 @@ const DB = require('../../db/DB')
 const commonFields = require('../common/common-fields')
 const commonUtils = require('../../utils/common-utils')
 const schemasUtils = require('../../utils/schemas-utils')
+const utils = require('../../utils/utils')
 
 const material = schemasUtils.createDefaultMutaion('material', types.materialType, types.materialInputType, materialModel);
 const tryFeedback = schemasUtils.createDefaultMutaion('tryFeedback', types.tryFeedbackType, types.tryFeedbackInputType, tryFeedbackModel);
@@ -41,6 +42,9 @@ const orderAdd = {
     }
   },
   async resolve (ctx, params, options) {
+    if (params.doc && ctx.session && ctx.session.user) {
+      params.doc = utils.createEditorDoc(ctx.session.user, params.doc);
+    }
     const shop = await salesData.addOrder(params.doc)
     ctx.result = '添加成功！';
     return shop;
@@ -69,6 +73,9 @@ const orderUpdate = {
     doc: {type: types.orderInputType},
   },
   async resolve (ctx, params, options) {
+    if (params.doc && ctx.session && ctx.session.user) {
+      params.doc = utils.createEditorDoc(ctx.session.user, params.doc);
+    }
     return await salesData.updateOrder({_id:params.doc._id}, params.doc);
   }
 }
@@ -81,6 +88,9 @@ const reviewSuborderUpdate = {
     id: {type: GraphQLString}
   },
   async resolve (ctx, params, options) {
+    if (params.doc && ctx.session && ctx.session.user) {
+      params.doc = utils.createEditorDoc(ctx.session.user, params.doc);
+    }
     return await salesData.reviewSubOrder(params.id, params.doc);
   }
 }
@@ -103,6 +113,9 @@ const suborderUpdate = {
     doc: {type: types.subOrderInputType},
   },
   async resolve (ctx, params, options) {
+    if (params.doc && ctx.session && ctx.session.user) {
+      params.doc = utils.createEditorDoc(ctx.session.user, params.doc);
+    }
     return await salesData.updateSubOrder({_id:params.id}, params.doc);
   }
 }
@@ -113,6 +126,9 @@ const suborderCancel = {
     id: {type: GraphQLString},
   },
   async resolve (ctx, params, options) {
+    if (params.doc && ctx.session && ctx.session.user) {
+      params.doc = utils.createEditorDoc(ctx.session.user, params.doc);
+    }
     return await salesData.cancelSuborder(params.id);
   }
 }

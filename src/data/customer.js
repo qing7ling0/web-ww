@@ -15,7 +15,7 @@ import { ApiError, ApiErrorNames } from '../error/api-errors'
 import utils from '../utils/utils'
 import baseUtils from '../base/utils/utils'
 import constants from '../constants/constants'
-// import 
+import DB from '../db/DB'
 
 const logUtil = require('../utils/log-utils');
 
@@ -29,24 +29,27 @@ class CustomerData {
    * @memberof customerData
    */
   async getList(page, options) {
-    let skip = 0;
-    let limit = page.pageSize || 100;
-    if (page.page) {
-      skip = Math.max(page.page-1,0) * limit;
-    }
-    let findOptions = options.options || {};
-    findOptions.limit = limit;
-    findOptions.skip = skip;
-    let conditions = options.conditions || {};
-    let total = await customerModel.find(conditions).count();
-    let customers = await customerModel.find(conditions, null, findOptions);
-    customers = customers.map((item) => {
-      return item;
+    // let skip = 0;
+    // let limit = page.pageSize || 100;
+    // if (page.page) {
+    //   skip = Math.max(page.page-1,0) * limit;
+    // }
+    // let findOptions = options.options || {};
+    // findOptions.limit = limit;
+    // findOptions.skip = skip;
+    // let conditions = options.conditions || {};
+    // let total = await customerModel.find(conditions).count();
+    // let customers = await customerModel.find(conditions, null, findOptions);
+    // customers = customers.map((item) => {
+    //   return item;
+    // })
+    // return {
+    //   page:{page:page.page, pageSize:limit, total:total},
+    //   list: customers
+    // };
+    return DB.getList(customerModel, options, page, (query) =>{
+       return query.populate('vip_card_guide').populate('vip_card_shop')
     })
-    return {
-      page:{page:page.page, pageSize:limit, total:total},
-      list: customers
-    };
   }
 
   async find(conditions, projection, options) {

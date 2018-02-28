@@ -13,6 +13,8 @@ import {
 
  import commonFields from '../common/common-fields'
  import constants from '../../constants/constants'
+ import  * as shopTypes from '../shop/types'
+ import  * as userTypes from '../user/types'
 
  export const customerInputFields = {
   name: {type:GraphQLString, description:'姓名'},
@@ -26,8 +28,6 @@ import {
   address: {type:GraphQLString, description:'地址'},
   zipcode: {type:GraphQLString, description:'邮编'},
   vip_card_date: {type: GraphQLString, description:'开卡日期'},
-  vip_card_shop: {type: GraphQLString, description:'开卡门店'},
-  vip_card_guide: {type: GraphQLString, description:'开卡导购'},
   vip_level: {type: GraphQLInt},
   vip_exp:{type:GraphQLInt},
   balance:{type:GraphQLFloat},
@@ -38,42 +38,43 @@ export const customerFields = {
   ...customerInputFields,
   ...commonFields.defaultCreateFields
 };
-const customerFields = {
-  ...customerFields,
-  pics:{type:new GraphQLList(new GraphQLObjectType({
-    name: 'vipTagsType',
-    fields: {
-      tag:{type:GraphQLString, decription:'标签'}
-    }
-  }))}
-};
+
 export const customerType = new GraphQLObjectType({
   name: 'customer',
-  fields: {...customerFields}
+  fields: {
+    ...customerFields,
+    vip_card_shop: {type: shopTypes.shopType, description:'开卡门店'},
+    vip_card_guide: {type: userTypes.userShopGuideType, description:'开卡导购'},
+    tags:{type:new GraphQLList(new GraphQLObjectType({
+      name: 'vipTagsType',
+      fields: {
+        tag:{type:GraphQLString, decription:'标签'}
+      }
+    }))},
+  }
 });
 
 export const customerInputType = new GraphQLInputObjectType({
   name: 'customerInput',
   fields: {
     _id: {type:GraphQLString},
+    ...customerInputFields,
+    vip_card_shop: {type: GraphQLString, description:'开卡门店'},
+    vip_card_guide: {type: GraphQLString, description:'开卡导购'},
     tags:{type:new GraphQLList(new GraphQLInputObjectType({
         name: 'vipTagsInputType',
         fields: {
           tag:{type:GraphQLString, decription:'标签'},
         }
       }
-    ))},
-    ...customerInputFields
+    ))}
   }
 });
 
 export const customerReportType = new GraphQLObjectType({
   name: 'customerReport',
   fields: {
-    customer:{type:new GraphQLObjectType({
-      name: 'customer',
-      fields: {...customerFields}
-    })},
+    customer:{type:customerType},
     lastCostTime: {type: GraphQLString, description:'最后一次消费日期'},
     costCount: {type:GraphQLInt},
     costAmount: {type:GraphQLFloat},

@@ -67,22 +67,29 @@ export const checkPasswordInput = function(password) {
 
 export const initFormDefaultValues = (options, values, getValue) => {
   return options.map((item) => {
-    item.options = item.options.map((sub) => {
-      let value = values[sub.name] || '';
+    let initValue = function(data) {
+      let value = values[data.name] || '';
       if (getValue) {
         value = getValue(value);
       } else if (value._id) {
         value = value._id;
       }
       if (value !== null && value !== undefined && value !== NaN) {
-        if (!sub.decoratorOptions) {
-          sub.decoratorOptions = {};
+        if (!data.decoratorOptions) {
+          data.decoratorOptions = {};
         }
-        sub.decoratorOptions.initialValue = value;
+        data.decoratorOptions.initialValue = value;
       }
-      return sub;
-    })
-    return item;
+      return data;
+    }
+    if (item.options && item.options.length > 0) {
+      item.options = item.options.map((sub) => {
+        return initValue(sub);
+      })
+      return item;
+    } else {
+      return initValue(item);
+    }
   })
 }
 

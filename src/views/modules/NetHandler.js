@@ -315,7 +315,7 @@ class NetHandler {
         materialList(page:${pageIndex}, pageSize:${pageSize})${types.pageListType(types.materialType)}
         rechargeList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.RECHARGE_REWARD}))}")${types.pageListType(types.rechargeType)}
         vipLevelList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.VIP}))}")${types.pageListType(types.vipLevelType)}
-
+        customerTagList:commonList(page:${pageIndex}, pageSize:${pageSize}, conditions: "${encodeURIComponent(JSON.stringify({type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.CUSTOMER_TAG}))}")${types.pageListType(types.salesBaseType)}
       }
   `);
   }

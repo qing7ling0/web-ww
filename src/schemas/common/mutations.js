@@ -16,6 +16,7 @@ import {
 import { ApiError, ApiErrorNames } from '../../error/api-errors'
 const commonFields = require('../common/common-fields')
 const schemasUtils = require('../../utils/schemas-utils')
+const utils = require('../../utils/utils')
 
 export const menuAdd = {
   type: types.menu,
@@ -38,6 +39,9 @@ export const commonAdd = {
   },
   async resolve (ctx, params, options) {
     if (ctx.session.user) {
+      if (params.doc && ctx.session && ctx.session.user) {
+        params.doc = utils.createEditorDoc(ctx.session.user, params.doc);
+      }
       const common = await commonData.addCommon(params.doc)
       ctx.result = '添加成功！';
       return common;
@@ -52,9 +56,8 @@ export const commonRemove = {
     ids: {type: new GraphQLList(GraphQLString)}
   },
   async resolve (ctx, params, options) {
-    const ret = await commonData.removeCommonByIds(params.ids);
+    const ret = await commonData.removeByIdsCommon(params.ids);
     if (ret) {
-      let res = JSON.parse(ret);
       if (ret.ok === 1) return params.ids;
       return null;
     }
@@ -73,6 +76,9 @@ export const commonUpdate = {
       params.conditions = commonUtils.urlString2Conditions(params.conditions);
     } else {
       params.conditions = {_id:params.id};
+    }
+    if (params.doc && ctx.session && ctx.session.user) {
+      params.doc = utils.createEditorDoc(ctx.session.user, params.doc);
     }
     return await commonData.updateCommon(params.conditions, params.doc);
   }

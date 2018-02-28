@@ -123,16 +123,20 @@ export const userType = new GraphQLUnionType({
   name:'user',
   types:[userShopGuideType, userOperateType, userProductionType, userAdminType],
   resolveType(value) {
-    switch(value.user_type) {
-    case constants.USER_TYPES.shopGuide:
-      return userShopGuideType;
-    case constants.USER_TYPES.operate:
-      return userOperateType;
-    case constants.USER_TYPES.production:
-      return userProductionType;
-    case constants.USER_TYPES.admin:
-      return userAdminType;
+    console.log('userType' + value);
+    if (value) {
+      switch(value.user_type) {
+        case constants.USER_TYPES.shopGuide:
+          return userShopGuideType;
+        case constants.USER_TYPES.operate:
+          return userOperateType;
+        case constants.USER_TYPES.production:
+          return userProductionType;
+        case constants.USER_TYPES.admin:
+          return userAdminType;
+      }
     }
+    return userAdminType;
   }
 });
 

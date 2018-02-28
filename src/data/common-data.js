@@ -60,7 +60,7 @@ class CommonData {
       }
       options.conditions.type = type;
     }
-    return DB.getList(commonModel, options, page);
+    return await DB.getList(commonModel, options, page);
   }
   async addCommon(doc, options={}) {
     let NIDUnique = await this.checkNIDUnique(doc.NID, doc.type);
@@ -68,7 +68,7 @@ class CommonData {
       throw new ApiError(ApiErrorNames.ADD_FAIL, '编号已存在!');
     }
 
-    return DB.add(commonModel, doc, options);
+    return await DB.add(commonModel, doc, options);
   }
   async updateCommon(conditions, doc, options) {
     if (doc && doc.NID) {
@@ -82,14 +82,14 @@ class CommonData {
       }
     }
     console.log(JSON.stringify(doc));
-    return DB.update(commonModel, conditions, doc, options);
+    return await DB.update(commonModel, conditions, doc, options);
   }
   async removeCommon(conditions) {
     // return DB.remove(commonModel, conditions);
-    return DB.update(commonModel, conditions, {hide:true}, options);
+    return await DB.update(commonModel, conditions, {hide:true});
   }
-  async removeByIdsCommon(model, ids) {
-    return DB.update(commonModel, {_id:{$in:ids}}, {hide:true}, options);
+  async removeByIdsCommon(ids) {
+    return await DB.update(commonModel, {_id:{$in:ids}}, {hide:true});
     // return DB.removeByIds(commonModel, ids);
   }
   async findByIdCommon(id, onQuery) {

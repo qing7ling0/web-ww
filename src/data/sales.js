@@ -30,7 +30,7 @@ import DB from '../db/DB'
 import commonData from './common-data'
 import fileData from './file'
 
-import { customerData } from './index'
+import customerData from './customer'
 import { tryFeedbackModel } from '../models/sales';
 import { subOrderType } from '../schemas/sales/types';
 import { commonModel } from '../models/common';
@@ -302,9 +302,10 @@ class SalesData {
       return customer;
     } else { // 添加客户
       _customerData = {...customerDoc}
-      _customerData.vip_card_date = moment().format('YYYY-MM-DD');
+      _customerData.vip_card_date = moment().format('YYYY-MM-DD HH:mm:ss');
       _customerData.vip_card_shop = order.shop;
       _customerData.vip_card_guide = order.guide;
+      _customerData.join_type = constants.E_CUSTOMER_TYPE.ORDER;
       let cmodel = new customerModel(_customerData);
       customer = await cmodel.save();
       return customer;
@@ -747,21 +748,22 @@ class SalesData {
   }
 
   // 获取当前导购的客户消费信息统计
-  getCustomerReportList(guideId, conditions, page) {
+  async getCustomerReportList(guideId, conditions, page) {
     if (!guideId) {
       throw new ApiError(ApiErrorNames.GET_FAIL);
     }
-    let cusCond = {guide:guideId};
+    let cusCond = {vip_card_guide:guideId};
     let minDate = null;
     let maxDate = null;
-    if (conditions.dateMin) {
-      let minDate = new Date(conditions.dateMin);
+    if (conditions.dateBegan) {
+      minDate = moment(conditions.dateBegan);
     }
-    if (conditions.dateMax) {
-      maxDate = new Date(conditions.dateMax);
+    if (conditions.dateEnd) {
+      maxDate = moment(conditions.dateEnd);
     }
     if (minDate && maxDate) {
       cusCond.birthday = {$gte:minDate, $lte:maxDate};
+      console.log('mindate + maxDate');
     } else if (minDate && !maxDate) {
       cusCond.birthday = {$gte:minDate};
     } else if (!minDate && maxDate) {
@@ -769,14 +771,18 @@ class SalesData {
     }
     if (conditions.phone) {
       cusCond = {
-        phone: cusCond.phone
+        vip_card_guide:guideId,
+        phone: conditions.phone
       }
     }
-    let customers = await customerData.getList(page, {
-      conditions: cusCond
-    });
+    console.log('getCustomerReportList conditions=' + JSON.stringify(conditions))
 
+    let customers = await customerModel.find(cusCond);
+    // let customers = await customerData.getList(page, {
+    //   conditions: cusCond
+    // });
     if (customers && customers.length > 0) {
+      console.log('getCustomerReportList customers=' + customers)
       let cIds = customers.map(item=>item._id);
       let orderCond = {customer:{$in:cIds}};
       orderCond.is_recharge = false;
@@ -799,7 +805,9 @@ class SalesData {
           $match: {"costAmount":{$lte:conditions.costMax}}
         })
       }
+      aggOptions.push({ $project : {"_id": 0, "customer" : "$_id.customer", "costCount" : "$costCount", "costAmount" : "$costAmount"}} )
       let orders = await orderModel.aggregate(aggOptions);
+      console.log('getCustomerReportList orders=' + JSON.stringify(orders))
       let newOrders = await orderModel.populate(orders, {path:'customer', model:'customer'});
       for(let order of newOrders) {
         if (order.customer) {
@@ -810,14 +818,16 @@ class SalesData {
           }
         }
       }
+      // console.log('getCustomerReportList newOrders1=' + JSON.stringify(newOrders))
       if (conditions.day) { // 最后一次消费到今天的天数
         newOrders = newOrders.filter((item)=> {
-          if (order.lastCostTime) {
-            return moment().isBefore(moment(order.lastCostTime).add(conditions.day, 'days'));
+          if (item.lastCostTime) {
+            return moment().isBefore(moment(item.lastCostTime).add(conditions.day+1, 'days'), 'day');
           } 
           return false;
         })
       }
+      // console.log('getCustomerReportList newOrders2=' + JSON.stringify(newOrders))
       return newOrders;
     } else {
       return [];

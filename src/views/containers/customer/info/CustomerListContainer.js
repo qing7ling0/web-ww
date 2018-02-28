@@ -27,6 +27,7 @@ import * as constants from '../../../constants/Constants'
 import CustomerAddModal from './CustomerAddModal'
 import CustomerEditModal from './CustomerEditModal'
 import { commonUtils } from '../../../modules/common';
+import * as graphqlTypes from '../../../modules/graphqlTypes'
 
 class CustomerListContainer extends Component {
   // 构造函数，在创建组件的时候调用一次
@@ -45,10 +46,16 @@ class CustomerListContainer extends Component {
 
   //在组件挂载之前调用一次。如果在这个函数里面调用setState，本次的render函数可以看到更新后的state，并且只渲染一次
   componentWillMount(){
-    this.props.reqGetCustomerList(this.props.pageInfo.page);
   }
   
   componentWillReceiveProps(nextProps){
+  }
+
+  componentDidMount(){
+    // this.props.reqGetCustomerList(this.props.pageInfo.page);
+    this.props.reqShopList(0, 100);
+    this.props.reqShopGuideList(0, 1000);
+    this.props.reqGetSalesBaseList('customerTagList:commonList', graphqlTypes.salesBaseType, {type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.CUSTOMER_TAGS, hide:true});
   }
 
   render() {
@@ -65,6 +72,15 @@ class CustomerListContainer extends Component {
       { title: '开卡人员', dataIndex: 'vip_card_shop_guide_label', key: 'vip_card_shop_guide_label'},
       { title: 'vip等级', dataIndex: 'vip_level', key: 'vip_level'},
       { title: '申请方式', dataIndex: 'join_type_label', key: 'join_type_label'},
+      { title: '客户标签', dataIndex: 'tags', key: 'tags', render:((value)=>{
+        let list = value.map(item=>{
+          for(let tag of this.props.customerTagList) {
+            if (tag._id === item.tag) return tag.name;
+          }
+          return '';
+        })
+        return list.join(',');
+      })},
       { title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
         return (<Button type="primary" shape="circle" icon="delete" size="large" onClick={()=>this.onDelete([record._id])} />);
       }}
@@ -73,6 +89,7 @@ class CustomerListContainer extends Component {
     return (
       <BaseListComponent
         columns={columns} 
+        canOperate={this.canOperate()}
         dataSource={this.props.list} 
         loading={this.props.loading}
         onRowClick={this.onRowClick}
@@ -108,18 +125,25 @@ class CustomerListContainer extends Component {
     info.birthday = moment(info.birthday).format('YYYY-MM-DD');
     info.vip_card_date = moment(info.vip_card_date).format('YYYY-MM-DD HH:mm:ss');
     info.vip_card_shop_label = info.vip_card_shop ? info.vip_card_shop.name: '';
-    info.vip_card_shop_guide_label = info.vip_card_shop_guide ? info.vip_card_shop_guide.name: '';
+    info.vip_card_shop_guide_label = info.vip_card_guide ? info.vip_card_guide.name: '';
     info.join_type_label = typeInfo ? typeInfo.label : '';
 
     return info;
   }
   
   onDelete = (ids) => {
+    if (!this.canOperate()) return;
     this.props.reqDeleteCustomer(ids);
   }
-
+  
   onRowClick = (record, index, event) => {
-    // this.setState({editVisible:true, editData:record});
+    if (!this.canOperate()) return;
+    this.setState({editVisible:true, editData:record});
+  }
+
+  canOperate = () => {
+    this.power = commonUtils.getPower(this.props.user, constants.MENU_IDS.shopInfo)
+    return this.power && this.power.canOperate;
   }
 }
 
@@ -128,12 +152,17 @@ export default connect(
     list:state.customer.customerList,
     loading:state.customer.loading,
     pageInfo:state.customer.customerListPage,
-    customerDeleteIDS:state.customer.customerDeleteIDS
+    customerDeleteIDS:state.customer.customerDeleteIDS,
+    user:state.app.loginInfo.user,
+    customerTagList:state.sales.customerTagList||[]
   }),
   (dispatch) => {
     return bindActionCreators({
+      reqGetSalesBaseList: Actions.getSalesBaseList,
       reqGetCustomerList: Actions.getCustomerList,
       reqDeleteCustomer: Actions.deleteCustomer,
+      reqShopList:Actions.getShopList,
+      reqShopGuideList:Actions.getShopGuideList,
     }, dispatch);
   }
 )(CustomerListContainer);

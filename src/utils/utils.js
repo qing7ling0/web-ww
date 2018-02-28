@@ -45,6 +45,8 @@ module.exports.diffent = function(newValue, oldValue) {
 
 module.exports.createEditorDoc = function(user, doc) {
   if (!user) return null;
+  if (!doc) return null;
+  
   let ret = doc || {};
   ret.editor_id = user._id;
   ret.editor_name = user.name;

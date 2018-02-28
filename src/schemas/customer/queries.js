@@ -79,7 +79,7 @@ export const customerOrderInfo = {
 
 // 获取当前导购的客户消费信息
 export const customerReportList = {
-  type: types.customerReportType,
+  type: new GraphQLList(types.customerReportType),
   args: {
     id:{type:GraphQLString},
     conditions: {type:GraphQLString}
@@ -92,10 +92,11 @@ export const customerReportList = {
       } else {
         params.conditions = {};
       }
+
+      return await salesData.getCustomerReportList(params.id, params.conditions, {page:params.page||0, pageSize:params.pageSize||0});
     } catch(error) {
       console.log(error);
     }
-
-    return await salesData.getCustomerReportList(params.id, params.conditions, {page:params.page||0, pageSize:params.pageSize||0});
+    return [];
 	}
 }

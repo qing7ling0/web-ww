@@ -14,6 +14,7 @@ module.exports.MENU_IDS = {
   customerBuy:          302, // 客户消费表
   customerOrder:        303, // 客户订单
   customerFeedback:     304, // 客户反馈记录
+  customerTags:         305, // 客户标签
 
   sales:                4, // 进销存管理【商品，原材料，保养维护价目表】
   salesMaterial:        401, // 原材料
@@ -86,11 +87,19 @@ module.exports.SHOP_PRO = [
   {id:2, value:'2', 'label':'特卖'},
 ]
 
+module.exports.E_CUSTOMER_TYPE = {
+  ORDER:'1',
+  WEB:'2',
+  ADMIN:'3',
+  OTHER:'99'
+}
+
 /** 客户来源 */
 module.exports.CUSTOMER_TYPE = [
-  {value:'1', label:'订单'},
-  {value:'2', label:'网站'},
-  {value:'99', label:'其他'}
+  {value:module.exports.E_CUSTOMER_TYPE.ORDER, label:'订单'},
+  {value:module.exports.E_CUSTOMER_TYPE.WEB, label:'网站'},
+  {value:module.exports.E_CUSTOMER_TYPE.ADMIN, label:'后台'},
+  {value:module.exports.E_CUSTOMER_TYPE.OTHER, label:'其他'}
 ]
 
 /** 维修保养改型 */
@@ -197,6 +206,7 @@ module.exports.COMMON_DATA_TYPES = {
   SHOES_TIE_BIAN:'17', // 贴边,
   RECHARGE_REWARD:'18', // 充值奖励
   VIP:'19', // VIP等级
+  CUSTOMER_TAGS:'20', // 客户标签
 }
 
 // 试脚鞋反馈状态

@@ -135,6 +135,9 @@ class UserData {
       if (!params.user) { // 必须有用户信息
         throw new ApiError(ApiErrorNames.UPDATE_FAIL);
       }
+      if (params.user && ctx.session && ctx.session.user) {
+        params.user = utils.createEditorDoc(ctx.session.user, params.user);
+      }
 
       let account = null;
       if (params.account && params.account.account && params.account.password) {
@@ -192,6 +195,9 @@ class UserData {
     }
     if (!fields._id) {
       throw new ApiError(ApiErrorNames.UPDATE_FAIL);
+    }
+    if (fields && ctx.session && ctx.session.user) {
+      fields = utils.createEditorDoc(ctx.session.user, fields);
     }
 
     let account = null;
@@ -252,9 +258,9 @@ class UserData {
         } else {
           info.account = '';
         }
-        console.log('update user' + JSON.stringify(fields) + "; info=" + JSON.stringify(info));
+        // console.log('update user' + JSON.stringify(fields) + "; info=" + JSON.stringify(info));
         user = await model.findByIdAndUpdate(fields._id, info, modelOptions||{new:true});
-        console.log('update user' + JSON.stringify(user));
+        // console.log('update user' + JSON.stringify(user));
         return user;
       } else {
         throw new ApiError(ApiErrorNames.UPDATE_FAIL);

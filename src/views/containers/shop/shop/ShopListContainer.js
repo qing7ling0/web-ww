@@ -68,7 +68,11 @@ class ShopListContainer extends Component {
       { title: '电话', dataIndex: 'phone', key: 'phone'},
       { title: '关店时间', dataIndex: 'close_date', key: 'close_date'},
       { title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
-        return (<Button type="primary" shape="circle" icon="delete" size="large" onClick={()=>this.onDelete([record._id])} />);
+        return (<Button type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
+          e.stopPropagation();
+          this.onDelete([record._id])}
+        }
+        />);
       }}
     ]
 

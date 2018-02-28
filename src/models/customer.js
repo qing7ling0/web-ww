@@ -19,8 +19,8 @@ export const customerFields = {
   address: {type:String, description:'地址'},
   zipcode: {type:String, description:'邮编'},
   vip_card_date: {type: Date, default:moment().format('YYYY-MM-DD'), description:'开卡日期'},
-  vip_card_shop: {type: String, description:'开卡门店'},
-  vip_card_guide: {type: String, description:'开卡导购'},
+  vip_card_shop: {type: Schema.Types.ObjectId, ref:'shop', description:'开卡门店'},
+  vip_card_guide: {type: Schema.Types.ObjectId, ref:'user_shop_guide', description:'开卡导购'},
   vip_level: {type: Number, default:0},
   vip_exp: {type:Number, default:0},
   balance:{type:Number, default:0, description:'余额'},
@@ -30,7 +30,6 @@ export const customerFields = {
   tags:[new Schema({
     tag:{type: Schema.Types.ObjectId, ref:'common', description:'标签'}
   })],
-  guide: {type: Schema.Types.ObjectId, ref:'user_shop_guide', description:'导购'},
   ...baseFields
 };
 // 店铺

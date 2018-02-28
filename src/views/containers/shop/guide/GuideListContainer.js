@@ -68,7 +68,10 @@ class GuideListContainer extends Component {
       { title: '入职日期', dataIndex: 'entry_time_label', key: 'entry_time_label'},
       { title: '离职日期', dataIndex: 'leave_time_label', key: 'leave_time_label'},
       { title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
-        return (<Button type="primary" shape="circle" icon="delete" size="large" onClick={()=>this.onDelete([record._id])} />);
+        return (<Button type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
+          e.stopPropagation();
+          this.onDelete([record._id])}
+        } />);
       }}
     ]
 
