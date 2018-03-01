@@ -7,7 +7,9 @@ import {
   userProductionModel,
   userAdminModel,
   accountModel,
-  shopModel
+  shopModel,
+  userShopGuideModel,
+  orderModel
 } from '../models/index.js'
 
 import { ApiError, ApiErrorNames } from '../error/api-errors'
@@ -91,16 +93,29 @@ class ShopData {
     }
   }
 
-  async remove(conditions) {
-    if (conditions) {
-      return await model.deleteMany(conditions);
-    } else {
-      throw new ApiError(ApiErrorNames.DELETE_FAIL);
+  // async remove(conditions) {
+  //   if (conditions) {
+  //     return await model.deleteMany(conditions);
+  //   } else {
+  //     throw new ApiError(ApiErrorNames.DELETE_FAIL);
+  //   }
+  // }
+
+  async checkCanRemoveByIds(ids) {
+    let guids = await userShopGuideModel.find({shop:{$in:ids}});
+    if (guids && guids.length > 0) {
+      throw new ApiError(ApiErrorNames.DELETE_FAIL, '此店铺下有导购，无法删除！');
     }
+    let oders = await orderModel.find({shop:{$in:ids}});
+    if (oders && oders.length > 0) {
+      throw new ApiError(ApiErrorNames.DELETE_FAIL, '此店铺下有订单，无法删除！');
+    }
+    return true;
   }
 
   async removeByIds(ids) {
     if (ids && ids.length > 0) {
+      await this.checkCanRemoveByIds(ids)
       return await shopModel.remove({_id:{$in:ids}});
     } else {
       throw new ApiError(ApiErrorNames.DELETE_FAIL);

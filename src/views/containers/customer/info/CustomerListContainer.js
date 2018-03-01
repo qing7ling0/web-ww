@@ -55,7 +55,7 @@ class CustomerListContainer extends Component {
     // this.props.reqGetCustomerList(this.props.pageInfo.page);
     this.props.reqShopList(0, 100);
     this.props.reqShopGuideList(0, 1000);
-    this.props.reqGetSalesBaseList('customerTagList:commonList', graphqlTypes.salesBaseType, {type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.CUSTOMER_TAGS, hide:true});
+    this.props.reqGetSalesBaseList('customerTagList:commonList', graphqlTypes.salesBaseType, {type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.CUSTOMER_TAGS});
   }
 
   render() {

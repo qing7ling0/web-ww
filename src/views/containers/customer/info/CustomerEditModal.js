@@ -68,7 +68,7 @@ class CustomerEditModal extends Component {
       {type:'select', name:'vip_card_guide', label:'开卡导购', selectItems:common.listToSelectOptions(this.props.guideList), options:{defaultActiveFirstOption:true}},
       {
         type:'select', name:'tags', label:'客户标签', 
-        selectItems:common.listToSelectOptions(this.props.customerTagList.filter(item=>!item.hide)), 
+        selectItems:common.listToSelectOptions(this.props.customerTagList), 
         options:{
           defaultActiveFirstOption:true,
           mode:"tags",

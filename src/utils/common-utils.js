@@ -183,7 +183,7 @@ export const getPower= function(user, powerId) {
       powerType = constants.POWER_TYPES.FACTORY_PRODUCTION;
       return getPowerByType(powerId, powerType);
     case constants.USER_TYPES.admin:
-      return {view:true, add:true, edit:true, canOperate:true}
+      return {view:true, add:true, edit:true, del:true, canOperate:true}
     default:
     break;
   }

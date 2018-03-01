@@ -6,7 +6,8 @@ import {
   userOperateModel, 
   userProductionModel,
   userAdminModel,
-  accountModel
+  accountModel,
+  orderModel
 } from '../models/index.js'
 
 import fileData from './file'
@@ -277,6 +278,7 @@ class UserData {
     let users = null;
     let model = this.getUserModel(type);
     if (model) {
+      await this.checkUserCanRemoveByIDS(ids, type)
       users = await model.deleteMany({_id:{$in:ids}});
       if (users && users.length > 0) {
         for(let i=0; i<users.length; i++) {
@@ -289,9 +291,21 @@ class UserData {
     }
   }
 
+  async checkUserCanRemoveByIDS(ids, type) {
+    if (type === constants.USER_TYPES.shopGuide) {
+      let orders = await orderModel.find({guide:{$in:ids}});
+      if (orders && orders.length > 0) {
+        throw new ApiError(ApiErrorNames.DELETE_FAIL, '此导购有订单信息，无法删除！');
+      }
+    }
+
+    return true;
+  }
+
   async deleteUserById(type, id) {
     let user = null;
     let model = this.getUserModel(type);
+    await this.checkUserCanRemoveByIDS([id], type);
     if (model) {
       user = await model.findByIdAndRemove(id);
       if (user) {
@@ -299,7 +313,7 @@ class UserData {
       }
       return user;
     } else {
-      throw new ApiError(ApiErrorNames.UPDATE_FAIL);
+      throw new ApiError(ApiErrorNames.DELETE_FAIL);
     }
   }
 
@@ -307,6 +321,8 @@ class UserData {
     let ret = null;
     let model = this.getUserModel(params.user_type);
     if (model || (params.ids && params.ids.length>0)) {
+      await this.checkUserCanRemoveByIDS(params.ids, params.user_type);
+
       if (params.ids.length === 1) {
         ret = await model.deleteOne({_id:params.ids[0]});
       } else {

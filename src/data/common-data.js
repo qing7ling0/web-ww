@@ -1,12 +1,15 @@
 const {Menus, Routers} = require('../constants/config')
 import { 
-  commonModel
+  commonModel,
+  goodsModel,
+  materialModel
 } from '../models/index.js'
 
 import DB from '../db/DB'
 import { ApiError, ApiErrorNames } from '../error/api-errors'
 import Menu from 'antd/lib/menu';
 import * as commonUtils from '../utils/common-utils'
+const constants = require('../constants/constants')
 
 class CommonData {
 
@@ -84,16 +87,93 @@ class CommonData {
     console.log(JSON.stringify(doc));
     return await DB.update(commonModel, conditions, doc, options);
   }
-  async removeCommon(conditions) {
-    // return DB.remove(commonModel, conditions);
-    return await DB.update(commonModel, conditions, {hide:true});
+  
+  async checkCanRemoveByIds(ids, type) {
+    // console.log('checkCanRemoveByIds type=' + type + "; ids=" + ids);
+    let goodsKeys = [];
+    switch(type) {
+      case constants.COMMON_DATA_TYPES.SHOES_OUT_COLOR:
+      goodsKeys.push('s_out_color')
+      break;
+      case constants.COMMON_DATA_TYPES.SHOES_IN_COLOR:
+      goodsKeys.push('s_in_color')
+      break;
+      case constants.COMMON_DATA_TYPES.SHOES_BOTTOM_COLOR:
+      goodsKeys.push('s_bottom_color')
+      break;
+      case constants.COMMON_DATA_TYPES.SHOES_BOTTOM_SIDE_COLOR:
+      goodsKeys.push('s_bottom_side_color')
+      break;
+      case constants.COMMON_DATA_TYPES.MATERIAL_COLOR:
+      goodsKeys.push('b_color')
+      goodsKeys.push('m_color')
+      break;
+      case constants.COMMON_DATA_TYPES.CUSTOM:
+      break;
+      case constants.COMMON_DATA_TYPES.URGENT:
+      break;
+      case constants.COMMON_DATA_TYPES.MAINTAIN:
+      break;
+      case constants.COMMON_DATA_TYPES.GOODS_TYPE:
+      goodsKeys.push('type')
+      break;
+      case constants.COMMON_DATA_TYPES.GOODS_STYLE:
+      goodsKeys.push('style')
+      break;
+      case constants.COMMON_DATA_TYPES.GOODS_SEASON:
+      goodsKeys.push('season')
+      break;
+      case constants.COMMON_DATA_TYPES.XUAN_HAO:
+      goodsKeys.push('s_xuan_hao')
+      break;
+      case constants.COMMON_DATA_TYPES.WATCH_STRAP_STYLE:
+      goodsKeys.push('ws_style')
+      break;
+      case constants.COMMON_DATA_TYPES.SHOES_GEN_GAO:
+      goodsKeys.push('s_gen_gao')
+      break;
+      case constants.COMMON_DATA_TYPES.SHOES_GUI_GE:
+      goodsKeys.push('s_gui_ge')
+      break;
+    }
+
+    if (goodsKeys && goodsKeys.length > 0) {
+      let arr = [];
+      for(let key of goodsKeys) {
+        let r = {};
+        r[key] = {$in:ids};
+        arr.push(r);
+      }
+      let goods = await goodsModel.find({$or:arr})
+      if (goods && goods.length > 0) {
+        throw new ApiError(ApiErrorNames.DELETE_FAIL, '数据被使用，无法删除！');
+      }
+    }
+
+    if (type === constants.COMMON_DATA_TYPES.MATERIAL_COLOR) {
+      let mats = await materialModel.find({color:{$in:ids}});
+      if (mats && mats.length > 0) {
+        throw new ApiError(ApiErrorNames.DELETE_FAIL, '数据被使用，无法删除！');
+      }
+    }
   }
+
   async removeByIdsCommon(ids) {
-    return await DB.update(commonModel, {_id:{$in:ids}}, {hide:true});
-    // return DB.removeByIds(commonModel, ids);
+    if (!ids || ids.length === 0) {
+      throw new ApiError(ApiErrorNames.DELETE_FAIL);
+    }
+    let datas = await commonModel.find({_id:{$in:ids}});
+    if (datas && datas.length > 0) {
+      console.log('datas length=' + datas.length)
+      let type = datas[0].type;
+      await this.checkCanRemoveByIds(ids, type);
+    }
+    // return await DB.update(commonModel, {_id:{$in:ids}}, {hide:true});
+    return await DB.removeByIds(commonModel, ids);
   }
+
   async findByIdCommon(id, onQuery) {
-    return DB.findById(commonModel, id, onQuery);
+    return await DB.findById(commonModel, id, onQuery);
   }
 
   createCurrentOrderIndex() {

@@ -47,7 +47,7 @@ class CustomerData {
     //   page:{page:page.page, pageSize:limit, total:total},
     //   list: customers
     // };
-    return DB.getList(customerModel, options, page, (query) =>{
+    return await DB.getList(customerModel, options, page, (query) =>{
        return query.populate('vip_card_guide').populate('vip_card_shop')
     })
   }
@@ -81,16 +81,25 @@ class CustomerData {
     }
   }
 
-  async remove(conditions) {
-    if (conditions) {
-      return await model.deleteMany(conditions);
-    } else {
-      throw new ApiError(ApiErrorNames.DELETE_FAIL);
+  // async remove(conditions) {
+  //   if (conditions) {
+  //     return await model.deleteMany(conditions);
+  //   } else {
+  //     throw new ApiError(ApiErrorNames.DELETE_FAIL);
+  //   }
+  // }
+
+  async checkCanRemoveByIds(ids) {
+    let oders = await orderModel.find({customer:{$in:ids}});
+    if (oders && oders.length > 0) {
+      throw new ApiError(ApiErrorNames.DELETE_FAIL, '此客户有订单，无法删除！');
     }
+    return true;
   }
 
   async removeByIds(ids) {
     if (ids && ids.length > 0) {
+      await this.checkCanRemoveByIds(ids);
       return await customerModel.remove({_id:{$in:ids}});
     } else {
       throw new ApiError(ApiErrorNames.DELETE_FAIL);

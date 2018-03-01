@@ -30,6 +30,7 @@ class DataContentComponent extends Component {
     hasSearch: false,
     searchPlaceholder:'',
     canOperate:false,
+    canDelete:false,
   }
 
 
@@ -58,7 +59,7 @@ class DataContentComponent extends Component {
               : null
             }
             {
-              this.props.canOperate ?
+              this.props.canDelete ?
               <ButtonOp type="primary" onClick={(e)=>this.onClick(e, 'delArray')}>批量删除</ButtonOp>
               : null
             }

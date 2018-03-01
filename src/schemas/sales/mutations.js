@@ -24,7 +24,9 @@ const commonUtils = require('../../utils/common-utils')
 const schemasUtils = require('../../utils/schemas-utils')
 const utils = require('../../utils/utils')
 
-const material = schemasUtils.createDefaultMutaion('material', types.materialType, types.materialInputType, materialModel);
+const material = schemasUtils.createDefaultMutaion('material', types.materialType, types.materialInputType, materialModel, {
+  remove:salesData.removeMaterialByIds.bind(salesData), 
+});
 const tryFeedback = schemasUtils.createDefaultMutaion('tryFeedback', types.tryFeedbackType, types.tryFeedbackInputType, tryFeedbackModel);
 const sampleGoods = schemasUtils.createDefaultMutaion('sampleGoods', types.sampleGoodsType, types.sampleGoodsInputType, sampleGoodsModel);
 const goods = schemasUtils.createDefaultMutaion('goods', types.goodsType, types.goodsInputType, goodsModel, {

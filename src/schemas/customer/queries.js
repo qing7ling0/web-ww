@@ -77,7 +77,7 @@ export const customerOrderInfo = {
 	}
 }
 
-// 获取当前导购的客户消费信息
+// 获取当前导购的客户消费列表
 export const customerReportList = {
   type: new GraphQLList(types.customerReportType),
   args: {
@@ -98,5 +98,18 @@ export const customerReportList = {
       console.log(error);
     }
     return [];
+	}
+}
+
+
+// 获取当前导购的客户消费信息
+export const customerReportInfo = {
+  type: types.customerReportBaseType,
+  args: {
+    id:{type:GraphQLString}
+  },
+	async resolve (root, params, options) {
+    if (!params.id) return null;
+    return await salesData.getCustomerReportInfo(params.id);
 	}
 }

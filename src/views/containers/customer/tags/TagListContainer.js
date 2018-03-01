@@ -121,8 +121,7 @@ class TagListContainer extends Component {
 
   onReqList = () => {
     let con = {
-      type:this.dataType.key,
-      hide:false
+      type:this.dataType.key
     };
     if (this.searchWord) {
       con = {};
@@ -188,7 +187,7 @@ export default connect(
   state => ({
     sales:state.sales,
     loading:state.sales.loading,
-    deleteIDS:state.sales.goodsBaseDeleteIDS,
+    deleteIDS:state.sales.salesBaseDeleteIDS,
     user:state.app.loginInfo.user
   }),
   (dispatch) => {

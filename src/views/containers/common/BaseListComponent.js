@@ -31,6 +31,7 @@ class BaseListComponent extends Component {
     hasSearch: false,
     searchPlaceholder:'',
     canOperate:false,
+    canDelete:false,
     footer:null
   }
 
@@ -84,6 +85,7 @@ class BaseListComponent extends Component {
         <DataContentComponent
           headerRender={this.props.headerRender}
           canOperate={this.props.canOperate}
+          canDelete={this.props.canDelete}
           hasSearch={this.props.hasSearch}
           searchPlaceholder={this.props.searchPlaceholder}
           listener={(e, value)=>{
@@ -109,7 +111,7 @@ class BaseListComponent extends Component {
             onRow={(record, index) => ({
               onClick: ()=>this.onRowClick(record, index),
             })}
-            rowSelection={this.props.canOperate ? {onChange:this.onRowSelectionChange}:null}
+            rowSelection={this.props.canDelete ? {onChange:this.onRowSelectionChange}:null}
             pagination={pagination}
             footer={this.props.footer}
           />

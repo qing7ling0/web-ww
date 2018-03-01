@@ -66,15 +66,20 @@ class ShopListContainer extends Component {
       { title: '面积', dataIndex: 'area_label', key: 'area_label'},
       { title: '地址', dataIndex: 'address', key: 'address'},
       { title: '电话', dataIndex: 'phone', key: 'phone'},
-      { title: '关店时间', dataIndex: 'close_date', key: 'close_date'},
-      { title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
-        return (<Button type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
-          e.stopPropagation();
-          this.onDelete([record._id])}
-        }
-        />);
-      }}
+      { title: '关店时间', dataIndex: 'close_date', key: 'close_date'}
     ]
+
+    if (this.canOperateDelete()) {
+      columns.push(
+        { title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
+          return (<Button type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
+            e.stopPropagation();
+            this.onDelete([record._id])}
+          }
+          />);
+        }}
+      );
+    }
 
     return (
       <Root>
@@ -141,6 +146,11 @@ class ShopListContainer extends Component {
   canOperate = () => {
     this.power = commonUtils.getPower(this.props.user, constants.MENU_IDS.shopInfo)
     return this.power && this.power.canOperate;
+  }
+
+  canOperateDelete = () => {
+    this.power = commonUtils.getPower(this.props.user, constants.MENU_IDS.shopInfo)
+    return this.power && this.power.del;
   }
 }
 

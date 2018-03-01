@@ -71,6 +71,16 @@ export const customerInputType = new GraphQLInputObjectType({
   }
 });
 
+export const customerReportBaseType = new GraphQLObjectType({
+  name: 'customerReportBase',
+  fields: {
+    totalCount: {type:GraphQLInt},
+    monthCount: {type:GraphQLInt},
+    yearCount: {type:GraphQLInt},
+    notBuyCount: {type:GraphQLInt}
+  }
+});
+
 export const customerReportType = new GraphQLObjectType({
   name: 'customerReport',
   fields: {
