@@ -29,9 +29,9 @@ export const shopList = {
   },
 	async resolve (root, params, options) {
     if (params.conditions) {
-      console.log(decodeURIComponent(params.conditions));
+      // console.log(decodeURIComponent(params.conditions));
       params.conditions = commonUtils.urlString2Conditions(params.conditions);
-      console.log(JSON.stringify(params.conditions));
+      // console.log(JSON.stringify(params.conditions));
     }
     return await shopData.getList({page:params.page, pageSize:params.pageSize}, {conditions:params.conditions})
 	}

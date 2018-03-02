@@ -20,7 +20,7 @@ import {
   rent: { type:GraphQLString, description:'租金'},
   area: {type: GraphQLFloat, description:'面积'},
   country: { type:GraphQLString, description:'国家' },
-  region:{ type:GraphQLString, description:'大区ID'},
+  region:{ type:GraphQLString, description:'华东华北等区域'},
   province: { type:GraphQLString, description:'省' },
   marketLevel: { type:GraphQLString, description:'市场级别' },
   property:{type:GraphQLString, description:'店铺性质，是否特卖等'},
@@ -40,6 +40,13 @@ export const shopType = new GraphQLObjectType({
   name: 'shop',
   fields: {
     ...shopFields,
+    region_id:{ type:new GraphQLObjectType({
+      name: 'shopRegionType',
+      fields: {
+        _id: {type:GraphQLString, decription:'ID'},
+        name: {type:GraphQLString, decription:'名称'}
+      }
+    }), description:'区域ID'},
     isNew:{type:GraphQLBoolean}
   }
 });
@@ -48,6 +55,7 @@ export const shopInputType = new GraphQLInputObjectType({
   name: 'shopInput',
   fields: {
     _id: {type:GraphQLString},
+    region_id:{ type:GraphQLString, description:'区域ID'},
     ...shopInputFields
   }
 });

@@ -2,7 +2,8 @@ const {Menus, Routers} = require('../constants/config')
 import { 
   commonModel,
   goodsModel,
-  materialModel
+  materialModel,
+  shopModel
 } from '../models/index.js'
 
 import DB from '../db/DB'
@@ -152,6 +153,13 @@ class CommonData {
 
     if (type === constants.COMMON_DATA_TYPES.MATERIAL_COLOR) {
       let mats = await materialModel.find({color:{$in:ids}});
+      if (mats && mats.length > 0) {
+        throw new ApiError(ApiErrorNames.DELETE_FAIL, '数据被使用，无法删除！');
+      }
+    }
+
+    if (type === constants.COMMON_DATA_TYPES.SHOP_REGION) {
+      let mats = await shopModel.find({region_id:{$in:ids}});
       if (mats && mats.length > 0) {
         throw new ApiError(ApiErrorNames.DELETE_FAIL, '数据被使用，无法删除！');
       }

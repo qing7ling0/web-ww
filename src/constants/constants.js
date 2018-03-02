@@ -8,6 +8,7 @@ module.exports.MENU_IDS = {
   shopInfo:             201, // 门店信息
   shopGuide:            202, // 门店导购
   shopSales:            203, // 门店促销
+  shopRegion:           204, // 门店区域管理
 
   customer:             3, // 客户
   customerInfo:         301, // 客户信息
@@ -207,6 +208,7 @@ module.exports.COMMON_DATA_TYPES = {
   RECHARGE_REWARD:'18', // 充值奖励
   VIP:'19', // VIP等级
   CUSTOMER_TAGS:'20', // 客户标签
+  SHOP_REGION:'21', // 店铺区域
 }
 
 // 试脚鞋反馈状态

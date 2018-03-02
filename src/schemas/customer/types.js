@@ -90,3 +90,15 @@ export const customerReportType = new GraphQLObjectType({
     costAmount: {type:GraphQLFloat},
   }
 });
+
+export const customerShopReportType = new GraphQLObjectType({
+  name: 'customerShopReport',
+  fields: {
+    guide:{type:userTypes.userType},
+    shop:{type:shopTypes.shopType},
+    totalCount: {type:GraphQLInt},
+    monthCount: {type:GraphQLInt},
+    yearCount: {type:GraphQLInt},
+    notBuyCount: {type:GraphQLInt}
+  }
+});

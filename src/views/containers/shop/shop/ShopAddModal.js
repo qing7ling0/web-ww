@@ -57,6 +57,7 @@ class ShopAddModal extends Component {
       {type:'datePicker', name:'rents_expire_date', label:'房租到期时间'},
       {type:'input', name:'rent', label:'租金', itemOptions:{hasFeedback:true}, rule:{required:true}},
       {type:'number', name:'area', label:'面积', options:{formatter:(value) => `${value}m²`, parser:value => value.replace('m²', '')}, itemOptions:{hasFeedback:true}, rule:{required:true}},
+      {type:'select', name:'region_id', label:'区域', selectItems:common.listToSelectOptions(this.props.shopRegionList), options:{defaultActiveFirstOption:true}, rule:{required:true}},
       {type:'cascader', name:'regionInfo', label:'省份', options:{options:constants.CITYS, expandTrigger:"hover"}, rule:{required:true}, decoratorOptions:{initialValue:['中国', '华东', '上海市']}},
       {type:'select', name:'marketLevel', label:'市场级别', selectItems:constants.MARKET_LEVEL, options:{defaultActiveFirstOption:true}, rule:{required:true}},
       {type:'select', name:'property', label:'店铺性质', selectItems:constants.SHOP_PRO, options:{defaultActiveFirstOption:true}, rule:{required:true}},
@@ -128,7 +129,8 @@ class ShopAddModal extends Component {
 export default connect(
   state => ({
     loading:state.shop.loading,
-    result:state.shop.result
+    result:state.shop.result,
+    shopRegionList:state.sales.shopRegionList||[]
   }),
   (dispatch) => {
     return bindActionCreators({

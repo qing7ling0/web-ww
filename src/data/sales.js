@@ -35,6 +35,9 @@ import { tryFeedbackModel } from '../models/sales';
 import { subOrderType } from '../schemas/sales/types';
 import { commonModel } from '../models/common';
 import { fileModel } from '../models/file.js';
+import { Schema, mongo } from 'mongoose';
+
+const { ObjectID } = mongo
 // import 
 
 const logUtil = require('../utils/log-utils');
@@ -780,10 +783,10 @@ class SalesData {
     let minDate = null;
     let maxDate = null;
     if (conditions.dateBegan) {
-      minDate = moment(conditions.dateBegan);
+      minDate = moment(conditions.dateBegan).toDate();
     }
     if (conditions.dateEnd) {
-      maxDate = moment(conditions.dateEnd);
+      maxDate = moment(conditions.dateEnd).toDate();
     }
     if (minDate && maxDate) {
       cusCond.birthday = {$gte:minDate, $lte:maxDate};
@@ -831,7 +834,7 @@ class SalesData {
       }
       aggOptions.push({ $project : {"_id": 0, "customer" : "$_id.customer", "costCount" : "$costCount", "costAmount" : "$costAmount"}} )
       let orders = await orderModel.aggregate(aggOptions);
-      console.log('getCustomerReportList orders=' + JSON.stringify(orders))
+      // console.log('getCustomerReportList orders=' + JSON.stringify(orders))
       let newOrders = await orderModel.populate(orders, {path:'customer', model:'customer'});
       for(let order of newOrders) {
         if (order.customer) {
@@ -859,62 +862,55 @@ class SalesData {
   }
   // 获取当前导购的客户消费基本信息
   async getCustomerReportInfo(guideId) {
-    if (!guideId) {
-      throw new ApiError(ApiErrorNames.GET_FAIL);
-    }
+    // if (!guideId) {
+    //   throw new ApiError(ApiErrorNames.GET_FAIL);
+    // }
     let customers = await customerModel.find({});
 
-    let guideCustomers = await customerModel.find({vip_card_guide:guideId});
-    let cIds = [];
-    if (guideCustomers) {
-      cIds = guideCustomers.map(item=>item._id);
-    }
-    console.log("ids=" + cIds);
     let monthCount = 0;
-    if (cIds) {
-      let orderCond = {};
-      orderCond.is_recharge = false;
-      let month = moment(moment().format("YYYY-MM"));
-      orderCond.create_time = {$gte:month}
-  
-      let aggOptions = [
-        { $match: {is_recharge:false, customer:{$in:cIds}, create_time:{$gte:month.toDate(), $lt:month.add(1, 'months').toDate()}} },
-        { $group: {"_id": { "customer": "$customer"}, "count":{$sum:1}}},
-      ];
-      aggOptions.push({
-        $match: {"count":{$gte:2}}
-      })
-      // let da = moment(moment().format("YYYY")).format("YYYY-MM-DD");
-      let orders = await orderModel.aggregate(aggOptions);
-      monthCount = orders.length;
-    }
+    let month = moment(moment().format("YYYY-MM"));
+    let orderCond = {};
+    orderCond.is_recharge = false;
+    orderCond.create_time = {$gte:month.toDate(), $lt:month.add(1, 'months').toDate()}
+    if (guideId) orderCond.guide = ObjectID(guideId);
+    
+    let aggOptions = [
+      { $match: orderCond},
+      { $group: {"_id": { "customer": "$customer"}, "count":{$sum:1}}},
+      { $match: {"count":{$gte:2}}}
+    ];
+    
+    let orders = await orderModel.aggregate(aggOptions);
+    monthCount = orders.length;
+    // console.log("monthCount orders=" + orders.length + "; da=" + month.format("YYYY-MM-DD HH:mm:ss"));
     
     let yearCount = 0;
-    if (cIds) {
-      let year = moment(moment().format("YYYY")+"-01-01");
-      let aggOptions = [
-        { $match: {is_recharge:false, customer:{$in:cIds}, create_time:{$gte:year.toDate(), $lt:year.add(1, 'year').toDate()}} },
-        { $group: {"_id": { "customer": "$customer"}, "count":{$sum:1}}},
-      ];
-      aggOptions.push({
-        $match: {"count":{$gte:2}}
-      })
-      let orders = await orderModel.aggregate(aggOptions);
-      console.log("monthCount orders=" + orders.length + "; da=" + year.format("YYYY-MM-DD HH:mm:ss"));
-      yearCount = orders.length;
-    }
+    let year = moment(moment().format("YYYY")+"-01-01");
+    orderCond = {};
+    if (guideId) orderCond.guide = ObjectID(guideId);
+    orderCond.create_time = {$gte:year.toDate(), $lte:year.add(1, 'years').toDate()}
+    orderCond.is_recharge = false;
+    aggOptions = [
+      { $match: orderCond },
+      { $group: {"_id": { "customer": "$customer"}, "count":{$sum:1}}},
+      { $match: {"count":{$gte:2}}}
+    ];
+    orders = await orderModel.aggregate(aggOptions);
+    // console.log("yearCount date1=" + date1 + " date2=" + date2);
+    // console.log("yearCount orders=" + JSON.stringify(orders));
+    yearCount = orders.length;
 
     let notBuyCount = customers.length;
     if (notBuyCount) {
-      let orderCond = {};
+      orderCond = {};
       orderCond.is_recharge = false;
       orderCond.create_time = {$gte:moment().subtract(1,'year').toDate(), $lte:moment().toDate()}
   
-      let aggOptions = [
+      aggOptions = [
         { $match: orderCond },
-        { $group: {"_id": { "customer": "$customer"}, "count":{$sum:1}}},
+        { $group: {"_id": { "customer": "$customer"}, "count":{$sum:1}}}
       ];
-      let orders = await orderModel.aggregate(aggOptions);
+      orders = await orderModel.aggregate(aggOptions);
       notBuyCount = Math.max(0, notBuyCount - orders.length);
     }
 
@@ -926,6 +922,65 @@ class SalesData {
       notBuyCount: notBuyCount
     }
 
+  }
+  // 获取店铺的消费信息统计
+  async getCustomerShopReportList(conditions, page) {
+    let customers = await customerModel.find({});
+
+    // console.log("ids=" + cIds);
+    let monthCount = 0;
+    let orderCond = {};
+    orderCond.is_recharge = false;
+    let month = moment(moment(conditions.date).format("YYYY-MM")).subtract(1,'years');
+    orderCond.create_time = {$gte:month}
+
+    let aggOptions = [
+      { $match: {is_recharge:false, create_time:{$gte:month.toDate(), $lte:month.add(3, 'years').toDate()}} },
+      { $group: {"_id": { "guide": "$guide", "customer": "$customer"}, "count":{$sum:1}}},
+      // { $match: {"count":{$gte:2}}},
+      // { $group: {"_id": { "guide": "$_id.guide"}, "count":{$sum:1}}},
+    ];
+    // let da = moment(moment().format("YYYY")).format("YYYY-MM-DD");
+    let orders = await orderModel.aggregate(aggOptions);
+    console.log("getCustomerShopReportList orers 111=" + JSON.stringify(orders));
+
+    // orders = await orders.aggregate([
+    //   { $group: {"_id": { "guide": "$_id.guide"}, "count":{$sum:1}}}
+    // ])
+    console.log("getCustomerShopReportList orers 222=" + JSON.stringify(orders));
+    monthCount = orders.length;
+    
+    // let yearCount = 0;
+    // if (cIds) {
+    //   let year = moment(moment().format("YYYY")+"-01-01");
+    //   let aggOptions = [
+    //     { $match: {is_recharge:false, customer:{$in:cIds}, create_time:{$gte:year.toDate(), $lt:year.add(1, 'year').toDate()}} },
+    //     { $group: {"_id": { "customer": "$customer"}, "count":{$sum:1}}},
+    //   ];
+    //   aggOptions.push({
+    //     $match: {"count":{$gte:2}}
+    //   })
+    //   let orders = await orderModel.aggregate(aggOptions);
+    //   console.log("monthCount orders=" + orders.length + "; da=" + year.format("YYYY-MM-DD HH:mm:ss"));
+    //   yearCount = orders.length;
+    // }
+
+    // let notBuyCount = customers.length;
+    // if (notBuyCount) {
+    //   let orderCond = {};
+    //   orderCond.is_recharge = false;
+    //   orderCond.create_time = {$gte:moment().subtract(1,'year').toDate(), $lte:moment().toDate()}
+  
+    //   let aggOptions = [
+    //     { $match: orderCond },
+    //     { $group: {"_id": { "customer": "$customer"}, "count":{$sum:1}}},
+    //   ];
+    //   let orders = await orderModel.aggregate(aggOptions);
+    //   notBuyCount = Math.max(0, notBuyCount - orders.length);
+    // }
+
+
+    return null;
   }
 }
 

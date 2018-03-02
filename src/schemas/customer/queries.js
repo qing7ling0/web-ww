@@ -102,6 +102,28 @@ export const customerReportList = {
 }
 
 
+// 获取当前店铺的客户消费列表
+export const customerShopReportList = {
+  type: new GraphQLList(types.customerShopReportType),
+  args: {
+    conditions: {type:GraphQLString}
+  },
+	async resolve (root, params, options) {
+    try {
+      if (params.conditions) {
+        params.conditions = commonUtils.urlString2Conditions(params.conditions);
+      } else {
+        params.conditions = {};
+      }
+
+      return await salesData.getCustomerShopReportList(params.conditions);
+    } catch(error) {
+      console.log(error);
+    }
+    return [];
+	}
+}
+
 // 获取当前导购的客户消费信息
 export const customerReportInfo = {
   type: types.customerReportBaseType,
@@ -109,7 +131,6 @@ export const customerReportInfo = {
     id:{type:GraphQLString}
   },
 	async resolve (root, params, options) {
-    if (!params.id) return null;
     return await salesData.getCustomerReportInfo(params.id);
 	}
 }

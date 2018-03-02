@@ -28,6 +28,7 @@ import BaseListComponent from '../../common/BaseListComponent'
 import * as common from '../../../modules/common'
 import { commonUtils } from '../../../modules/common';
 import * as constants from '../../../constants/Constants'
+import * as graphqlTypes from '../../../modules/graphqlTypes'
 import ShopAddModal from './ShopAddModal'
 import ShopEditModal from './ShopEditModal'
 
@@ -48,7 +49,11 @@ class ShopListContainer extends Component {
 
   //在组件挂载之前调用一次。如果在这个函数里面调用setState，本次的render函数可以看到更新后的state，并且只渲染一次
   componentWillMount(){
+  }
+  
+  componentDidMount() {
     this.props.reqGetShopList(this.props.pageInfo.page);
+    this.props.reqGetSalesBaseList('shopRegionList:commonList', graphqlTypes.regionType, {type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.SHOP_REGION});
   }
   
   componentWillReceiveProps(nextProps){
@@ -58,7 +63,8 @@ class ShopListContainer extends Component {
     const columns = [
       { title: '门店', dataIndex: 'name', key: 'name'},
       { title: '开业时间', dataIndex: 'open_date', key: 'open_date'},
-      { title: '区域', dataIndex: 'regionInfoLabel', key: 'regionInfoLabel'},
+      { title: '区域', dataIndex: 'region_id', key: 'region_id', render:item=>item&&item.name||''},
+      { title: '省份', dataIndex: 'regionInfoLabel', key: 'regionInfoLabel'},
       { title: '市场级别', dataIndex: 'marketLevelLabel', key: 'marketLevel'},
       { title: '门店性质', dataIndex: 'propertyLabel', key: 'property'},
       { title: '房租到期时间', dataIndex: 'rents_expire_date', key: 'rents_expire_date'},
@@ -164,6 +170,7 @@ export default connect(
   }),
   (dispatch) => {
     return bindActionCreators({
+      reqGetSalesBaseList: Actions.getSalesBaseList,
       reqGetShopList: Actions.getShopList,
       reqDeleteShop: Actions.deleteShop,
     }, dispatch);

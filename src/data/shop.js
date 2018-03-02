@@ -8,7 +8,6 @@ import {
   userAdminModel,
   accountModel,
   shopModel,
-  userShopGuideModel,
   orderModel
 } from '../models/index.js'
 
@@ -40,7 +39,8 @@ class ShopData {
     findOptions.skip = skip;
     let conditions = options.conditions || {};
     let total = await shopModel.find(conditions).count();
-    let shops = await shopModel.find(conditions, null, findOptions);
+    let shops = await shopModel.find(conditions, null, findOptions).populate('region_id');
+    console.log(shops);
     shops = shops.map((item) => {
       let isNew = false;
       if (item.open_date) {

@@ -40,6 +40,7 @@ module.exports.Menus = [
     subMenus: [
       {id:MENU_IDS.shopInfo, name:'门店'},
       {id:MENU_IDS.shopGuide, name:'导购'},
+      {id:MENU_IDS.shopRegion, name:'区域管理'}
       // {id:MENU_IDS.shopSales, name:'促销信息'}
     ]
   },
@@ -87,6 +88,7 @@ module.exports.Routers = [
   { id:MENU_IDS.shopInfo, name:'门店', url: '/home/shop/info' },
   { id:MENU_IDS.shopGuide, name:'导购', url: '/home/shop/guide' },
   { id:MENU_IDS.shopSales, name:'促销信息', url: '/home/shop/sales' },
+  { id:MENU_IDS.shopRegion, name:'区域管理', url: '/home/shop/region' },
   
   { id:MENU_IDS.system, url: '/home/system', name:'系统管理' },
   { id:MENU_IDS.systemSetting, name:'设置', url: '/home/system/setting' },
@@ -216,6 +218,17 @@ module.exports.Powers = [
       { id:POWER_TYPES.SALE_MANAGER, power:{view:true, add:true, edit:true} },
       { id:POWER_TYPES.SHOP_MANAGER, power:{view:true, add:true, edit:true} },
       { id:POWER_TYPES.SHOP_GUIDE, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_NORMAL, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.FACTORY_PRODUCTION, power:{view:false} },
+    ]
+  },
+  { 
+    id:MENU_IDS.shopRegion, 
+    powers:[
+      { id:POWER_TYPES.SALE_MANAGER, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.SHOP_GUIDE, power:{view:true, add:true, edit:true} },
       { id:POWER_TYPES.MANAGER_NORMAL, power:{view:true} },
       { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
       { id:POWER_TYPES.FACTORY_PRODUCTION, power:{view:false} },
