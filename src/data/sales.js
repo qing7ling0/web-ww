@@ -927,60 +927,92 @@ class SalesData {
   async getCustomerShopReportList(conditions, page) {
     let customers = await customerModel.find({});
 
-    // console.log("ids=" + cIds);
+    let guideCon = {};
+    if (conditions.shop) {
+      guideCon.shop = conditions.shop;
+    } 
+
+    let shop_guides = await userShopGuideModel.find(guideCon).populate('shop');
+    // console.log("getCustomerShopReportList shop_guides" + JSON.stringify(shop_guides));
+
+    if (!shop_guides || shop_guides.length === 0) return [];
+
+    let guideIds = shop_guides.map(item=>ObjectID(item._id));
+    // console.log("getCustomerShopReportList shop_guides" + JSON.stringify(guideIds));
+
+    if (!conditions.date) conditions.date = moment();
+    else conditions.date = moment(conditions.date);
     let monthCount = 0;
-    let orderCond = {};
-    orderCond.is_recharge = false;
-    let month = moment(moment(conditions.date).format("YYYY-MM")).subtract(1,'years');
-    orderCond.create_time = {$gte:month}
-
+    let year = conditions.date;
+    let yearEnd = year.toDate();
+    let yearBegan = moment(year.format("YYYY-MM-DD")).subtract(1,'years').toDate();
     let aggOptions = [
-      { $match: {is_recharge:false, create_time:{$gte:month.toDate(), $lte:month.add(3, 'years').toDate()}} },
+      { $match: {is_recharge:false, guide:{$in:guideIds}, create_time:{$gte:yearBegan, $lte:yearEnd}} },
       { $group: {"_id": { "guide": "$guide", "customer": "$customer"}, "count":{$sum:1}}},
-      // { $match: {"count":{$gte:2}}},
-      // { $group: {"_id": { "guide": "$_id.guide"}, "count":{$sum:1}}},
+      { $match: {"count":{$gte:2}}},
+      { $group: {"_id": { "guide": "$_id.guide"}, "yearCount":{$sum:1}}},
+      { $project : {"_id": 0, "guide" : "$_id.guide", "yearCount" : "$yearCount"}}
     ];
-    // let da = moment(moment().format("YYYY")).format("YYYY-MM-DD");
-    let orders = await orderModel.aggregate(aggOptions);
-    console.log("getCustomerShopReportList orers 111=" + JSON.stringify(orders));
+    let guides = await orderModel.aggregate(aggOptions);
 
-    // orders = await orders.aggregate([
-    //   { $group: {"_id": { "guide": "$_id.guide"}, "count":{$sum:1}}}
-    // ])
-    console.log("getCustomerShopReportList orers 222=" + JSON.stringify(orders));
-    monthCount = orders.length;
-    
-    // let yearCount = 0;
-    // if (cIds) {
-    //   let year = moment(moment().format("YYYY")+"-01-01");
-    //   let aggOptions = [
-    //     { $match: {is_recharge:false, customer:{$in:cIds}, create_time:{$gte:year.toDate(), $lt:year.add(1, 'year').toDate()}} },
-    //     { $group: {"_id": { "customer": "$customer"}, "count":{$sum:1}}},
-    //   ];
-    //   aggOptions.push({
-    //     $match: {"count":{$gte:2}}
-    //   })
-    //   let orders = await orderModel.aggregate(aggOptions);
-    //   console.log("monthCount orders=" + orders.length + "; da=" + year.format("YYYY-MM-DD HH:mm:ss"));
-    //   yearCount = orders.length;
-    // }
+    // console.log("getCustomerShopReportList year=" + yearBegan + "; yearEnd=" + moment(yearEnd).format("YYYY/MM/DD HH:mm:ss") + "; orers 111=" + JSON.stringify(guides));
+    shop_guides = shop_guides.map((sg)=> {
+      let orderGuide = null;
+      for(let item of guides) {
+        if (item.guide.toString() == sg._id.toString()) {
+          orderGuide = item;
+          break;
+        }
+      }
+      return { guide:sg, shop:sg.shop, totalCount:customers.length, yearCount:orderGuide&&orderGuide.yearCount||0, monthCount:0, notBuyCount:customers.length}
+    })
+    guides = shop_guides;    
+    // console.log("getCustomerShopReportList year=" + yearBegan + "; yearEnd=" + moment(yearEnd).format("YYYY/MM/DD HH:mm:ss") + "; orers 111=" + JSON.stringify(guides));
 
-    // let notBuyCount = customers.length;
-    // if (notBuyCount) {
-    //   let orderCond = {};
-    //   orderCond.is_recharge = false;
-    //   orderCond.create_time = {$gte:moment().subtract(1,'year').toDate(), $lte:moment().toDate()}
+
+    let month = moment(conditions.date.format("YYYY-MM"));
+    let monthBegan = month.toDate();
+    let monthEnd = month.add(1, 'month').toDate();
+
+    aggOptions = [
+      { $match: {is_recharge:false, guide:{$in:guideIds}, create_time:{$gte:monthBegan, $lte:monthEnd}} },
+      { $group: {"_id": { "guide": "$guide", "customer": "$customer"}, "count":{$sum:1}}},
+      { $match: {"count":{$gte:2}}},
+      { $group: {"_id": { "guide": "$_id.guide"}, "monthCount":{$sum:1}}},
+    ]
+    let guides2 = await orderModel.aggregate(aggOptions);
+    console.log("getCustomerShopReportList monthBegan=" + moment(monthBegan).format("YYYY/MM/DD HH:mm:ss") + "; monthEnd=" + moment(monthEnd).format("YYYY/MM/DD HH:mm:ss") + "; guides2 222=" + JSON.stringify(guides2));
+
+    for(let guide of guides) {
+      let monthGuide = guides2.find(item=>item._id.guide.toString() === (guide.guide&&guide.guide._id.toString()));
+      if (monthGuide) {
+        guide.monthCount = monthGuide.monthCount;
+      }
+    }
+
+    let notBuyCount = customers.length;
+    if (notBuyCount) {
+      let orderCond = {};
+      orderCond.is_recharge = false;
+      orderCond.guide = {$in:guideIds};
+      orderCond.create_time = {$gte:moment(conditions.date).subtract(1,'year').toDate(), $lte:moment(conditions.date).toDate()}
   
-    //   let aggOptions = [
-    //     { $match: orderCond },
-    //     { $group: {"_id": { "customer": "$customer"}, "count":{$sum:1}}},
-    //   ];
-    //   let orders = await orderModel.aggregate(aggOptions);
-    //   notBuyCount = Math.max(0, notBuyCount - orders.length);
-    // }
+      let aggOptions = [
+        { $match: orderCond },
+        { $group: {"_id": { "guide": "$guide", "customer": "$customer"}, "count":{$sum:1}}},
+        { $match: {"count":{$gte:1}}},
+        { $group: {"_id": { "guide": "$_id.guide"}, "buyCount":{$sum:1}}},
+      ];
+      let guides3 = await orderModel.aggregate(aggOptions);
+      for(let guide of guides) {
+        let buyGuide = guides3.find(item=>item._id.guide.toString() === (guide.guide && guide.guide._id.toString()));
+        if (buyGuide) {
+          guide.notBuyCount = Math.max(0, guide.totalCount - buyGuide.buyCount);
+        }
+      }
+    }
 
-
-    return null;
+    return guides;
   }
 }
 

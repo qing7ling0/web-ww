@@ -64,8 +64,8 @@ class CustomerEditModal extends Component {
       {type:'input', name:'address', label:'地址', itemOptions:{hasFeedback:true}},
       {type:'input', name:'zipcode', label:'邮编', itemOptions:{hasFeedback:true}},
       {type:'datePicker', name:'vip_card_date', label:'开卡日期'},
-      {type:'select', name:'vip_card_shop', label:'开卡门店', selectItems:common.listToSelectOptions(this.props.shopList), options:{defaultActiveFirstOption:true}},
-      {type:'select', name:'vip_card_guide', label:'开卡导购', selectItems:common.listToSelectOptions(this.props.guideList), options:{defaultActiveFirstOption:true}},
+      {type:'select', name:'vip_card_shop', label:'开卡门店', selectItems:common.listToSelectOptions(this.props.shopList), options:{defaultActiveFirstOption:true}, rule:{required:true}},
+      {type:'select', name:'vip_card_guide', label:'开卡导购', selectItems:common.listToSelectOptions(this.props.guideList), options:{defaultActiveFirstOption:true}, rule:{required:true}},
       {
         type:'select', name:'tags', label:'客户标签', 
         selectItems:common.listToSelectOptions(this.props.customerTagList), 
