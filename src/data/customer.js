@@ -8,7 +8,8 @@ import {
   userAdminModel,
   accountModel,
   shopModel,
-  customerModel
+  customerModel,
+  orderModel
 } from '../models/index.js'
 
 import { ApiError, ApiErrorNames } from '../error/api-errors'

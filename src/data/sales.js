@@ -17,7 +17,8 @@ import {
   orderModel,
   customerModel,
   subOrderModel,
-  sampleGoodsModel
+  sampleGoodsModel,
+  sampleAllotModel
 } from '../models/index.js'
 
 import { ApiError, ApiErrorNames } from '../error/api-errors'
@@ -701,7 +702,9 @@ class SalesData {
           let list = this.createSample(suborder);
           for(let item of list) {
             let sample = new sampleGoodsModel(item);
-            sample.count = 1;
+            sample.left_count = 1;
+            sample.right_count = 1;
+            sample.shop = suborder.shop;
             let newSample = await sample.save();
             // TODO 这里出错需要还原
           }
@@ -1013,6 +1016,13 @@ class SalesData {
     }
 
     return guides;
+  }
+
+  getSampleAllotList(page, options) {
+    const list = await DB.getList(sampleAllotModel, options, page, (query)=>{
+      return query.populate('shop').populate('guide').populate('customer');
+    });
+    return list;
   }
 }
 

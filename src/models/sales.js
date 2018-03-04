@@ -72,6 +72,8 @@ const sampleBaseFields = {
   type: {type: String, decription:'类型'},
   shop: {type:Schema.Types.ObjectId, ref:'shop', description:'店铺'},
   count: {type: Number, decription:'数量'},
+  left_count: {type: Number, decription:'左脚数量'},
+  right_count: {type: Number, decription:'右脚数量'},
 }
 // 样品鞋数据
 const sampleShoesFields = {
@@ -114,6 +116,30 @@ const sampleFields = {
 module.exports.sampleGoodsModel = mongoose.model('sample_goods', 
   new Schema(
     sampleFields,
+    {
+      timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
+    }
+  )
+);
+
+// 样品调拨记录
+const sampleAllotFields = {
+  _id: {type:String, decription:'ID'},
+  sample: {type:Schema.Types.ObjectId, ref:'sample_goods', decription:'样品'},
+  left_count: {type: Number, decription:'左脚数量'},
+  right_count: {type: Number, decription:'右脚数量'},
+  status: {type: Number, decription:'状态'},
+  apply_shop: {type:Schema.Types.ObjectId, ref:'shop', decription:'申请的店铺'},
+  goods_user: {type:Schema.Types.ObjectId, ref:'user_operate', decription:'商品部跟进人'},
+  accept_shop_guide: {type:Schema.Types.ObjectId, ref:'user_shop_guide', decription:'店铺负责人'},
+  transport_company: {type:String, decription:'快递公司'},
+  transport_id: {type:String, decription:'快递单号'},
+  transport_phone: {type:String, decription:'联系电话'},
+  ...baseFields
+}
+module.exports.sampleAllotModel = mongoose.model('sample_allot', 
+  new Schema(
+    sampleAllotFields,
     {
       timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
     }

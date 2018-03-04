@@ -193,7 +193,7 @@ export default connect(
   state => ({
     sales:state.sales,
     loading:state.sales.loading,
-    deleteIDS:state.sales.goodsBaseDeleteIDS,
+    deleteIDS:state.sales.salesBaseDeleteIDS,
     user:state.app.loginInfo.user
   }),
   (dispatch) => {

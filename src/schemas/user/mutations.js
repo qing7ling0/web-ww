@@ -13,26 +13,27 @@ import * as types from './types';
 import {userData} from '../../data/index';
 
 
+// export const addUser = {
+//   type: types.userType,
+//   args: {
+//     info: {
+//       name: 'info',
+//       type: new GraphQLNonNull(types.userInputType)
+//     }
+//   },
+//   async resolve (root, params, options) {
+//     const newUser = await userData.addUser(root, params);
+//     return newUser;
+//   }
+// };
+
 export const addUser = {
   type: types.userType,
   args: {
-    info: {
-      name: 'info',
-      type: new GraphQLNonNull(types.userInputType)
-    }
-  },
-  async resolve (root, params, options) {
-    const newUser = await userData.addUser(root, params);
-    return newUser;
-  }
-};
-
-export const addAdmin = {
-  type: types.userType,
-  args: {
+    user_type: {type:GraphQLInt},
     user: {
       name: 'user',
-      type: new GraphQLNonNull(types.adminInputType)
+      type: new GraphQLNonNull(types.userInputType)
     },
     account:{
       name: 'account',
@@ -40,31 +41,33 @@ export const addAdmin = {
     }
   },
   async resolve (root, params, options) {
-    params.user_type = userData.types().admin;
+    // params.user_type = userData.types().admin;
     const newUser = await userData.addUser(root, params);
     return newUser;
   }
 }
 
-export const deleteAdmin = {
+export const deleteUser = {
   type: new GraphQLList(GraphQLString),
   args: {
+    user_type: {type:GraphQLInt},
     ids: {type: new GraphQLList(GraphQLString)}
   },
   async resolve (root, params, options) {
-    params.user_type = userData.types().admin;
+    // params.user_type = userData.types().admin;
     const ids = await userData.deleteUser(root, params);
     return ids;
   }
 }
 
-export const updateAdmin = {
+export const updateUser = {
   type: types.userType,
   args: {
+    user_type: {type:GraphQLInt},
     fields: {type: types.adminInputType}
   },
   async resolve (root, params, options) {
-    return await userData.updateUser(userData.types().admin, params.fields);
+    return await userData.updateUser(root, params.user_type, params.fields);
   }
 }
 

@@ -12,6 +12,7 @@ const SHOP_GUIDE_FIELDS = {
   account: {type: Schema.Types.ObjectId, ref:'account'},
   manager: Boolean, // 是否店长
   sex: String, // 性别
+  phone: String, // 电话
   shop: {type: Schema.Types.ObjectId, ref:'shop'}, // 店铺
   birthday: {type:Date, default:moment(1990-1-1, 'YYYY-MM-DD')}, // 生日
   height: Number, // 身高
@@ -33,6 +34,7 @@ var operateSchema = new Schema({
   name: String,
   account: {type: Schema.Types.ObjectId, ref:'account'},
   sex: String,
+  phone: String, // 电话
   user_type: {type:Number, default:constants.USER_TYPES.operate},
   power_type: {type:Number, default:constants.POWER_TYPES.MANAGER_NORMAL},
   ...baseFields,
@@ -47,6 +49,7 @@ var productionSchema = new Schema({
   account: {type: Schema.Types.ObjectId, ref:'account'},
   sex: String,
   step: String,
+  phone: String, // 电话
   user_type: {type:Number, default:constants.USER_TYPES.production},
   ...baseFields,
 },{
@@ -59,6 +62,7 @@ var adminSchema = new Schema({
   account: {type: Schema.Types.ObjectId, ref:'account'},
   name: String,
   sex: String,
+  phone: String, // 电话
   user_type: {type:Number, default:constants.USER_TYPES.admin},
   ...baseFields,
 },{

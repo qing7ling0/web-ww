@@ -7,18 +7,18 @@ import baseUtils from '../../base/utils/utils'
 import * as constants from '../constants/Constants'
 
 const LOADING_ACTIONS = [
-  ActionTypes.ADMIN_ACCOUNT_ADD,
-  ActionTypes.ADMIN_ACCOUNT_DELETE,
-  ActionTypes.ADMIN_ACCOUNT_UPDATE,
-  ActionTypes.ADMIN_LIST_GET
+  ActionTypes.USER_ACCOUNT_ADD,
+  ActionTypes.USER_ACCOUNT_DELETE,
+  ActionTypes.USER_ACCOUNT_UPDATE,
+  ActionTypes.USER_LIST_GET
 ];
 
 const initialState = {
   loading:false,
   result: {code:0, message:'', type:0},
-  adminList: [],
-  adminListPage: {page:0,pageSize:constants.DEFAULT_PAGE_SIZE,total:0},
-  adminDeleteIDS: [],
+  userList: [],
+  userListPage: {page:0,pageSize:constants.DEFAULT_PAGE_SIZE,total:0},
+  userDeleteIDS: [],
 };
 
 function createState(state, resState, values) {
@@ -45,15 +45,15 @@ function doActions(state, action) {
   }
 
   switch (action.type) {
-    case ActionTypes.ADMIN_LIST_GET:
+    case ActionTypes.USER_LIST_GET:
         if (action.state === States.Fulfilled && result.code === 0) {
-          return createState(state, resState, {adminList:data.adminList.list, adminListPage:data.adminList.page});
+          return createState(state, resState, {userList:data.userList.list, userListPage:data.userList.page});
         }
       break;
 
-    case ActionTypes.ADMIN_ACCOUNT_DELETE:
+    case ActionTypes.USER_ACCOUNT_DELETE:
       if (action.state === States.Fulfilled && result.code === 0) {
-        return createState(state, resState, {adminDeleteIDS:data.deleteAdmin});
+        return createState(state, resState, {userDeleteIDS:data.deleteUser});
       }
       break;
 

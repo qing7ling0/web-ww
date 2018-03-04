@@ -47,6 +47,7 @@ const _accountInputType = new GraphQLInputObjectType({
 const userCommonFields = {
   name: {type:GraphQLString},
   sex: { type:GraphQLString }, // 性别
+  phone: { type:GraphQLString }, // 电话
   account: {type: _accountType},
   editor_name: {type:GraphQLString},
   editor_time: {type:GraphQLString},
@@ -57,6 +58,7 @@ const userCommonInputFields = {
   name: {type:GraphQLString},
   sex: { type:GraphQLString }, // 性别
   account: {type: _accountInputType},
+  phone: {type: GraphQLString},
   editor_name: {type:GraphQLString},
   editor_time: {type:GraphQLString},
 }
@@ -153,6 +155,7 @@ export const userInputType = new GraphQLInputObjectType({
     account: { type:GraphQLString },
     password: { type:GraphQLString },
     name: { type:GraphQLString },
+    phone: { type:GraphQLString },
     user_type: { type:GraphQLString }
   }
 });

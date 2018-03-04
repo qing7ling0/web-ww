@@ -130,6 +130,13 @@ class CustomerAddModal extends Component {
       callback('手机或者电话号码格式不合法');
     }
   }
+  checkPhone = (rule, value, callback) => {
+    if (validate.isTel(value) || validate.isMobile(value)) {
+      callback();
+    } else {
+      callback('手机或者电话号码格式不合法');
+    }
+  }
 }
 
 export default connect(

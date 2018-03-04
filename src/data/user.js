@@ -190,7 +190,7 @@ class UserData {
    * @param {*} ctx 
    * @param {user{userType}, account{account, password}} params
    */
-  async updateUser(userType, fields, options, modelOptions) {
+  async updateUser(ctx, userType, fields, options, modelOptions) {
     if (!userType) {
       throw new ApiError(ApiErrorNames.UPDATE_FAIL);
     }

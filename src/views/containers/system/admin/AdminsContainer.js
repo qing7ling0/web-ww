@@ -9,7 +9,8 @@ import {
   message,
   Table,
   Button,
-  Modal
+  Modal,
+  Menu
 } from 'antd'
 
 import {
@@ -26,6 +27,26 @@ import Navigation from '../../../modules/Navigation'
 import AdminAddModal from './AdminAddModal'
 import AdminEditModal from './AdminEditModal'
 
+const TYPES = [
+  {
+    key:'admins', label:'管理员账号', type:constants.BASE_CONSTANTS.USER_TYPES.admin,
+    options:(target)=>[
+      {type:'input', name:'account', label:'账号', itemOptions:{hasFeedback:true}, rule:{required:true, validator:target.checkAccount}},
+      {type:'input', name:'password', label:'密码', itemOptions:{hasFeedback:true}, rule:{required:true, validator:target.checkPassword}},
+      {type:'input', name:'name', label:'姓名', itemOptions:{hasFeedback:true}, rule:{max:20}},
+      {type:'input', name:'phone', label:'电话', itemOptions:{hasFeedback:true}, rule:{required:true, validator:target.checkPhone}}
+    ]
+  },
+  {
+    key:'operates', label:'运营账号', type:constants.BASE_CONSTANTS.USER_TYPES.operate,
+    options:(target)=>[
+      {type:'input', name:'account', label:'账号', itemOptions:{hasFeedback:true}, rule:{required:true, validator:target.checkAccount}},
+      {type:'input', name:'password', label:'密码', itemOptions:{hasFeedback:true}, rule:{required:true, validator:target.checkPassword}},
+      {type:'input', name:'name', label:'姓名', itemOptions:{hasFeedback:true}, rule:{required:true, max:20}},
+      {type:'input', name:'phone', label:'电话', itemOptions:{hasFeedback:true}, rule:{required:true, validator:target.checkPhone}}
+    ]
+  },
+]
 
 class AdminsContainer extends Component {
   // 构造函数，在创建组件的时候调用一次
@@ -35,14 +56,20 @@ class AdminsContainer extends Component {
     this.state = {
       addVisible:false,
       page: 0,
-      selectRows:[]
+      selectedKeys: [TYPES[0].key]
     }
     this.navigation = new Navigation(this.props.history);
+    this.typeInfo = TYPES[0];
   }
 
-  //在组件挂载之前调用一次。如果在这个函数里面调用setState，本次的render函数可以看到更新后的state，并且只渲染一次
-  componentWillMount(){
-    this.props.reqGetAdminList(this.props.pageInfo.page);
+  componentDidMount(){
+    this.onReqList(this.props.pageInfo.page);
+    const { location } = this.props.history;
+    const pathSnippets = location.pathname.split('/').filter(i => i);
+    let len = pathSnippets.length;
+    if(len > 2 && pathSnippets[len-2] === 'admins') {
+      this.state.selectedKeys = [pathSnippets[len-1]];
+    }
   }
 
   componentWillReceiveProps(nextProps){
@@ -51,8 +78,33 @@ class AdminsContainer extends Component {
       if (nextProps.adminDeleteIDS.length >= this.props.list.length) {
         page = Math.max(1, page-1);
       }
-      this.props.reqGetAdminList(page, this.props.pageInfo.pageSize);
+      this.onReqList(page, this.props.pageInfo.pageSize);
+      // this.props.reqGetAdminList(page, this.props.pageInfo.pageSize);
     }
+    if(nextProps.match.params.type !== this.props.match.params.type) {
+      for(let value of TYPES) {
+        if (value.key === nextProps.match.params.type) {
+          this.typeInfo = value;
+        }
+      }
+      this.onReqList(1, this.props.pageInfo.pageSize);
+    }
+  }
+
+  renderHeaderContent = () => {
+    return (
+      <Menu
+        onClick={this.onMenuClicked}
+        mode="horizontal"
+        defaultSelectedKeys={this.state.selectedKeys}
+      >
+        {TYPES.map((item) => {
+          return (
+            <Menu.Item key={item.key}>{item.label}</Menu.Item>
+          );
+        })}
+      </Menu>
+    );
   }
 
   render() {
@@ -60,12 +112,15 @@ class AdminsContainer extends Component {
       { title: '姓名', dataIndex: 'name', key: 'name'},
       { title: '账号', dataIndex: 'account', key: 'account'},
       { title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
-        return (<Button type="primary" shape="circle" icon="delete" size="large" onClick={()=>this.onDelete([record._id])} />);
+        return (<Button type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
+          e.stopPropagation();
+          this.onDelete([record._id])}
+        } />);
       }}
     ]
     return (
       <Root>
-        <ContentHeaderComponent willSelectNavKey={constants.MENU_IDS.systemAdmin} history={this.props.history} />
+        <ContentHeaderComponent willSelectNavKey={constants.MENU_IDS.systemAdmin} history={this.props.history} contentRender={this.renderHeaderContent} />
         <ContentContainer>
           <DataContentComponent 
             canOperate={this.canOperate()}
@@ -78,7 +133,7 @@ class AdminsContainer extends Component {
                 let ids = this.state.selectedRows.map((item) => {
                   return item._id;
                 })
-                this.props.reqDeleteAdmin(ids);
+                this.onDelete(ids);
               }
             }}
           >
@@ -103,16 +158,29 @@ class AdminsContainer extends Component {
         </ContentContainer>
         {
           this.state.addVisible ? 
-          <AdminAddModal title={'账号添加'} pageInfo={this.props.pageInfo} visible={this.state.addVisible} afterClose={()=>this.setState({addVisible:false})}/> 
+          <AdminAddModal title={'账号添加'} typeInfo={this.typeInfo} pageInfo={this.props.pageInfo} visible={this.state.addVisible} afterClose={()=>this.setState({addVisible:false})}/> 
           : null
         }
         {
           this.state.editVisible ? 
-          <AdminEditModal title={'账号编辑'} data={this.state.editData} pageInfo={this.props.pageInfo} visible={this.state.editVisible} afterClose={()=>this.setState({editVisible:false})}/> 
+          <AdminEditModal title={'账号编辑'} typeInfo={this.typeInfo} data={this.state.editData} pageInfo={this.props.pageInfo} visible={this.state.editVisible} afterClose={()=>this.setState({editVisible:false})}/> 
           : null
         }
       </Root>
     );
+  }
+
+  onReqList = (page, pageSize) => {
+    this.props.reqGetUserList(this.typeInfo.type, page, pageSize);
+  }
+
+  onMenuClicked = ({item, key}) => {
+    let index = this.props.match.path.lastIndexOf('/');
+    let _path = this.props.match.path;
+    if (index !== -1) {
+      _path = _path.substring(0, index);
+    }
+    this.props.history.replace(_path+'/' + key);
   }
 
   onRowSelectionChange = (selectedRowKeys, selectedRows) => {
@@ -127,12 +195,12 @@ class AdminsContainer extends Component {
   }
 
   onPageChange = (page, pageSize) => {
-    this.props.reqGetAdminList(page, pageSize);
+    this.onReqList(page, pageSize);
   }
 
   onDelete = (ids) => {
     if (this.canOperate())
-      this.props.reqDeleteAdmin(ids);
+      this.props.reqDeleteUser(this.typeInfo.type, ids);
   }
 
   canOperate = () => {
@@ -158,16 +226,16 @@ const converList = (list) => {
 
 export default connect(
   state => ({
-    list:converList(state.system.adminList),
+    list:converList(state.system.userList),
     loading:state.system.loading,
-    pageInfo:state.system.adminListPage,
-    adminDeleteIDS:state.system.adminDeleteIDS,
+    pageInfo:state.system.userListPage,
+    adminDeleteIDS:state.system.userDeleteIDS,
     user:state.app.loginInfo.user
   }),
   (dispatch) => {
     return bindActionCreators({
-      reqGetAdminList: Actions.getAdminList,
-      reqDeleteAdmin:Actions.deleteAdmin,
+      reqGetUserList: Actions.getUserList,
+      reqDeleteUser:Actions.deleteUser,
     }, dispatch);
   }
 )(AdminsContainer);

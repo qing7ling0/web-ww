@@ -1,16 +1,14 @@
 'use strict'
 
 export const LOAD                 = 'LOAD';
-export const USER_ADD             = 'USER_ADD';
-export const USER_LIST_GET        = 'USER_LIST_GET';
 export const LOGIN                = 'LOGIN';
 export const LOGOUT               = 'LOGOUT';
 export const SELECT_NAV           = 'SELECT_NAV';
 
-export const ADMIN_LIST_GET       = 'ADMIN_LIST_GET';
-export const ADMIN_ACCOUNT_ADD    = 'ADMIN_ACCOUNT_ADD';
-export const ADMIN_ACCOUNT_DELETE = 'ADMIN_ACCOUNT_DELETE';
-export const ADMIN_ACCOUNT_UPDATE = 'ADMIN_ACCOUNT_UPDATE';
+export const USER_LIST_GET       = 'USER_LIST_GET';
+export const USER_ACCOUNT_ADD    = 'USER_ACCOUNT_ADD';
+export const USER_ACCOUNT_DELETE = 'USER_ACCOUNT_DELETE';
+export const USER_ACCOUNT_UPDATE = 'USER_ACCOUNT_UPDATE';
 
 export const SHOP_LIST_GET        = 'SHOP_LIST_GET';
 export const SHOP_ADD             = 'SHOP_ADD';

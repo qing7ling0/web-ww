@@ -40,6 +40,7 @@ import * as constants from '../../../constants/Constants'
 import * as common from '../../../modules/common'
 import FormItemComponent from '../../common/FormItemComponent'
 import utils from '../../../../utils/utils'
+import * as validate from '../../../../base/utils/validate'
 
 
 class AdminEditModal extends Component {
@@ -55,11 +56,7 @@ class AdminEditModal extends Component {
 
   //在组件挂载之前调用一次。如果在这个函数里面调用setState，本次的render函数可以看到更新后的state，并且只渲染一次
   componentWillMount(){
-    this.options = [
-      {type:'input', name:'account', label:'账号', itemOptions:{hasFeedback:true}, rule:{validator:this.checkAccount}},
-      {type:'input', name:'password', label:'密码', itemOptions:{hasFeedback:true}, rule:{validator:this.checkPassword}},
-      {type:'input', name:'name', label:'姓名', itemOptions:{hasFeedback:true}, rule:{max:20}}
-    ];
+    this.options = this.props.typeInfo.options(this);
     this.setState({visible:this.props.visible})
   }
 
@@ -71,10 +68,10 @@ class AdminEditModal extends Component {
       this.state.confirmLoading = false;
     }
 
-    if (nextProps.result.type === ActionTypes.ADMIN_ACCOUNT_UPDATE && nextProps.loading !== this.props.loading && !nextProps.loading) {
+    if (nextProps.result.type === ActionTypes.USER_ACCOUNT_UPDATE && nextProps.loading !== this.props.loading && !nextProps.loading) {
       if (nextProps.result.code === 0) {
         this.setState({confirmLoading:false, visible:false})
-        this.props.reqGetAdminList(this.props.pageInfo.page, this.props.pageInfo.pageSize);
+        this.props.reqGetUserList(this.props.typeInfo.type, this.props.pageInfo.page, this.props.pageInfo.pageSize);
       } else {
         this.setState({confirmLoading:false})
       }
@@ -131,9 +128,17 @@ class AdminEditModal extends Component {
         delete updates.password;
         updates.account = account;
         updates._id = this.props.data._id;
-        this.props.reqUpdateAdmin(updates);
+        this.props.reqUpdateUser(this.props.typeInfo.type, updates);
       }
     });
+  }
+  
+  checkPhone = (rule, value, callback) => {
+    if (validate.isTel(value) || validate.isMobile(value)) {
+      callback();
+    } else {
+      callback('手机或者电话号码格式不合法');
+    }
   }
 
   checkAccount = (rule, value, callback) => {
@@ -170,8 +175,8 @@ export default connect(
   }),
   (dispatch) => {
     return bindActionCreators({
-      reqGetAdminList: Actions.getAdminList,
-      reqUpdateAdmin: Actions.updateAdmin
+      reqGetUserList: Actions.getUserList,
+      reqUpdateUser: Actions.updateUser
     }, dispatch);
   }
 )(Form.create()(AdminEditModal));

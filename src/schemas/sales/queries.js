@@ -134,3 +134,27 @@ export const suborderProfile = {
     return await salesData.getSuborderProfile(params.id);
   }
 };
+
+export const sampleAllotList = {
+	type: new GraphQLObjectType({
+    name: 'sampleAllotList',
+    fields: {
+      page: {type:commonFields.defaultPageType},
+      list: {type:new GraphQLList(types.sampleAllotType)}
+    }
+  }),
+  args: {
+    page: {type: GraphQLInt},
+    pageSize: {type: GraphQLInt},
+    conditions: {type:GraphQLString}  
+  },
+	async resolve (root, params, options) {
+    if (params.conditions) {
+      params.conditions = commonUtils.urlString2Conditions(params.conditions);
+    }
+    // TEST();
+    // console.log(JSON.stringify(params.conditions));
+    return await salesData.getSampleAllotList({page:params.page, pageSize:params.pageSize}, {conditions:params.conditions})
+	}
+}
+

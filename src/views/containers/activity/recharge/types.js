@@ -38,14 +38,17 @@ const listToSelectOptions = (list, valueFormat, labelFormat) => {
 // 充值
 const getListOptions = function(target) {
   let options = [
-    { title: '充值金额', dataIndex: 'mount', key: 'mount', className:"table-column-left", render:(text)=>text+' RMB'},
+    { title: '充值金额', dataIndex: 'mount', key: 'mount', className:"table-column-left", render:(text)=>text+' RMB'},
     { title: '赠送金额', dataIndex: 'reward', key: 'reward', className:"table-column-left", render:(text)=>text+' RMB'},
   ]
 
   if (target.canOperate()) {
     options.push({
       title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
-        return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={()=>target.onDelete([record._id])} />);
+        return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
+          e.stopPropagation();
+          target.onDelete([record._id])} 
+        }/>);
       }
     })
   }

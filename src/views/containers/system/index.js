@@ -10,8 +10,8 @@ import * as common from '../../modules/common'
 
 export default [
   (<Route 
-    key={constants.MENU_IDS.systemAdmin} 
-    path={common.findRouterById(config.Routers, constants.MENU_IDS.systemAdmin).url} 
+    key={constants.MENU_IDS.systemAdmin+"/:type"} 
+    path={common.findRouterById(config.Routers, constants.MENU_IDS.systemAdmin).url+"/:type"} 
     exact={true} strict={true}
     component={AdminsContainer}
   />),
@@ -24,6 +24,6 @@ export default [
   (<Redirect 
     key={constants.MENU_IDS.system} 
     from={common.findRouterById(config.Routers, constants.MENU_IDS.system).url} 
-    to={common.findRouterById(config.Routers, constants.MENU_IDS.systemAdmin).url}
+    to={common.findRouterById(config.Routers, constants.MENU_IDS.systemAdmin).url+"/admins"}
   />)
 ]

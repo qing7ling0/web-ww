@@ -18,6 +18,7 @@ module.exports.Menus = [
       {id:MENU_IDS.salesOrder, name:'订单'},
       {id:MENU_IDS.salesMaterial, name:'原材料'},
       {id:MENU_IDS.salesSampleGoods, name:'库存'},
+      {id:MENU_IDS.salesSampleAllot, name:'调拨管理'},
       {id:MENU_IDS.salesItemsBase, name:'基础数据管理'}
     ]
   },
@@ -75,6 +76,7 @@ module.exports.Routers = [
   { id:MENU_IDS.salesOrder, name:'订单', url: '/home/sales/order' },
   { id:MENU_IDS.salesMaterial, name:'原材料', url: '/home/sales/material' },
   { id:MENU_IDS.salesSampleGoods, name:'库存', url: '/home/sales/sample' },
+  { id:MENU_IDS.salesSampleAllot, name:'调拨管理', url: '/home/sales/sample-allot' },
   { id:MENU_IDS.salesItemsBase, name:'基础数据管理', url: '/home/sales/base' },
 
   { id:MENU_IDS.customer, name: '客户管理', url: '/home/customer' },
@@ -148,8 +150,19 @@ module.exports.Powers = [
     id:MENU_IDS.salesSampleGoods, 
     powers:[
       { id:POWER_TYPES.SALE_MANAGER, power:{view:true, add:true, edit:true} },
-      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true, add:true, edit:true} },
-      { id:POWER_TYPES.SHOP_GUIDE, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true} },
+      { id:POWER_TYPES.SHOP_GUIDE, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_NORMAL, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.FACTORY_PRODUCTION, power:{view:true} },
+    ]
+  },
+  { 
+    id:MENU_IDS.salesSampleAllot, 
+    powers:[
+      { id:POWER_TYPES.SALE_MANAGER, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true} },
+      { id:POWER_TYPES.SHOP_GUIDE, power:{view:true} },
       { id:POWER_TYPES.MANAGER_NORMAL, power:{view:true} },
       { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
       { id:POWER_TYPES.FACTORY_PRODUCTION, power:{view:true} },

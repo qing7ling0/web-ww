@@ -75,36 +75,36 @@ class NetHandler {
     return netUtils.graphqlJson(config.GetServerAddress() + '/api', graphqlValue)
   }
 
-  static getAdminList(pageIndex, pageSize=constants.DEFAULT_PAGE_SIZE) {
+  static getUserList(type, pageIndex, pageSize=constants.DEFAULT_PAGE_SIZE) {
     return netUtils.graphqlJson(config.GetServerAddress() + '/api', `
       query Query {
-        adminList(page:${pageIndex}, pageSize:${pageSize})${types.pageListType(types.userType)}
+        userList(user_type:${type}, page:${pageIndex}, pageSize:${pageSize})${types.pageListType(types.userType)}
       }
     `);
   }
 
-  static addAdmin(user, accountInfo) {
+  static addUser(type, user, accountInfo) {
     let mut = `
       mutation Mutation {
-        addAdmin(user:${object2String(user)}, account:${object2String(accountInfo)})${types.userType}
+        addUser(user_type:${type}, user:${object2String(user)}, account:${object2String(accountInfo)})${types.userType}
       }
     `
     return netUtils.graphqlJson(config.GetServerAddress() + '/api', mut);
   }
 
-  static deleteAdmin(ids) {
+  static deleteUser(type, ids) {
     let mut = `
       mutation Mutation {
-        deleteAdmin(ids:${object2String(ids)}) 
+        deleteUser(user_type:${type}, ids:${object2String(ids)}) 
       }
     `    
     return netUtils.graphqlJson(config.GetServerAddress() + '/api', mut);
   }
 
-  static updateAdmin(data) {
+  static updateUser(type, data) {
     let mut = `
       mutation Mutation {
-        updateAdmin(fields:${object2String(data)}) ${types.userType}
+        updateUser(user_type:${type}, fields:${object2String(data)}) ${types.userType}
       }
     `    
     return netUtils.graphqlJson(config.GetServerAddress() + '/api', mut);

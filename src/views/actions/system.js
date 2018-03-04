@@ -3,7 +3,7 @@ import * as types from '../constants/ActionTypes';
 import config from '../constants/Config.js';
 import netHandler from '../modules/NetHandler'
 
-export const getAdminList = createAction(types.ADMIN_LIST_GET, netHandler.getAdminList);
-export const addAdmin = createAction(types.ADMIN_ACCOUNT_ADD, netHandler.addAdmin);
-export const updateAdmin = createAction(types.ADMIN_ACCOUNT_UPDATE, netHandler.updateAdmin);
-export const deleteAdmin = createAction(types.ADMIN_ACCOUNT_DELETE, netHandler.deleteAdmin);
+export const getUserList = createAction(types.USER_LIST_GET, netHandler.getUserList);
+export const addUser = createAction(types.USER_ACCOUNT_ADD, netHandler.addUser);
+export const updateUser = createAction(types.USER_ACCOUNT_UPDATE, netHandler.updateUser);
+export const deleteUser = createAction(types.USER_ACCOUNT_DELETE, netHandler.deleteUser);

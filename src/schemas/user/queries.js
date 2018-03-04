@@ -27,20 +27,21 @@ const commonUtils = require('../../utils/common-utils')
 // 	}
 // }
 
-export const adminList = {
+export const userList = {
 	type: new GraphQLObjectType({
-    name: 'adminListPage',
+    name: 'userList',
     fields: {
       page: {type:commonFields.defaultPageType},
       list: {type:new GraphQLList(types.userType)}
     }
   }),
   args: {
+    user_type: {type: GraphQLInt},
     page: {type: GraphQLInt},
     pageSize: {type: GraphQLInt},
   },
 	async resolve (root, params, options) {
-		params.user_type = userData.types().admin;
+		// params.user_type = userData.types().admin;
 		var ret = await userData.getUserList(root, params);
 		return ret;
 	}

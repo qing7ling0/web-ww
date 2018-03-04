@@ -198,6 +198,8 @@ const sampleGoodsInputFields = {
   NID: {type:GraphQLString, description:'编号'},
   type: {type: GraphQLString, decription:'类型'},
   count: {type: GraphQLInt, decription:'数量'},
+  left_count: {type: GraphQLInt},
+  right_count: {type: GraphQLInt},
 }
 
 // 样品鞋数据
@@ -250,6 +252,53 @@ export const sampleGoodsInputType = new GraphQLInputObjectType({
     ...sampleWatchStrapFields,
     ...sampleOrnamentFields,
     shop: {type:GraphQLString}
+  }
+})
+
+// 库存调拨记录
+const sampleAllotBaseType = new GraphQLObjectType({
+  name: 'sampleAllotBaseType',
+  fields: {
+    _id: {type:GraphQLString},
+    name: {type:GraphQLString},
+    phone: {type:GraphQLString}
+  }
+})
+
+// 库存调拨记录
+export const sampleAllotType = new GraphQLObjectType({
+  name: 'sampleAllotType',
+  fields: {
+    _id: {type:GraphQLString},
+    sample: {type:GraphQLString},
+    left_count: {type: GraphQLInt, decription:'左脚数量'},
+    right_count: {type: GraphQLInt, decription:'右脚数量'},
+    status: {type: GraphQLInt, decription:'状态'},
+    apply_shop: {type:sampleAllotBaseType, decription:'申请的店铺'},
+    apply_user: {type:sampleAllotBaseType, decription:'申请人'},
+    goods_user: {type:sampleAllotBaseType, decription:'商品部跟进人'},
+    accept_shop: {type:sampleAllotBaseType, decription:'申请的店铺'},
+    accept_shop_guide: {type:sampleAllotBaseType, decription:'店铺负责人'},
+    transport_company: {type:GraphQLString, decription:'快递公司'},
+    transport_id: {type:GraphQLString, decription:'快递单号'},
+    transport_phone: {type:GraphQLString, decription:'联系电话'},
+    ...commonFields.defaultCreateFields,
+  }
+})
+export const sampleAllotInputType = new GraphQLInputObjectType({
+  name: 'sampleAllotInputType',
+  fields: {
+    _id: {type:GraphQLString},
+    sample: {type:GraphQLString},
+    left_count: {type: GraphQLInt, decription:'左脚数量'},
+    right_count: {type: GraphQLInt, decription:'右脚数量'},
+    status: {type: GraphQLInt, decription:'状态'},
+    apply_shop: {type:GraphQLString, decription:'申请的店铺'},
+    goods_user: {type:GraphQLString, decription:'商品部跟进人'},
+    accept_shop_guide: {type:GraphQLString, decription:'店铺负责人'},
+    transport_company: {type:GraphQLString, decription:'快递公司'},
+    transport_id: {type:GraphQLString, decription:'快递单号'},
+    transport_phone: {type:GraphQLString, decription:'联系电话'},
   }
 })
 

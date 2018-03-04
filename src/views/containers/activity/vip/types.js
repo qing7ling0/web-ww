@@ -38,7 +38,7 @@ const listToSelectOptions = (list, valueFormat, labelFormat) => {
 // vip
 const getListOptions = function(target) {
   let options = [
-    { title: '等级', dataIndex: 'level', key: 'level', className:"table-column-left", render:(text)=>text+' 级'},
+    { title: '等级', dataIndex: 'level', key: 'level', className:"table-column-left", render:(text)=>text+' 级'},
     { title: '升级充值', dataIndex: 'exp', key: 'exp', className:"table-column-left", render:(text)=>text+' RMB'},
     { title: '折扣', dataIndex: 'discount', key: 'discount', className:"table-column-left", render:(text)=>text+' 折'},
   ]
@@ -46,7 +46,11 @@ const getListOptions = function(target) {
   if (target.canOperate()) {
     options.push({
       title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
-        return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={()=>target.onDelete([record._id])} />);
+        return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
+          e.stopPropagation();
+          target.onDelete([record._id])}
+        }
+        />);
       }
     })
   }
