@@ -1018,7 +1018,7 @@ class SalesData {
     return guides;
   }
 
-  getSampleAllotList(page, options) {
+  async getSampleAllotList(page, options) {
     const list = await DB.getList(sampleAllotModel, options, page, (query)=>{
       return query.populate('shop').populate('guide').populate('customer');
     });

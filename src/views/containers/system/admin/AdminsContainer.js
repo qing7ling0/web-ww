@@ -37,15 +37,15 @@ const TYPES = [
       {type:'input', name:'phone', label:'电话', itemOptions:{hasFeedback:true}, rule:{required:true, validator:target.checkPhone}}
     ]
   },
-  {
-    key:'operates', label:'运营账号', type:constants.BASE_CONSTANTS.USER_TYPES.operate,
-    options:(target)=>[
-      {type:'input', name:'account', label:'账号', itemOptions:{hasFeedback:true}, rule:{required:true, validator:target.checkAccount}},
-      {type:'input', name:'password', label:'密码', itemOptions:{hasFeedback:true}, rule:{required:true, validator:target.checkPassword}},
-      {type:'input', name:'name', label:'姓名', itemOptions:{hasFeedback:true}, rule:{required:true, max:20}},
-      {type:'input', name:'phone', label:'电话', itemOptions:{hasFeedback:true}, rule:{required:true, validator:target.checkPhone}}
-    ]
-  },
+  // {
+  //   key:'operates', label:'运营账号', type:constants.BASE_CONSTANTS.USER_TYPES.operate,
+  //   options:(target)=>[
+  //     {type:'input', name:'account', label:'账号', itemOptions:{hasFeedback:true}, rule:{required:true, validator:target.checkAccount}},
+  //     {type:'input', name:'password', label:'密码', itemOptions:{hasFeedback:true}, rule:{required:true, validator:target.checkPassword}},
+  //     {type:'input', name:'name', label:'姓名', itemOptions:{hasFeedback:true}, rule:{required:true, max:20}},
+  //     {type:'input', name:'phone', label:'电话', itemOptions:{hasFeedback:true}, rule:{required:true, validator:target.checkPhone}}
+  //   ]
+  // },
 ]
 
 class AdminsContainer extends Component {
