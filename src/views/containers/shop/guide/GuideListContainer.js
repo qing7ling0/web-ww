@@ -59,6 +59,7 @@ class GuideListContainer extends Component {
   render() {
     const columns = [
       { title: '名称', dataIndex: 'name', key: 'name'},
+      { title: '手机', dataIndex: 'phone', key: 'phone'},
       { title: '账号', dataIndex: 'account', key: 'account'},
       { title: '性别', dataIndex: 'sex', key: 'sex'},
       { title: '身高', dataIndex: 'height_label', key: 'height_label'},
