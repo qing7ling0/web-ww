@@ -108,7 +108,7 @@ class AdminAddModal extends Component {
       if (!err) {
         // console.log('Received values of form: ', values);
         this.setState({confirmLoading:true});
-        this.props.reqAddUser(this.props.typeInfo.type, {name:values.name}, {account:values.account, password:values.password});
+        this.props.reqAddUser(this.props.typeInfo.type, {name:values.name, phone:values.phone}, {account:values.account, password:values.password});
       }
     });
   }

@@ -108,7 +108,7 @@ export const updateShopGuide = {
     fields: {type: types.shopGuideInputType}
   },
   async resolve (root, params, options) {
-    return await userData.updateUser(userData.types().shopGuide, params.fields);
+    return await userData.updateUser(root, userData.types().shopGuide, params.fields);
   }
 }
 

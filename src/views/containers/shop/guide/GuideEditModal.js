@@ -54,6 +54,7 @@ class GuideEditModal extends Component {
   componentWillMount(){
     this.options = [
       {type:'input', name:'name', label:'姓名', itemOptions:{hasFeedback:true}, rule:{required:true}},
+      {type:'input', name:'phone', label:'手机号码', itemOptions:{hasFeedback:true}, rule:{required:true, validator:this.checkPhone}},
       {type:'input', name:'account', label:'账号', itemOptions:{hasFeedback:true}, rule:{required:true, validator:this.checkAccount}},
       {type:'input', name:'password', label:'密码', itemOptions:{hasFeedback:true}, rule:{validator:this.checkPassword}},
       {type:'select', name:'shop_id', label:'门店', selectItems:this.props.shopList, options:{defaultActiveFirstOption:true}, rule:{required:true}},            
@@ -160,6 +161,13 @@ class GuideEditModal extends Component {
       callback(msg);
     } else {
       callback();
+    }
+  }
+  checkPhone = (rule, value, callback) => {
+    if (validate.isTel(value) || validate.isMobile(value)) {
+      callback();
+    } else {
+      callback('手机或者电话号码格式不合法');
     }
   }
 }
