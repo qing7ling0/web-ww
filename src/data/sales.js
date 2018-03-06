@@ -1018,11 +1018,21 @@ class SalesData {
     return guides;
   }
 
-  getSampleAllotList(page, options) {
+  async getSampleAllotList(page, options) {
     const list = await DB.getList(sampleAllotModel, options, page, (query)=>{
-      return query.populate('shop').populate('guide').populate('customer');
+      return query.populate('sample').populate('accept_shop_guide').populate('accept_shop')
+      .populate('apply_shop').populate('apply_shop_guide').populate('goods_user');
     });
     return list;
+  }
+
+  async sampleAllotApply(doc) {
+    if (!doc.apply_shop || !doc.apply_shop_guide || !doc.sample) 
+      throw new ApiError(ApiErrorNames.ADD_FAIL);
+    // 必须有申请的数量
+    if (!doc.left_count && !doc.right_count) 
+      throw new ApiError(ApiErrorNames.ADD_FAIL);
+      
   }
 }
 

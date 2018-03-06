@@ -135,9 +135,53 @@ const suborderCancel = {
   }
 }
 
+// 调拨申请
+const sampleAllotApply = {
+  type: commonFields.operateResultType,
+  args: {
+    doc: {type: types.sampleAllotInputType},
+  },
+  async resolve (ctx, params, options) {
+    if (params.doc && ctx.session && ctx.session.user) {
+      params.doc = utils.createEditorDoc(ctx.session.user, params.doc);
+    }
+    // return await salesData.cancelSuborder(params.id);
+  }
+}
+
+// 调拨修改
+const sampleAllotUpdate = {
+  type: commonFields.operateResultType,
+  args: {
+    id: {type: GraphQLString},
+    doc: {type: types.sampleAllotInputType},
+  },
+  async resolve (ctx, params, options) {
+    if (params.doc && ctx.session && ctx.session.user) {
+      params.doc = utils.createEditorDoc(ctx.session.user, params.doc);
+    }
+    // return await salesData.cancelSuborder(params.id);
+  }
+}
+
+// 调拨完成
+const sampleAllotFinish = {
+  type: commonFields.operateResultType,
+  args: {
+    id: {type: GraphQLString}
+  },
+  async resolve (ctx, params, options) {
+    if (params.doc && ctx.session && ctx.session.user) {
+      params.doc = utils.createEditorDoc(ctx.session.user, params.doc);
+    }
+    // return await salesData.cancelSuborder(params.id);
+  }
+}
+
 let mutations = {
   ...material, ...goods, ...tryFeedback, ...sampleGoods,
   orderAdd, orderRemove, orderUpdate, 
-  reviewSuborderUpdate, suborderStateUpdate, suborderUpdate, suborderCancel
+  reviewSuborderUpdate, suborderStateUpdate, suborderUpdate, suborderCancel,
+  sampleAllotApply, sampleAllotUpdate, sampleAllotFinish
 };
 export default mutations;
