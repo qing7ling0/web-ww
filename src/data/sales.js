@@ -1027,12 +1027,38 @@ class SalesData {
   }
 
   async sampleAllotApply(doc) {
-    if (!doc.apply_shop || !doc.apply_shop_guide || !doc.sample) 
+    if (!doc.apply_shop || !doc.apply_shop_guide || !doc.sample) {
       throw new ApiError(ApiErrorNames.ADD_FAIL);
+    }
     // 必须有申请的数量
-    if (!doc.left_count && !doc.right_count) 
-      throw new ApiError(ApiErrorNames.ADD_FAIL);
-      
+    if (!doc.left_count && !doc.right_count) {
+      throw new ApiError(ApiErrorNames.ADD_FAIL, '必须有申请数量');
+    }
+
+    let sampleInfo = await sampleGoodsModel.findById(doc.sample);
+    if (!sampleInfo){
+      throw new ApiError(ApiErrorNames.ADD_FAIL, '申请的样品不存在');
+    }
+    
+    if (sampleInfo.left_count < doc.left_count || sampleInfo.right_count < doc.right_count) {
+      throw new ApiError(ApiErrorNames.ADD_FAIL, '申请的数量不足');
+    }
+    
+    doc.status = constants.E_SAMPLE_ALLOT_STATUS.REVIEW;
+    let _sampleAllotMode = new sampleAllotModel();
+    let data = await _sampleAllotMode.save(doc);
+
+    return data;
+  }
+
+  async sampleAllotUpdate(id, doc) {
+    if (!id || !doc) {
+      throw new ApiError(ApiErrorNames.UPDATE_FAIL);
+    }
+    
+    let ret = await sampleAllotModel.findByIdAndUpdate(id, doc);
+
+    return ret;
   }
 }
 

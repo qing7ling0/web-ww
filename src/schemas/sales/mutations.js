@@ -18,6 +18,7 @@ import {
 } from '../../models/sales'
 import {salesData} from '../../data/index';
 import * as types from './types';
+import constants from '../../constants/constants';
 const DB = require('../../db/DB')
 const commonFields = require('../common/common-fields')
 const commonUtils = require('../../utils/common-utils')
@@ -154,13 +155,13 @@ const sampleAllotUpdate = {
   type: commonFields.operateResultType,
   args: {
     id: {type: GraphQLString},
-    doc: {type: types.sampleAllotInputType},
+    doc: {type: types.sampleAllotUpdateInputType},
   },
   async resolve (ctx, params, options) {
     if (params.doc && ctx.session && ctx.session.user) {
       params.doc = utils.createEditorDoc(ctx.session.user, params.doc);
     }
-    // return await salesData.cancelSuborder(params.id);
+    return await salesData.sampleAllotUpdate(params.id, params.doc);
   }
 }
 
@@ -174,7 +175,7 @@ const sampleAllotFinish = {
     if (params.doc && ctx.session && ctx.session.user) {
       params.doc = utils.createEditorDoc(ctx.session.user, params.doc);
     }
-    // return await salesData.cancelSuborder(params.id);
+    return await salesData.sampleAllotUpdate(params.id, {status:constants.E_SAMPLE_ALLOT_STATUS.COMPLETED});
   }
 }
 

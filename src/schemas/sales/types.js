@@ -301,6 +301,16 @@ export const sampleAllotInputType = new GraphQLInputObjectType({
     transport_phone: {type:GraphQLString, decription:'联系电话'},
   }
 })
+export const sampleAllotUpdateInputType = new GraphQLInputObjectType({
+  name: 'sampleAllotUpdateInputType',
+  fields: {
+    status: {type: GraphQLInt, decription:'状态'},
+    goods_user: {type:GraphQLString, decription:'商品部跟进人'},
+    transport_company: {type:GraphQLString, decription:'快递公司'},
+    transport_id: {type:GraphQLString, decription:'快递单号'},
+    transport_phone: {type:GraphQLString, decription:'联系电话'},
+  }
+})
 
 // 鞋
 const orderShoesBaseFields = {

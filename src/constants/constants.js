@@ -266,3 +266,12 @@ module.exports.E_REPORT_TYPES = {
   CUSTOMER_BUY:'6', // 客户购买表
   CUSTOMER:'7', // vip客户表
 }
+
+// 样品调拨状态
+module.exports.E_SAMPLE_ALLOT_STATUS = {
+  REVIEW: 1, // 审核中
+  REVIEW_FINISH:200, // 已审核等待发货
+  TRANSPORT:300, // 发货中
+  INBOUND:400, // 已入库
+  COMPLETED: 500 // 已完成
+}
