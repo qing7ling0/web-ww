@@ -77,7 +77,7 @@ class SampleGoodsListContainer extends Component {
 
     return (
       <BaseListComponent
-        canOperate={this.canOperate()}
+        canOperate={false}
         columns={this.options} 
         dataSource={this.currentList()} 
         loading={this.props.loading}
@@ -88,7 +88,7 @@ class SampleGoodsListContainer extends Component {
           this.onReqList(pageInfo);
         }}
         hasSearch={true}
-        searchPlaceholder={`请输入${this.sampleGoodsType.label}名称`}
+        searchPlaceholder={`请输入货号`}
         onSearch={(value)=>{
           this.searchWord = value;
           this.onReqList(this.props.pageInfo);
@@ -142,7 +142,7 @@ class SampleGoodsListContainer extends Component {
     };
     if (this.searchWord) {
       con = {};
-      con.name = {$regex:`/${this.searchWord}/i`}
+      con.NID = this.searchWord;
     }
     this.props.reqGetSampleGoodsList(this.sampleGoodsType.listTag, con, pageInfo);
   }

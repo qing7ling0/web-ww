@@ -71,14 +71,7 @@ import { commonUtils } from '../../../../modules/common';
 const DEFAULT_COL_SPAN = {xs:24,sm:12,lg:8};
 
 const TRANSPORT_OPTIONS = [
-  {key:'transport_company', label:'快递公司', render:(value)=>{
-    let com = commonUtils.getTransportCompany(value);
-    if (com) {
-      return com.label;
-    }
-
-    return '未填写';
-  }},
+  {key:'transport_company', label:'快递公司', render:(value)=>value||'未填写'},
   {key:'transport_id', label:'快递单号', render:(value)=>value||'未填写'},
   {key:'transport_address', label:'快递地址', render:(value)=>value||'未填写'},
 ];
@@ -86,14 +79,9 @@ const TRANSPORT_OPTIONS = [
 const TRANSPORT_INPUT_OPTIONS = (target) => { 
   return [
     {
-      type:'select', name:'transport_company', label:'快递公司', 
-      itemOptions:{labelLeft:true}, 
-      selectItems:constants.BASE_CONSTANTS.TRANSPORT_COMPANYS, 
-      decoratorOptions:{initialValue:target.props.profile.transport_company},
-      options:{
-        defaultActiveFirstOption:true,
-      }, 
-      rule:{required:true}
+      type:'input', name:'transport_company', label:'快递公司', 
+      decoratorOptions:{initialValue:target.props.profile.transport_id}, 
+      itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}
     },
     {
       type:'input',  name:'transport_id', label:'快递单号',

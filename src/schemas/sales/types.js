@@ -197,9 +197,11 @@ export const goodsInputType = new GraphQLInputObjectType({
 const sampleGoodsInputFields = {
   NID: {type:GraphQLString, description:'编号'},
   type: {type: GraphQLString, decription:'类型'},
+  shop: {type: GraphQLString, decription:'店铺'},
   count: {type: GraphQLInt, decription:'数量'},
   left_count: {type: GraphQLInt},
   right_count: {type: GraphQLInt},
+  pics:{type:new GraphQLList(GraphQLString)},
 }
 
 // 样品鞋数据

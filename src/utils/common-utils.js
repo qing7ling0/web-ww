@@ -190,3 +190,12 @@ export const getPower= function(user, powerId) {
 
   return {};
 }
+
+export const getValueByList= function(list, id) {
+  if (!list) return null;
+  for(let i=0; i<list.length; i++) {
+    if (list.value === id) return list[i];
+  }
+
+  return null;
+}

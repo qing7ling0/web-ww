@@ -43,6 +43,11 @@ const LOADING_ACTIONS = [
   ActionTypes.SUB_ORDER_TRY_FEEDBACK_LIST,
   ActionTypes.SUB_ORDER_TRY_FEEDBACK_ADD,
   ActionTypes.SUB_ORDER_TRY_FEEDBACK_UPDATE,
+
+  ActionTypes.SAMPLE_ALLOT_LIST_GET,
+  ActionTypes.SAMPLE_ALLOT_DELETE,
+  ActionTypes.SAMPLE_ALLOT_UPDATE,
+  ActionTypes.SAMPLE_ALLOT_PROFILE_GET,
 ];
 
 const initialState = {

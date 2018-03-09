@@ -268,10 +268,20 @@ module.exports.E_REPORT_TYPES = {
 }
 
 // 样品调拨状态
-module.exports.E_SAMPLE_ALLOT_STATUS = {
+const E_SAMPLE_ALLOT_STATUS = {
   REVIEW: 1, // 审核中
   REVIEW_FINISH:200, // 已审核等待发货
   TRANSPORT:300, // 发货中
   INBOUND:400, // 已入库
   COMPLETED: 500 // 已完成
 }
+module.exports.E_SAMPLE_ALLOT_STATUS = E_SAMPLE_ALLOT_STATUS;
+
+// 样品调拨状态
+module.exports.SAMPLE_ALLOT_STATUS_DATAS = [
+  {value:E_SAMPLE_ALLOT_STATUS.REVIEW, label:'等待审核'}, // 审核中
+  {value:E_SAMPLE_ALLOT_STATUS.REVIEW_FINISH, label:'等待发货'}, // 已审核等待发货
+  {value:E_SAMPLE_ALLOT_STATUS.TRANSPORT, label:'已发货'}, // 发货中
+  {value:E_SAMPLE_ALLOT_STATUS.INBOUND, label:'已入库'}, // 已入库
+  {value:E_SAMPLE_ALLOT_STATUS.COMPLETED, label:'完成'}, // 已完成
+]

@@ -174,6 +174,8 @@ class OrderShoesProfile extends Component {
         case constants.BASE_CONSTANTS.E_ORDER_STATUS.DELIVERY:
         case constants.BASE_CONSTANTS.E_ORDER_STATUS.TRANSPORT:
         case constants.BASE_CONSTANTS.E_ORDER_STATUS.SURE:
+        case constants.BASE_CONSTANTS.E_ORDER_STATUS.INBOUND:
+        case constants.BASE_CONSTANTS.E_ORDER_STATUS.OUTBOUND:
           this.setState({currentStep:3});
         break;
         case constants.BASE_CONSTANTS.E_ORDER_STATUS.COMPLETED:

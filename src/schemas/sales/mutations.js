@@ -146,7 +146,8 @@ const sampleAllotApply = {
     if (params.doc && ctx.session && ctx.session.user) {
       params.doc = utils.createEditorDoc(ctx.session.user, params.doc);
     }
-    // return await salesData.cancelSuborder(params.id);
+    
+    return await salesData.sampleAllotApply(params.doc);
   }
 }
 

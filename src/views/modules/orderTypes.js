@@ -17,11 +17,18 @@ const rechargeType = `r_amount`
 const ornamentType = `o_name`
 
 export const subOrderType = `{_id, NID, name, price, count, type, sub_order_id, state, file, transport_company, transport_id, transport_price, remark, pics{file, desc}, transport_name, transport_phone, transport_address, transport_zipcode,
-  shop{_id,name}, guide{_id,name}, customer${graphqlTypes.customerType}, urgent{_id,day,price},
+  shop{_id,name}, guide{_id,name}, customer${graphqlTypes.customerType}, urgent{_id,day,price}, create_time, editor_time,
   ${shoesType}, ${beltType}, ${watchStrapType}, ${maintainType}, ${rechargeType}, ${ornamentType}}`
 export const orderType = `{_id, source, pay, pay_type, store_card_selected, cash_ticket_NID, shop{_id,name}, guide{_id,name},customer{_id,name,vip_level}, system_price, real_pay_price, discount_price, create_time}`
 export const orderDetailType = `{
   _id, source, pay, pay_type, sub_orders${subOrderType}
 }`
 export const suborderTryFeedback = `{_id, message, suborder_id, transport_id, status, editor_name, editor_time, create_time}`
-export const sampleGoodsType=`{_id, type, NID, shop{_id,name}, s_right, s_foot_size, s_length, s_fuWei, s_zhiWei, b_A, b_B, b_C, b_D, ws_A, ws_B, ws_C, ws_D, ws_E, ws_F, ws_G, o_name}`
+export const sampleGoodsType=`{_id, type, NID, pics shop{_id,name}, left_count, right_count, s_right, s_foot_size, s_length, s_fuWei, s_zhiWei, b_A, b_B, b_C, b_D, ws_A, ws_B, ws_C, ws_D, ws_E, ws_F, ws_G, o_name}`
+
+const sampleAllotBaseType = `{_id, name, phone}`
+export const sampleAllotType=`{
+  _id, sample${sampleGoodsType}, left_count, right_count, status, 
+  apply_shop${sampleAllotBaseType}, apply_user${sampleAllotBaseType}, goods_user${sampleAllotBaseType}, accept_shop${sampleAllotBaseType}, accept_shop_guide${sampleAllotBaseType},
+  transport_company, transport_id, transport_phone
+}`

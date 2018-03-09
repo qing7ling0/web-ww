@@ -47,6 +47,12 @@ const getSampleGoodsBaseColumns = function(target) {
       return '';
     }},
     { title: '店铺', dataIndex: 'shop', key: 'shop', render:(item) => item.name},
+    { title: '数量', dataIndex: '_id', key: '_id', render:(item, record)=>{
+      if (record.left_count && record.right_count) return '一双';
+      if (record.left_count && !record.right_count) return '左脚';
+      if (!record.left_count && record.right_count) return '右脚';
+      return '无';
+    }},
   ]
 }
 

@@ -47,35 +47,36 @@ class SampleAllotListContainer extends Component {
     }
 
     this.searchWord = '';
-    this.sampleGoodsType = GOODS_TYPES[0];
+    this.typeInfo = GOODS_TYPES[0];
   }
 
   componentWillMount(){
     for(let value of GOODS_TYPES) {
       if (value.key === this.props.match.params.type) {
-        this.sampleGoodsType = value;
+        this.typeInfo = value;
       }
     }
-    this.props.reqGetGoodsBaseDatas();
+    // this.props.reqGetGoodsBaseDatas();
   }
   
   componentWillReceiveProps(nextProps){
     if(nextProps.match.params.type !== this.props.match.params.type) {
       for(let value of GOODS_TYPES) {
         if (value.key === nextProps.match.params.type) {
-          this.sampleGoodsType = value;
+          this.typeInfo = value;
         }
       }
-      this.onReqList();
+      // this.onReqList();
     }
   }
 
   render() {
-    this.options = this.sampleGoodsType.listOptions(this);
+    this.options = this.typeInfo.listOptions(this);
 
     return (
       <BaseListComponent
-        canOperate={this.canOperate()}
+        canOperate={false}
+        canDelete={this.canDelete()}
         columns={this.options} 
         dataSource={this.currentList()} 
         loading={this.props.loading}
@@ -85,8 +86,8 @@ class SampleAllotListContainer extends Component {
         onGetList={(pageInfo)=>{
           this.onReqList(pageInfo);
         }}
-        hasSearch={true}
-        searchPlaceholder={`请输入${this.sampleGoodsType.label}名称`}
+        hasSearch={false}
+        searchPlaceholder={`请输入${this.typeInfo.label}名称`}
         onSearch={(value)=>{
           this.searchWord = value;
           this.onReqList(this.props.pageInfo);
@@ -96,15 +97,14 @@ class SampleAllotListContainer extends Component {
         deleteIDS={this.props.deleteIDS}
         addVisible={this.state.addVisible}
         editVisible={this.state.editVisible}
-        
       />
     );
   }
   currentList = () => {
-    let listKey = this.sampleGoodsType.listTag;
-    let index = this.sampleGoodsType.listTag.indexOf(':');
+    let listKey = this.typeInfo.listTag;
+    let index = this.typeInfo.listTag.indexOf(':');
     if (index > -1) {
-      listKey = this.sampleGoodsType.listTag.substring(0, index);
+      listKey = this.typeInfo.listTag.substring(0, index);
     }
     for(let key in this.props.sales) {
       if (listKey === key) {
@@ -116,31 +116,27 @@ class SampleAllotListContainer extends Component {
 
   onReqList = (pageInfo) => {
     let con = {
-      type:this.sampleGoodsType.key
+      // type:this.typeInfo.key
     };
-    if (this.searchWord) {
-      con = {};
-      con.name = {$regex:`/${this.searchWord}/i`}
-    }
-    this.props.reqGetSampleAllotList(this.sampleGoodsType.listTag, con, pageInfo);
+    this.props.reqGetSampleAllotList(con, pageInfo);
   }
   onReqUpdate = (id, data) => {
     if (data) {
-      data.type = this.sampleGoodsType.key;
+      data.type = this.typeInfo.key;
     }
-    this.props.reqUpdateSampleAllot(this.sampleGoodsType.tag, id, data);
+    this.props.reqUpdateSampleAllot(this.typeInfo.tag, id, data);
   }
   onReqAdd = (data) => {
     if (data) {
-      data.type = this.sampleGoodsType.key;
+      data.type = this.typeInfo.key;
     }
-    this.props.reqAddSampleAllot(this.sampleGoodsType.tag, data);
+    this.props.reqAddSampleAllot(this.typeInfo.tag, data);
   }
   onReqRemove = (ids) => {
-    this.props.reqDeleteSampleAllot(this.sampleGoodsType.tag, ids);
+    this.props.reqDeleteSampleAllot(this.typeInfo.tag, ids);
   }
   onReqProfile = (id) => {
-    this.props.reqGetSampleAllotProfile(this.sampleGoodsType.tag, id);
+    this.props.reqGetSampleAllotProfile(this.typeInfo.tag, id);
   }
 
   onAdd = (values) => {
@@ -180,23 +176,25 @@ class SampleAllotListContainer extends Component {
     this.power = commonUtils.getPower(this.props.user, constants.MENU_IDS.salesSampleAllot)
     return this.power && this.power.canOperate;
   }
+  canDelete = () => {
+    this.power = commonUtils.getPower(this.props.user, constants.MENU_IDS.salesSampleAllot)
+    return this.power && this.power.del;
+  }
 }
 
 export default connect(
   state => ({
     sales:state.sales,
     loading:state.sales.loading,
-    pageInfo:state.sales.sampleGoodsListPage,
-    deleteIDS:state.sales.sampleGoodsDeleteIDS,
+    pageInfo:state.sales.sampleAllotListPage,
+    deleteIDS:state.sales.sampleAllotRemove,
     user:state.app.loginInfo.user
   }),
   (dispatch) => {
     return bindActionCreators({
       reqGetSampleAllotList: Actions.getSampleAllotList,
-      reqAddSampleAllot: Actions.addSampleAllot,
       reqDeleteSampleAllot: Actions.deleteSampleAllot,
       reqUpdateSampleAllot: Actions.updateSampleAllot,
-      reqGetSampleAllotProfile: Actions.getSampleAllotProfile,
       reqGetGoodsBaseDatas: Actions.getGoodsBaseDatas
     }, dispatch);
   }

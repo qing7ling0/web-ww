@@ -103,7 +103,7 @@ export const customType = `{_id, name, NID, price, editor_name, editor_time}`
 export const urgentType = `{_id, NID, day, price, editor_name, editor_time}`
 export const xuanHaoType = `{_id, NID, name, editor_name, editor_time}`
 export const guiGeType = `{_id, NID, name, editor_name, editor_time}`
-export const genGaoType = `{_id, NID, name, editor_name, editor_time,}`
+export const genGaoType = `{_id, NID, name, editor_name, editor_time}`
 export const watchStrapStyleType = `{_id, NID, name, editor_name, editor_time}`
 export const shoesTieBianType = `{_id, NID, name, editor_name, editor_time}`
 export const footType = `{_id, type, size, length, zhiWei, fuWei}`
@@ -114,7 +114,6 @@ const goodsBeltType = `b_material{_id,name}, b_color{_id,name}`
 const goodsWatchStrapType = `ws_material{_id,name}, ws_style{_id,name}`
 const goodsOrnamentType = ``
 export const goodsType=`{${goodsBaseType}, ${goodsShoesType}, ${goodsBeltType}, ${goodsWatchStrapType}, ${goodsOrnamentType}}`
-
 
 
 export const orderBaseFields = `
@@ -162,22 +161,18 @@ export const orderWatchStrapType = `{
   shop {_id, name},
 }
 `
-
 export const orderTypes ={
   orderShoes:orderShoseType,
   orderBelt:orderBeltType,
   orderWatchStrap:orderWatchStrapType
 }
 
-export const customerReportType = `{customer ${customerType}, lastCostTime, costCount, costAmount}`
+export const customerReportType = `{customer {_id,name,phone,sex,birthday}, lastCostTime, costCount, costAmount}`
 export const customerReportBaseType = `{totalCount, monthCount, yearCount, notBuyCount}`
 export const customerShopReportType = `{guide ${userType}, shop${shopType}, totalCount, monthCount, yearCount, notBuyCount}`
 
-export const pageListType = (itemType) =>{ 
-  return`
-    {page {page,pageSize,total}
-    list ${itemType}}
-  `
+export const pageListType = (itemType) =>{
+  return`{page {page,pageSize,total} list ${itemType}}`
 }
 
 export const resultType = `

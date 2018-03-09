@@ -7,6 +7,7 @@ import CommonContainer from './common/index'
 import MaintainContainer from './maintain/index'
 import OrderContainer from './order/index'
 import SampleGoodsContainer from './sample/index'
+import SampleAllotContainer from './sample-allot/index'
 
 import * as config from '../../constants/Config'
 import * as constants from '../../constants/Constants'
@@ -42,6 +43,12 @@ export default [
     path={common.findRouterById(config.Routers, constants.MENU_IDS.salesSampleGoods).url} 
     strict={true}
     component={SampleGoodsContainer}
+  />),
+  (<Route 
+    key={constants.MENU_IDS.salesSampleAllot} 
+    path={common.findRouterById(config.Routers, constants.MENU_IDS.salesSampleAllot).url} 
+    strict={true}
+    component={SampleAllotContainer}
   />),
   (<Redirect 
     key={constants.MENU_IDS.sales} 

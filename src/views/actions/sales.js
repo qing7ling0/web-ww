@@ -133,3 +133,17 @@ export const deleteMaintain = createAction(types.MAINTAIN_DELETE, (ids) => {
 export const updateMaintain = createAction(types.MAINTAIN_UPDATE, (id, data) => {
   return netHandler.updateDefault('maintainPrice', id, data);
 })
+
+// 调拨记录
+export const getSampleAllotList = createAction(types.SAMPLE_ALLOT_LIST_GET, (conditions, page={page:-1,pageSize:0}) => {
+  return netHandler.getDefaultList('sampleAllotList', orderTypes.sampleAllotType, conditions, page.page, page.pageSize);
+})
+export const deleteSampleAllot = createAction(types.SAMPLE_ALLOT_DELETE, (ids) => {
+  return netHandler.deleteDefault('sampleAllot', ids);
+})
+export const updateSampleAllot = createAction(types.SAMPLE_ALLOT_UPDATE, (id, data) => {
+  return netHandler.updateDefault('sampleAllot', id, data);
+})
+export const getSampleAllotProfile = createAction(types.SAMPLE_ALLOT_PROFILE_GET, (id) => {
+  return netHandler.getDefaultProfile('sampleAllotProfile', id);
+})

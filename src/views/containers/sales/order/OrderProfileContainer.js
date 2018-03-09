@@ -18,7 +18,8 @@ import {
   Modal,
   Row,
   Col,
-  Spin 
+  Spin,
+  Popconfirm
 } from 'antd'
 
 const FormItem = Form.Item;
@@ -139,9 +140,23 @@ class OrderProfileContainer extends Component {
           bordered={false} 
           
           extra={
-            <ProfileBtnBack><Button type="primary" shape="circle" icon="rollback" onClick={()=>{
-              this.props.history.goBack();
-            }} /></ProfileBtnBack>
+            <ProfileBtnBack>
+              {
+                this.canOperate() && this.props.profile && this.props.profile.state !== constants.BASE_CONSTANTS.E_ORDER_STATUS.COMPLETED ?
+                <Popconfirm title="确定要取消订单吗，确定后无法返回?" onConfirm={()=>{
+                  this.props.reqSuborderCancel(this.props.profile._id);
+                  this.props.history.goBack();
+                }} okText="确定" cancelText="取消">
+                  <Button style={{margin:'0 0.15rem'}} type="primary">取消</Button>
+                </Popconfirm>
+                :
+                null
+              }
+              <span> </span>
+              <Button type="primary" shape="circle" icon="rollback" onClick={()=>{
+                this.props.history.goBack();
+              }} />
+            </ProfileBtnBack>
           }>
             <div>
               {
@@ -191,7 +206,8 @@ export default connect(
   (dispatch) => {
     return bindActionCreators({
       reqSuborderProfile: Actions.suborderProfile,
-      reqGetCustomerProfile:Actions.getCustomer
+      reqGetCustomerProfile:Actions.getCustomer,
+      reqSuborderCancel:Actions.suborderCancel,
     }, dispatch);
   }
 )(OrderProfileContainer);

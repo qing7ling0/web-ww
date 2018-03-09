@@ -699,12 +699,12 @@ class SalesData {
         suborder.type === constants.E_ORDER_TYPE.ORNAMENT 
       ) {
         if (suborder.type === constants.E_ORDER_TYPE.SHOES) {
+          let goods = await goodsModel.findOne({NID:suborder.NID});
+          let pics = goods&&goods.pics || [];
           let list = this.createSample(suborder);
           for(let item of list) {
+            item.pics = pics;
             let sample = new sampleGoodsModel(item);
-            sample.left_count = 1;
-            sample.right_count = 1;
-            sample.shop = suborder.shop;
             let newSample = await sample.save();
             // TODO 这里出错需要还原
           }
@@ -733,25 +733,16 @@ class SalesData {
       ret.type = suborder.type;
       return ret;
     }
-    if (suborder.type === constants.E_ORDER_TYPE.SHOES) {
-      for(let i=0; i<2; i++) {
-        let shoes = createBase(suborder);
-        shoes.s_foot_size = suborder.s_foot_size;
-        shoes.s_right = i===0;
-        if (i===0) {
-          shoes.s_right = true;
-          shoes.s_length = suborder.s_right_length;
-          shoes.s_zhiWei = suborder.s_right_zhiWei;
-          shoes.s_fuWei = suborder.s_right_fuWei;
-        } else {
-          shoes.s_right = false;
-          shoes.s_length = suborder.s_left_length;
-          shoes.s_zhiWei = suborder.s_left_zhiWei;
-          shoes.s_fuWei = suborder.s_left_fuWei;
-        }
 
-        list.push(shoes);
-      }
+    if (suborder.type === constants.E_ORDER_TYPE.SHOES) {
+      let shoes = createBase(suborder);
+      shoes.s_foot_size = suborder.s_foot_size;
+      shoes.s_length = suborder.s_right_length;
+      shoes.s_zhiWei = suborder.s_right_zhiWei;
+      shoes.s_fuWei = suborder.s_right_fuWei;
+      shoes.left_count = 1;
+      shoes.right_count = 1;
+      list.push(shoes);
     } else if (suborder.type === constants.E_ORDER_TYPE.BELT){
       let belt = createBase(suborder);
       belt.b_A = suborder.b_A;

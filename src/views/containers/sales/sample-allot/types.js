@@ -39,57 +39,46 @@ const listToSelectOptions = (list, valueFormat, labelFormat) => {
 
 // 基础
 const getSampleAllotColumns = function(target) {
+  // sample: {type:sampleGoodsType},
+  // left_count: {type: GraphQLInt, decription:'左脚数量'},
+  // right_count: {type: GraphQLInt, decription:'右脚数量'},
+  // status: {type: GraphQLInt, decription:'状态'},
+  // apply_shop: {type:sampleAllotBaseType, decription:'申请的店铺'},
+  // apply_user: {type:sampleAllotBaseType, decription:'申请人'},
+  // goods_user: {type:sampleAllotBaseType, decription:'商品部跟进人'},
+  // accept_shop: {type:sampleAllotBaseType, decription:'申请的店铺'},
+  // accept_shop_guide: {type:sampleAllotBaseType, decription:'店铺负责人'},
+  // transport_company: {type:GraphQLString, decription:'快递公司'},
+  // transport_id: {type:GraphQLString, decription:'快递单号'},
+  // transport_phone: {type:GraphQLString, decription:'联系电话'},
+  // ...commonFields.defaultCreateFields,
   return [
-    { title: '编号', dataIndex: 'NID', key: 'NID'},
-    { title: '分类', dataIndex: 'type', key: 'type', render:(item) => {
-      let type = commonUtils.getOrderType(item);
-      if (type) return type.label;
-      return '';
+    { title: '编号', dataIndex: 'NID', key: 'NID', render:item=>item.sample&&item.sample.NID || ""},
+    { title: '状态', dataIndex: 'status', key: 'status', render:(item) => {
+      let type = commonUtils.getValueByList(constants.BASE_CONSTANTS.SAMPLE_ALLOT_STATUS_DATAS, item);
+      return type&&type.label||'';
     }},
-    { title: '店铺', dataIndex: 'shop', key: 'shop', render:(item) => item.name},
+    { title: '申请的店铺', dataIndex: 'apply_shop', key: 'apply_shop', render:(item) => item&&item.name||''},
+    { title: '申请人', dataIndex: 'apply_user', key: 'apply_user', render:(item) => item&&item.name||''},
+    { title: '样品店铺', dataIndex: 'accept_shop', key: 'accept_shop', render:(item) => item&&item.name||''},
+    { title: '快递公司', dataIndex: 'transport_company', key: 'transport_company'},
+    { title: '快递单号', dataIndex: 'transport_id', key: 'transport_id'},
+    { title: '联系电话', dataIndex: 'transport_phone', key: 'transport_phone'},
+    { title: '数量', dataIndex: '_id', key: '_id', render:(item, record)=>{
+      if (record.left_count && record.right_count) return '一双';
+      if (record.left_count && !record.right_count) return '左脚';
+      if (!record.left_count && record.right_count) return '右脚';
+      return '无';
+    }},
   ]
 }
 
-const getSampleAllotProfileOptions = function(target) {
-  return {
-    base: {
-      title:'基础信息',
-      options:getSampleAllotColumns(target)
-    },
-    size: {
-      title:'测量信息',
-      options: [
-        {title: '左右脚', dataIndex: 's_right', key: 's_right', render:(item) => item?"右脚":"左脚"},
-        {title: '尺寸', dataIndex: 's_foot_size', key: 's_foot_size'},
-        {title: '长度', dataIndex: 's_length', key: 's_length'},
-        {title: '趾围', dataIndex: 's_zhiWei', key: 's_zhiWei'},
-        {title: '附维', dataIndex: 's_fuWei', key: 's_fuWei'},
-      ]
-    },
-    goods: {
-      title:'详细信息',
-      options: [
-        { title: '名称', dataIndex: 'name', key: 'name'},
-        { title: '性别', dataIndex: 'sex', key: 'sex'},
-        { title: '楦号', dataIndex: 's_xuan_hao', key: 's_xuan_hao', render:(item) => item&&item.name||''},
-        { title: '规格', dataIndex: 's_gui_ge', key: 's_gui_ge', render:(item) => item&&item.name||''},
-        { title: '跟高', dataIndex: 's_gen_gao', key: 's_gen_gao', render:(item) => item&&item.name||''},
-        { title: '材质', dataIndex: 's_material', key: 's_material', render:(item) => item&&item.name||''},
-        { title: '鞋面颜色', dataIndex: 's_out_color', key: 's_out_color', render:(item) => item&&item.name||''},
-        { title: '里皮颜色', dataIndex: 's_in_color', key: 's_in_color', render:(item) => item&&item.name||''},
-        { title: '鞋底颜色', dataIndex: 's_bottom_color', key: 's_bottom_color', render:(item) => item&&item.name||''},
-        { title: '底边颜色', dataIndex: 's_bottom_side_color', key: 's_bottom_side_color', render:(item) => item&&item.name||''},
-      ]
-    }
-  }
-}
 
 export const GOODS_TYPES = [
   {
     key:BASE_CONSTANTS.GOODS_SHOES,
     listTag:'sampleAllotList', tag:'sampleAllotList', label:'鞋', 
     graphqlType:graphqlTypes.sampleAllotType,
-    listOptions:getSampleAllotColumns,
-    profileOptions:getSampleAllotProfileOptions,
+    listOptions:getSampleAllotColumns
   },
 ]
