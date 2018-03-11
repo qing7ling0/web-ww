@@ -138,7 +138,7 @@ const suborderCancel = {
 
 // 调拨申请
 const sampleAllotApply = {
-  type: commonFields.operateResultType,
+  type: types.sampleAllotType,
   args: {
     doc: {type: types.sampleAllotInputType},
   },

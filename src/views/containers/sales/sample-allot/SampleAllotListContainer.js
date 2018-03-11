@@ -9,15 +9,17 @@ import {
   Layout,
   message,
   Table,
-  Button
+  Button,
+  Menu,
+  Select
 } from 'antd'
 
 import {
   Root,
-  LoginInput,
-  Container,
-  LoginCard,
-  BtnLogin
+  SearchContainer,
+  SelectInput,
+  SearchInput,
+  ButtonOp,
 } from './styled'
 
 import Actions from '../../../actions'
@@ -34,6 +36,13 @@ const ADD_URL = ROOT_URL + '/add';
 const URL_PROFILE = ROOT_URL + '/profile';
 const URL_REG = new RegExp(ROOT_URL + '/list/' +'\\d/') ;
 
+const ORDER_MENUS = [
+  {key:'1', label:'待审核'},
+  {key:'2', label:'调拨中'},
+  {key:'3', label:'已完成'},
+  {key:'4', label:'已取消'}
+]
+
 class SampleAllotListContainer extends Component {
   // 构造函数，在创建组件的时候调用一次
   constructor(props) {
@@ -43,11 +52,15 @@ class SampleAllotListContainer extends Component {
       addVisible:false,
       editVisible:false,
       page: 0,
-      selectRows:[]
+      selectRows:[],
+      selectedKeys: [ORDER_MENUS[0].key],
+      searchShop:''
     }
 
     this.searchWord = '';
     this.typeInfo = GOODS_TYPES[0];
+    this.orderMenuKey = ORDER_MENUS[0].key;
+    this.routerPath = common.findRouterById(config.Routers, constants.MENU_IDS.salesSampleAllot).url;
   }
 
   componentWillMount(){
@@ -56,7 +69,16 @@ class SampleAllotListContainer extends Component {
         this.typeInfo = value;
       }
     }
+    const { location } = this.props.history;
+    if (location.pathname.match(URL_REG)) {
+      const pathSnippets = location.pathname.replace(URL_REG, '').split('/').filter(i => i);
+      let len = pathSnippets.length;
+      if(len > 0) {
+        this.state.selectedKeys = [pathSnippets[0]];
+      }
+    }
     // this.props.reqGetGoodsBaseDatas();
+    this.props.reqShopList(1, 100);
   }
   
   componentWillReceiveProps(nextProps){
@@ -70,13 +92,41 @@ class SampleAllotListContainer extends Component {
     }
   }
 
+  renderHeader = () => {
+    return(
+      <div>
+        <Menu
+          onClick={this.onMenuClicked}
+          mode="horizontal"
+          defaultSelectedKeys={this.state.selectedKeys}
+        >
+          {ORDER_MENUS.map((item) => {
+            return (
+              <Menu.Item key={item.key}>{item.label}</Menu.Item>
+            );
+          })}
+        </Menu>
+        <SearchContainer>
+          <SelectInput placeholder={'请选择申请的店铺'} allowClear={true} onChange={this.onShopChange}>
+            {
+              this.props.shopList.map((item) => {
+                return <Select.Option key={item._id}>{item.name}</Select.Option>;
+              })
+            }
+          </SelectInput>
+        </SearchContainer>
+      </div>
+    );
+  }
+
   render() {
     this.options = this.typeInfo.listOptions(this);
 
     return (
       <BaseListComponent
+        headerRender={this.renderHeader}
         canOperate={false}
-        canDelete={this.canDelete()}
+        canDelete={false}
         columns={this.options} 
         dataSource={this.currentList()} 
         loading={this.props.loading}
@@ -116,8 +166,19 @@ class SampleAllotListContainer extends Component {
 
   onReqList = (pageInfo) => {
     let con = {
-      // type:this.typeInfo.key
     };
+    if (this.searchShop) {
+      con.apply_shop = this.searchShop;
+    }
+    if (this.orderMenuKey === '1') {
+      con.status = constants.BASE_CONSTANTS.E_SAMPLE_ALLOT_STATUS.REVIEW;
+    } else if (this.orderMenuKey === '2') {
+      con.status = {$gt:constants.BASE_CONSTANTS.E_SAMPLE_ALLOT_STATUS.REVIEW, $lt:constants.BASE_CONSTANTS.E_SAMPLE_ALLOT_STATUS.COMPLETED};
+    } else if (this.orderMenuKey === '3') {
+      con.status = constants.BASE_CONSTANTS.E_SAMPLE_ALLOT_STATUS.COMPLETED;
+    } else if (this.orderMenuKey === '4') {
+      con.status = constants.BASE_CONSTANTS.E_SAMPLE_ALLOT_STATUS.CANCEL;
+    }
     this.props.reqGetSampleAllotList(con, pageInfo);
   }
   onReqUpdate = (id, data) => {
@@ -172,6 +233,15 @@ class SampleAllotListContainer extends Component {
     if (!this.canOperate()) return;
     this.setState({editVisible:true, editData:record});
   }
+  onMenuClicked = ({item, key}) => {
+    this.setState({orderMenuKey:key})
+    this.orderMenuKey = key;
+    this.onReqList();
+  }
+  onShopChange = (value) => {
+    this.searchShop = value;
+    this.onReqList();
+  }
   canOperate = () => {
     this.power = commonUtils.getPower(this.props.user, constants.MENU_IDS.salesSampleAllot)
     return this.power && this.power.canOperate;
@@ -188,6 +258,7 @@ export default connect(
     loading:state.sales.loading,
     pageInfo:state.sales.sampleAllotListPage,
     deleteIDS:state.sales.sampleAllotRemove,
+    shopList:state.shop.shopList,
     user:state.app.loginInfo.user
   }),
   (dispatch) => {
@@ -195,6 +266,7 @@ export default connect(
       reqGetSampleAllotList: Actions.getSampleAllotList,
       reqDeleteSampleAllot: Actions.deleteSampleAllot,
       reqUpdateSampleAllot: Actions.updateSampleAllot,
+      reqShopList:Actions.getShopList,
       reqGetGoodsBaseDatas: Actions.getGoodsBaseDatas
     }, dispatch);
   }

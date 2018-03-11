@@ -78,7 +78,7 @@ class SampleGoodsProfileContainer extends Component {
     if (col.dataIndex in profile) {
       let value = profile[col.dataIndex];
       if (col.render) {
-        value = col.render(value);
+        value = col.render(value, profile);
       }
       return (
         <ProfileCol xs={24} sm={12} lg={8} key={index}>

@@ -13,6 +13,7 @@ import {
  import commonFields from '../common/common-fields'
  import constants from '../../constants/constants'
  import * as shopTypes from '../shop/types'
+import { commonInputType } from '../common/types';
 
  export const userFields = {
   _id: {type:GraphQLString},
@@ -73,6 +74,7 @@ const userShopGuideFields = {
 }
 
 const userOperateFields = {
+  department: {type:GraphQLString}
 }
 
 const userProductionFields = {
@@ -152,11 +154,14 @@ export const IDType = new GraphQLObjectType({
 export const userInputType = new GraphQLInputObjectType({
   name: 'userInput',
   fields: {
-    account: { type:GraphQLString },
-    password: { type:GraphQLString },
-    name: { type:GraphQLString },
-    phone: { type:GraphQLString },
-    user_type: { type:GraphQLString }
+    _id:{type:GraphQLString},
+    ...userCommonInputFields,
+    user_type:{type:GraphQLInt},
+    ...userShopGuideFields,
+    shop: { type:GraphQLString }, // 店铺
+    ...userOperateFields,
+    ...userAdminFields,
+    ...userProductionFields
   }
 });
 

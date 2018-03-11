@@ -124,7 +124,6 @@ module.exports.sampleGoodsModel = mongoose.model('sample_goods',
 
 // 样品调拨记录
 const sampleAllotFields = {
-  _id: {type:String, decription:'ID'},
   sample: {type:Schema.Types.ObjectId, ref:'sample_goods', decription:'样品'},
   left_count: {type: Number, decription:'左脚数量'},
   right_count: {type: Number, decription:'右脚数量'},

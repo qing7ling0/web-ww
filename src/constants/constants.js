@@ -57,6 +57,18 @@ module.exports.USER_TYPES = {
   admin:4, // 管理员
 }
 
+/**
+ * 部门
+ */
+module.exports.E_DEPARTMENT_TYPES = {
+  shop:'1', // 商品
+  normal:'2', // 各级管理人员
+}
+module.exports.DEPARTMENT_TYPES_DATAS = [
+  {id:1, value:module.exports.E_DEPARTMENT_TYPES.shop, label:'商品部'},
+  {id:2, value:module.exports.E_DEPARTMENT_TYPES.normal, label:'普通管理'},
+]
+
 // 每个子订单可以上传的图片最大数量
 module.exports.ORDER_UPLOAD_PIC_MAX_COUNT = 10;
 
@@ -273,7 +285,8 @@ const E_SAMPLE_ALLOT_STATUS = {
   REVIEW_FINISH:200, // 已审核等待发货
   TRANSPORT:300, // 发货中
   INBOUND:400, // 已入库
-  COMPLETED: 500 // 已完成
+  COMPLETED: 500, // 已完成
+  CANCEL: 1000, // 已取消
 }
 module.exports.E_SAMPLE_ALLOT_STATUS = E_SAMPLE_ALLOT_STATUS;
 
@@ -284,4 +297,5 @@ module.exports.SAMPLE_ALLOT_STATUS_DATAS = [
   {value:E_SAMPLE_ALLOT_STATUS.TRANSPORT, label:'已发货'}, // 发货中
   {value:E_SAMPLE_ALLOT_STATUS.INBOUND, label:'已入库'}, // 已入库
   {value:E_SAMPLE_ALLOT_STATUS.COMPLETED, label:'完成'}, // 已完成
+  {value:E_SAMPLE_ALLOT_STATUS.CANCEL, label:'取消'}, // 已完成
 ]

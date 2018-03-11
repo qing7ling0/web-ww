@@ -177,8 +177,10 @@ export const getPower= function(user, powerId) {
       powerType = user.manager ? constants.POWER_TYPES.SHOP_MANAGER : constants.POWER_TYPES.SHOP_GUIDE;
       return getPowerByType(powerId, powerType);
     case constants.USER_TYPES.operate:
-      powerType = constants.POWER_TYPES.MANAGER_NORMAL;
-      return getPowerByType(powerId, powerType);
+      if (user.department === constants.E_DEPARTMENT_TYPES.shop) {
+        return getPowerByType(powerId, constants.POWER_TYPES.MANAGER_SENIOR);
+      }
+      return getPowerByType(powerId, constants.POWER_TYPES.MANAGER_NORMAL);
     case constants.USER_TYPES.production:
       powerType = constants.POWER_TYPES.FACTORY_PRODUCTION;
       return getPowerByType(powerId, powerType);
@@ -194,7 +196,7 @@ export const getPower= function(user, powerId) {
 export const getValueByList= function(list, id) {
   if (!list) return null;
   for(let i=0; i<list.length; i++) {
-    if (list.value === id) return list[i];
+    if (list[i].value === id) return list[i];
   }
 
   return null;

@@ -64,7 +64,7 @@ export const updateUser = {
   type: types.userType,
   args: {
     user_type: {type:GraphQLInt},
-    fields: {type: types.adminInputType}
+    fields: {type: types.userInputType}
   },
   async resolve (root, params, options) {
     return await userData.updateUser(root, params.user_type, params.fields);

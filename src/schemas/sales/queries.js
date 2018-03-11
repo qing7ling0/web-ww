@@ -158,3 +158,13 @@ export const sampleAllotList = {
 	}
 }
 
+export const sampleAllotProfile = {
+	type: types.sampleAllotType,
+  args: {
+    id: {type:GraphQLString},
+  },
+	async resolve (root, params, options) {
+    return await salesData.getSampleAllotProfile(params.id);
+	}
+}
+

@@ -37,6 +37,7 @@ var operateSchema = new Schema({
   phone: String, // 电话
   user_type: {type:Number, default:constants.USER_TYPES.operate},
   power_type: {type:Number, default:constants.POWER_TYPES.MANAGER_NORMAL},
+  department: {type:String, default:constants.E_DEPARTMENT_TYPES.normal},
   ...baseFields,
 },{
   timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }

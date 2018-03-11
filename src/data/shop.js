@@ -121,6 +121,15 @@ class ShopData {
       throw new ApiError(ApiErrorNames.DELETE_FAIL);
     }
   }
+
+  // 获取店长
+  async getShopManager(shopId) {
+    if (shopId) {
+      return await userShopGuideModel.findOne({shop:shopId, manager:true});
+    } else {
+      return null;
+    }
+  }
 }
 
 module.exports = new ShopData()

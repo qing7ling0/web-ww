@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components'
 import moment from 'moment'
 
-import { Form, Input, InputNumber, Radio, Slider, Upload, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete, DatePicker } from 'antd';
+import { Form, Input, InputNumber, Switch, Radio, Slider, Upload, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete, DatePicker } from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
 const RadioButton = Radio.Button;

@@ -145,5 +145,5 @@ export const updateSampleAllot = createAction(types.SAMPLE_ALLOT_UPDATE, (id, da
   return netHandler.updateDefault('sampleAllot', id, data);
 })
 export const getSampleAllotProfile = createAction(types.SAMPLE_ALLOT_PROFILE_GET, (id) => {
-  return netHandler.getDefaultProfile('sampleAllotProfile', id);
+  return netHandler.getDefaultProfile('sampleAllotProfile', orderTypes.sampleAllotType, id);
 })

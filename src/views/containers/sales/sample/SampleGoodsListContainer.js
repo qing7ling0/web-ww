@@ -138,11 +138,12 @@ class SampleGoodsListContainer extends Component {
 
   onReqList = (pageInfo) => {
     let con = {
-      type:this.sampleGoodsType.key
+      type:this.sampleGoodsType.key,
+      $or:[{left_count:{$gt:0}}, {right_count:{$gt:0}}]
     };
     if (this.searchWord) {
       con = {};
-      con.NID = this.searchWord;
+      con.NID = {$regex:`/${this.searchWord}/i`};
     }
     this.props.reqGetSampleGoodsList(this.sampleGoodsType.listTag, con, pageInfo);
   }

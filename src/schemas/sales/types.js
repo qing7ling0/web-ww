@@ -277,7 +277,7 @@ export const sampleAllotType = new GraphQLObjectType({
     right_count: {type: GraphQLInt, decription:'右脚数量'},
     status: {type: GraphQLInt, decription:'状态'},
     apply_shop: {type:sampleAllotBaseType, decription:'申请的店铺'},
-    apply_user: {type:sampleAllotBaseType, decription:'申请人'},
+    apply_shop_guide: {type:sampleAllotBaseType, decription:'申请人'},
     goods_user: {type:sampleAllotBaseType, decription:'商品部跟进人'},
     accept_shop: {type:sampleAllotBaseType, decription:'申请的店铺'},
     accept_shop_guide: {type:sampleAllotBaseType, decription:'店铺负责人'},

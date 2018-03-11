@@ -58,6 +58,7 @@ class GuideEditModal extends Component {
       {type:'input', name:'account', label:'账号', itemOptions:{hasFeedback:true}, rule:{required:true, validator:this.checkAccount}},
       {type:'input', name:'password', label:'密码', itemOptions:{hasFeedback:true}, rule:{validator:this.checkPassword}},
       {type:'select', name:'shop_id', label:'门店', selectItems:this.props.shopList, options:{defaultActiveFirstOption:true}, rule:{required:true}},            
+      {type:'switch', name:'manager', label:'是否店长', decoratorOptions:{valuePropName:"checked"}, rule:{required:true}},            
       {type:'select', name:'sex', label:'性别', selectItems:constants.SEX_DATA, options:{defaultActiveFirstOption:true}, rule:{required:true}},
       {type:'datePicker', name:'birthday', label:'生日', rule:{required:true}},
       {type:'number', name:'height', label:'身高', options:{formatter:(value) => `${value}cm`, parser:value => value.replace('cm', '')}},

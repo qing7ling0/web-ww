@@ -32,20 +32,21 @@ const TYPES = [
     key:'admins', label:'管理员账号', type:constants.BASE_CONSTANTS.USER_TYPES.admin,
     options:(target)=>[
       {type:'input', name:'account', label:'账号', itemOptions:{hasFeedback:true}, rule:{required:true, validator:target.checkAccount}},
-      {type:'input', name:'password', label:'密码', itemOptions:{hasFeedback:true}, rule:{required:true, validator:target.checkPassword}},
+      {type:'input', name:'password', label:'密码', itemOptions:{hasFeedback:true}, rule:{required:!target.isEdit, validator:target.checkPassword}},
       {type:'input', name:'name', label:'姓名', itemOptions:{hasFeedback:true}, rule:{max:20}},
-      {type:'input', name:'phone', label:'电话', itemOptions:{hasFeedback:true}, rule:{required:true, validator:target.checkPhone}}
+      {type:'input', name:'phone', label:'电话', itemOptions:{hasFeedback:true}, rule:{required:true, validator:target.checkPhone}},
     ]
   },
-  // {
-  //   key:'operates', label:'运营账号', type:constants.BASE_CONSTANTS.USER_TYPES.operate,
-  //   options:(target)=>[
-  //     {type:'input', name:'account', label:'账号', itemOptions:{hasFeedback:true}, rule:{required:true, validator:target.checkAccount}},
-  //     {type:'input', name:'password', label:'密码', itemOptions:{hasFeedback:true}, rule:{required:true, validator:target.checkPassword}},
-  //     {type:'input', name:'name', label:'姓名', itemOptions:{hasFeedback:true}, rule:{required:true, max:20}},
-  //     {type:'input', name:'phone', label:'电话', itemOptions:{hasFeedback:true}, rule:{required:true, validator:target.checkPhone}}
-  //   ]
-  // },
+  {
+    key:'operates', label:'运营账号', type:constants.BASE_CONSTANTS.USER_TYPES.operate,
+    options:(target)=>[
+      {type:'input', name:'account', label:'账号', itemOptions:{hasFeedback:true}, rule:{required:true, validator:target.checkAccount}},
+      {type:'input', name:'password', label:'密码', itemOptions:{hasFeedback:true}, rule:{required:!target.isEdit, validator:target.checkPassword}},
+      {type:'input', name:'name', label:'姓名', itemOptions:{hasFeedback:true}, rule:{required:true, max:20}},
+      {type:'input', name:'phone', label:'电话', itemOptions:{hasFeedback:true}, rule:{required:true, validator:target.checkPhone}},
+      {type:'select', name:'department', label:'权限类型', selectItems:constants.BASE_CONSTANTS.DEPARTMENT_TYPES_DATAS, options:{defaultActiveFirstOption:true}, rule:{required:true}},
+    ]
+  },
 ]
 
 class AdminsContainer extends Component {

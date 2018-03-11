@@ -39,27 +39,14 @@ const listToSelectOptions = (list, valueFormat, labelFormat) => {
 
 // 基础
 const getSampleAllotColumns = function(target) {
-  // sample: {type:sampleGoodsType},
-  // left_count: {type: GraphQLInt, decription:'左脚数量'},
-  // right_count: {type: GraphQLInt, decription:'右脚数量'},
-  // status: {type: GraphQLInt, decription:'状态'},
-  // apply_shop: {type:sampleAllotBaseType, decription:'申请的店铺'},
-  // apply_user: {type:sampleAllotBaseType, decription:'申请人'},
-  // goods_user: {type:sampleAllotBaseType, decription:'商品部跟进人'},
-  // accept_shop: {type:sampleAllotBaseType, decription:'申请的店铺'},
-  // accept_shop_guide: {type:sampleAllotBaseType, decription:'店铺负责人'},
-  // transport_company: {type:GraphQLString, decription:'快递公司'},
-  // transport_id: {type:GraphQLString, decription:'快递单号'},
-  // transport_phone: {type:GraphQLString, decription:'联系电话'},
-  // ...commonFields.defaultCreateFields,
   return [
-    { title: '编号', dataIndex: 'NID', key: 'NID', render:item=>item.sample&&item.sample.NID || ""},
+    { title: '编号', dataIndex: 'sample', key: 'sample', render:item=>item&&item.NID || ""},
     { title: '状态', dataIndex: 'status', key: 'status', render:(item) => {
       let type = commonUtils.getValueByList(constants.BASE_CONSTANTS.SAMPLE_ALLOT_STATUS_DATAS, item);
       return type&&type.label||'';
     }},
     { title: '申请的店铺', dataIndex: 'apply_shop', key: 'apply_shop', render:(item) => item&&item.name||''},
-    { title: '申请人', dataIndex: 'apply_user', key: 'apply_user', render:(item) => item&&item.name||''},
+    { title: '申请人', dataIndex: 'apply_shop_guide', key: 'apply_shop_guide', render:(item) => item&&item.name||''},
     { title: '样品店铺', dataIndex: 'accept_shop', key: 'accept_shop', render:(item) => item&&item.name||''},
     { title: '快递公司', dataIndex: 'transport_company', key: 'transport_company'},
     { title: '快递单号', dataIndex: 'transport_id', key: 'transport_id'},

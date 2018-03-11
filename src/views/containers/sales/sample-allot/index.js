@@ -39,6 +39,7 @@ class SampleAllotContainer extends Component {
           <Switch>
             <Route exact path={match.path} component={SampleAllotListContainer} />
             <Route path={`${match.path}/list/:type`} component={SampleAllotListContainer} />
+            <Route path={`${match.path}/profile/:id`} component={SampleAllotProfileContianer} />
           </Switch>
         </ContentContainer>
       </Root>

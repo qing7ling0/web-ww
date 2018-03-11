@@ -47,9 +47,9 @@ const ORDER_MENUS = [
   {key:'5', label:'全部'}
 ]
 const ROOT_URL = common.findRouterById(config.Routers, constants.MENU_IDS.salesOrder).url;
+const URL_REG = new RegExp(ROOT_URL + '/list/' +'\\d/') ;
 const ADD_URL = ROOT_URL + '/add';
 const URL_PROFILE = ROOT_URL + '/profile';
-const URL_REG = new RegExp(ROOT_URL + '/list/' +'\\d/') ;
 
 class OrderListContainer extends Component {
   // 构造函数，在创建组件的时候调用一次
@@ -69,7 +69,7 @@ class OrderListContainer extends Component {
     this.searchWord = '';
     this.searchGuide = '';
     this.searchShop = '';
-    this.orderMenuKey = ORDER_MENUS[0].key,
+    this.orderMenuKey = ORDER_MENUS[0].key;
     this.routerPath = common.findRouterById(config.Routers, constants.MENU_IDS.salesOrder).url;
   }
 
@@ -89,9 +89,9 @@ class OrderListContainer extends Component {
         this.state.selectedKeys = [pathSnippets[0]];
       }
     }
-    this.props.reqCustomerList(0, 10000);
-    this.props.reqShopList(0, 100);
-    this.props.reqShopGuideList(0, 1000);
+    this.props.reqCustomerList(1, 10000);
+    this.props.reqShopList(1, 100);
+    this.props.reqShopGuideList(1, 1000);
   }
 
   componentDidMount() {

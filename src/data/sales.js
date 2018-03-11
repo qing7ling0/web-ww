@@ -30,6 +30,7 @@ import constants from '../constants/constants'
 import DB from '../db/DB'
 import commonData from './common-data'
 import fileData from './file'
+import shopData from './shop'
 
 import customerData from './customer'
 import { tryFeedbackModel } from '../models/sales';
@@ -1017,6 +1018,14 @@ class SalesData {
     return list;
   }
 
+  async getSampleAllotProfile(id) {
+    if (!id){
+      throw new ApiError(ApiErrorNames.GET_FAIL);
+    }
+    return await sampleAllotModel.findById(id).populate('sample').populate('accept_shop_guide').populate('accept_shop')
+    .populate('apply_shop').populate('apply_shop_guide').populate('goods_user');
+  }
+
   async sampleAllotApply(doc) {
     if (!doc.apply_shop || !doc.apply_shop_guide || !doc.sample) {
       throw new ApiError(ApiErrorNames.ADD_FAIL);
@@ -1035,9 +1044,27 @@ class SalesData {
       throw new ApiError(ApiErrorNames.ADD_FAIL, '申请的数量不足');
     }
     
+    let goodsUser = await userOperateModel.findOne({department:constants.E_DEPARTMENT_TYPES.shop});
+    if (goodsUser) {
+      doc.goods_user = goodsUser._id;
+    }
+
+    doc.accept_shop = sampleInfo.shop;
+    let shopManager = await shopData.getShopManager(doc.accept_shop);
+    if (shopManager) {
+      doc.accept_shop_guide = shopManager._id;
+    }
+
     doc.status = constants.E_SAMPLE_ALLOT_STATUS.REVIEW;
-    let _sampleAllotMode = new sampleAllotModel();
-    let data = await _sampleAllotMode.save(doc);
+    let _sampleAllotMode = new sampleAllotModel(doc);
+    if (_sampleAllotMode) {
+      let value = {
+        left_count:sampleInfo.left_count - doc.left_count,
+        right_count:sampleInfo.right_count - doc.right_count
+      }
+      await sampleGoodsModel.findByIdAndUpdate(sampleInfo._id, value);
+    }
+    let data = await _sampleAllotMode.save();
 
     return data;
   }
@@ -1046,8 +1073,60 @@ class SalesData {
     if (!id || !doc) {
       throw new ApiError(ApiErrorNames.UPDATE_FAIL);
     }
+
+    if (doc.status!== undefined && doc.status !== null) {
+      let allot = await sampleAllotModel.findById(id);
+      if (!allot) {
+        throw new ApiError(ApiErrorNames.UPDATE_FAIL);
+      }
+      if (doc.status === constants.E_SAMPLE_ALLOT_STATUS.COMPLETED) {
+        // 去完成
+        if (allot.status >= constants.E_SAMPLE_ALLOT_STATUS.COMPLETED) {
+          throw new ApiError(ApiErrorNames.UPDATE_FAIL, '操作失败, 当前调拨已入库或者已取消!');
+        }
+
+        let sampleGoods = await sampleGoodsModel.findById(allot.sample);
+        if (!sampleGoods) {
+          throw new ApiError(ApiErrorNames.UPDATE_FAIL, '当前样品不存在！');
+        }
+
+        let goods = {};
+        for(let key in sampleGoods._doc) {
+          if (key === '_id' || key === '__v' || key === 'create_time' || key === 'editor_time' || key === 'editor_id' || key === 'editor_name') {
+          } else {
+            goods[key] = sampleGoods[key];
+          }
+        }
+        goods.left_count = allot.left_count;
+        goods.right_count = allot.right_count;
+        goods.shop = allot.apply_shop;
+        console.log(JSON.stringify(goods))
+        let sampleModel = new sampleGoodsModel(goods);
+        let newSample = await sampleModel.save();
+        if (!newSample) {
+          throw new ApiError(ApiErrorNames.UPDATE_FAIL);
+        }
+      } else if (doc.status === constants.E_SAMPLE_ALLOT_STATUS.CANCEL) {
+        // 取消调拨
+        if (allot.status >= constants.E_SAMPLE_ALLOT_STATUS.E_SAMPLE_ALLOT_STATUS) {
+          throw new ApiError(ApiErrorNames.UPDATE_FAIL, '操作失败, 当前调拨已取消!');
+        }
+
+        let sampleGoods = await sampleGoodsModel.findById(allot.sample);
+        if (!sampleGoods) {
+          throw new ApiError(ApiErrorNames.UPDATE_FAIL, '当前样品不存在！');
+        }
+
+        let value = {
+          left_count:sampleGoods.left_count + allot.left_count,
+          right_count:sampleGoods.right_count + allot.right_count
+        }
+
+        await sampleGoodsModel.findByIdAndUpdate(sampleGoods._id, value);
+      }
+    }
     
-    let ret = await sampleAllotModel.findByIdAndUpdate(id, doc);
+    let ret = await sampleAllotModel.updateOne({_id:id}, doc);
 
     return ret;
   }

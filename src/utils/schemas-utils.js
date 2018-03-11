@@ -13,7 +13,7 @@ const commonUtils = require('./common-utils')
 const commonFields = require('../schemas/common/common-fields')
 const utils = require('./utils')
 
-export const createDefaultListQuery = (name, type, model, onQuery) => {
+export const createDefaultListQuery = (name, type, model, onQuery, formatList) => {
   return {
     type: new GraphQLObjectType({
       name: name,
@@ -37,12 +37,15 @@ export const createDefaultListQuery = (name, type, model, onQuery) => {
       } else {
         ret = await DB.getList(model, {conditions:params.conditions}, null, onQuery);
       }
+      if (formatList) {
+        ret = formatList(ret);
+      }
       return ret;
     }
   }
 }
 
-export const createDefaultProfileQuery = (type, model, onQuery) => {
+export const createDefaultProfileQuery = (type, model, onQuery, formatList) => {
   return {
     type: type,
     args: {
@@ -51,11 +54,17 @@ export const createDefaultProfileQuery = (type, model, onQuery) => {
     },
     async resolve (root, params, options) {
       let id = params.id || '';
+      let ret = null;
       if (id) {
-        return await DB.findById(model, id, onQuery);
+        ret = await DB.findById(model, id, onQuery);
+      } else {
+        let con = params.conditions && commonUtils.urlString2Conditions(params.conditions) || null;
+        ret = await DB.findOne(model, con, onQuery);
       }
-      let con = params.conditions && commonUtils.urlString2Conditions(params.conditions) || null;
-      return await DB.findOne(model, con, onQuery);
+      if (formatList) {
+        ret = formatList(ret);
+      }
+      return ret;
     }
   };
 }

@@ -52,6 +52,7 @@ class AdminEditModal extends Component {
       visible:false,
       confirmLoading:false,
     }
+    this.isEdit = true;
   }
 
   //在组件挂载之前调用一次。如果在这个函数里面调用setState，本次的render函数可以看到更新后的state，并且只渲染一次
