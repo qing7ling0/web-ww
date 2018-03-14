@@ -218,6 +218,7 @@ class UserData {
           throw new ApiError(ApiErrorNames.ACCOUNT_PASSWORD_ERROR);
         }
         info.password = utils.sha1(fields.account.password);
+        console.log('nfo.password=' + info.password)
       }
       if (info) {
         if (info.account) {
@@ -376,7 +377,6 @@ class UserData {
     if (params.check) {
       throw new ApiError(ApiErrorNames.LOGIN_INVALID);
     }
-    console.log('params.password' + params.password)
     if (!UserData.checkAccount(params.account) || !UserData.checkPassword(params.password)) {
       throw new ApiError(ApiErrorNames.ACCOUNT_PASSWORD_ERROR);
     }
@@ -384,6 +384,7 @@ class UserData {
     let user = null;
     const account = await accountModel.findOne({account:params.account, password:utils.sha1(params.password)});
     if (account) {
+      console.log('params.password=' + utils.sha1(params.password) +"; params.account=" +params.account)
       user = await this.getUserById(account.user_type, account.user);
     } else {
       throw new ApiError(ApiErrorNames.ACCOUNT_PASSWORD_ERROR);

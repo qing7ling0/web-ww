@@ -122,6 +122,9 @@ class GuideEditModal extends Component {
       if (values.account && values.account.length > 0) {
         account.account = values.account;
       }
+      if (values.password && values.password.length > 0) {
+        account.password = values.password;
+      }
       delete values.account;
       delete values.password;
       values.account = account;
