@@ -539,6 +539,7 @@ export const orderType = new GraphQLObjectType({
     real_pay_price:{type:GraphQLFloat, decription:'实际支付价格'},
     discount_price:{type:GraphQLFloat, decription:'实际优惠了多少'},
     sub_orders:{type:new GraphQLList(GraphQLString)},
+    signature_pic: {type:GraphQLString},
     ...commonFields.defaultCreateFields
   }
 });
