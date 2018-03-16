@@ -3,6 +3,7 @@ import {HashRouter,Route, Redirect} from 'react-router-dom'
 
 import CustomerContainer from './info/index'
 import CustomerTagsContainer from './tags/index'
+import CustomerAnalyseContainer from './analyse/index'
 
 import * as config from '../../constants/Config'
 import * as constants from '../../constants/Constants'
@@ -20,6 +21,12 @@ export default [
     path={common.findRouterById(config.Routers, constants.MENU_IDS.customerTags).url} 
     exact={true} strict={true}
     component={CustomerTagsContainer}
+  />),
+  (<Route 
+    key={constants.MENU_IDS.customerAnalyse} 
+    path={common.findRouterById(config.Routers, constants.MENU_IDS.customerAnalyse).url} 
+    exact={true} strict={true}
+    component={CustomerAnalyseContainer}
   />),
   (<Redirect 
     key={constants.MENU_IDS.customer} 

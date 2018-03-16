@@ -59,9 +59,15 @@ export const commonRemove = {
     ids: {type: new GraphQLList(GraphQLString)}
   },
   async resolve (ctx, params, options) {
-    const ret = await commonData.removeByIdsCommon(params.ids);
+    let ret = await commonData.removeByIdsCommon(params.ids);
     if (ret) {
-      if (ret.ok === 1) return params.ids;
+      try {
+        ret = JSON.parse(ret);
+      } catch (error) {
+      }
+      if (ret.ok == 1) {
+        return params.ids;
+      }
       return null;
     }
     return null;

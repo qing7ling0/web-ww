@@ -77,7 +77,7 @@ class RegionListContainer extends Component {
             onGetList={(pageInfo)=>{
               this.onReqList();
             }}
-            hasSearch={true}
+            hasSearch={false}
             searchPlaceholder={`请输入${this.dataType.label}`}
             onSearch={(value)=>{
               this.searchWord = value;

@@ -95,6 +95,17 @@ const VIPFields = {
   discount:{type:Number}, // 享受的折扣
 }
 
+// 店铺区域
+const regionFields = {
+  color_css: {type:Number, description:'css颜色', default:0xffff000},
+}
+
+// 会员分析柱状图颜色
+const customerAnalyseFields = {
+  analyse_id: {type:String, description:'分析的类型'},
+  color_css: {type:Number, description:'css颜色', default:0xffff000},
+}
+
 const commonFields = {
   ...commonBaseFields,
   ...colorFields,
@@ -110,6 +121,8 @@ const commonFields = {
   ...watchStrapStyleFields,
   ...rechargeRewardFields,
   ...VIPFields,
+  ...regionFields,
+  ...customerAnalyseFields,
   ...baseFields
 }
 

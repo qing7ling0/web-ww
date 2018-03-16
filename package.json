@@ -68,6 +68,7 @@
         "moment": "^2.19.1",
         "mongoose": "^4.11.13",
         "react": "^15.6.1",
+        "react-color": "^2.14.0",
         "react-dom": "^15.6.1",
         "react-redux": "^5.0.6",
         "react-router": "^4.2.0",

@@ -39,7 +39,13 @@ const listToSelectOptions = (list, valueFormat, labelFormat) => {
 const getSalesBaseListOptions = function(target) {
   let options = [
     { title: '名称', dataIndex: 'name', key: 'name', className:"table-column-left"},
-    { title: '编辑人', dataIndex: 'editor_name', width:'120', key: 'editor_name'}
+    { title: '颜色', dataIndex: 'color_css', key: 'color_css', render:(item)=>{
+      let color = item || 0xffffff;
+      let r = (color>>16) & 0xff;
+      let g = (color>>8) & 0xff;
+      let b = (color) & 0xff;
+      return (<div style={{backgroundColor:`rgb(${r},${g},${b})`, width:'100%', height:'40px', margin:'0 auto'}}></div>)
+    }}
   ]
 
   if (target.canOperate()) {
@@ -58,6 +64,7 @@ const getSalesBaseListOptions = function(target) {
 const getSalesBaseAddOptions = function(target) {
   return [
     {type:'input', name:'name', label:'名称', itemOptions:{hasFeedback:true}, rule:{required:true}},
+    {type:'colorPicker', name:'color_css', label:'颜色', itemOptions:{hasFeedback:true}, rule:{required:true}},
   ];
 }
 const getSalesBaseEditOptions = function(target) {

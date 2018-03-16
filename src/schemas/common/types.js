@@ -106,6 +106,12 @@ const VIPFields = {
   discount:{type:GraphQLFloat}, // 享受的折扣
 }
 
+// 会员分析柱状图颜色
+const customerAnalyseFields = {
+  analyse_id: {type:GraphQLString, description:'分析的类型'},
+  color_css: {type:GraphQLInt, description:'css颜色'},
+}
+
 const commonTypeFields = {
   ...commonBaseFields,
   ...colorFields,
@@ -118,6 +124,7 @@ const commonTypeFields = {
   ...xuanHaoFields,
   ...watchStrapStyleFields,
   ...rechargeRewardFields,
+  ...customerAnalyseFields,
   ...VIPFields
 }
 

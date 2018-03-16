@@ -16,6 +16,7 @@ module.exports.MENU_IDS = {
   customerOrder:        303, // 客户订单
   customerFeedback:     304, // 客户反馈记录
   customerTags:         305, // 客户标签
+  customerAnalyse:      306, // 客户分析配置
 
   sales:                4, // 进销存管理【商品，原材料，保养维护价目表】
   salesMaterial:        401, // 原材料
@@ -222,6 +223,7 @@ module.exports.COMMON_DATA_TYPES = {
   VIP:'19', // VIP等级
   CUSTOMER_TAGS:'20', // 客户标签
   SHOP_REGION:'21', // 店铺区域
+  CUSTOMER_ANALYSE_CONFIG:'22', // 会员分析图表
 }
 
 // 试脚鞋反馈状态
@@ -298,4 +300,20 @@ module.exports.SAMPLE_ALLOT_STATUS_DATAS = [
   {value:E_SAMPLE_ALLOT_STATUS.INBOUND, label:'已入库'}, // 已入库
   {value:E_SAMPLE_ALLOT_STATUS.COMPLETED, label:'完成'}, // 已完成
   {value:E_SAMPLE_ALLOT_STATUS.CANCEL, label:'取消'}, // 已完成
+]
+
+
+// 样品调拨状态
+const E_CUSTOMER_ANALYSE_TYPES = {
+  OLD_VIP: '1', // 老会员
+  NEW_VIP: '2', // 新会员
+  NOT_VIP: '3', // 非会员
+}
+module.exports.E_CUSTOMER_ANALYSE_TYPES = E_CUSTOMER_ANALYSE_TYPES;
+
+// 样品调拨状态
+module.exports.CUSTOMER_ANALYSE_TYPES_DATAS = [
+  {value:E_CUSTOMER_ANALYSE_TYPES.OLD_VIP, label:'老会员'},
+  {value:E_CUSTOMER_ANALYSE_TYPES.NEW_VIP, label:'新会员'},
+  {value:E_CUSTOMER_ANALYSE_TYPES.NOT_VIP, label:'非会员'},
 ]

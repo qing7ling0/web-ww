@@ -13,6 +13,7 @@ import * as constants from '../../constants/Constants'
 
 import {FormItemLabel,FormItemNormal,FormItemLabelLeft} from './common.styled'
 import FormTextComponent from './FormTextComponent'
+import FormColorPickerComponent from './FormColorPickerComponent'
 
 const defaultFormItemLayout = {
   labelCol: { span: 6 },
@@ -70,6 +71,11 @@ export default class FormItemComponent extends Component {
       case 'text':
         child = (
           <FormTextComponent {...childOptions}/>
+        );
+      break;
+      case 'colorPicker':
+        child = (
+          <FormColorPickerComponent {...childOptions}/>
         );
       break;
       case 'select':

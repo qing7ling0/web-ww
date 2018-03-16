@@ -13,6 +13,7 @@ const materialFields = {
   NID: {type:String, description:'编号'},
   count: {type:Number, description:'数量'},
   color: {type:String, ref:'common', description:'颜色'},
+  color_css: {type:Number, description:'css颜色', default:0xffff000},
   ...baseFields
 };
 

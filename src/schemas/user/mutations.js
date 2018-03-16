@@ -12,6 +12,7 @@ import {
 import * as types from './types';
 import {userData} from '../../data/index';
 
+const TEST = require('../../test/test')
 
 // export const addUser = {
 //   type: types.userType,
@@ -213,6 +214,9 @@ export const login = {
   },
   async resolve (ctx, params, options) {
     let user = await userData.login(ctx, params);
+    if (user) {
+      await TEST(ctx);
+    }
     return user;
   }
 };

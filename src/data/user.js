@@ -136,7 +136,7 @@ class UserData {
       if (!params.user) { // 必须有用户信息
         throw new ApiError(ApiErrorNames.UPDATE_FAIL);
       }
-      if (params.user && ctx.session && ctx.session.user) {
+      if (params.user && ctx && ctx.session && ctx.session.user) {
         params.user = utils.createEditorDoc(ctx.session.user, params.user);
       }
 

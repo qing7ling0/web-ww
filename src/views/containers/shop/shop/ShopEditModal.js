@@ -75,13 +75,14 @@ class ShopEditModal extends Component {
   }
 
   render() {
-    let _options = this.options.map((item, index) => {
-      if (!item.decoratorOptions) {
-        item.decoratorOptions = {};
-      }
-      item.decoratorOptions.initialValue = this.props.data[item.name];
-      return item;
-    });
+    // let _options = this.options.map((item, index) => {
+    //   if (!item.decoratorOptions) {
+    //     item.decoratorOptions = {};
+    //   }
+    //   item.decoratorOptions.initialValue = this.props.data[item.name];
+    //   return item;
+    // });
+    let _options = common.initFormDefaultValues(this.options, this.props.data)
     return (
       <BaseFormModal
         title={this.props.title}

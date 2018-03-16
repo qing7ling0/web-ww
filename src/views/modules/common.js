@@ -94,6 +94,7 @@ export const initFormDefaultValues = (options, values, getValue) => {
 }
 
 export const listToSelectOptions = (list, valueFormat, labelFormat) => {
+  if (!list) return [];
   return list.map((item) => {
     let ret = {_id:item._id};
     ret.value = valueFormat ? valueFormat(item) : item._id;
