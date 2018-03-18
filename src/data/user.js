@@ -86,7 +86,7 @@ class UserData {
       let conditions = params.conditions || {};
       let total = await model.find(conditions).count();
       let users = await this.populateUserModel(params.user_type, model.find(conditions).skip(skip).limit(limit));
-      console.log('users' + JSON.stringify(users));
+      // console.log('users' + JSON.stringify(users) + "\ndfasdfasdfasdf");
       return {
         page:{page:params.page, pageSize:limit, total:total},
         list: users
@@ -218,7 +218,7 @@ class UserData {
           throw new ApiError(ApiErrorNames.ACCOUNT_PASSWORD_ERROR);
         }
         info.password = utils.sha1(fields.account.password);
-        console.log('nfo.password=' + info.password)
+        // console.log('nfo.password=' + info.password)
       }
       if (info) {
         if (info.account) {
@@ -384,7 +384,7 @@ class UserData {
     let user = null;
     const account = await accountModel.findOne({account:params.account, password:utils.sha1(params.password)});
     if (account) {
-      console.log('params.password=' + utils.sha1(params.password) +"; params.account=" +params.account)
+      // console.log('params.password=' + utils.sha1(params.password) +"; params.account=" +params.account)
       user = await this.getUserById(account.user_type, account.user);
     } else {
       throw new ApiError(ApiErrorNames.ACCOUNT_PASSWORD_ERROR);

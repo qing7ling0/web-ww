@@ -252,7 +252,7 @@ class SalesData {
 
   async getGoodsProfileByNID(nid) {
     if (!nid) return null;
-    console.log(nid)
+    // console.log(nid)
     const profile = await DB.findOne(goodsModel, {NID:nid}, (query)=>{
       return this.goodsPopulate(query);
     });
@@ -392,7 +392,7 @@ class SalesData {
     if (canUseBalance < payInfo.real_pay_price) {
       throw new ApiError(ApiErrorNames.MOUNT_NOT_ENOUGH);
     }
-    console.log(payInfo)
+    // console.log(payInfo)
     let balance = customer.balance - payInfo.real_pay_price;
     await customerModel.findOneAndUpdate({_id:customer._id}, {$set:{balance:balance}});
     return payInfo;
@@ -458,8 +458,7 @@ class SalesData {
       let vipLevelList = await commonData.getCommonList(constants.COMMON_DATA_TYPES.VIP);
       
       vipLevelList = vipLevelList && vipLevelList.list || [];
-      console.log(vipLevelList)
-      console.log(vipLevelList)
+      // console.log(vipLevelList)
       vipLevelList.sort((a,b)=>a.level>b.level?1:-1);
       if (vipLevel > -1) {
         for(let lv of vipLevelList) {
@@ -471,7 +470,7 @@ class SalesData {
       }
 
       // 开始计算支付，主要是从储值卡中扣除
-      console.log(payInfo)
+      // console.log(payInfo)
       await this.pay(customerInfo, payInfo);
       doc.system_price = payInfo.discount_mount + payInfo.undiscount_mount;
       doc.real_pay_price = payInfo.real_pay_price;
@@ -606,7 +605,7 @@ class SalesData {
       // 如果商品里面没有此商品则添加
       await this.addGoodsBySuborder(doc);
     } else {
-      console.log(goods);
+      // console.log(goods);
     }
 
     let conditions = {_id:id};
@@ -976,7 +975,7 @@ class SalesData {
       { $group: {"_id": { "guide": "$_id.guide"}, "monthCount":{$sum:1}}},
     ]
     let guides2 = await orderModel.aggregate(aggOptions);
-    console.log("getCustomerShopReportList monthBegan=" + moment(monthBegan).format("YYYY/MM/DD HH:mm:ss") + "; monthEnd=" + moment(monthEnd).format("YYYY/MM/DD HH:mm:ss") + "; guides2 222=" + JSON.stringify(guides2));
+    // console.log("getCustomerShopReportList monthBegan=" + moment(monthBegan).format("YYYY/MM/DD HH:mm:ss") + "; monthEnd=" + moment(monthEnd).format("YYYY/MM/DD HH:mm:ss") + "; guides2 222=" + JSON.stringify(guides2));
 
     for(let guide of guides) {
       let monthGuide = guides2.find(item=>item._id.guide.toString() === (guide.guide&&guide.guide._id.toString()));
@@ -1100,7 +1099,7 @@ class SalesData {
         goods.left_count = allot.left_count;
         goods.right_count = allot.right_count;
         goods.shop = allot.apply_shop;
-        console.log(JSON.stringify(goods))
+        // console.log(JSON.stringify(goods))
         let sampleModel = new sampleGoodsModel(goods);
         let newSample = await sampleModel.save();
         if (!newSample) {

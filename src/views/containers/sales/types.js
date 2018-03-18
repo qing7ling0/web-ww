@@ -64,7 +64,7 @@ export const getMaterialBaseColumns = function(target) {
   return [
     { title: '名称', dataIndex: 'name', key: 'name'},
     { title: '编号', dataIndex: 'NID', key: 'NID'},
-    { title: '颜色', dataIndex: 'color', key: 'color', render:(item) => item.name},
+    { title: '颜色', dataIndex: 'color', key: 'color', render:(item) => item&&item.name||''},
     { title: '数量', dataIndex: 'count', key: 'count'},
   ]
 }

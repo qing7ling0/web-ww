@@ -311,9 +311,14 @@ const orderFields = {
 }
 const orderSchema = new Schema({
   ...orderFields
-},{
-  timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
-});
+}
+,{
+  timestamps: {updatedAt: 'editor_time' }
+}
+// ,{
+//   timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
+// }
+);
 module.exports.orderModel = mongoose.model('order', orderSchema);
 
 // 代金券

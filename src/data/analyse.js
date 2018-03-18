@@ -28,87 +28,166 @@ class AnalyseData {
    * @param {any} options {conditions}
    * @memberof ShopData
    */
-  async getAnalyseShopSalesList() {
+  async getAnalyseShopSalesList(params) {
+    let date = moment();
+    let dateBegan = date.toDate();
+    let dateEnd = date.toDate();
+    if (params.date_type === 2) { // 周
+      let _date = moment(date.weekday(0));
+      dateBegan = _date.toDate();
+      dateEnd = _date.add(7, 'days').toDate();
+    } else if (params.date_type === 3) { // 月
+      let _date = moment(date.format("YYYY-MM")+"-01");
+      dateBegan = _date.toDate();
+      dateEnd = _date.add(1, 'month').toDate();
+    } else if (params.date_type === 4) { // 年
+      let _date = moment(date.format("YYYY")+"-01-01");
+      dateBegan = _date.toDate();
+      dateEnd = _date.add(1, 'year').toDate();
+    } else {
+      let _date = moment(date.format("YYYY-MM-DD"));
+      dateBegan = _date.toDate();
+      dateEnd = _date.add(1, 'day').toDate();
+    }
+
+    let aggOptions = [
+      { $match: {is_recharge:false, create_time:{$gte:dateBegan, $lt:dateEnd}} },
+      { $group: {"_id": { "shop": "$shop"}, "price":{$sum:"$system_price"}, "count":{$sum:1}, "sub_count":{$sum:{"$size":"$sub_orders"}}}}
+    ];
+    let orders = await orderModel.aggregate(aggOptions);
+    let newOrders = await orderModel.populate(orders, {path:'shop', model:'shop'});
+    
+    return newOrders;
+  }
+
+  /**
+   * 获取最近5周的销量
+   */
+  async getAnalyseSalesListLast5Week() {
+    let date = moment(moment().format("YYYY-MM-DD"));
+    let dateBegan = null;
+    let dateEnd = null;
+
     let list = [];
+    for(let i=0; i<5; i++) {
+      dateBegan = moment(date.weekday(-7*i)).toDate();
+      dateEnd = moment(date.weekday(-7*(i+1))).toDate();
+      let aggOptions = [
+        { $match: {is_recharge:false, create_time:{$gte:dateBegan, $lt:dateEnd}} },
+        { $group: {"price":{$sum:"$system_price"}}}
+      ];
+      let orders = await orderModel.aggregate(aggOptions);
+      list.push(orders.price);
+    }
+    return list;
+  }
 
+  /**
+   * 获取最近12个月的销量
+   */
+  async getAnalyseSalesListLast12Month() {
+    let date = moment(moment().format("YYYY-MM"));
+    let dateBegan = moment(date);
+    let dateEnd = moment(date.add(1, 'month'));
 
+    let list = [];
+    for(let i=0; i<12; i++) {
+      let aggOptions = [
+        { $match: {is_recharge:false, create_time:{$gte:dateBegan.toDate(), $lt:dateEnd.toDate()}} },
+        { $group: {"price":{$sum:"$system_price"}}}
+      ];
+      let orders = await orderModel.aggregate(aggOptions);
+      list.push(orders.price);
+      dateEnd = moment(dateBegan);
+      dateBegan = moment(dateBegan.subtract(1, 'month'));
+    }
+    return list;
+  }
+
+  /**
+   * 获取今年和去年12个月的销量
+   */
+  async getAnalyseSalesListLast2Year12Month() {
+    let date = moment(moment().format("YYYY-MM"));
+    let dateBegan = moment(date);
+    let dateEnd = moment(date.add(1, 'month'));
+
+    let list = [];
+    for(let i=0; i<12; i++) {
+      dateBegan = moment(date.month(i));
+      dateEnd = moment(date.month(i+1));
+      let aggOptions = [
+        { $match: {is_recharge:false, create_time:{$gte:dateBegan.toDate(), $lt:dateEnd.toDate()}} },
+        { $group: {"price":{$sum:"$system_price"}}}
+      ];
+      let orders = await orderModel.aggregate(aggOptions);
+      list.push(orders.price);
+    }
+
+    date = moment(moment().format("YYYY-MM")).subtract(1, 'year');
+
+    let yesteryearList = [];
+    for(let i=0; i<12; i++) {
+      dateBegan = moment(date.month(i));
+      dateEnd = moment(date.month(i+1));
+      let aggOptions = [
+        { $match: {is_recharge:false, create_time:{$gte:dateBegan.toDate(), $lt:dateEnd.toDate()}} },
+        { $group: {"price":{$sum:"$system_price"}}}
+      ];
+      let orders = await orderModel.aggregate(aggOptions);
+      yesteryearList.push(orders.price);
+    }
+    return {
+      year:list,
+      yesteryear:yesteryearList
+    }
+  }
+  
+  /**
+   * 获取最近5年销售额
+   */
+  async getAnalyseSalesListLast5Year() {
+    let date = moment(moment().format("YYYY"+"01-01")).add(1, 'year');
+    let dateBegan = moment(date.subtract(1, 'year'));
+    let dateEnd = moment(date);
+
+    let list = [];
+    for(let i=0; i<5; i++) {
+      let aggOptions = [
+        { $match: {is_recharge:false, create_time:{$gte:dateBegan.toDate(), $lt:dateEnd.toDate()}} },
+        { $group: {"price":{$sum:"$system_price"}}}
+      ];
+      let orders = await orderModel.aggregate(aggOptions);
+      list.push(orders.price);
+      dateEnd = moment(dateBegan);
+      dateBegan = moment(dateBegan.subtract(1, 'year'));
+    }
+    return list;
+  }
+
+  /**
+   * 获取当年4个季度销售额
+   */
+  async getAnalyseSalesList4Quarter() {
+    let date = moment(moment().format("YYYY"+"01-01"));
+    let dateBegan = moment(date);
+    let dateEnd = moment(date.add(3, 'month'));
+
+    let list = [];
+    for(let i=0; i<4; i++) {
+      let aggOptions = [
+        { $match: {is_recharge:false, create_time:{$gte:dateBegan.toDate(), $lt:dateEnd.toDate()}} },
+        { $group: {"price":{$sum:"$system_price"}}}
+      ];
+      let orders = await orderModel.aggregate(aggOptions);
+      list.push(orders.price);
+      dateBegan = moment(dateEnd);
+      dateEnd = moment(dateEnd.add(3, 'month'));
+    }
 
     return list;
   }
 
-  async find(conditions, projection, options) {
-    let shop = await shopModel.findOne(conditions, projection, options);
-    if (shop) {
-      let isNew = moment(shop.open_date).add(180, 'days').isSameOrAfter(Date.now());
-      shop.isNew = isNew;
-      return shop;
-    } else {
-      throw new ApiError(ApiErrorNames.UPDATE_FAIL);
-    }
-  }
-
-  async add(doc, options={}) {
-    if (doc) {
-      let shop = new shopModel(doc);
-      if (shop) {
-        let newShop = await shop.save(options);
-        if (newShop) {
-          return newShop;
-        }
-      } else {
-        throw new ApiError(ApiErrorNames.ADD_FAIL);
-      }
-    } else {
-      throw new ApiError(ApiErrorNames.ADD_FAIL);
-    }
-  }
-
-  async update(conditions, doc, options) {
-    if (doc) {
-      let ret = await shopModel.update(conditions, doc, options);
-      return ret;
-    } else {
-      throw new ApiError(ApiErrorNames.UPDATE_FAIL);
-    }
-  }
-
-  // async remove(conditions) {
-  //   if (conditions) {
-  //     return await model.deleteMany(conditions);
-  //   } else {
-  //     throw new ApiError(ApiErrorNames.DELETE_FAIL);
-  //   }
-  // }
-
-  async checkCanRemoveByIds(ids) {
-    let guids = await userShopGuideModel.find({shop:{$in:ids}});
-    if (guids && guids.length > 0) {
-      throw new ApiError(ApiErrorNames.DELETE_FAIL, '此店铺下有导购，无法删除！');
-    }
-    let oders = await orderModel.find({shop:{$in:ids}});
-    if (oders && oders.length > 0) {
-      throw new ApiError(ApiErrorNames.DELETE_FAIL, '此店铺下有订单，无法删除！');
-    }
-    return true;
-  }
-
-  async removeByIds(ids) {
-    if (ids && ids.length > 0) {
-      await this.checkCanRemoveByIds(ids)
-      return await shopModel.remove({_id:{$in:ids}});
-    } else {
-      throw new ApiError(ApiErrorNames.DELETE_FAIL);
-    }
-  }
-
-  // 获取店长
-  async getShopManager(shopId) {
-    if (shopId) {
-      return await userShopGuideModel.findOne({shop:shopId, manager:true});
-    } else {
-      return null;
-    }
-  }
 }
 
-module.exports = new ShopData()
+module.exports = new AnalyseData()

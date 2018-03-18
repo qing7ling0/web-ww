@@ -7,12 +7,12 @@ const {ApiError, ApiErrorNames} = require('../error/api-errors');
  */
 var responseFormatter = (ctx) => {
     //如果有返回数据，将返回数据添加到data中
-    console.log('responseFormatter' + JSON.stringify(ctx.body));
     // console.log('responseFormatter message ' + ctx.result);
     if (ctx.body) {
         let body = JSON.parse(ctx.body);
         
         if (body.errors ) {
+            // console.log('responseFormatter' + JSON.stringify(ctx.body));
             let error = body.errors.length > 0 ? body.errors[0] : body.errors;
             if (typeof(error.code)=="undefined") {
                 ctx.body = {

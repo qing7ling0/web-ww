@@ -87,7 +87,7 @@ class BaseComponent extends Component {
         return this.onRender();
       } catch (e) {
         if (navigator.userAgent.indexOf("MSIE 8.0") == -1){
-          console.log(e, this);
+          // console.log(e, this);
         }
         return this.onRenderError(e)
       }

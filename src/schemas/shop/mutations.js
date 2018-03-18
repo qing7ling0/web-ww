@@ -42,7 +42,7 @@ export const deleteShop = {
     const ret = await shopData.removeByIds(params.ids);
     if (ret) {
       let res = JSON.parse(ret);
-      console.log('ret=' + JSON.stringify(res));
+      // console.log('ret=' + JSON.stringify(res));
       if (ret.ok === 1) return params.ids;
       return null;
     }

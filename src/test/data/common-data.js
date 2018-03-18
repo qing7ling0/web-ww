@@ -112,6 +112,6 @@ var addMaterials = async function(ctx) {
 }
 
 module.exports = async function(ctx) {
-  await addDatas(ctx);
-  // await addMaterials(ctx);
+  // await addDatas(ctx);
+  await addMaterials(ctx);
 }

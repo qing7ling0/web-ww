@@ -16,10 +16,16 @@ const REGIONS = [
   {name:"海口", color_css:0xfff000},
   {name:"宁波", color_css:0xffff00},
   {name:"常州", color_css:0xfffff0},
+  {name:"扬州", color_css:0x0f0000},
+  {name:"杭州", color_css:0x00f000},
+  {name:"天津", color_css:0x000f00},
+  {name:"青岛", color_css:0x0000f0},
+  {name:"三亚", color_css:0x00000f},
 ]
 
 const GUIDE_NAME = [
-  "关羽", '赵云', '屠夫','刺客','甄姬','貂蝉','司马懿','周瑜','荀彧','黄盖','陆逊','魏延','典韦','张飞','刘备','曹操','张辽','影魔'
+  "关羽",'赵云','屠夫','刺客','甄姬','貂蝉','司马懿','周瑜','荀彧','黄盖',
+  '陆逊','魏延','典韦','张飞','刘备','曹操','张辽','影魔'
 ]
 
 var current_phone = 13000000000;
@@ -58,14 +64,17 @@ var addGuide = async function (ctx, index, shopId) {
     // "name" : "周杰",
   }
 
-  for(let i=0; i<GUIDE_NAME.length; i++) {
+  let guideCount = Math.floor(Math.random()*1000000) % GUIDE_NAME.length;
+  guideCount = Math.max(2, guideCount);
+
+  for(let i=0; i<GUIDE_NAME.length && i<guideCount; i++) {
     current_phone++;
     let info = Object.assign(
       {}, 
       temp,
       {
         shop:shopId,
-        name:GUIDE_NAME[i],
+        name:GUIDE_NAME[i]+''+index,
         phone:"" + current_phone,
         manager:i===0
       }
@@ -106,17 +115,18 @@ var addShop = async function(ctx) {
     let region = regionList[rind];
     let item = Object.assign({}, data);
     item.region_id = region._id;
-    item.name = region.name + '-' + (rind+1);
+    item.name = region.name + '-' + (index+1);
     // list.push(item);
     let _shopModel = new shopModel(item);
     let newShop = await _shopModel.save();
     console.log("添加店铺" + item.name);
     await addGuide(ctx, i, newShop._id);
+    index++;
   }
 
 }
 
 module.exports = async function(ctx) {
   // await addRegion(ctx);
-  await addShop(ctx);
+  // await addShop(ctx);
 }

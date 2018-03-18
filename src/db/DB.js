@@ -81,7 +81,7 @@ class DB {
             if (page && page.pageSize>0 && page.page>-1) {
                 newPage.total = await model.find(conditions).count();
             }
-            console.log('DB.getList ' + JSON.stringify(conditions) + '; findOptions='+ JSON.stringify(findOptions))
+            // console.log('DB.getList ' + JSON.stringify(conditions) + '; findOptions='+ JSON.stringify(findOptions))
             let datas = null;
             if (onQuery) {
                 let query = model.find(conditions, null, findOptions);

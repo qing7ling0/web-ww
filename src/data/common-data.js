@@ -85,7 +85,7 @@ class CommonData {
         throw new ApiError(ApiErrorNames.ADD_FAIL, '编号已使用!');
       }
     }
-    console.log(JSON.stringify(doc));
+    // console.log(JSON.stringify(doc));
     return await DB.update(commonModel, conditions, doc, options);
   }
   
@@ -172,7 +172,7 @@ class CommonData {
     }
     let datas = await commonModel.find({_id:{$in:ids}});
     if (datas && datas.length > 0) {
-      console.log('datas length=' + datas.length)
+      // console.log('datas length=' + datas.length)
       let type = datas[0].type;
       await this.checkCanRemoveByIds(ids, type);
     }
