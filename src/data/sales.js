@@ -524,6 +524,7 @@ class SalesData {
       if (order) {
         let newOrder = await order.save(options);
         if (newOrder) {
+          await fileModel.findByIdAndUpdate(doc.signature_pic, {temp:false});
           await subOrderModel.updateMany({_id:{$in:newSubOrders}}, {order:newOrder._id});
           return newOrder;
         }
