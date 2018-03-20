@@ -30,7 +30,7 @@ var auth = async function(ctx, next) {
       await next();
     } else {
       if (ctx.request.headers.auth) {
-        console.log('auth=' + ctx.request.headers.auth);
+        // console.log('auth=' + ctx.request.headers.auth);
         let time = new Date().getTime();
 
         // let superAdmin = require('./super-admin');

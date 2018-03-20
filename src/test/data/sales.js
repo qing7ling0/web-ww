@@ -71,14 +71,14 @@ var addOrderTest = async function(ctx, time) {
       let bottomSideColorList = await commonModel.find({type:constants.COMMON_DATA_TYPES.SHOES_BOTTOM_SIDE_COLOR});
     // if (shoesList && shoesList.list.length > 0) {
       
-      console.log('----test add 1 order');
+      // console.log('----test add 1 order');
       // let goodsShoes = shoesList.list[0];
       let subOrder = {};
       // subOrder.NID = 'NID101';
       subOrder.name = '';
       subOrder.price = 1000+2000*Math.random();
       subOrder.count = 1;
-      console.log('----test add 2 order');
+      // console.log('----test add 2 order');
       subOrder.type = constants.E_ORDER_TYPE.SHOES;
       subOrder.transport_name = '吴飞';
       subOrder.transport_address = '上海市陆家嘴';
@@ -176,12 +176,12 @@ var addOrderTest = async function(ctx, time) {
       order.sub_orders.push(subOrder);
     }
     
-
-    let newOrder = await salesData.addOrder(order);
-    if (time) {
-      console.log('----test add 1 order time='  + time);
-      await orderModel.findByIdAndUpdate(newOrder._id, {create_time:time})
-    }
+    return order;
+    // let newOrder = await salesData.addOrder(order);
+    // if (time) {
+    //   console.log('----test add 1 order time='  + time);
+    //   await orderModel.findByIdAndUpdate(newOrder._id, {create_time:time})
+    // }
     // console.log('----test add 2 order='  + JSON.stringify(order));
     // let newOrder = await salesData.addOrder(order);
     // console.log('----test add newOrder=' + JSON.stringify(newOrder));
@@ -195,33 +195,111 @@ var addOrderTest = async function(ctx, time) {
 
 module.exports.testAddOrder = async function(ctx) {
   let xiaoshi = 24*12*30;
+  let orders = [];
+  let mi = new Date().getTime();
+  let mi2 = new Date().getTime();
   for(let i=0; i<5000; i++) {
     let h = Math.floor(Math.random()*100000000) % xiaoshi;
     let time = moment().subtract(h,'h');
-    await addOrderTest(ctx, time.format("YYYY-MM-DD HH:mm:ss"));
+    let order = await addOrderTest(ctx, time.format("YYYY-MM-DD HH:mm:ss"));
+    orders.push({order, time});
   }
+  mi2 = new Date().getTime();
+  console.log('testAddOrder time 111111 =' + (mi2-mi));
+  mi = mi2;
   
-  for(let i=0; i<3000; i++) {
-    let h = Math.floor(Math.random()*100000000) % xiaoshi + xiaoshi;
-    let time = moment().subtract(h,'h');
-    await addOrderTest(ctx, time.format("YYYY-MM-DD HH:mm:ss"));
+  for(let item of orders) {
+    let newOrder = await salesData.addOrder(item.order);
+    if (item.time) {
+      // console.log('----test add 1 order time='  + item.time);
+      await orderModel.findByIdAndUpdate(newOrder._id, {create_time:item.time})
+    }
   }
+  mi2 = new Date().getTime();
+  console.log('testAddOrder time 111222 =' + (mi2-mi));
+  mi = mi2;
+  
+  // for(let i=0; i<3000; i++) {
+  //   let h = Math.floor(Math.random()*100000000) % xiaoshi + xiaoshi;
+  //   let time = moment().subtract(h,'h');
+  //   let order = await addOrderTest(ctx, time.format("YYYY-MM-DD HH:mm:ss"));
+  //   orders.push({order, time});
+  // }
+  // mi2 = new Date().getTime();
+  // console.log('testAddOrder time 222111 =' + (mi2-mi));
+  // mi = mi2;
+  
+  // for(let item of orders) {
+  //   let newOrder = await salesData.addOrder(item.order);
+  //   if (item.time) {
+  //     // console.log('----test add 1 order time='  + item.time);
+  //     await orderModel.findByIdAndUpdate(newOrder._id, {create_time:item.time})
+  //   }
+  // }
+  // mi2 = new Date().getTime();
+  // console.log('testAddOrder time 222222 =' + (mi2-mi));
+  // mi = mi2;
 
-  for(let i=0; i<2000; i++) {
-    let h = Math.floor(Math.random()*100000000) % xiaoshi + xiaoshi*2;
-    let time = moment().subtract(h,'h');
-    await addOrderTest(ctx, time.format("YYYY-MM-DD HH:mm:ss"));
-  }
+  // for(let i=0; i<2000; i++) {
+  //   let h = Math.floor(Math.random()*100000000) % xiaoshi + xiaoshi*2;
+  //   let time = moment().subtract(h,'h');
+  //   let order = await addOrderTest(ctx, time.format("YYYY-MM-DD HH:mm:ss"));
+  //   orders.push({order, time});
+  // }
+  // mi2 = new Date().getTime();
+  // console.log('testAddOrder time 333111 =' + (mi2-mi));
+  // mi = mi2;
+  
+  // for(let item of orders) {
+  //   let newOrder = await salesData.addOrder(item.order);
+  //   if (item.time) {
+  //     // console.log('----test add 1 order time='  + item.time);
+  //     await orderModel.findByIdAndUpdate(newOrder._id, {create_time:item.time})
+  //   }
+  // }
+  // mi2 = new Date().getTime();
+  // console.log('testAddOrder time 333222 =' + (mi2-mi));
+  // mi = mi2;
 
-  for(let i=0; i<3687; i++) {
-    let h = Math.floor(Math.random()*100000000) % xiaoshi + xiaoshi*3;
-    let time = moment().subtract(h,'h');
-    await addOrderTest(ctx, time.format("YYYY-MM-DD HH:mm:ss"));
-  }
+  // for(let i=0; i<3687; i++) {
+  //   let h = Math.floor(Math.random()*100000000) % xiaoshi + xiaoshi*3;
+  //   let time = moment().subtract(h,'h');
+  //   let order = await addOrderTest(ctx, time.format("YYYY-MM-DD HH:mm:ss"));
+  //   orders.push({order, time});
+  // }
+  // mi2 = new Date().getTime();
+  // console.log('testAddOrder time 444111 =' + (mi2-mi));
+  // mi = mi2;
+  
+  // for(let item of orders) {
+  //   let newOrder = await salesData.addOrder(item.order);
+  //   if (item.time) {
+  //     // console.log('----test add 1 order time='  + item.time);
+  //     await orderModel.findByIdAndUpdate(newOrder._id, {create_time:item.time})
+  //   }
+  // }
+  // mi2 = new Date().getTime();
+  // console.log('testAddOrder time 444222 =' + (mi2-mi));
+  // mi = mi2;
 
-  for(let i=0; i<2589; i++) {
-    let h = Math.floor(Math.random()*100000000) % xiaoshi + xiaoshi*4;
-    let time = moment().subtract(h,'h');
-    await addOrderTest(ctx, time.format("YYYY-MM-DD HH:mm:ss"));
-  }
+  // for(let i=0; i<2589; i++) {
+  //   let h = Math.floor(Math.random()*100000000) % xiaoshi + xiaoshi*4;
+  //   let time = moment().subtract(h,'h');
+  //   let order = await addOrderTest(ctx, time.format("YYYY-MM-DD HH:mm:ss"));
+  //   orders.push({order, time});
+  // }
+  // mi2 = new Date().getTime();
+  // console.log('testAddOrder time 555111 =' + (mi2-mi));
+  // mi = mi2;
+  
+  // for(let item of orders) {
+  //   let newOrder = await salesData.addOrder(item.order);
+  //   if (item.time) {
+  //     // console.log('----test add 1 order time='  + item.time);
+  //     await orderModel.findByIdAndUpdate(newOrder._id, {create_time:item.time})
+  //   }
+  // }
+  // mi2 = new Date().getTime();
+  // console.log('testAddOrder time 555222 =' + (mi2-mi));
+  // mi = mi2;
 }

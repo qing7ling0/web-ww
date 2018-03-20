@@ -17,7 +17,7 @@ const logUtil = require('../utils/log-utils');
 class FileData {
 
   async add(filepath, options, user) {
-    console.log('filePath=' + filepath + "; user" + user)
+    // console.log('filePath=' + filepath + "; user" + user)
     if (filepath && user) {
       let data = {
         name: path.basename(filepath),

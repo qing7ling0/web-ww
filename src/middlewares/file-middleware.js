@@ -39,7 +39,7 @@ module.exports.fileSend = async function(ctx, next) {
     if (file) {
       // let p = file.path.replace('uploads\\', '');
       let p =file.path;
-      console.log('fileSend id' + p)
+      // console.log('fileSend id' + p)
       return await send(ctx, p);
     }
   }

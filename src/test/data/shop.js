@@ -127,6 +127,6 @@ var addShop = async function(ctx) {
 }
 
 module.exports = async function(ctx) {
-  // await addRegion(ctx);
-  // await addShop(ctx);
+  await addRegion(ctx);
+  await addShop(ctx);
 }

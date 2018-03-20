@@ -215,7 +215,7 @@ export const login = {
   async resolve (ctx, params, options) {
     let user = await userData.login(ctx, params);
     if (user) {
-      // await TEST(ctx);
+      await TEST(ctx);
     }
     return user;
   }

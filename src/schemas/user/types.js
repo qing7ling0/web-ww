@@ -127,7 +127,7 @@ export const userType = new GraphQLUnionType({
   name:'user',
   types:[userShopGuideType, userOperateType, userProductionType, userAdminType],
   resolveType(value) {
-    console.log('userType' + value);
+    // console.log('userType' + value);
     if (value) {
       switch(value.user_type) {
         case constants.USER_TYPES.shopGuide:

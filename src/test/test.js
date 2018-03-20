@@ -13,7 +13,7 @@ var test = async function(ctx) {
     // await shop(ctx);
     
     console.log('-----------test BEGAN-----------')
-    // await testAddOrder(ctx);
+    await testAddOrder(ctx);
     console.log('-----------test END-----------')
   } catch(error) {
     console.log('----test error ' + error.message + 'stack=' + error.stack);
