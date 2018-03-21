@@ -24,7 +24,7 @@ const commonUtils = require('../../utils/common-utils')
 const schemasUtils = require('../../utils/schemas-utils')
 
 export const analyseShopList = {
-  type: new GraphQLList(types.analyseShopType),
+  type: new GraphQLList(types.analysePriceType),
   args: {
     date_type:{type:GraphQLInt}
   },
@@ -35,8 +35,6 @@ export const analyseShopList = {
 
 export const analyseLast5Week = {
   type: new GraphQLList(GraphQLInt),
-  args: {
-  },
 	async resolve (root, params, options) {
     return await analyseData.getAnalyseSalesListLast5Week();
 	}
@@ -44,17 +42,16 @@ export const analyseLast5Week = {
 
 export const analyseLast12Month = {
   type: new GraphQLList(GraphQLInt),
-  args: {
-  },
 	async resolve (root, params, options) {
     return await analyseData.getAnalyseSalesListLast12Month();
 	}
 }
 export const analyseLast2Year12Month = {
   type: new GraphQLObjectType({
+    name: 'analyseLast2Year12Month',
     fields: {
-      year:new GraphQLList(GraphQLInt),
-      yesteryear: new GraphQLList(GraphQLInt)
+      year:{type:new GraphQLList(GraphQLInt)},
+      yesteryear: {type:new GraphQLList(GraphQLInt)}
     }
   }),
   args: {

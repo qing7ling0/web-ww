@@ -15,6 +15,7 @@ import common from './common/index'
 import shop from './shop/index'
 import customer from './customer/index'
 import sales from './sales/index'
+import analyses from './analyse/index'
 
 function createModule(schema) {
     return graphqlHTTP(async (request, response, ctx) => {
@@ -44,6 +45,7 @@ let schema = new GraphQLSchema({
         ...shop.queries,
         ...customer.queries,
         ...sales.queries,
+        ...analyses.queries
     }
   }),
 
@@ -55,7 +57,7 @@ let schema = new GraphQLSchema({
         ...common.mutations, 
         ...common.queries,
         ...customer.mutations,
-        ...sales.mutations,
+        ...sales.mutations
     }
   })
 });

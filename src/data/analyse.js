@@ -52,10 +52,13 @@ class AnalyseData {
 
     let aggOptions = [
       { $match: {is_recharge:false, create_time:{$gte:dateBegan, $lt:dateEnd}} },
-      { $group: {"_id": { "shop": "$shop"}, "price":{$sum:"$system_price"}, "count":{$sum:1}, "sub_count":{$sum:{"$size":"$sub_orders"}}}}
+      { $group: {"_id": { "shop": "$shop"}, "amount":{$sum:"$system_price"}, "count":{$sum:1}, "sub_count":{$sum:{"$size":"$sub_orders"}}}},
+      { $project : {"_id": 0, "shop" : "$_id.shop", "amount" : "$amount", "count" : "$count", "sub_count" : "$sub_count"}}
     ];
     let orders = await orderModel.aggregate(aggOptions);
+    // console.log('getAnalyseShopSalesList orders=' + JSON.stringify(orders))
     let newOrders = await orderModel.populate(orders, {path:'shop', model:'shop'});
+    console.log('getAnalyseShopSalesList orders=' + JSON.stringify(newOrders))
     
     return newOrders;
   }
@@ -94,7 +97,7 @@ class AnalyseData {
     for(let i=0; i<12; i++) {
       let aggOptions = [
         { $match: {is_recharge:false, create_time:{$gte:dateBegan.toDate(), $lt:dateEnd.toDate()}} },
-        { $group: {"price":{$sum:"$system_price"}}}
+        { $group: {"amount":{$sum:"$system_price"}}}
       ];
       let orders = await orderModel.aggregate(aggOptions);
       list.push(orders.price);
@@ -118,7 +121,7 @@ class AnalyseData {
       dateEnd = moment(date.month(i+1));
       let aggOptions = [
         { $match: {is_recharge:false, create_time:{$gte:dateBegan.toDate(), $lt:dateEnd.toDate()}} },
-        { $group: {"price":{$sum:"$system_price"}}}
+        { $group: {"amount":{$sum:"$system_price"}}}
       ];
       let orders = await orderModel.aggregate(aggOptions);
       list.push(orders.price);
@@ -155,7 +158,7 @@ class AnalyseData {
     for(let i=0; i<5; i++) {
       let aggOptions = [
         { $match: {is_recharge:false, create_time:{$gte:dateBegan.toDate(), $lt:dateEnd.toDate()}} },
-        { $group: {"price":{$sum:"$system_price"}}}
+        { $group: {"amount":{$sum:"$system_price"}}}
       ];
       let orders = await orderModel.aggregate(aggOptions);
       list.push(orders.price);
@@ -177,7 +180,7 @@ class AnalyseData {
     for(let i=0; i<4; i++) {
       let aggOptions = [
         { $match: {is_recharge:false, create_time:{$gte:dateBegan.toDate(), $lt:dateEnd.toDate()}} },
-        { $group: {"price":{$sum:"$system_price"}}}
+        { $group: {"amount":{$sum:"$system_price"}}}
       ];
       let orders = await orderModel.aggregate(aggOptions);
       list.push(orders.price);

@@ -12,7 +12,7 @@ var responseFormatter = (ctx) => {
         let body = JSON.parse(ctx.body);
         
         if (body.errors ) {
-            // console.log('responseFormatter' + JSON.stringify(ctx.body));
+            console.log('responseFormatter' + JSON.stringify(ctx.body));
             let error = body.errors.length > 0 ? body.errors[0] : body.errors;
             if (typeof(error.code)=="undefined") {
                 ctx.body = {
