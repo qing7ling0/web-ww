@@ -5,6 +5,7 @@ import {
   GraphQLString,
   GraphQLID,
   GraphQLInt,
+  GraphQLFloat,
   GraphQLBoolean,
   GraphQLInputObjectType
 } from 'graphql';
@@ -34,14 +35,14 @@ export const analyseShopList = {
 }
 
 export const analyseLast5Week = {
-  type: new GraphQLList(GraphQLInt),
+  type: new GraphQLList(GraphQLFloat),
 	async resolve (root, params, options) {
     return await analyseData.getAnalyseSalesListLast5Week();
 	}
 }
 
 export const analyseLast12Month = {
-  type: new GraphQLList(GraphQLInt),
+  type: new GraphQLList(GraphQLFloat),
 	async resolve (root, params, options) {
     return await analyseData.getAnalyseSalesListLast12Month();
 	}
@@ -50,8 +51,8 @@ export const analyseLast2Year12Month = {
   type: new GraphQLObjectType({
     name: 'analyseLast2Year12Month',
     fields: {
-      year:{type:new GraphQLList(GraphQLInt)},
-      yesteryear: {type:new GraphQLList(GraphQLInt)}
+      year:{type:new GraphQLList(GraphQLFloat)},
+      yesteryear: {type:new GraphQLList(GraphQLFloat)}
     }
   }),
   args: {
@@ -61,7 +62,7 @@ export const analyseLast2Year12Month = {
 	}
 }
 export const analyseLast5Year = {
-  type: new GraphQLList(GraphQLInt),
+  type: new GraphQLList(GraphQLFloat),
   args: {
   },
 	async resolve (root, params, options) {
@@ -69,7 +70,7 @@ export const analyseLast5Year = {
 	}
 }
 export const analyse4Quarter = {
-  type: new GraphQLList(GraphQLInt),
+  type: new GraphQLList(GraphQLFloat),
   args: {
   },
 	async resolve (root, params, options) {

@@ -58,7 +58,7 @@ class AnalyseData {
     let orders = await orderModel.aggregate(aggOptions);
     // console.log('getAnalyseShopSalesList orders=' + JSON.stringify(orders))
     let newOrders = await orderModel.populate(orders, {path:'shop', model:'shop'});
-    console.log('getAnalyseShopSalesList orders=' + JSON.stringify(newOrders))
+    // console.log('getAnalyseShopSalesList orders=' + JSON.stringify(newOrders))
     
     return newOrders;
   }
@@ -67,21 +67,28 @@ class AnalyseData {
    * 获取最近5周的销量
    */
   async getAnalyseSalesListLast5Week() {
-    let date = moment(moment().format("YYYY-MM-DD"));
+    let date = moment(moment().format("YYYY-MM-DD")).add(1, 'day');
     let dateBegan = null;
     let dateEnd = null;
 
     let list = [];
     for(let i=0; i<5; i++) {
-      dateBegan = moment(date.weekday(-7*i)).toDate();
-      dateEnd = moment(date.weekday(-7*(i+1))).toDate();
+      dateEnd = moment(date);
+      dateBegan = moment(date.subtract(7, 'days'));
+      // console.log('getAnalyseSalesListLast5Week dateBegan=' + dateBegan.format("YYYY-MM-DD HH:mm:ss") + 'dateEnd=' + dateEnd.format("YYYY-MM-DD HH:mm:ss"))
       let aggOptions = [
-        { $match: {is_recharge:false, create_time:{$gte:dateBegan, $lt:dateEnd}} },
-        { $group: {"price":{$sum:"$system_price"}}}
+        { $match: {is_recharge:false, create_time:{$gte:dateBegan.toDate(), $lt:dateEnd.toDate()}} },
+        { $group: {"_id": { "is_recharge": "$is_recharge"}, "amount":{$sum:"$system_price"}}}
       ];
       let orders = await orderModel.aggregate(aggOptions);
-      list.push(orders.price);
+      // console.log('getAnalyseSalesListLast5Week list=' + JSON.stringify(orders))
+      if (orders.length > 0) {
+        list.push(orders[0].amount);
+      } else {
+        list.push(0);
+      }
     }
+    console.log('getAnalyseSalesListLast5Week list=' + JSON.stringify(list))
     return list;
   }
 
@@ -95,12 +102,19 @@ class AnalyseData {
 
     let list = [];
     for(let i=0; i<12; i++) {
+      console.log('getAnalyseSalesListLast12Month dateBegan=' + dateBegan.format("YYYY-MM-DD HH:mm:ss") + 'dateEnd=' + dateEnd.format("YYYY-MM-DD HH:mm:ss"))
+
       let aggOptions = [
         { $match: {is_recharge:false, create_time:{$gte:dateBegan.toDate(), $lt:dateEnd.toDate()}} },
-        { $group: {"amount":{$sum:"$system_price"}}}
+        { $group: {"_id": { "is_recharge": "$is_recharge"}, "amount":{$sum:"$system_price"}}}
       ];
       let orders = await orderModel.aggregate(aggOptions);
-      list.push(orders.price);
+      // console.log('getAnalyseSalesListLast12Month list=' + JSON.stringify(orders))
+      if (orders.length > 0) {
+        list.push(orders[0].amount);
+      } else {
+        list.push(0);
+      }
       dateEnd = moment(dateBegan);
       dateBegan = moment(dateBegan.subtract(1, 'month'));
     }
@@ -121,10 +135,14 @@ class AnalyseData {
       dateEnd = moment(date.month(i+1));
       let aggOptions = [
         { $match: {is_recharge:false, create_time:{$gte:dateBegan.toDate(), $lt:dateEnd.toDate()}} },
-        { $group: {"amount":{$sum:"$system_price"}}}
+        { $group: {"_id": { "is_recharge": "$is_recharge"}, "amount":{$sum:"$system_price"}}}
       ];
       let orders = await orderModel.aggregate(aggOptions);
-      list.push(orders.price);
+      if (orders.length > 0) {
+        list.push(orders[0].amount);
+      } else {
+        list.push(0);
+      }
     }
 
     date = moment(moment().format("YYYY-MM")).subtract(1, 'year');
@@ -135,10 +153,14 @@ class AnalyseData {
       dateEnd = moment(date.month(i+1));
       let aggOptions = [
         { $match: {is_recharge:false, create_time:{$gte:dateBegan.toDate(), $lt:dateEnd.toDate()}} },
-        { $group: {"price":{$sum:"$system_price"}}}
+        { $group: {"_id": { "is_recharge": "$is_recharge"}, "amount":{$sum:"$system_price"}}}
       ];
       let orders = await orderModel.aggregate(aggOptions);
-      yesteryearList.push(orders.price);
+      if (orders.length > 0) {
+        yesteryearList.push(orders[0].amount);
+      } else {
+        yesteryearList.push(0);
+      }
     }
     return {
       year:list,
@@ -150,42 +172,54 @@ class AnalyseData {
    * 获取最近5年销售额
    */
   async getAnalyseSalesListLast5Year() {
-    let date = moment(moment().format("YYYY"+"01-01")).add(1, 'year');
-    let dateBegan = moment(date.subtract(1, 'year'));
+    let date = moment(moment().format("YYYY"+"-01-01")).add(1, 'year');
+    let dateBegan = moment(date).subtract(1, 'year');
     let dateEnd = moment(date);
 
     let list = [];
     for(let i=0; i<5; i++) {
       let aggOptions = [
         { $match: {is_recharge:false, create_time:{$gte:dateBegan.toDate(), $lt:dateEnd.toDate()}} },
-        { $group: {"amount":{$sum:"$system_price"}}}
+        { $group: {"_id": { "is_recharge": "$is_recharge"}, "amount":{$sum:"$system_price"}}}
       ];
       let orders = await orderModel.aggregate(aggOptions);
-      list.push(orders.price);
+      if (orders.length > 0) {
+        list.push(orders[0].amount);
+      } else {
+        list.push(0);
+      }      
+      console.log('getAnalyseSalesListLast5Year list=' + JSON.stringify(orders))
+
       dateEnd = moment(dateBegan);
-      dateBegan = moment(dateBegan.subtract(1, 'year'));
+      dateBegan = moment(dateBegan).subtract(1, 'year');
     }
-    return list;
+    return list.reverse();
   }
 
   /**
    * 获取当年4个季度销售额
    */
   async getAnalyseSalesList4Quarter() {
-    let date = moment(moment().format("YYYY"+"01-01"));
+    let date = moment(moment().format("YYYY"+"-01-01"));
     let dateBegan = moment(date);
-    let dateEnd = moment(date.add(3, 'month'));
+    let dateEnd = moment(date).add(3, 'months');
 
     let list = [];
     for(let i=0; i<4; i++) {
       let aggOptions = [
         { $match: {is_recharge:false, create_time:{$gte:dateBegan.toDate(), $lt:dateEnd.toDate()}} },
-        { $group: {"amount":{$sum:"$system_price"}}}
+        { $group: {"_id": { "is_recharge": "$is_recharge"}, "amount":{$sum:"$system_price"}}}
       ];
       let orders = await orderModel.aggregate(aggOptions);
-      list.push(orders.price);
+      if (orders.length > 0) {
+        list.push(orders[0].amount);
+      } else {
+        list.push(0);
+      }
+      console.log('getAnalyseSalesList4Quarter list=' + JSON.stringify(orders))
+
       dateBegan = moment(dateEnd);
-      dateEnd = moment(dateEnd.add(3, 'month'));
+      dateEnd = moment(dateEnd).add(3, 'month');
     }
 
     return list;

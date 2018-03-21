@@ -219,87 +219,87 @@ module.exports.testAddOrder = async function(ctx) {
   console.log('testAddOrder time 111222 =' + (mi2-mi));
   mi = mi2;
   
-  // for(let i=0; i<3000; i++) {
-  //   let h = Math.floor(Math.random()*100000000) % xiaoshi + xiaoshi;
-  //   let time = moment().subtract(h,'h');
-  //   let order = await addOrderTest(ctx, time.format("YYYY-MM-DD HH:mm:ss"));
-  //   orders.push({order, time});
-  // }
-  // mi2 = new Date().getTime();
-  // console.log('testAddOrder time 222111 =' + (mi2-mi));
-  // mi = mi2;
+  for(let i=0; i<3000; i++) {
+    let h = Math.floor(Math.random()*100000000) % xiaoshi + xiaoshi;
+    let time = moment().subtract(h,'h');
+    let order = await addOrderTest(ctx, time.format("YYYY-MM-DD HH:mm:ss"));
+    orders.push({order, time});
+  }
+  mi2 = new Date().getTime();
+  console.log('testAddOrder time 222111 =' + (mi2-mi));
+  mi = mi2;
   
-  // for(let item of orders) {
-  //   let newOrder = await salesData.addOrder(item.order);
-  //   if (item.time) {
-  //     // console.log('----test add 1 order time='  + item.time);
-  //     await orderModel.findByIdAndUpdate(newOrder._id, {create_time:item.time})
-  //   }
-  // }
-  // mi2 = new Date().getTime();
-  // console.log('testAddOrder time 222222 =' + (mi2-mi));
-  // mi = mi2;
+  for(let item of orders) {
+    let newOrder = await salesData.addOrder(item.order);
+    if (item.time) {
+      // console.log('----test add 1 order time='  + item.time);
+      await orderModel.findByIdAndUpdate(newOrder._id, {create_time:item.time})
+    }
+  }
+  mi2 = new Date().getTime();
+  console.log('testAddOrder time 222222 =' + (mi2-mi));
+  mi = mi2;
 
-  // for(let i=0; i<2000; i++) {
-  //   let h = Math.floor(Math.random()*100000000) % xiaoshi + xiaoshi*2;
-  //   let time = moment().subtract(h,'h');
-  //   let order = await addOrderTest(ctx, time.format("YYYY-MM-DD HH:mm:ss"));
-  //   orders.push({order, time});
-  // }
-  // mi2 = new Date().getTime();
-  // console.log('testAddOrder time 333111 =' + (mi2-mi));
-  // mi = mi2;
+  for(let i=0; i<2000; i++) {
+    let h = Math.floor(Math.random()*100000000) % xiaoshi + xiaoshi*2;
+    let time = moment().subtract(h,'h');
+    let order = await addOrderTest(ctx, time.format("YYYY-MM-DD HH:mm:ss"));
+    orders.push({order, time});
+  }
+  mi2 = new Date().getTime();
+  console.log('testAddOrder time 333111 =' + (mi2-mi));
+  mi = mi2;
   
-  // for(let item of orders) {
-  //   let newOrder = await salesData.addOrder(item.order);
-  //   if (item.time) {
-  //     // console.log('----test add 1 order time='  + item.time);
-  //     await orderModel.findByIdAndUpdate(newOrder._id, {create_time:item.time})
-  //   }
-  // }
-  // mi2 = new Date().getTime();
-  // console.log('testAddOrder time 333222 =' + (mi2-mi));
-  // mi = mi2;
+  for(let item of orders) {
+    let newOrder = await salesData.addOrder(item.order);
+    if (item.time) {
+      // console.log('----test add 1 order time='  + item.time);
+      await orderModel.findByIdAndUpdate(newOrder._id, {create_time:item.time})
+    }
+  }
+  mi2 = new Date().getTime();
+  console.log('testAddOrder time 333222 =' + (mi2-mi));
+  mi = mi2;
 
-  // for(let i=0; i<3687; i++) {
-  //   let h = Math.floor(Math.random()*100000000) % xiaoshi + xiaoshi*3;
-  //   let time = moment().subtract(h,'h');
-  //   let order = await addOrderTest(ctx, time.format("YYYY-MM-DD HH:mm:ss"));
-  //   orders.push({order, time});
-  // }
-  // mi2 = new Date().getTime();
-  // console.log('testAddOrder time 444111 =' + (mi2-mi));
-  // mi = mi2;
+  for(let i=0; i<3687; i++) {
+    let h = Math.floor(Math.random()*100000000) % xiaoshi + xiaoshi*3;
+    let time = moment().subtract(h,'h');
+    let order = await addOrderTest(ctx, time.format("YYYY-MM-DD HH:mm:ss"));
+    orders.push({order, time});
+  }
+  mi2 = new Date().getTime();
+  console.log('testAddOrder time 444111 =' + (mi2-mi));
+  mi = mi2;
   
-  // for(let item of orders) {
-  //   let newOrder = await salesData.addOrder(item.order);
-  //   if (item.time) {
-  //     // console.log('----test add 1 order time='  + item.time);
-  //     await orderModel.findByIdAndUpdate(newOrder._id, {create_time:item.time})
-  //   }
-  // }
-  // mi2 = new Date().getTime();
-  // console.log('testAddOrder time 444222 =' + (mi2-mi));
-  // mi = mi2;
+  for(let item of orders) {
+    let newOrder = await salesData.addOrder(item.order);
+    if (item.time) {
+      // console.log('----test add 1 order time='  + item.time);
+      await orderModel.findByIdAndUpdate(newOrder._id, {create_time:item.time})
+    }
+  }
+  mi2 = new Date().getTime();
+  console.log('testAddOrder time 444222 =' + (mi2-mi));
+  mi = mi2;
 
-  // for(let i=0; i<2589; i++) {
-  //   let h = Math.floor(Math.random()*100000000) % xiaoshi + xiaoshi*4;
-  //   let time = moment().subtract(h,'h');
-  //   let order = await addOrderTest(ctx, time.format("YYYY-MM-DD HH:mm:ss"));
-  //   orders.push({order, time});
-  // }
-  // mi2 = new Date().getTime();
-  // console.log('testAddOrder time 555111 =' + (mi2-mi));
-  // mi = mi2;
+  for(let i=0; i<2589; i++) {
+    let h = Math.floor(Math.random()*100000000) % xiaoshi + xiaoshi*4;
+    let time = moment().subtract(h,'h');
+    let order = await addOrderTest(ctx, time.format("YYYY-MM-DD HH:mm:ss"));
+    orders.push({order, time});
+  }
+  mi2 = new Date().getTime();
+  console.log('testAddOrder time 555111 =' + (mi2-mi));
+  mi = mi2;
   
-  // for(let item of orders) {
-  //   let newOrder = await salesData.addOrder(item.order);
-  //   if (item.time) {
-  //     // console.log('----test add 1 order time='  + item.time);
-  //     await orderModel.findByIdAndUpdate(newOrder._id, {create_time:item.time})
-  //   }
-  // }
-  // mi2 = new Date().getTime();
-  // console.log('testAddOrder time 555222 =' + (mi2-mi));
-  // mi = mi2;
+  for(let item of orders) {
+    let newOrder = await salesData.addOrder(item.order);
+    if (item.time) {
+      // console.log('----test add 1 order time='  + item.time);
+      await orderModel.findByIdAndUpdate(newOrder._id, {create_time:item.time})
+    }
+  }
+  mi2 = new Date().getTime();
+  console.log('testAddOrder time 555222 =' + (mi2-mi));
+  mi = mi2;
 }
