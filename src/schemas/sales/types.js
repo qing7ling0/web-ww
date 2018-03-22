@@ -24,7 +24,8 @@ export const materialInputFields = {
   _id: {type:GraphQLString},
   name: {type:GraphQLString, description:'名称'},
   NID: {type:GraphQLString, description:'编号'},
-  count: {type:GraphQLInt, description:'数量'}
+  count: {type:GraphQLInt, description:'数量'},
+  maintain_cycle: {type:GraphQLInt, decription:'保养周期'}
 };
 export const materialType = new GraphQLObjectType({
   name: 'materialType',
@@ -91,8 +92,7 @@ const goodsBaseFields = {
   goods: {type:GraphQLString, description:'商品（鞋皮带表带）'},
   put_date: {type:GraphQLString, decription:'上架时间'},
   sex: {type:GraphQLString, decription:'男女'},
-  price: {type:GraphQLInt, decription:'价格'},
-  maintain_cycle: {type:GraphQLInt, decription:'保养周期'}
+  price: {type:GraphQLInt, decription:'价格'}
 };
 const goodsFields = {
   ...goodsBaseFields,

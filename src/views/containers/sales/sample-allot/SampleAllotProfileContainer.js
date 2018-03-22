@@ -60,7 +60,7 @@ const ORDER_STEPS = [
   {title: '完成'}
 ];
 
-// { title: '编号', dataIndex: 'sample', key: 'sample', render:item=>item&&item.NID || ""},
+// { title: '货号', dataIndex: 'sample', key: 'sample', render:item=>item&&item.NID || ""},
 // { title: '状态', dataIndex: 'status', key: 'status', render:(item) => {
 //   let type = commonUtils.getValueByList(constants.BASE_CONSTANTS.SAMPLE_ALLOT_STATUS_DATAS, item);
 //   return type&&type.label||'';
@@ -78,7 +78,7 @@ const ORDER_STEPS = [
 //   return '无';
 // }},
 const OPTIONS = [
-  { title: '编号', dataIndex: 'sample', key: 'sample', render:(item) => item&&item.NID || ''},
+  { title: '货号', dataIndex: 'sample', key: 'sample', render:(item) => item&&item.NID || ''},
   { title: '申请的店铺', dataIndex: 'apply_shop', key: 'apply_shop', render:(item) => item&&item.name||''},
   { title: '申请人', dataIndex: 'apply_shop_guide', key: 'apply_shop_guide', render:(item) => item&&item.name||''},
   { title: '样品店铺', dataIndex: 'accept_shop', key: 'accept_shop', render:(item) => item&&item.name||''},

@@ -82,7 +82,7 @@ const ORDER_STEPS = [
 
 // 皮带
 const ORDER_BELT = [
-  { title: '编号', dataIndex: 'NID', key: 'NID'},
+  { title: '货号', dataIndex: 'NID', key: 'NID'},
   { title: '价格', dataIndex: 'price', key: 'price_label', render:(item) => item+' RMB'},
   { title: '材质', dataIndex: 'b_material', key: 'b_material', render:(item) => item.name},
   { title: '颜色', dataIndex: 'b_out_color', key: 'b_out_color', render:(item) => item.name},
@@ -94,7 +94,7 @@ const ORDER_BELT = [
 
 // 表带
 const ORDER_WATCH_STRAP = [
-  { title: '编号', dataIndex: 'NID', key: 'NID'},
+  { title: '货号', dataIndex: 'NID', key: 'NID'},
   { title: '价格', dataIndex: 'price', key: 'price_label', render:(item) => item+' RMB'},
   { title: '材质', dataIndex: 'ws_material', key: 'ws_material', render:(item) => item.name},
   { title: '类型', dataIndex: 'ws_style', key: 'ws_style', render:(item) => item.name},
@@ -110,7 +110,7 @@ const ORDER_WATCH_STRAP = [
 
 // 护理
 const ORDER_MAINTAIN = [
-  { title: '编号', dataIndex: 'NID', key: 'NID'},
+  { title: '货号', dataIndex: 'NID', key: 'NID'},
   { title: '价格', dataIndex: 'price', key: 'price_label', render:(item) => item+' RMB'},
   { title: '护理内容', dataIndex: 'm_name', key: 'm_name'},
   { title: '护理时间', dataIndex: 'm_time', key: 'm_time'},
@@ -121,7 +121,7 @@ const ORDER_MAINTAIN = [
 
 // 配饰
 const ORDER_ORNAMEN = [
-  { title: '编号', dataIndex: 'NID', key: 'NID'},
+  { title: '货号', dataIndex: 'NID', key: 'NID'},
   { title: '价格', dataIndex: 'price', key: 'price_label', render:(item) => item+' RMB'},
   { title: '名称', dataIndex: 'o_name', key: 'o_name'}
 ]

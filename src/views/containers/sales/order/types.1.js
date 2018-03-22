@@ -203,7 +203,7 @@ const getOrderBaseOptions = function(target) {
 const getOrderShoesListColumns = function(target) {
   let options = getOrderBaseListColumns(target);
   return [
-    { title: '编号', dataIndex: 's_NID', key: 'ws_NID'}
+    { title: '货号', dataIndex: 's_NID', key: 'ws_NID'}
   ].concat(options);
 }
 const getOrderShoesOptions = function(target) {
@@ -222,7 +222,7 @@ const getOrderShoesOptions = function(target) {
 const getOrderBeltListColumns = function(target) {
   let options = getOrderBaseListColumns(target);
   return [
-    { title: '编号', dataIndex: 'b_NID', key: 'ws_NID'}
+    { title: '货号', dataIndex: 'b_NID', key: 'ws_NID'}
   ].concat(options);
 }
 const getOrderBeltOptions = function(target) {
@@ -241,7 +241,7 @@ const getOrderBeltOptions = function(target) {
 const getOrderWatchStrapListColumns = function(target) {
   let options = getOrderBaseListColumns(target);
   return [
-    { title: '编号', dataIndex: 'ws_NID', key: 'ws_NID'}
+    { title: '货号', dataIndex: 'ws_NID', key: 'ws_NID'}
   ].concat(options);
 }
 const getOrderWatchStrapOptions = function(target) {
@@ -258,7 +258,7 @@ const getOrderWatchStrapOptions = function(target) {
 const getOrderMaintainListColumns = function(target) {
   let options = getOrderBaseListColumns(target);
   return [
-    { title: '编号', dataIndex: 'm_NID', key: 'm_NID'}
+    { title: '货号', dataIndex: 'm_NID', key: 'm_NID'}
   ].concat(options);
 }
 const getOrderMaintainOptions = function(target) {
@@ -277,7 +277,7 @@ const getOrderMaintainOptions = function(target) {
 const getOrderOrnamentListColumns = function(target) {
   let options = getOrderBaseListColumns(target);
   return [
-    { title: '编号', dataIndex: 'o_NID', key: 'o_NID'}
+    { title: '货号', dataIndex: 'o_NID', key: 'o_NID'}
   ].concat(options);
 }
 const getOrderOrnamentOptions = function(target) {

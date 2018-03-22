@@ -53,6 +53,10 @@ class MaterialEditModal extends Component {
   onSubmit = (err, values) => {
     if (!err) {
       if (this.props.onEdit) {
+        if (values.count !== null && values.count !== undefined) {
+          if (values.count) values.count = 1;
+          else values.count = 0;
+        }
         this.props.onEdit(values);
       }
     }

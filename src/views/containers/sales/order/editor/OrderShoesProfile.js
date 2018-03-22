@@ -84,7 +84,7 @@ const ORDER_STEPS = [
 
 // 基础
 const ORDER_SHOES = [
-  { title: '编号', dataIndex: 'NID', key: 'NID'},
+  { title: '货号', dataIndex: 'NID', key: 'NID'},
   { title: '价格', dataIndex: 'price', key: 'price_label', render:(item) => item+' RMB'},
   { title: '分类', dataIndex: 'type', key: 'type_label', render:(item) => item.name},
   { title: '系列', dataIndex: 'style', key: 'style_label', render:(item) => item.name},
@@ -94,10 +94,10 @@ const ORDER_SHOES = [
   { title: '规格', dataIndex: 's_gui_ge', key: 's_gui_ge', render:(item) => item.name},
   { title: '跟高', dataIndex: 's_gen_gao', key: 's_gen_gao', render:(item) => item&&item.name||''},
   { title: '材质', dataIndex: 's_material', key: 's_material', render:(item) => item.name},
-  { title: '鞋面颜色', dataIndex: 's_out_color', key: 's_out_color', render:(item) => item.name},
-  { title: '里皮颜色', dataIndex: 's_in_color', key: 's_in_color', render:(item) => item.name},
-  { title: '鞋底颜色', dataIndex: 's_bottom_color', key: 's_bottom_color', render:(item) => item.name},
-  { title: '底边颜色', dataIndex: 's_bottom_side_color', key: 's_bottom_side_color', render:(item) => item.name}
+  { title: '颜色', dataIndex: 's_out_color', key: 's_out_color', render:(item) => item.name},
+  { title: '内里色', dataIndex: 's_in_color', key: 's_in_color', render:(item) => item.name},
+  { title: '底侧色', dataIndex: 's_bottom_color', key: 's_bottom_color', render:(item) => item.name},
+  { title: '底板色', dataIndex: 's_bottom_side_color', key: 's_bottom_side_color', render:(item) => item.name}
 ]
 
 // 尺寸

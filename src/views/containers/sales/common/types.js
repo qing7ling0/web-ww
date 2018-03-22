@@ -279,7 +279,7 @@ export const COMMON_TYPES = [
   },
   {
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.SHOES_OUT_COLOR,
-    listTag:'outColorList:commonList', tag:'commonList', label:'鞋面颜色', 
+    listTag:'outColorList:commonList', tag:'commonList', label:'鞋颜色', 
     graphqlType:graphqlTypes.salesBaseType,
     listOptions:getNIDBaseListOptions,
     addOptions:getNIDBaseAddOptions,
@@ -287,7 +287,7 @@ export const COMMON_TYPES = [
   },
   {
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.SHOES_IN_COLOR,
-    listTag:'inColorList:commonList', tag:'commonList', label:'里皮颜色', 
+    listTag:'inColorList:commonList', tag:'commonList', label:'鞋内里颜色', 
     graphqlType:graphqlTypes.salesBaseType,
     listOptions:getNIDBaseListOptions,
     addOptions:getNIDBaseAddOptions,
@@ -295,7 +295,7 @@ export const COMMON_TYPES = [
   },
   {
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.SHOES_BOTTOM_COLOR,
-    listTag:'bottomColorList:commonList', tag:'commonList', label:'鞋底颜色', 
+    listTag:'bottomColorList:commonList', tag:'commonList', label:'鞋底侧颜色', 
     graphqlType:graphqlTypes.salesBaseType,
     listOptions:getNIDBaseListOptions,
     addOptions:getNIDBaseAddOptions,
@@ -303,7 +303,7 @@ export const COMMON_TYPES = [
   },
   {
     key:BASE_CONSTANTS.COMMON_DATA_TYPES.SHOES_BOTTOM_SIDE_COLOR,
-    listTag:'bottomSideColorList:commonList', tag:'commonList', label:'底边颜色', 
+    listTag:'bottomSideColorList:commonList', tag:'commonList', label:'鞋底板颜色', 
     graphqlType:graphqlTypes.salesBaseType,
     listOptions:getNIDBaseListOptions,
     addOptions:getNIDBaseAddOptions,

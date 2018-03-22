@@ -82,7 +82,7 @@ const ORDER_STEPS = [
 
 // 基础
 const ORDER_BELT = [
-  { title: '编号', dataIndex: 'NID', key: 'NID'},
+  { title: '货号', dataIndex: 'NID', key: 'NID'},
   { title: '价格', dataIndex: 'price', key: 'price_label', render:(item) => item+' RMB'},
   { title: '材质', dataIndex: 'b_material', key: 'b_material', render:(item) => item.name},
   { title: '颜色', dataIndex: 'b_out_color', key: 'b_out_color', render:(item) => item.name},

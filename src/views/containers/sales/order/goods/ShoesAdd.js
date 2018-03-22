@@ -394,7 +394,7 @@ class ShoesAdd extends Component {
 
     // let NID = this.props.form.getFieldValue('NID');
     if (NID === constants.BASE_CONSTANTS.NULL_NID) {
-      message.error('请确定编号是否已有');
+      message.error('请确定货号是否已有');
       return false;
     }
     return true;

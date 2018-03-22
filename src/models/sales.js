@@ -14,6 +14,7 @@ const materialFields = {
   count: {type:Number, description:'数量'},
   color: {type:String, ref:'common', description:'颜色'},
   color_css: {type:Number, description:'css颜色', default:0xffff000},
+  maintain_cycle: {type:Number, decription:'保养周期'},
   ...baseFields
 };
 
@@ -32,7 +33,6 @@ const goodsBaseFields = {
   put_date: {type:Date, decription:'上架时间'},
   sex: {type:String, decription:'男女'},
   price: {type:Number, decription:'价格'},
-  maintain_cycle: {type:Number, decription:'保养周期'},
   pics:[new Schema({
     file:{type: Schema.Types.ObjectId, ref:'file', description:'图片'}
   })],

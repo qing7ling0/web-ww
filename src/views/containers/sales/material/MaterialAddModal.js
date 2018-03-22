@@ -53,6 +53,10 @@ class MaterialAddModal extends Component {
   onSubmit = (err, values) => {
     if (!err) {
       if (this.props.onAdd) {
+        if (values.count !== null && values.count !== undefined) {
+          if (values.count) values.count = 1;
+          else values.count = 0;
+        }
         this.props.onAdd(values);
       }
     }

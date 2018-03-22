@@ -40,7 +40,7 @@ const listToSelectOptions = (list, valueFormat, labelFormat) => {
 // 基础
 const getSampleAllotColumns = function(target) {
   return [
-    { title: '编号', dataIndex: 'sample', key: 'sample', render:item=>item&&item.NID || ""},
+    { title: '货号', dataIndex: 'sample', key: 'sample', render:item=>item&&item.NID || ""},
     { title: '状态', dataIndex: 'status', key: 'status', render:(item) => {
       let type = commonUtils.getValueByList(constants.BASE_CONSTANTS.SAMPLE_ALLOT_STATUS_DATAS, item);
       return type&&type.label||'';

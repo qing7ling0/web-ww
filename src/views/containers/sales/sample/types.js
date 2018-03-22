@@ -40,7 +40,7 @@ const listToSelectOptions = (list, valueFormat, labelFormat) => {
 // 基础
 const getSampleGoodsBaseColumns = function(target) {
   return [
-    { title: '编号', dataIndex: 'NID', key: 'NID'},
+    { title: '货号', dataIndex: 'NID', key: 'NID'},
     { title: '分类', dataIndex: 'type', key: 'type', render:(item) => {
       let type = commonUtils.getOrderType(item);
       if (type) return type.label;
@@ -81,10 +81,10 @@ const getSampleGoodsShoesProfileOptions = function(target) {
         { title: '规格', dataIndex: 's_gui_ge', key: 's_gui_ge', render:(item) => item&&item.name||''},
         { title: '跟高', dataIndex: 's_gen_gao', key: 's_gen_gao', render:(item) => item&&item.name||''},
         { title: '材质', dataIndex: 's_material', key: 's_material', render:(item) => item&&item.name||''},
-        { title: '鞋面颜色', dataIndex: 's_out_color', key: 's_out_color', render:(item) => item&&item.name||''},
-        { title: '里皮颜色', dataIndex: 's_in_color', key: 's_in_color', render:(item) => item&&item.name||''},
-        { title: '鞋底颜色', dataIndex: 's_bottom_color', key: 's_bottom_color', render:(item) => item&&item.name||''},
-        { title: '底边颜色', dataIndex: 's_bottom_side_color', key: 's_bottom_side_color', render:(item) => item&&item.name||''},
+        { title: '颜色', dataIndex: 's_out_color', key: 's_out_color', render:(item) => item&&item.name||''},
+        { title: '内里色', dataIndex: 's_in_color', key: 's_in_color', render:(item) => item&&item.name||''},
+        { title: '底侧色', dataIndex: 's_bottom_color', key: 's_bottom_color', render:(item) => item&&item.name||''},
+        { title: '底板色', dataIndex: 's_bottom_side_color', key: 's_bottom_side_color', render:(item) => item&&item.name||''},
       ]
     }
   }
@@ -207,7 +207,7 @@ const getSampleGoodsBeltEditOptions = function(target) {
 // 表带
 const getSampleGoodsWatchStrapBaseColumns = function(target) {
   return [
-    { title: '编号', dataIndex: 'NID', key: 'NID'},
+    { title: '货号', dataIndex: 'NID', key: 'NID'},
     { title: '名称', dataIndex: 'name', key: 'name'},
     { title: '价格', dataIndex: 'price', key: 'price_label', render:(item) => item+'RMB'},
     { title: '分类', dataIndex: 'type', key: 'type_label', render:(item) => item.name},
@@ -216,7 +216,7 @@ const getSampleGoodsWatchStrapBaseColumns = function(target) {
     { title: '性别', dataIndex: 'sex', key: 'sex'},
     { title: '材质', dataIndex: 'ws_material', key: 'ws_material', render:(item) => item.name},
     { title: '类别', dataIndex: 'ws_style', key: 'ws_style', render:(item) => item && item.name || ''},
-    { title: '保养周期', dataIndex: 'maintain_cycle', key: 'maintain_cycle', render:(item) => item+' 天'},    
+    { title: '保养周期', dataIndex: 'ws_material', key: 'maintain_cycle', render:(item) => (item&&item.maintain_cycle||0)+' 天'},    
     { title: '上架时间', dataIndex: 'put_date', key: 'put_date_label', render:(item) => moment(item).format('YYYY-MM-DD')},
   ]
 }

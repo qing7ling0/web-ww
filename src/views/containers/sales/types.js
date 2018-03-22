@@ -40,7 +40,8 @@ export const getMaterialAddOptions = function(target) {
     {type:'input', name:'name', label:'名称', itemOptions:{hasFeedback:true}, rule:{required:true}},
     {type:'input', name:'NID', label:'编号', itemOptions:{hasFeedback:true}, rule:{required:true}},
     {type:'select', name:'color', label:'颜色', selectItems:listToSelectOptions(target.props.materialColorList), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    {type:'number', name:'count', label:'数量', itemOptions:{hasFeedback:true}, rule:{required:true}},
+    {type:'switch', name:'count', label:'库存', decoratorOptions:{valuePropName:"checked"}, itemOptions:{hasFeedback:true}, rule:{required:true}},
+    {type:'number', name:'maintain_cycle', label:'保养周期', decoratorOptions:{}, options:{hasFeedback:true, formatter:value=>`${value}天`, parser:value=>value.replace('天', '')}, rule:{required:true}},
   ];
 } 
 
@@ -52,6 +53,9 @@ export const getMaterialEditOptions = function(target) {
       item.decoratorOptions = {};
     }
     let value = target.props.data[item.name] || '';
+    if (item.name === 'count') {
+      value = target.props.data[item.name]>0;
+    }
     if (value._id) {
       value = value._id;
     }
@@ -65,6 +69,7 @@ export const getMaterialBaseColumns = function(target) {
     { title: '名称', dataIndex: 'name', key: 'name'},
     { title: '编号', dataIndex: 'NID', key: 'NID'},
     { title: '颜色', dataIndex: 'color', key: 'color', render:(item) => item&&item.name||''},
-    { title: '数量', dataIndex: 'count', key: 'count'},
+    { title: '库存', dataIndex: 'count', key: 'count', render:(item) => item?'有':'无'},
+    { title: '保养周期', dataIndex: 'maintain_cycle', key: 'maintain_cycle', render:(item) => (item||0)+'天'},
   ]
 }

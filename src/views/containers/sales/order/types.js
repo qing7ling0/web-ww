@@ -230,7 +230,7 @@ const getOrderShoesOptions = function(target) {
           }, 
           rule:{required:true}},    
         {
-          type:'select', name:'s_out_color', label:'鞋面颜色', itemOptions:{labelLeft:true}, 
+          type:'select', name:'s_out_color', label:'颜色', itemOptions:{labelLeft:true}, 
           selectItems:listToSelectOptions(target.props.sales.outColorList, (item)=>item.name), 
           options:{
             defaultActiveFirstOption:true, 
@@ -241,7 +241,7 @@ const getOrderShoesOptions = function(target) {
           rule:{required:true}
         },    
         {
-          type:'select', name:'s_in_color', label:'内里颜色', itemOptions:{labelLeft:true}, 
+          type:'select', name:'s_in_color', label:'内里色', itemOptions:{labelLeft:true}, 
           selectItems:listToSelectOptions(target.props.sales.inColorList, (item)=>item.name), 
           options:{
             defaultActiveFirstOption:true, 
@@ -251,7 +251,7 @@ const getOrderShoesOptions = function(target) {
           }, 
           rule:{required:true}},    
         {
-          type:'select', name:'s_bottom_color', label:'鞋底颜色', itemOptions:{labelLeft:true}, 
+          type:'select', name:'s_bottom_color', label:'底侧色', itemOptions:{labelLeft:true}, 
           selectItems:listToSelectOptions(target.props.sales.bottomColorList, (item)=>item.name), 
           options:{
             defaultActiveFirstOption:true, 
@@ -262,7 +262,7 @@ const getOrderShoesOptions = function(target) {
           rule:{required:true}
         },    
         {
-          type:'select', name:'s_bottom_side_color', label:'底边颜色', itemOptions:{labelLeft:true}, 
+          type:'select', name:'s_bottom_side_color', label:'底板色', itemOptions:{labelLeft:true}, 
           selectItems:listToSelectOptions(target.props.sales.bottomSideColorList, (item)=>item.name), 
           options:{
             defaultActiveFirstOption:true, 
