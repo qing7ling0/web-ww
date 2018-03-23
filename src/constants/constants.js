@@ -23,8 +23,9 @@ module.exports.MENU_IDS = {
   salesItems:           402, // 商品
   salesOrder:           403, // 订单
   salesSampleGoods:     404, // 库存
-  salesSampleAllot:     406, // 库存调拨
   salesItemsBase:       405, // 商品基础数据
+  salesSampleAllot:     406, // 库存调拨
+  salesShoesColorPalette: 407, // 鞋子颜色搭配
 
   report:               5,
   reportTable:          501, // 销售报表

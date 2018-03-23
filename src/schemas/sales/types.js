@@ -20,6 +20,36 @@ import * as commonTypes from '../common/types'
 import { customerType } from '../customer/types';
 import { commonType } from '../common/types';
 
+export const colorPaletteInputFields = {
+  _id: {type:GraphQLString},
+  name: {type:GraphQLString, description:'名称'},
+  NID: {type:GraphQLString, description:'编号'},
+};
+export const colorPaletteType = new GraphQLObjectType({
+  name: 'colorPaletteType',
+  fields: {
+    _id: {type:GraphQLString},
+    name: {type:GraphQLString, description:'名称'},
+    NID: {type:GraphQLString, description:'编号'},
+    out_color: {type:commonType, description:'颜色'},
+    in_color: {type:commonType, description:'内里颜色'},
+    bottom_color: {type:commonType, description:'底侧颜色'},
+    bottom_side_color: {type:commonType, description:'底板颜色'},
+    ...commonFields.defaultCreateFields
+  }
+});
+export const colorPaletteInputType = new GraphQLInputObjectType({
+  name: 'colorPaletteInputType',
+  fields: {
+    name: {type:new GraphQLNonNull(GraphQLString), description:'名称'},
+    NID: {type:new GraphQLNonNull(GraphQLString), description:'编号'},
+    out_color: {type:new GraphQLNonNull(GraphQLString), description:'颜色'},
+    in_color: {type:new GraphQLNonNull(GraphQLString), description:'内里颜色'},
+    bottom_color: {type:new GraphQLNonNull(GraphQLString), description:'底侧颜色'},
+    bottom_side_color: {type:new GraphQLNonNull(GraphQLString), description:'底板颜色'}
+  }
+});
+
 export const materialInputFields = {
   _id: {type:GraphQLString},
   name: {type:GraphQLString, description:'名称'},
@@ -116,6 +146,7 @@ const goodsShoesFields = {
   s_material: {type:orderBaseCommonType, decription:'材质'},
   s_xuan_hao: {type:orderBaseCommonType, decription:'楦号'},
   s_gui_ge: {type:orderBaseCommonType, decription:'规格'},
+  s_color_palette: {type:GraphQLString, decription:'颜色搭配'},
   s_out_color: {type:orderBaseCommonType, decription:'鞋面颜色'},
   s_in_color: {type:orderBaseCommonType, decription:'里皮颜色'},
   s_bottom_color: {type:orderBaseCommonType, decription:'鞋底颜色'},
@@ -126,7 +157,7 @@ const goodsShoesInputFields = {
   ...goodsShoesBaseFields,
   s_material: {type:GraphQLString, decription:'材质'},
   s_xuan_hao: {type:GraphQLString, decription:'楦号'},
-  s_gui_ge: {type:GraphQLString, decription:'规格'},
+  s_color_palette: {type:GraphQLString, decription:'颜色搭配'},
   s_out_color: {type:GraphQLString, decription:'鞋面颜色'},
   s_in_color: {type:GraphQLString, decription:'里皮颜色'},
   s_bottom_color: {type:GraphQLString, decription:'鞋底颜色'},
@@ -329,9 +360,9 @@ const orderShoesBaseFields = {
 const orderShoesFields = {
   ...orderShoesBaseFields,
   s_xuan_hao:{type:orderBaseCommonType, decription:'鞋楦型'},
-  s_gui_ge:{type:orderBaseCommonType, decription:'规格'},
   s_gen_gao:{type:orderBaseCommonType, decription:'跟高'},
   s_material:{type:orderBaseCommonType, decription:'材料'},
+  s_color_palette:{type:GraphQLString, decription:'颜色搭配'},
   s_out_color:{type:orderBaseCommonType, decription:'鞋面颜色'},
   s_in_color:{type:orderBaseCommonType, decription:'内里颜色'},
   s_bottom_color:{type:orderBaseCommonType, decription:'鞋底颜色'},
@@ -343,8 +374,8 @@ const orderShoesFields = {
 const orderShoesInputFields = {
   ...orderShoesBaseFields,
   s_xuan_hao:{type:orderBaseCommonInputType, decription:'鞋楦型'},
-  s_gui_ge:{type:orderBaseCommonInputType, decription:'规格'},
   s_material:{type:orderBaseCommonInputType, decription:'材料'},
+  s_color_palette:{type:GraphQLString, decription:'颜色搭配'},
   s_out_color:{type:orderBaseCommonInputType, decription:'鞋面颜色'},
   s_in_color:{type:orderBaseCommonInputType, decription:'内里颜色'},
   s_bottom_color:{type:orderBaseCommonInputType, decription:'鞋底颜色'},

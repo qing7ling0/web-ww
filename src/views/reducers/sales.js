@@ -24,6 +24,11 @@ const LOADING_ACTIONS = [
   ActionTypes.SALES_UPDATE,
   ActionTypes.SALES_LIST_GET,
 
+  ActionTypes.COLOR_PALETTE_ADD,
+  ActionTypes.COLOR_PALETTE_DELETE,
+  ActionTypes.COLOR_PALETTE_UPDATE,
+  ActionTypes.COLOR_PALETTE_LIST_GET,
+
   ActionTypes.MATERIAL_ADD,
   ActionTypes.MATERIAL_DELETE,
   ActionTypes.MATERIAL_UPDATE,
@@ -226,6 +231,7 @@ function doActions(state, action) {
       }
       break;
     case ActionTypes.MATERIAL_LIST_GET:
+    case ActionTypes.COLOR_PALETTE_LIST_GET:
       if (action.state === States.Fulfilled && result.code === 0) {
         let list = {};
         for(let key in data) {
@@ -237,6 +243,7 @@ function doActions(state, action) {
         return createState(state, resState, list);
       }
       break;
+    case ActionTypes.COLOR_PALETTE_DELETE:
     case ActionTypes.MATERIAL_DELETE:
       if (action.state === States.Fulfilled && result.code === 0) {
         let deleteIDS = 0;
@@ -245,11 +252,11 @@ function doActions(state, action) {
             deleteIDS = data[key];
           }
         }
-        return createState(state, resState, {materialPriceDeleteIDS:deleteIDS});
+        return createState(state, resState, {deleteIDS});
       }
       break;
 
-      case ActionTypes.MAINTAIN_LIST_GET:
+    case ActionTypes.MAINTAIN_LIST_GET:
       if (action.state === States.Fulfilled && result.code === 0) {
         let list = {};
         for(let key in data) {

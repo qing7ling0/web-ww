@@ -48,13 +48,12 @@ const getGoodsShoesBaseColumns = function(target) {
     { title: '季节', dataIndex: 'season', key: 'season_label', render:(item) => item&&item.name||''},
     { title: '性别', dataIndex: 'sex', key: 'sex'},
     { title: '楦号', dataIndex: 's_xuan_hao', key: 's_xuan_hao', render:(item) => item&&item.name||''},
-    { title: '规格', dataIndex: 's_gui_ge', key: 's_gui_ge', render:(item) => item&&item.name||''},
     { title: '跟高', dataIndex: 's_gen_gao', key: 's_gen_gao', render:(item) => item&&item.name||''},
     { title: '材质', dataIndex: 's_material', key: 's_material', render:(item) => item&&item.name||''},
-    { title: '鞋颜色', dataIndex: 's_out_color', key: 's_out_color', render:(item) => item&&item.name||''},
+    { title: '皮胚色', dataIndex: 's_out_color', key: 's_out_color', render:(item) => item&&item.name||''},
     { title: '内里色', dataIndex: 's_in_color', key: 's_in_color', render:(item) => item&&item.name||''},
-    { title: '底侧色', dataIndex: 's_bottom_color', key: 's_bottom_color', render:(item) => item&&item.name||''},
-    { title: '底板色', dataIndex: 's_bottom_side_color', key: 's_bottom_side_color', render:(item) => item&&item.name||''},
+    { title: '底板色', dataIndex: 's_bottom_color', key: 's_bottom_color', render:(item) => item&&item.name||''},
+    { title: '底侧色', dataIndex: 's_bottom_side_color', key: 's_bottom_side_color', render:(item) => item&&item.name||''},
     { title: '保养周期', dataIndex: 's_material', key: 'maintain_cycle', render:(item) => (item&&item.maintain_cycle||0)+' 天'},
     { title: '上架时间', dataIndex: 'put_date', key: 'put_date_label', render:(item) => item&&moment(item).format('YYYY-MM-DD')||''},
   ]
@@ -93,14 +92,15 @@ const getGoodsShoesAddOptions = function(target) {
     {type:'select', name:'sex', label:'性别', selectItems:constants.BASE_CONSTANTS.SEX_DATA, options:{defaultActiveFirstOption:true}, rule:{required:true}},
     
     {type:'select', name:'s_xuan_hao', label:'楦号', selectItems:listToSelectOptions(target.props.sales['xuanHaoList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    {type:'select', name:'s_gui_ge', label:'规格', selectItems:listToSelectOptions(target.props.sales['guiGeList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
+    // {type:'select', name:'s_gui_ge', label:'规格', selectItems:listToSelectOptions(target.props.sales['guiGeList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
     {type:'select', name:'s_gen_gao', label:'跟高', selectItems:listToSelectOptions(target.props.sales['genGaoList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
     
     {type:'select', name:'s_material', label:'材质', selectItems:listToSelectOptions(target.props.sales['materialList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    {type:'select', name:'s_out_color', label:'颜色', selectItems:listToSelectOptions(target.props.sales['outColorList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    {type:'select', name:'s_in_color', label:'内里色', selectItems:listToSelectOptions(target.props.sales['inColorList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    {type:'select', name:'s_bottom_color', label:'底侧色', selectItems:listToSelectOptions(target.props.sales['bottomColorList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    {type:'select', name:'s_bottom_side_color', label:'底板色', selectItems:listToSelectOptions(target.props.sales['bottomSideColorList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
+    {type:'select', name:'s_color_palette', label:'颜色', selectItems:listToSelectOptions(target.props.sales['colorPaletteList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
+    // {type:'select', name:'s_out_color', label:'皮胚色', selectItems:listToSelectOptions(target.props.sales['outColorList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
+    // {type:'select', name:'s_in_color', label:'内里色', selectItems:listToSelectOptions(target.props.sales['inColorList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
+    // {type:'select', name:'s_bottom_color', label:'底板色', selectItems:listToSelectOptions(target.props.sales['bottomColorList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
+    // {type:'select', name:'s_bottom_side_color', label:'底侧色', selectItems:listToSelectOptions(target.props.sales['bottomSideColorList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
     
     {type:'datePicker', name:'put_date', label:'上架时间', rule:{required:true}},
   ];

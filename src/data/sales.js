@@ -18,7 +18,8 @@ import {
   customerModel,
   subOrderModel,
   sampleGoodsModel,
-  sampleAllotModel
+  sampleAllotModel,
+  shoesColorPaletteModel
 } from '../models/index.js'
 
 import { ApiError, ApiErrorNames } from '../error/api-errors'
@@ -214,6 +215,79 @@ class SalesData {
   async removeGoodsByIds(ids) {
     if (ids && ids.length > 0) {
       return await goodsModel.updateMany({_id:{$in:ids}}, {hide:true});
+    } else {
+      throw new ApiError(ApiErrorNames.DELETE_FAIL);
+    }
+  }
+
+  async addShoesColorPalette(doc) {
+    if (doc && doc.name && doc.NID && doc.out_color && doc.in_color && doc.bottom_color && doc.bottom_side_color) {
+      let ret = await shoesColorPaletteModel.findOne({NID:doc.NID});
+      if (ret) {
+        throw new ApiError(ApiErrorNames.ADD_FAIL, '添加失败，此编号已存在');
+      }
+      ret = await shoesColorPaletteModel.findOne({
+        out_color:doc.out_color,
+        in_color:doc.in_color,
+        bottom_color:doc.bottom_color,
+        bottom_side_color:doc.bottom_side_color,
+      });
+      if (ret) {
+        throw new ApiError(ApiErrorNames.ADD_FAIL, '添加失败，此颜色搭配组合已存在');
+      }
+
+      let paletteModel = new shoesColorPaletteModel(doc);
+      return await paletteModel.save();
+    }
+    throw new ApiError(ApiErrorNames.ADD_FAIL);
+  }
+
+  async updateShoesColorPalette(id, doc) {
+    if (id && doc && doc.name && doc.NID && doc.out_color && doc.in_color && doc.bottom_color && doc.bottom_side_color) {
+      let ret = await shoesColorPaletteModel.findOne({$and:[{$nor:[{_id:id}]}, {NID:doc.NID}]});
+      if (ret) {
+        throw new ApiError(ApiErrorNames.UPDATE_FAIL, '更新失败，此编号已存在');
+      }
+      ret = await shoesColorPaletteModel.findOne({
+        $and:[
+          {$nor:[{_id:id}]}, 
+          {
+            out_color:doc.out_color,
+            in_color:doc.in_color,
+            bottom_color:doc.bottom_color,
+            bottom_side_color:doc.bottom_side_color
+          }
+        ]
+      });
+      if (ret) {
+        throw new ApiError(ApiErrorNames.UPDATE_FAIL, '更新失败，此颜色搭配组合已存在');
+      }
+
+      return await shoesColorPaletteModel.findByIdAndUpdate(id, doc);
+    }
+    throw new ApiError(ApiErrorNames.UPDATE_FAIL);
+  }
+
+  // 删除鞋子颜色搭配
+  async removeShoesColorPaletteByIds(ids) {
+    if (ids && ids.length > 0) {
+      let cond = {s_color_palette:{$in:ids}};
+      let goods = await goodsModel.find(cond);
+      if (goods && goods.length > 0) {
+        throw new ApiError(ApiErrorNames.DELETE_FAIL, '已被使用，无法删除!');
+      }
+
+      goods = await sampleGoodsModel.find(cond);
+      if (goods && goods.length > 0) {
+        throw new ApiError(ApiErrorNames.DELETE_FAIL, '已被使用，无法删除!');
+      }
+
+      let subOrders = await subOrderModel.find(cond);
+      if (subOrders && subOrders.length > 0) {
+        throw new ApiError(ApiErrorNames.DELETE_FAIL, '已被使用，无法删除!');
+      }
+
+      return await shoesColorPaletteModel.deleteMany({_id:{$in:ids}});
     } else {
       throw new ApiError(ApiErrorNames.DELETE_FAIL);
     }

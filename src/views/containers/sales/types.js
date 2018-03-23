@@ -73,3 +73,4 @@ export const getMaterialBaseColumns = function(target) {
     { title: '保养周期', dataIndex: 'maintain_cycle', key: 'maintain_cycle', render:(item) => (item||0)+'天'},
   ]
 }
+

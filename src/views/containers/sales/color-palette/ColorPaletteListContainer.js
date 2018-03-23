@@ -24,17 +24,17 @@ import Actions from '../../../actions'
 import BaseListComponent from '../../common/BaseListComponent'
 import * as common from '../../../modules/common'
 import * as constants from '../../../constants/Constants'
-import MaterialAddModal from './MaterialAddModal'
-import MaterialEditModal from './MaterialEditModal'
+import ColorPaletteAddModal from './ColorPaletteAddModal'
+import ColorPaletteEditModal from './ColorPaletteEditModal'
 import { commonUtils } from '../../../modules/common';
-import * as optionsType from '../types'
+import * as optionsType from './types'
 import utils from '../../../../utils/utils'
 import * as graphqlTypes from '../../../modules/graphqlTypes'
 
-const CONTAINER_TITLE = '原材料'
-const MATERIAL_TAG = 'material'
+const CONTAINER_TITLE = '搭配'
+const MATERIAL_TAG = 'color-palette'
 
-class MaterialListContainer extends Component {
+class ColorPaletteListContainer extends Component {
   // 构造函数，在创建组件的时候调用一次
   constructor(props) {
     super(props);
@@ -59,8 +59,8 @@ class MaterialListContainer extends Component {
 
   componentDidMount(){
     // this.onReqList();
-    this.options = optionsType.getMaterialListOptions(this);
-    this.props.reqMaterialColorList('materialColorList:commonList', graphqlTypes.colorType, {type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.MATERIAL_COLOR});
+    this.options = optionsType.getColorPaletteListOptions(this);
+    this.props.reqGetBaseList();
   }
 
   render() {
@@ -75,19 +75,14 @@ class MaterialListContainer extends Component {
         onGetList={(pageInfo)=>{
           this.onReqList();
         }}
-        hasSearch={true}
-        searchPlaceholder={`请输入${CONTAINER_TITLE}`}
-        onSearch={(value)=>{
-          this.searchWord = value;
-          this.onReqList();
-        }}
+        hasSearch={false}
         onDelItems={this.onDelete}
         onItemConver={this.onItemConver}
         deleteIDS={this.props.deleteIDS}
         addVisible={this.state.addVisible}
         editVisible={this.state.editVisible}
         addNode={
-          <MaterialAddModal 
+          <ColorPaletteAddModal 
             title={`添加${CONTAINER_TITLE}`}
             visible={this.state.addVisible}
             onSubmitSuccess={this.onReqList}
@@ -95,7 +90,7 @@ class MaterialListContainer extends Component {
             afterClose={()=>this.setState({addVisible:false})}/> 
         }
         editNode={
-          <MaterialEditModal 
+          <ColorPaletteEditModal 
             title={`编辑${CONTAINER_TITLE}`}
             data={this.state.editData} 
             visible={this.state.editVisible} 
@@ -108,24 +103,19 @@ class MaterialListContainer extends Component {
   }
 
   onReqList = () => {
-    let con = null;
-    if (this.searchWord) {
-      con = {};
-      con.name = {$regex:`/${this.searchWord}/i`}
-    }
-    this.props.reqGetMaterialList(con);
+    this.props.reqGetColorPaletteList();
   }
 
   onReqUpdate = (id, data) => {
-    this.props.reqUpdateMaterial(id, data);
+    this.props.reqUpdateColorPalette(id, data);
   }
   
   onReqAdd = (data) => {
-    this.props.reqAddMaterial(data);
+    this.props.reqAddColorPalette(data);
   }
 
   onReqRemove = (ids) => {
-    this.props.reqDeleteMaterial(ids);
+    this.props.reqDeleteColorPalette(ids);
   }
 
   onItemConver = (item, index) => {
@@ -142,7 +132,8 @@ class MaterialListContainer extends Component {
   }
 
   onEdit = (values) => {
-    values = utils.diffent(values, this.state.editData);
+    // values = utils.diffent(values, this.state.editData);
+    // 这里不去除相同值的字段
     if (values) {
       this.onReqUpdate(this.state.editData._id, values);
     }
@@ -152,8 +143,9 @@ class MaterialListContainer extends Component {
     if (!this.canOperate()) return;
     this.setState({editVisible:true, editData:record});
   }
+
   canOperate = () => {
-    this.power = commonUtils.getPower(this.props.user, constants.MENU_IDS.salesMaterial)
+    this.power = commonUtils.getPower(this.props.user, constants.MENU_IDS.salesColorPalette)
     return this.power && this.power.canOperate;
   }
 }
@@ -163,16 +155,16 @@ export default connect(
     sales:state.sales,
     loading:state.sales.loading,
     deleteIDS:state.sales.deleteIDS,
-    list:state.sales.materialList,
+    list:state.sales.colorPaletteList,
     user:state.app.loginInfo.user
   }),
   (dispatch) => {
     return bindActionCreators({
-      reqGetMaterialList: Actions.getMaterialList,
-      reqAddMaterial: Actions.addMaterial,
-      reqDeleteMaterial: Actions.deleteMaterial,
-      reqUpdateMaterial: Actions.updateMaterial,
-      reqMaterialColorList:Actions.getSalesBaseList,
+      reqGetColorPaletteList: Actions.getColorPaletteList,
+      reqAddColorPalette: Actions.addColorPalette,
+      reqDeleteColorPalette: Actions.deleteColorPalette,
+      reqUpdateColorPalette: Actions.updateColorPalette,
+      reqGetBaseList:Actions.getGoodsBaseDatas,
     }, dispatch);
   }
-)(MaterialListContainer);
+)(ColorPaletteListContainer);

@@ -324,11 +324,6 @@ class WatchStrapAdd extends Component {
           let watchStrapInfo = values;
           watchStrapInfo.ws_material = this.getValueFromListById(this.props.sales.materialList, watchStrapInfo.ws_material);
           watchStrapInfo.ws_style = this.getValueFromListById(this.props.sales.watchStrapStyleList, watchStrapInfo.ws_style);
-          // watchStrapInfo.b_A = this.getValueFromListById(this.props.sales.guiGeList, watchStrapInfo.s_gui_ge);
-          // watchStrapInfo.b_B = this.getValueFromListById(this.props.sales.outColorList, watchStrapInfo.s_out_color);
-          // watchStrapInfo.b_C = this.getValueFromListById(this.props.sales.inColorList, watchStrapInfo.s_in_color);
-          // watchStrapInfo.b_D = this.getValueFromListById(this.props.sales.bottomColorList, watchStrapInfo.s_bottom_color);
-
           if (watchStrapInfo.ws_material) {
             watchStrapInfo.ws_material = {...watchStrapInfo.ws_material};
             watchStrapInfo.ws_material.count = null;

@@ -209,16 +209,16 @@ const getOrderShoesOptions = function(target) {
           }, 
           rule:{required:true}
         },    
-        {
-          type:'select', name:'s_gui_ge', label:'规格', itemOptions:{labelLeft:true}, 
-          selectItems:listToSelectOptions(target.props.sales.guiGeList, (item)=>item.name), 
-          options:{
-            defaultActiveFirstOption:true,
-            mode:"combobox", 
-            filterOption:false, 
-            onChange:(value)=>target.onNIDPropertyChange('s_gui_ge', value)
-          }, 
-          rule:{required:true}},    
+        // {
+        //   type:'select', name:'s_gui_ge', label:'规格', itemOptions:{labelLeft:true}, 
+        //   selectItems:listToSelectOptions(target.props.sales.guiGeList, (item)=>item.name), 
+        //   options:{
+        //     defaultActiveFirstOption:true,
+        //     mode:"combobox", 
+        //     filterOption:false, 
+        //     onChange:(value)=>target.onNIDPropertyChange('s_gui_ge', value)
+        //   }, 
+        //   rule:{required:true}},    
         {
           type:'select', name:'s_material', label:'材料', itemOptions:{labelLeft:true}, 
           selectItems:listToSelectOptions(target.props.sales.materialList, (item)=>item.name), 
@@ -228,49 +228,57 @@ const getOrderShoesOptions = function(target) {
             filterOption:false, 
             onChange:(value)=>target.onNIDPropertyChange('s_material', value)
           }, 
-          rule:{required:true}},    
+          rule:{required:true}
+        },    
         {
-          type:'select', name:'s_out_color', label:'颜色', itemOptions:{labelLeft:true}, 
-          selectItems:listToSelectOptions(target.props.sales.outColorList, (item)=>item.name), 
+          type:'select', name:'s_color_palette', label:'颜色', itemOptions:{labelLeft:true}, 
+          selectItems:listToSelectOptions(target.props.sales.colorPaletteList, (item)=>item.name), 
           options:{
             defaultActiveFirstOption:true, 
             mode:"combobox", 
             filterOption:false, 
-            onChange:(value)=>target.onNIDPropertyChange('s_out_color', value)
+            onChange:(value)=>target.onNIDPropertyChange('s_color_palette', value)
           }, 
           rule:{required:true}
         },    
         {
-          type:'select', name:'s_in_color', label:'内里色', itemOptions:{labelLeft:true}, 
-          selectItems:listToSelectOptions(target.props.sales.inColorList, (item)=>item.name), 
-          options:{
-            defaultActiveFirstOption:true, 
-            mode:"combobox", 
-            filterOption:false, 
-            onChange:(value)=>target.onNIDPropertyChange('s_in_color', value)
-          }, 
-          rule:{required:true}},    
-        {
-          type:'select', name:'s_bottom_color', label:'底侧色', itemOptions:{labelLeft:true}, 
-          selectItems:listToSelectOptions(target.props.sales.bottomColorList, (item)=>item.name), 
-          options:{
-            defaultActiveFirstOption:true, 
-            mode:"combobox", 
-            filterOption:false, 
-            onChange:(value)=>target.onNIDPropertyChange('s_bottom_color', value)
-          }, 
-          rule:{required:true}
+          type:'text', name:'s_out_color', label:'皮胚色', itemOptions:{labelLeft:true}
         },    
         {
-          type:'select', name:'s_bottom_side_color', label:'底板色', itemOptions:{labelLeft:true}, 
-          selectItems:listToSelectOptions(target.props.sales.bottomSideColorList, (item)=>item.name), 
-          options:{
-            defaultActiveFirstOption:true, 
-            mode:"combobox", 
-            filterOption:false, 
-            onChange:(value)=>target.onNIDPropertyChange('s_bottom_side_color', value)
-          }, 
-          rule:{required:true}
+          type:'text', name:'s_in_color', label:'皮胚色', itemOptions:{labelLeft:true}
+          // type:'select', name:'s_in_color', label:'内里色', itemOptions:{labelLeft:true}, 
+          // selectItems:listToSelectOptions(target.props.sales.inColorList, (item)=>item.name), 
+          // options:{
+          //   defaultActiveFirstOption:true, 
+          //   mode:"combobox", 
+          //   filterOption:false, 
+          //   onChange:(value)=>target.onNIDPropertyChange('s_in_color', value)
+          // }, 
+          // rule:{required:true}}, 
+        },   
+        {
+          type:'text', name:'s_bottom_color', label:'皮胚色', itemOptions:{labelLeft:true}
+          // type:'select', name:'s_bottom_color', label:'底板色', itemOptions:{labelLeft:true}, 
+          // selectItems:listToSelectOptions(target.props.sales.bottomColorList, (item)=>item.name), 
+          // options:{
+          //   defaultActiveFirstOption:true, 
+          //   mode:"combobox", 
+          //   filterOption:false, 
+          //   onChange:(value)=>target.onNIDPropertyChange('s_bottom_color', value)
+          // }, 
+          // rule:{required:true}
+        },    
+        {
+          type:'text', name:'s_bottom_side_color', label:'皮胚色', itemOptions:{labelLeft:true}
+          // type:'select', name:'s_bottom_side_color', label:'底侧色', itemOptions:{labelLeft:true}, 
+          // selectItems:listToSelectOptions(target.props.sales.bottomSideColorList, (item)=>item.name), 
+          // options:{
+          //   defaultActiveFirstOption:true, 
+          //   mode:"combobox", 
+          //   filterOption:false, 
+          //   onChange:(value)=>target.onNIDPropertyChange('s_bottom_side_color', value)
+          // }, 
+          // rule:{required:true}
         },       
       ].concat(endOptions).concat([
         {

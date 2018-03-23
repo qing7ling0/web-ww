@@ -8,6 +8,7 @@ import MaintainContainer from './maintain/index'
 import OrderContainer from './order/index'
 import SampleGoodsContainer from './sample/index'
 import SampleAllotContainer from './sample-allot/index'
+import ColorPaletteContainer from './color-palette/index'
 
 import * as config from '../../constants/Config'
 import * as constants from '../../constants/Constants'
@@ -31,6 +32,12 @@ export default [
     path={common.findRouterById(config.Routers, constants.MENU_IDS.salesMaterial).url} 
     strict={true}
     component={MaterialContainer}
+  />),
+  (<Route 
+    key={constants.MENU_IDS.salesShoesColorPalette} 
+    path={common.findRouterById(config.Routers, constants.MENU_IDS.salesShoesColorPalette).url} 
+    strict={true}
+    component={ColorPaletteContainer}
   />),
   (<Route 
     key={constants.MENU_IDS.salesItemsBase} 

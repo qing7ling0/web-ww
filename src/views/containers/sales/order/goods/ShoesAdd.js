@@ -524,7 +524,8 @@ class ShoesAdd extends Component {
         forms.setFieldsValue({NID:shoes.NID});
         forms.setFieldsValue({s_material:shoes.s_material.name});
         forms.setFieldsValue({s_xuan_hao:shoes.s_xuan_hao.name});
-        forms.setFieldsValue({s_gui_ge:shoes.s_gui_ge.name});
+        // forms.setFieldsValue({s_gui_ge:shoes.s_gui_ge.name});
+        forms.setFieldsValue({s_color_palette:shoes.s_color_palette.name});
         forms.setFieldsValue({s_out_color:shoes.s_out_color.name});
         forms.setFieldsValue({s_in_color:shoes.s_in_color.name});
         forms.setFieldsValue({s_bottom_color:shoes.s_bottom_color.name});
@@ -545,7 +546,8 @@ class ShoesAdd extends Component {
     let shoesInfo = values;
     shoesInfo.s_material = this.getValueFromListByName(this.props.sales.materialList, shoesInfo.s_material);
     shoesInfo.s_xuan_hao = this.getValueFromListByName(this.props.sales.xuanHaoList, shoesInfo.s_xuan_hao);
-    shoesInfo.s_gui_ge = this.getValueFromListByName(this.props.sales.guiGeList, shoesInfo.s_gui_ge);
+    // shoesInfo.s_gui_ge = this.getValueFromListByName(this.props.sales.guiGeList, shoesInfo.s_gui_ge);
+    shoesInfo.s_color_palette = this.getValueFromListByName(this.props.sales.colorPaletteList, shoesInfo.s_color_palette);
     shoesInfo.s_out_color = this.getValueFromListByName(this.props.sales.outColorList, shoesInfo.s_out_color);
     shoesInfo.s_in_color = this.getValueFromListByName(this.props.sales.inColorList, shoesInfo.s_in_color);
     shoesInfo.s_bottom_color = this.getValueFromListByName(this.props.sales.bottomColorList, shoesInfo.s_bottom_color);

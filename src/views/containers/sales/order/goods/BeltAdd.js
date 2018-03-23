@@ -319,10 +319,6 @@ class BeltAdd extends Component {
           let beltInfo = values;
           beltInfo.b_material = this.getValueFromListById(this.props.sales.materialList, beltInfo.b_material);
           beltInfo.b_color = this.getValueFromListById(this.props.sales.materialColorList, beltInfo.b_color);
-          // beltInfo.b_A = this.getValueFromListById(this.props.sales.guiGeList, beltInfo.s_gui_ge);
-          // beltInfo.b_B = this.getValueFromListById(this.props.sales.outColorList, beltInfo.s_out_color);
-          // beltInfo.b_C = this.getValueFromListById(this.props.sales.inColorList, beltInfo.s_in_color);
-          // beltInfo.b_D = this.getValueFromListById(this.props.sales.bottomColorList, beltInfo.s_bottom_color);
 
           if (beltInfo.b_material) {
             beltInfo.b_material = {...beltInfo.b_material};

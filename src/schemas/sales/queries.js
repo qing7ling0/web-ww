@@ -16,7 +16,8 @@ import {
   goodsModel,
   orderModel,
   tryFeedbackModel,
-  sampleGoodsModel
+  sampleGoodsModel,
+  shoesColorPaletteModel
 } from '../../models/sales'
 
 const DB = require('../../db/DB')
@@ -26,6 +27,9 @@ const schemasUtils = require('../../utils/schemas-utils')
 
 const TEST = require('../../test/test')
 
+export const colorPaletteList = schemasUtils.createDefaultListQuery('colorPaletteList', types.colorPaletteType, shoesColorPaletteModel, (query) =>{
+  return query.populate('out_color').populate('in_color').populate('bottom_color').populate('bottom_side_color')
+});
 export const materialList = schemasUtils.createDefaultListQuery('materialList', types.materialType, materialModel, (query) =>{
   return query.populate('color')
 });

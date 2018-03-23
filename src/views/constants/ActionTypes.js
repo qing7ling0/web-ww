@@ -51,6 +51,11 @@ export const SALES_ADD            = 'SALES_ADD';
 export const SALES_DELETE         = 'SALES_DELETE';
 export const SALES_UPDATE         = 'SALES_UPDATE';
 
+export const COLOR_PALETTE_LIST_GET    = 'COLOR_PALETTE_LIST_GET';
+export const COLOR_PALETTE_ADD         = 'COLOR_PALETTE_ADD';
+export const COLOR_PALETTE_DELETE      = 'COLOR_PALETTE_DELETE';
+export const COLOR_PALETTE_UPDATE      = 'COLOR_PALETTE_UPDATE';
+
 export const MATERIAL_LIST_GET    = 'MATERIAL_LIST_GET';
 export const MATERIAL_ADD         = 'MATERIAL_ADD';
 export const MATERIAL_DELETE      = 'MATERIAL_DELETE';

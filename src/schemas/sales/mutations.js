@@ -14,7 +14,8 @@ import {
   orderModel,
   goodsModel,
   tryFeedbackModel,
-  sampleGoodsModel
+  sampleGoodsModel,
+  shoesColorPaletteModel
 } from '../../models/sales'
 import {salesData} from '../../data/index';
 import * as types from './types';
@@ -25,6 +26,11 @@ const commonUtils = require('../../utils/common-utils')
 const schemasUtils = require('../../utils/schemas-utils')
 const utils = require('../../utils/utils')
 
+const colorPalette = schemasUtils.createDefaultMutaion('colorPalette', types.colorPaletteType, types.colorPaletteInputType, shoesColorPaletteModel, {
+  add:salesData.addShoesColorPalette.bind(salesData), 
+  update:salesData.updateShoesColorPalette.bind(salesData),
+  remove:salesData.removeShoesColorPaletteByIds.bind(salesData), 
+});
 const material = schemasUtils.createDefaultMutaion('material', types.materialType, types.materialInputType, materialModel, {
   remove:salesData.removeMaterialByIds.bind(salesData), 
 });
@@ -181,7 +187,7 @@ const sampleAllotFinish = {
 }
 
 let mutations = {
-  ...material, ...goods, ...tryFeedback, ...sampleGoods,
+  ...colorPalette, ...material, ...goods, ...tryFeedback, ...sampleGoods,
   orderAdd, orderRemove, orderUpdate, 
   reviewSuborderUpdate, suborderStateUpdate, suborderUpdate, suborderCancel,
   sampleAllotApply, sampleAllotUpdate, sampleAllotFinish

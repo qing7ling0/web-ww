@@ -120,6 +120,20 @@ export const updateMaterial = createAction(types.MATERIAL_UPDATE, (id, data) => 
   return netHandler.updateDefault('material', id, data);
 })
 
+// 颜色搭配
+export const getColorPaletteList = createAction(types.COLOR_PALETTE_LIST_GET, (conditions) => {
+  return netHandler.getDefaultList('colorPaletteList', graphqlTypes.colorPaletteType, conditions);
+})
+export const addColorPalette = createAction(types.COLOR_PALETTE_ADD, (data) => {
+  return netHandler.addDefault('colorPalette', graphqlTypes.colorPaletteType, data);
+})
+export const deleteColorPalette = createAction(types.COLOR_PALETTE_DELETE, (ids) => {
+  return netHandler.deleteDefault('colorPalette', ids);
+})
+export const updateColorPalette = createAction(types.COLOR_PALETTE_UPDATE, (id, data) => {
+  return netHandler.updateDefault('colorPalette', id, data);
+})
+
 // 保养价格
 export const getMaintainList = createAction(types.MAINTAIN_LIST_GET, (conditions) => {
   return netHandler.getDefaultList('maintainPriceList', graphqlTypes.maintainType, conditions);

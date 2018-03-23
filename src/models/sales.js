@@ -8,6 +8,20 @@ const {commonSchema, commonModel} = require('./common')
 
 const Schema = mongoose.Schema;
 
+// 颜色搭配
+const shoesColorPaletteFields = {
+  name: {type:String, description:'名称'},
+  NID: {type:String, description:'编号'},
+  out_color: {type:Schema.Types.ObjectId, ref:'common', description:'颜色'},
+  in_color: {type:Schema.Types.ObjectId, ref:'common', description:'内里颜色'},
+  bottom_color: {type:Schema.Types.ObjectId, ref:'common', description:'底侧颜色'},
+  bottom_side_color: {type:Schema.Types.ObjectId, ref:'common', description:'底板颜色'},
+  ...baseFields
+};
+module.exports.shoesColorPaletteModel = mongoose.model('shoes_color_palette', new Schema(shoesColorPaletteFields,{
+  timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
+}));
+
 const materialFields = {
   name: {type:String, description:'名称'},
   NID: {type:String, description:'编号'},
@@ -42,6 +56,7 @@ const goodsShoesFields = {
   s_material: {type:Schema.Types.ObjectId, ref:'material', decription:'材质'},
   s_xuan_hao: {type:Schema.Types.ObjectId, ref:'common', decription:'楦号'},
   s_gui_ge: {type:Schema.Types.ObjectId, ref:'common', decription:'规格'},
+  s_color_palette: {type:Schema.Types.ObjectId, ref:'shoes_color_palette', decription:'颜色搭配'},
   s_out_color: {type:Schema.Types.ObjectId, ref:'common', decription:'鞋面颜色'},
   s_in_color: {type:Schema.Types.ObjectId, ref:'common', decription:'里皮颜色'},
   s_bottom_color: {type:Schema.Types.ObjectId, ref:'common', decription:'鞋底颜色'},
@@ -177,6 +192,7 @@ const shoesFields = {
   s_xuan_hao: {type:orderBaseSchema, decription:'楦号'},
   s_gui_ge: {type:orderBaseSchema, decription:'规格'},
   s_gen_gao: {type:orderBaseSchema, decription:'跟高'},
+  s_color_palette: {type:String, decription:'颜色搭配'},
   s_out_color: {type:orderBaseSchema, decription:'鞋面颜色'},
   s_in_color: {type:orderBaseSchema, decription:'里皮颜色'},
   s_bottom_color: {type:orderBaseSchema, decription:'鞋底颜色'},

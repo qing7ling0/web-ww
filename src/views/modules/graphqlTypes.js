@@ -95,6 +95,7 @@ export const customerType = `{
 export const rechargeType = `{_id, mount, reward}`
 export const vipLevelType = `{_id, level, exp, discount}`
 
+export const colorPaletteType = `{_id name NID out_color{_id,name} in_color{_id,name} bottom_color{_id,name} bottom_side_color{_id,name}}`
 export const customerAnalyseType = `{_id, analyse_id, color_css, editor_name, editor_time}`
 export const regionType = `{_id, name, color_css, editor_name, editor_time}`
 export const materialType = `{_id, name, NID, color{_id,name}, count, maintain_cycle, editor_name, editor_time}`
@@ -111,7 +112,7 @@ export const shoesTieBianType = `{_id, NID, name, editor_name, editor_time}`
 export const footType = `{_id, type, size, length, zhiWei, fuWei}`
 
 const goodsBaseType =`_id, NID, name, goods, put_date, sex, price,type { _id, name }, style { _id, name }, season { _id, name }, pics,editor_name,editor_time`
-const goodsShoesType = `s_material{_id,name}, s_xuan_hao{_id,name}, s_gui_ge{_id,name}, s_gen_gao{_id,name}, s_out_color{_id,name}, s_in_color{_id,name}, s_bottom_color{_id,name}, s_bottom_side_color{_id,name}`
+const goodsShoesType = `s_material{_id,name}, s_xuan_hao{_id,name}, s_gen_gao{_id,name}, s_color_palette, s_out_color{_id,name}, s_in_color{_id,name}, s_bottom_color{_id,name}, s_bottom_side_color{_id,name}`
 const goodsBeltType = `b_material{_id,name}, b_color{_id,name}`
 const goodsWatchStrapType = `ws_material{_id,name}, ws_style{_id,name}`
 const goodsOrnamentType = ``

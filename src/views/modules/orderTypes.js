@@ -1,8 +1,8 @@
 import * as graphqlTypes from './graphqlTypes'
 
 // 鞋子
-const shoesType = `s_xuan_hao{_id,NID,name}, s_gen_gao{_id,NID,name}, s_gui_ge{_id,NID,name}, s_material{_id,NID,name}, s_customs{_id, name, price}
-  s_out_color{_id,NID,name},s_in_color{_id,NID,name},s_bottom_color{_id,NID,name},s_bottom_side_color{_id,NID,name}, s_tie_di{_id,NID,name}
+const shoesType = `s_xuan_hao{_id,NID,name}, s_gen_gao{_id,NID,name}, s_material{_id,NID,name}, s_customs{_id, name, price}
+  s_color_palette s_out_color{_id,NID,name},s_in_color{_id,NID,name},s_bottom_color{_id,NID,name},s_bottom_side_color{_id,NID,name}, s_tie_di{_id,NID,name}
   s_foot_size, s_left_length, s_left_zhiWei, s_left_fuWei, s_right_length,
   s_right_zhiWei, s_right_fuWei, s_production_step`
 // 皮带
