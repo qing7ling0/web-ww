@@ -58,6 +58,17 @@ class GoodsAddModal extends Component {
   componentWillReceiveProps(nextProps){
   }
 
+  renderColor = (list, id) => {
+    list = list || [];
+    for(let item of list) {
+      if (item._id === id) {
+        return item.name;
+      }
+    }
+
+    return '';
+  }
+
   render() {
     this.options = this.props.goodsType.addOptions(this);
     return (
@@ -73,10 +84,29 @@ class GoodsAddModal extends Component {
         confirmLoading={this.state.confirmLoading}
         actionType={ActionTypes.GOODS_ADD}
         onSubmitSuccess={this.props.onSubmitSuccess}
+        ref="formModal"
       />
     );
   }
 
+  setColorByColorPalette = (palette) => {
+    if (this.refs.formModal) {
+      let forms = this.refs.formModal;
+      forms.setFieldsValue({s_out_color:palette.out_color._id});
+      forms.setFieldsValue({s_in_color:palette.in_color._id});
+      forms.setFieldsValue({s_bottom_color:palette.bottom_color._id});
+      forms.setFieldsValue({s_bottom_side_color:palette.bottom_side_color._id});
+    }
+  }
+
+  onColorPaletteChange = (key, value) => {
+    let list = this.props.sales.colorPaletteList || [];
+    for(let palette of list) {
+      if (palette._id === value) {
+        this.setColorByColorPalette(palette);
+      }
+    }
+  }
 
   onSubmit = (err, values) => {
     if (!err) {

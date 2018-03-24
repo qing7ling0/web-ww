@@ -180,16 +180,19 @@ const goodsBeltInputFields = {
 }
 
 // 表带
-const goodsWatchStrapBaseFields = {};
+const goodsWatchStrapBaseFields = {
+};
 const goodsWatchStrapFields = {
   ...goodsWatchStrapBaseFields,
   ws_material: {type:orderBaseCommonType, decription:'材质'},
   ws_style: {type:orderBaseCommonType, decription:'类型'},
+  ws_color: {type:orderBaseCommonType, decription:'颜色'},
 }
 const goodsWatchStrapInputFields = {
   ...goodsWatchStrapBaseFields,
   ws_material: {type:GraphQLString, decription:'材质'},
   ws_style: {type:GraphQLString, decription:'类型'},
+  ws_color: {type:GraphQLString, decription:'颜色'},
 }
 
 // 配饰
@@ -417,19 +420,21 @@ const orderWatchStrapBaseFields = {
   ws_F: {type: GraphQLFloat, decription:'表带测量数据F'},
   ws_G: {type: GraphQLFloat, decription:'表带测量数据G'},
   ws_watch_brand:{type: GraphQLString, decription:'手表品牌'},
-  ws_size_remark: {type: GraphQLString, decription:'表带测量备注'}
+  ws_size_remark: {type: GraphQLString, decription:'表带测量备注'},
 }
 const orderWatchStrapFields = {
   ...orderWatchStrapBaseFields,
   ws_watchStrap: {type:goodsType, decription:'表带'},
   ws_material:{type:orderBaseCommonType, decription:'材质'},
   ws_style:{type:orderBaseCommonType, decription:'类别，男女'},
+  ws_color:{type:orderBaseCommonType, decription:'颜色'},
 }
 const orderWatchStrapInputFields = {
   ...orderWatchStrapBaseFields,
   ws_watchStrap:{type:GraphQLString, decription:'表带'},
   ws_material:{type:orderBaseCommonInputType, decription:'材质'},
   ws_style:{type:orderBaseCommonInputType, decription:'类别，男女'},
+  ws_color:{type:orderBaseCommonInputType, decription:'颜色'},
 }
 
 // 护理

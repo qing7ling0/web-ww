@@ -3,13 +3,14 @@ import styled from 'styled-components'
 import { Card } from 'antd'
 
 const Root = styled.div`
+  width:100%;
   font-size:0.14rem;
   font-family: "Helvetica Neue For Number", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
   color:rgba(0, 0, 0, 0.65);
   height: 32px;
   border-radius: 4px;
   border: 1px solid #d9d9d9;
-  inline-block;
+  display: inline-block;
   line-height:32px;
   padding:0 11px;
 `

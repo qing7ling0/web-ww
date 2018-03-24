@@ -181,12 +181,10 @@ module.exports.GOODS_WATCH_STRAP = E_ORDER_TYPE.WATCH_STRAP; // 表带
 module.exports.GOODS_ORNAMENT = E_ORDER_TYPE.ORNAMENT; // 配饰
 module.exports.MAINTAIN = E_ORDER_TYPE.MAINTAIN; // 护理
 module.exports.GOODS_SHOES_NID_FIELDS = [
-  's_xuan_hao', 's_material', 's_gui_ge', 
-  's_out_color', 's_in_color', 's_bottom_color', 
-  's_bottom_side_color', 's_gen_gao'
+  's_xuan_hao', 's_material', 's_gen_gao'
 ]; // 鞋子和编号关联字段
-module.exports.GOODS_BLET_NID_FIELDS = ['b_material', 'b_color']; // 皮带和编号关联字段
-module.exports.GOODS_WATCH_STRAP_NID_FIELDS = ['ws_material', 'ws_style']; // 表带和编号关联字段
+module.exports.GOODS_BLET_NID_FIELDS = ['b_material']; // 皮带和编号关联字段
+module.exports.GOODS_WATCH_STRAP_NID_FIELDS = ['ws_material']; // 表带和编号关联字段
 module.exports.NULL_NID = '不存在'; // 不存在的编号
 
 module.exports.E_DB_LOG_TYPES =  {

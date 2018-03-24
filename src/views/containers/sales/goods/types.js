@@ -85,6 +85,7 @@ const getGoodsShoesListOptions = function(target) {
 const getGoodsShoesAddOptions = function(target) {
   return [
     {type:'input', name:'name', label:'名称', itemOptions:{hasFeedback:true}, rule:{required:true}},
+    {type:'input', name:'NID', label:'货号', itemOptions:{hasFeedback:true}, rule:{required:true}},
     {type:'number', name:'price', label:'价格', options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, itemOptions:{hasFeedback:true}, rule:{required:true}},
     {type:'select', name:'type', label:'分类', selectItems:listToSelectOptions(target.props.sales['goodsTypeList']), options:{defaultActiveFirstOption:true}, rule:{}},
     {type:'select', name:'style', label:'系列', selectItems:listToSelectOptions(target.props.sales['goodsStyleList']), options:{defaultActiveFirstOption:true}, rule:{}},
@@ -96,7 +97,19 @@ const getGoodsShoesAddOptions = function(target) {
     {type:'select', name:'s_gen_gao', label:'跟高', selectItems:listToSelectOptions(target.props.sales['genGaoList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
     
     {type:'select', name:'s_material', label:'材质', selectItems:listToSelectOptions(target.props.sales['materialList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    {type:'select', name:'s_color_palette', label:'颜色', selectItems:listToSelectOptions(target.props.sales['colorPaletteList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
+    {
+      type:'select', name:'s_color_palette', label:'颜色', 
+      selectItems:listToSelectOptions(target.props.sales['colorPaletteList']), 
+      options:{
+        defaultActiveFirstOption:true,
+        onChange:(value)=>target.onColorPaletteChange('s_color_palette', value)
+      }, 
+      rule:{required:true}
+    },
+    {type:'text', name:'s_out_color', label:'皮胚色', options:{render:(value)=>target.renderColor(target.props.sales['outColorList'], value)}},
+    {type:'text', name:'s_in_color', label:'内里色', options:{render:(value)=>target.renderColor(target.props.sales['inColorList'], value)}},
+    {type:'text', name:'s_bottom_color', label:'底板色', options:{render:(value)=>target.renderColor(target.props.sales['bottomColorList'], value)}},
+    {type:'text', name:'s_bottom_side_color', label:'底侧色', options:{render:(value)=>target.renderColor(target.props.sales['bottomSideColorList'], value)}},
     // {type:'select', name:'s_out_color', label:'皮胚色', selectItems:listToSelectOptions(target.props.sales['outColorList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
     // {type:'select', name:'s_in_color', label:'内里色', selectItems:listToSelectOptions(target.props.sales['inColorList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
     // {type:'select', name:'s_bottom_color', label:'底板色', selectItems:listToSelectOptions(target.props.sales['bottomColorList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
@@ -159,7 +172,7 @@ const getGoodsBeltAddOptions = function(target) {
     
     {type:'select', name:'b_material', label:'材质', selectItems:listToSelectOptions(target.props.sales['materialList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
     {type:'select', name:'b_color', label:'颜色', selectItems:listToSelectOptions(target.props.sales['materialColorList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
- 
+    
     {type:'datePicker', name:'put_date', label:'上架时间', rule:{required:true}},
   ];
 } 
@@ -180,6 +193,7 @@ const getGoodsWatchStrapBaseColumns = function(target) {
     { title: '性别', dataIndex: 'sex', key: 'sex'},
     { title: '材质', dataIndex: 'ws_material', key: 'ws_material', render:(item) => item&&item.name||''},
     { title: '类别', dataIndex: 'ws_style', key: 'ws_style', render:(item) => item && item.name || ''},
+    { title: '颜色', dataIndex: 'ws_color', key: 'ws_color', render:(item) => item&&item.name||''},
     { title: '保养周期', dataIndex: 'ws_material', key: 'maintain_cycle', render:(item) => (item&&item.maintain_cycle||0)+' 天'},    
     { title: '上架时间', dataIndex: 'put_date', key: 'put_date_label', render:(item) => item&&moment(item).format('YYYY-MM-DD')||''},
   ]
@@ -217,6 +231,7 @@ const getGoodsWatchStrapAddOptions = function(target) {
     
     {type:'select', name:'ws_material', label:'材质', selectItems:listToSelectOptions(target.props.sales['materialList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
     {type:'select', name:'ws_style', label:'类别', selectItems:listToSelectOptions(target.props.sales['watchStrapStyleList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
+    {type:'select', name:'ws_color', label:'颜色', selectItems:listToSelectOptions(target.props.sales['materialColorList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
     
     {type:'datePicker', name:'put_date', label:'上架时间', rule:{required:true}},
   ];
@@ -264,6 +279,7 @@ const getGoodsOrnamentListOptions = function(target) {
 const getGoodsOrnamentAddOptions = function(target) {
   return [
     {type:'input', name:'name', label:'名称', itemOptions:{hasFeedback:true}, rule:{required:true}},
+    {type:'input', name:'NID', label:'货号', itemOptions:{hasFeedback:true}, rule:{required:true}},
     {type:'number', name:'price', label:'价格', options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, itemOptions:{hasFeedback:true}, rule:{required:true}},
     {type:'select', name:'type', label:'分类', selectItems:listToSelectOptions(target.props.sales['goodsTypeList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
     {type:'select', name:'style', label:'系列', selectItems:listToSelectOptions(target.props.sales['goodsStyleList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},

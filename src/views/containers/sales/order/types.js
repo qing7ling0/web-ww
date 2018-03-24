@@ -407,6 +407,17 @@ const getOrderWatchStrapOptions = function(target) {
           }, 
           rule:{required:true}
         },    
+        {
+          type:'select', 
+          name:'ws_color', 
+          label:'颜色', 
+          itemOptions:{labelLeft:true}, 
+          selectItems:listToSelectOptions(target.props.sales.materialColorList), 
+          options:{
+            defaultActiveFirstOption:true,
+          }, 
+          rule:{required:true}
+        },   
         {type:'number', name:'price', label:'价格', itemOptions:{labelLeft:true}, options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, rule:{required:true}},    
         {type:'number', name:'ws_A', label:'A', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
         {type:'number', name:'ws_B', label:'B', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},

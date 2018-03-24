@@ -70,6 +70,7 @@ var goodsBeltFields = {
 var goodsWatchStrapFields = {
   ws_material: {type:Schema.Types.ObjectId, ref:'material', description:'材质'},
   ws_style: {type:Schema.Types.ObjectId, ref:'common', description:'类型，男女'},
+  ws_color: {type:Schema.Types.ObjectId, ref:'common', description:'颜色'}
 };
 var goodsSchema = new Schema({
     ...goodsBaseFields,
@@ -218,7 +219,7 @@ const beltFields = {
   b_material:{type:orderBaseSchema, decription:'材质'},
   b_color:{type:orderBaseSchema, decription:'颜色'},
   b_belt: {type:Schema.Types.ObjectId, ref:'goods', decription:'商品'},
-
+  
   b_A: {type: Number, decription:'皮带测量数据A'},
   b_B: {type: Number, decription:'皮带测量数据B'},
   b_C: {type: Number, decription:'皮带测量数据C'},
@@ -230,6 +231,7 @@ const beltFields = {
 const watchStrapFields = {
   ws_material:{type:orderBaseSchema, decription:'材质'},
   ws_style:{type:orderBaseSchema, decription:'类别，男女'},
+  ws_color:{type:orderBaseSchema, decription:'颜色'},
   ws_watch_strap: {type:Schema.Types.ObjectId, ref:'goods', decription:'商品'},
 
   ws_A: {type: Number, decription:'表带测量数据A'},

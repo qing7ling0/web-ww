@@ -214,9 +214,7 @@ const getSampleGoodsWatchStrapBaseColumns = function(target) {
     { title: '系列', dataIndex: 'style', key: 'style_label', render:(item) => item.name},
     { title: '季节', dataIndex: 'season', key: 'season_label', render:(item) => item.name},
     { title: '性别', dataIndex: 'sex', key: 'sex'},
-    { title: '材质', dataIndex: 'ws_material', key: 'ws_material', render:(item) => item.name},
-    { title: '类别', dataIndex: 'ws_style', key: 'ws_style', render:(item) => item && item.name || ''},
-    { title: '保养周期', dataIndex: 'ws_material', key: 'maintain_cycle', render:(item) => (item&&item.maintain_cycle||0)+' 天'},    
+    // { title: '保养周期', dataIndex: 'ws_material', key: 'maintain_cycle', render:(item) => (item&&item.maintain_cycle||0)+' 天'},    
     { title: '上架时间', dataIndex: 'put_date', key: 'put_date_label', render:(item) => moment(item).format('YYYY-MM-DD')},
   ]
 }
@@ -245,6 +243,7 @@ const getSampleGoodsWatchStrapProfileOptions = function(target) {
         { title: '性别', dataIndex: 'sex', key: 'sex'},
         { title: '材质', dataIndex: 'ws_material', key: 'ws_material', render:(item) => item.name},
         { title: '类别', dataIndex: 'ws_style', key: 'ws_style', render:(item) => item && item.name || ''},
+        { title: '颜色', dataIndex: 'ws_color', key: 'ws_color', render:(item) => item && item.name || ''},
       ]
     }
   }
@@ -285,6 +284,7 @@ const getSampleGoodsWatchStrapAddOptions = function(target) {
     {type:'number', name:'count', label:'数量', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
     {type:'select', name:'ws_material', label:'材质', selectItems:listToSelectOptions(target.props.sales['materialList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
     {type:'select', name:'ws_style', label:'类别', selectItems:listToSelectOptions(target.props.sales['watchStrapStyleList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
+    {type:'select', name:'ws_color', label:'颜色', selectItems:listToSelectOptions(target.props.sales['materialColorList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
   ];
 } 
 const getSampleGoodsWatchStrapEditOptions = function(target) {

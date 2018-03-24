@@ -324,6 +324,7 @@ class WatchStrapAdd extends Component {
           let watchStrapInfo = values;
           watchStrapInfo.ws_material = this.getValueFromListById(this.props.sales.materialList, watchStrapInfo.ws_material);
           watchStrapInfo.ws_style = this.getValueFromListById(this.props.sales.watchStrapStyleList, watchStrapInfo.ws_style);
+          watchStrapInfo.ws_color = this.getValueFromListById(this.props.sales.materialColorList, watchStrapInfo.ws_color);
           if (watchStrapInfo.ws_material) {
             watchStrapInfo.ws_material = {...watchStrapInfo.ws_material};
             watchStrapInfo.ws_material.count = null;
@@ -380,6 +381,7 @@ class WatchStrapAdd extends Component {
         forms.setFieldsValue({NID:watchStrap.NID});
         forms.setFieldsValue({ws_material:watchStrap.ws_material._id});
         forms.setFieldsValue({ws_style:watchStrap.ws_style._id});
+        forms.setFieldsValue({ws_color:watchStrap.ws_color._id});
         forms.setFieldsValue({price:watchStrap.price});
 
         this.setState({selectGoods:watchStrap});
@@ -393,6 +395,7 @@ class WatchStrapAdd extends Component {
     watchStrapInfo[key] = value;
     watchStrapInfo.ws_material = this.getValueFromListById(this.props.sales.materialList, watchStrapInfo.ws_material);
     watchStrapInfo.ws_style = this.getValueFromListById(this.props.sales.watchStrapStyleList, watchStrapInfo.ws_style);
+    watchStrapInfo.ws_color = this.getValueFromListById(this.props.sales.materialColorList, watchStrapInfo.ws_color);
     let nid = commonUtils.createGoodsNID(this.props.orderType.key, watchStrapInfo, this.props.customer.sex);
     if (nid !== constants.BASE_CONSTANTS.NULL_NID) {
       let watchStrap = this.getValueFromListById(this.props.sales.goodsWatchStrapList, 0, (item)=>item.NID === nid);

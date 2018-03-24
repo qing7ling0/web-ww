@@ -60,7 +60,7 @@ class SalesData {
       .populate('s_material').populate('s_out_color').populate('s_in_color')
       .populate('s_bottom_color').populate('s_bottom_side_color').populate('s_xuan_hao').populate('s_gui_ge').populate('s_gen_gao')
       .populate('b_material').populate('b_color')
-      .populate('ws_material').populate('ws_style');
+      .populate('ws_material').populate('ws_style').populate('ws_color');
   }
 
   /**
@@ -99,13 +99,21 @@ class SalesData {
   
   async addGoods(doc, options={}) {
     if (doc) {
+      if (doc.NID) {
+        let goods = await goodsModel.findOne({NID:doc.NID});
+        if (goods) {
+          throw new ApiError(ApiErrorNames.ADD_FAIL, '添加失败，当前货号已存在');
+        }
+      }
       let order = new goodsModel(doc);
       if (order) {
         let newOrder = await order.save(options);
         if (newOrder) {
           newOrder = await this.goodsPopulate(newOrder).execPopulate();
-          let NID = commonUtils.createGoodsNID(newOrder.goods, newOrder, newOrder.sex);
-          await goodsModel.findOneAndUpdate({_id:newOrder._id}, {NID:NID});
+          if (!doc.NID) { // 如果没有制定NID，则创建NID
+            let NID = await commonData.createGoodsNID(newOrder.goods, newOrder.sex, newOrder);
+            await goodsModel.findOneAndUpdate({_id:newOrder._id}, {NID:NID});
+          }
           return newOrder;
         }
         throw new ApiError(ApiErrorNames.ADD_FAIL);
@@ -149,6 +157,7 @@ class SalesData {
       } else if (suborder.type === constants.E_ORDER_TYPE.WATCH_STRAP){
         goods.ws_material = suborder.ws_material && suborder.ws_material._id || '';
         goods.ws_style = suborder.ws_style && suborder.ws_style._id || '';
+        goods.ws_color = suborder.ws_color && suborder.ws_color._id || '';
       } else if (suborder.type === constants.E_ORDER_TYPE.ORNAMENT){
         goods.o_name = suborder.o_name || '';
       }
@@ -190,11 +199,24 @@ class SalesData {
           }
         }
       }
+      if (doc.NID !== null || doc.NID !== undefined) {
+        if (doc.NID === '') {
+          throw new ApiError(ApiErrorNames.UPDATE_FAIL, '更新失败，货号不能为空！');
+        }
+        console.log(JSON.stringify(doc));
+        // let goods = await goodsModel.findOne({$and:[{_id:{$in:[conditions._id]}}, {NID:doc.NID}]});
+        let goods = await goodsModel.findOne({_id:{$in:[conditions._id]}, NID:doc.NID});
+        console.log(JSON.stringify(goods));
+        if (goods) {
+          throw new ApiError(ApiErrorNames.UPDATE_FAIL, '更新失败，当前货号已存在');
+        }
+        NIDChange = false;
+      }
       let ret = await goodsModel.update(conditions, doc, options);
       if (NIDChange) {
         let goods = await this.goodsPopulate(goodsModel.findOne(conditions));
         if (goods) {
-          let NID = commonUtils.createGoodsNID(goods.goods, goods, goods.sex);
+          let NID = await commonData.createGoodsNID(goods.goods, goods.sex, goods);
           await goodsModel.findOneAndUpdate({_id:goods._id}, {NID:NID});
         }
       }

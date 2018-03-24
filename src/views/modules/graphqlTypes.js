@@ -114,7 +114,7 @@ export const footType = `{_id, type, size, length, zhiWei, fuWei}`
 const goodsBaseType =`_id, NID, name, goods, put_date, sex, price,type { _id, name }, style { _id, name }, season { _id, name }, pics,editor_name,editor_time`
 const goodsShoesType = `s_material{_id,name}, s_xuan_hao{_id,name}, s_gen_gao{_id,name}, s_color_palette, s_out_color{_id,name}, s_in_color{_id,name}, s_bottom_color{_id,name}, s_bottom_side_color{_id,name}`
 const goodsBeltType = `b_material{_id,name}, b_color{_id,name}`
-const goodsWatchStrapType = `ws_material{_id,name}, ws_style{_id,name}`
+const goodsWatchStrapType = `ws_material{_id,name}, ws_style{_id,name}, ws_color{_id,name}`
 const goodsOrnamentType = ``
 export const goodsType=`{${goodsBaseType}, ${goodsShoesType}, ${goodsBeltType}, ${goodsWatchStrapType}, ${goodsOrnamentType}}`
 

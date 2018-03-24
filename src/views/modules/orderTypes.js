@@ -8,7 +8,7 @@ const shoesType = `s_xuan_hao{_id,NID,name}, s_gen_gao{_id,NID,name}, s_material
 // 皮带
 const beltType = `b_material{_id,NID,name}, b_color{_id,NID,name}, b_A, b_B, b_C, b_D, b_size_remark`
 // 表带
-const watchStrapType = `ws_material{_id,NID,name}, ws_style{_id,NID,name}, ws_A, ws_B, ws_C, ws_D, ws_E, ws_F, ws_G, ws_watch_brand, ws_size_remark`
+const watchStrapType = `ws_material{_id,NID,name}, ws_style{_id,NID,name}, ws_color{_id,NID,name}, ws_A, ws_B, ws_C, ws_D, ws_E, ws_F, ws_G, ws_watch_brand, ws_size_remark`
 // 护理
 const maintainType = `m_name, m_price, m_time, m_color, m_demo, m_wash`
 // 充值

@@ -132,3 +132,10 @@ var _commonSchema = new Schema(commonFields,{
 
 module.exports.commonSchema = _commonSchema;
 module.exports.commonModel = mongoose.model('common', _commonSchema);
+
+module.exports.NIDModel = mongoose.model('NID', new Schema({
+  key: {type:String, description:'key'},
+  count: {type:Number, description:'数量'},
+},{
+  timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
+}));
