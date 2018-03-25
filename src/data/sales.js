@@ -699,11 +699,13 @@ class SalesData {
     if (!id || !doc || !doc.type) {
       throw new ApiError(ApiErrorNames.UPDATE_FAIL);
     }
-    let nid = '';
     if (!doc.NID || doc.NID === constants.NULL_NID) {
-      nid = commonData.createNID(doc.type, doc.s_gen_gao)
+      let nid = commonData.createNID(doc.type, doc.sex, doc);
+      if (!nid || nid === constants.NULL_NID) {
+        throw new ApiError(ApiErrorNames.UPDATE_FAIL, '审核失败，创建货号错误！');
+      }
+      doc.NID = nid;
     }
-    
     let goods = await this.getGoodsProfileByNID(doc.NID);
     if (!goods) {
       // 如果商品里面没有此商品则添加
