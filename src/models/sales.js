@@ -62,6 +62,7 @@ const goodsShoesFields = {
   s_bottom_color: {type:Schema.Types.ObjectId, ref:'common', decription:'鞋底颜色'},
   s_bottom_side_color: {type:Schema.Types.ObjectId, ref:'common', decription:'底边颜色'},
   s_gen_gao: {type:Schema.Types.ObjectId, ref:'common', decription:'跟高'},
+  s_tie_di: {type:Schema.Types.ObjectId, ref:'common', decription:'贴底'},
 };
 var goodsBeltFields = {
   b_material: {type:Schema.Types.ObjectId, ref:'material', description:'材质'},
@@ -87,6 +88,7 @@ module.exports.goodsModel = mongoose.model('goods', goodsSchema);
 const sampleBaseFields = {
   NID: {type:String, decription:'编号'},
   type: {type: String, decription:'类型'},
+  sex: {type: String, decription:'性别'},
   shop: {type:Schema.Types.ObjectId, ref:'shop', description:'店铺'},
   count: {type: Number, decription:'数量'},
   left_count: {type: Number, decription:'左脚数量'},
@@ -184,7 +186,8 @@ const orderBaseSchema = new Schema({
   NID: {type:String, decription:'编号'},
   color: {type:String, decription:'颜色'},
   price: {type:Number, decription:'价格'},
-  day: {type:Number, decription:'天数'}
+  day: {type:Number, decription:'天数'},
+  maintain_cycle: {type:Number, decription:'保养周期'},
 });
 // 订单信息
 // 鞋
@@ -285,6 +288,7 @@ const subOrderSchema = new Schema({
   })],
   NID: {type:String, decription:'编号'},
   name:{type:String, decription:'名称'},
+  sex:{type:String, ddecription:'性别'},
   count:{type:Number, decription:'数量', default:1},
   price:{type:Number, decription:'价格'},
   remark:{type:String, ddecription:'备注'},

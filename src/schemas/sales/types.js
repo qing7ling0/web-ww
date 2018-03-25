@@ -100,7 +100,8 @@ const orderBaseCommonFields = {
   NID: {type:GraphQLString, decription:'编号'},
   color: {type:GraphQLString, decription:'颜色'},
   price: {type:GraphQLFloat, decription:'价格'},
-  day: {type:GraphQLInt, decription:'天数'}
+  day: {type:GraphQLInt, decription:'天数'},
+  maintain_cycle: {type:GraphQLInt, decription:'保养周期'},
 };
 const orderBaseCommonType = new GraphQLObjectType({
   name: 'orderBaseCommonType',
@@ -146,12 +147,13 @@ const goodsShoesFields = {
   s_material: {type:orderBaseCommonType, decription:'材质'},
   s_xuan_hao: {type:orderBaseCommonType, decription:'楦号'},
   s_gui_ge: {type:orderBaseCommonType, decription:'规格'},
-  s_color_palette: {type:GraphQLString, decription:'颜色搭配'},
+  s_color_palette: {type:orderBaseCommonType, decription:'颜色搭配'},
   s_out_color: {type:orderBaseCommonType, decription:'鞋面颜色'},
   s_in_color: {type:orderBaseCommonType, decription:'里皮颜色'},
   s_bottom_color: {type:orderBaseCommonType, decription:'鞋底颜色'},
   s_bottom_side_color: {type:orderBaseCommonType, decription:'底边颜色'},
   s_gen_gao: {type:orderBaseCommonType, decription:'跟高'},
+  s_tie_di:{type:orderBaseCommonType, decription:'贴底'},
 }
 const goodsShoesInputFields = {
   ...goodsShoesBaseFields,
@@ -163,6 +165,7 @@ const goodsShoesInputFields = {
   s_bottom_color: {type:GraphQLString, decription:'鞋底颜色'},
   s_bottom_side_color: {type:GraphQLString, decription:'底边颜色'},
   s_gen_gao: {type:GraphQLString, decription:'跟高'},
+  s_tie_di:{type:GraphQLString, decription:'贴底'},
 }
 
 // 皮带
@@ -232,6 +235,7 @@ const sampleGoodsInputFields = {
   NID: {type:GraphQLString, description:'编号'},
   type: {type: GraphQLString, decription:'类型'},
   shop: {type: GraphQLString, decription:'店铺'},
+  sex: {type: GraphQLString, decription:'性别'},
   count: {type: GraphQLInt, decription:'数量'},
   left_count: {type: GraphQLInt},
   right_count: {type: GraphQLInt},
@@ -482,6 +486,7 @@ const orderOrnamentInputFields = {
 // 子订单
 const subOrderBaseFields = {
   NID:{type:GraphQLString, decription:'编号'},
+  sex:{type:GraphQLString, decription:'性别'},
   name:{type:GraphQLString, decription:'名称'},
   price:{type:GraphQLFloat, decription:'价格'},
   count:{type:GraphQLInt, decription:'数量'},

@@ -525,11 +525,13 @@ class ShoesAdd extends Component {
         forms.setFieldsValue({s_material:shoes.s_material.name});
         forms.setFieldsValue({s_xuan_hao:shoes.s_xuan_hao.name});
         // forms.setFieldsValue({s_gui_ge:shoes.s_gui_ge.name});
-        forms.setFieldsValue({s_color_palette:shoes.s_color_palette.name});
+        forms.setFieldsValue({s_color_palette:shoes.s_color_palette._id});
         forms.setFieldsValue({s_out_color:shoes.s_out_color.name});
         forms.setFieldsValue({s_in_color:shoes.s_in_color.name});
         forms.setFieldsValue({s_bottom_color:shoes.s_bottom_color.name});
         forms.setFieldsValue({s_bottom_side_color:shoes.s_bottom_side_color.name});
+        forms.setFieldsValue({s_tie_di:shoes.s_tie_di.name});
+        forms.setFieldsValue({sex:shoes.sex});
         if (!this.props.isReview) { // 审核过程不修改价格
           forms.setFieldsValue({price:shoes.price});
         }
@@ -547,7 +549,7 @@ class ShoesAdd extends Component {
     shoesInfo.s_material = this.getValueFromListByName(this.props.sales.materialList, shoesInfo.s_material);
     shoesInfo.s_xuan_hao = this.getValueFromListByName(this.props.sales.xuanHaoList, shoesInfo.s_xuan_hao);
     // shoesInfo.s_gui_ge = this.getValueFromListByName(this.props.sales.guiGeList, shoesInfo.s_gui_ge);
-    shoesInfo.s_color_palette = this.getValueFromListByName(this.props.sales.colorPaletteList, shoesInfo.s_color_palette);
+    // shoesInfo.s_color_palette = this.getValueFromListById(this.props.sales.colorPaletteList, shoesInfo.s_color_palette);
     shoesInfo.s_out_color = this.getValueFromListByName(this.props.sales.outColorList, shoesInfo.s_out_color);
     shoesInfo.s_in_color = this.getValueFromListByName(this.props.sales.inColorList, shoesInfo.s_in_color);
     shoesInfo.s_bottom_color = this.getValueFromListByName(this.props.sales.bottomColorList, shoesInfo.s_bottom_color);
@@ -557,28 +559,74 @@ class ShoesAdd extends Component {
     return shoesInfo;
   }
 
+  getGoodsByCurrentInput = (shoesInfo) => {
+    if (shoesInfo.s_material && shoesInfo.sex && shoesInfo.s_xuan_hao && shoesInfo.s_color_palette && shoesInfo.s_tie_di) {
+      for(let goods of this.props.sales.goodsShoesList) {
+        if (goods.s_material && goods.s_xuan_hao && goods.sex && goods.s_color_palette && goods.s_tie_di) {
+          if (goods.s_material._id === shoesInfo.s_material._id
+            && goods.s_xuan_hao._id === shoesInfo.s_xuan_hao._id
+            && goods.s_color_palette._id === shoesInfo.s_color_palette
+            && goods.s_tie_di._id === shoesInfo.s_tie_di._id
+            && goods.sex === shoesInfo.sex
+          ) {
+            if ((goods.sex === constants.BASE_CONSTANTS.SEX_FEMALE && goods.s_gen_gao && shoesInfo.s_gen_gao && shoesInfo.s_gen_gao._id === goods.s_gen_gao._id) ||
+            goods.sex !== constants.BASE_CONSTANTS.SEX_FEMALE
+            ) {
+              return goods;
+            }
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  setColorByColorPalette = (palette) => {
+    const {form:forms} = this.props;
+    if (forms) {
+      forms.setFieldsValue({s_out_color:palette.out_color.name});
+      forms.setFieldsValue({s_in_color:palette.in_color.name});
+      forms.setFieldsValue({s_bottom_color:palette.bottom_color.name});
+      forms.setFieldsValue({s_bottom_side_color:palette.bottom_side_color.name});
+    }
+  }
+
   onNIDPropertyChange = (key, value) => {
     const {form:forms} = this.props;
-    let shoesInfo = forms.getFieldsValue();
-    if (key) {
-      shoesInfo[key] = value;
-    }
-    shoesInfo = this.getGoodsInfo(shoesInfo);
-
-    let nid = commonUtils.createGoodsNID(constants.BASE_CONSTANTS.GOODS_SHOES, shoesInfo, this.props.customer.sex);
-    if (!this.props.isReview) { // 审核过程不修改价格
-      if (nid !== constants.BASE_CONSTANTS.NULL_NID) {
-        let shoes = this.getValueFromListById(this.props.sales.goodsShoesList, 0, (item)=>item.NID === nid);
-        if (shoes) {
-          forms.setFieldsValue({price:shoes.price});
+    if (key === 's_color_palette') {
+      let palette = null;
+      let list = this.props.sales.colorPaletteList || [];
+      for(let pa of list) {
+        if (pa._id === value) {
+          palette = pa;
+          break;
+        }
+      }
+      if (palette) {
+        this.setColorByColorPalette(palette);
+      }
+    } else {
+      let shoesInfo = forms.getFieldsValue();
+      if (key) {
+        shoesInfo[key] = value;
+      }
+      shoesInfo = this.getGoodsInfo(shoesInfo);
+  
+      // let nid = commonUtils.createGoodsNID(constants.BASE_CONSTANTS.GOODS_SHOES, shoesInfo, this.props.customer.sex);
+      let goods = this.getGoodsByCurrentInput(shoesInfo);
+      if (!this.props.isReview) { // 审核过程不修改价格
+        if (goods) {
+          forms.setFieldsValue({price:goods.price});
         } else {
           forms.setFieldsValue({price:null});
         }
+      }
+      if (goods) {
+        forms.setFieldsValue({NID:goods.NID});
       } else {
-        forms.setFieldsValue({price:null});
+        forms.setFieldsValue({NID:constants.BASE_CONSTANTS.NULL_NID});
       }
     }
-    forms.setFieldsValue({NID:nid});
   }
 
   getValueFromListById = (list, id, checkFn) => {

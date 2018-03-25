@@ -57,8 +57,8 @@ class SalesData {
   goodsPopulate(query) {
     return query
       .populate('type').populate('season').populate('style')
-      .populate('s_material').populate('s_out_color').populate('s_in_color')
-      .populate('s_bottom_color').populate('s_bottom_side_color').populate('s_xuan_hao').populate('s_gui_ge').populate('s_gen_gao')
+      .populate('s_material').populate('s_out_color').populate('s_in_color').populate('s_color_palette')
+      .populate('s_bottom_color').populate('s_bottom_side_color').populate('s_xuan_hao').populate('s_gui_ge').populate('s_gen_gao').populate('s_tie_di')
       .populate('b_material').populate('b_color')
       .populate('ws_material').populate('ws_style').populate('ws_color');
   }
@@ -144,10 +144,12 @@ class SalesData {
         goods.s_material = suborder.s_material && suborder.s_material._id || '';
         goods.s_xuan_hao = suborder.s_xuan_hao && suborder.s_xuan_hao._id || '';
         goods.s_gui_ge = suborder.s_gui_ge && suborder.s_gui_ge._id || '';
+        goods.s_color_palette = suborder.s_color_palette && suborder.s_color_palette._id || '';
         goods.s_in_color = suborder.s_in_color && suborder.s_in_color._id || '';
         goods.s_out_color = suborder.s_out_color && suborder.s_out_color._id || '';
         goods.s_bottom_color = suborder.s_bottom_color && suborder.s_bottom_color._id || '';
         goods.s_bottom_side_color = suborder.s_bottom_side_color && suborder.s_bottom_side_color._id || '';
+        goods.s_tie_di = suborder.s_tie_di && suborder.s_tie_di._id || '';
         if(suborder.s_gen_gao && suborder.s_gen_gao._id) {
           goods.s_gen_gao = suborder.s_gen_gao._id;
         }
@@ -200,26 +202,27 @@ class SalesData {
         }
       }
       if (doc.NID !== null || doc.NID !== undefined) {
-        if (doc.NID === '') {
-          throw new ApiError(ApiErrorNames.UPDATE_FAIL, '更新失败，货号不能为空！');
+        if (doc.NID !== '') {
+          console.log("111=" + JSON.stringify(doc));
+          let goods = await goodsModel.findOne(conditions);
+          console.log("222=" + JSON.stringify(goods));
+          if (goods) {
+            goods = await goodsModel.findOne({_id:{$nin:[goods._id]}, NID:doc.NID});
+            if (goods) {
+              throw new ApiError(ApiErrorNames.UPDATE_FAIL, '更新失败，当前货号已存在');
+            }
+          }
+          NIDChange = false;
         }
-        console.log(JSON.stringify(doc));
-        // let goods = await goodsModel.findOne({$and:[{_id:{$in:[conditions._id]}}, {NID:doc.NID}]});
-        let goods = await goodsModel.findOne({_id:{$in:[conditions._id]}, NID:doc.NID});
-        console.log(JSON.stringify(goods));
-        if (goods) {
-          throw new ApiError(ApiErrorNames.UPDATE_FAIL, '更新失败，当前货号已存在');
-        }
-        NIDChange = false;
       }
       let ret = await goodsModel.update(conditions, doc, options);
-      if (NIDChange) {
-        let goods = await this.goodsPopulate(goodsModel.findOne(conditions));
-        if (goods) {
-          let NID = await commonData.createGoodsNID(goods.goods, goods.sex, goods);
-          await goodsModel.findOneAndUpdate({_id:goods._id}, {NID:NID});
-        }
-      }
+      // if (NIDChange) {
+      //   let goods = await this.goodsPopulate(goodsModel.findOne(conditions));
+      //   if (goods) {
+      //     let NID = await commonData.createGoodsNID(goods.goods, goods.sex, goods);
+      //     await goodsModel.findOneAndUpdate({_id:goods._id}, {NID:NID});
+      //   }
+      // }
       return ret;
     } else {
       throw new ApiError(ApiErrorNames.UPDATE_FAIL);
@@ -693,8 +696,12 @@ class SalesData {
   }
 
   async reviewSubOrder(id, doc, options) {
-    if (!id || !doc || !doc.type || !doc.NID || doc.NID === constants.NULL_NID) {
+    if (!id || !doc || !doc.type) {
       throw new ApiError(ApiErrorNames.UPDATE_FAIL);
+    }
+    let nid = '';
+    if (!doc.NID || doc.NID === constants.NULL_NID) {
+      nid = commonData.createNID(doc.type, doc.s_gen_gao)
     }
     
     let goods = await this.getGoodsProfileByNID(doc.NID);

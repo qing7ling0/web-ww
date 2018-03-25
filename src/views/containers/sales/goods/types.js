@@ -50,6 +50,7 @@ const getGoodsShoesBaseColumns = function(target) {
     { title: '楦号', dataIndex: 's_xuan_hao', key: 's_xuan_hao', render:(item) => item&&item.name||''},
     { title: '跟高', dataIndex: 's_gen_gao', key: 's_gen_gao', render:(item) => item&&item.name||''},
     { title: '材质', dataIndex: 's_material', key: 's_material', render:(item) => item&&item.name||''},
+    { title: '贴底', dataIndex: 's_tie_di', key: 's_tie_di', render:(item) => item&&item.name||''},
     { title: '皮胚色', dataIndex: 's_out_color', key: 's_out_color', render:(item) => item&&item.name||''},
     { title: '内里色', dataIndex: 's_in_color', key: 's_in_color', render:(item) => item&&item.name||''},
     { title: '底板色', dataIndex: 's_bottom_color', key: 's_bottom_color', render:(item) => item&&item.name||''},
@@ -93,6 +94,7 @@ const getGoodsShoesAddOptions = function(target) {
     {type:'select', name:'sex', label:'性别', selectItems:constants.BASE_CONSTANTS.SEX_DATA, options:{defaultActiveFirstOption:true}, rule:{required:true}},
     
     {type:'select', name:'s_xuan_hao', label:'楦号', selectItems:listToSelectOptions(target.props.sales['xuanHaoList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
+    {type:'select', name:'s_tie_di', label:'贴底', selectItems:listToSelectOptions(target.props.sales['shoesTieBianList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
     // {type:'select', name:'s_gui_ge', label:'规格', selectItems:listToSelectOptions(target.props.sales['guiGeList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
     {type:'select', name:'s_gen_gao', label:'跟高', selectItems:listToSelectOptions(target.props.sales['genGaoList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
     

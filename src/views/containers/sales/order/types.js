@@ -163,7 +163,8 @@ const getOrderShoesListColumns = function(target) {
 }
 const getOrderShoesOptions = function(target) {
   let endOptions = [];
-  if (target.props.customer.sex === constants.BASE_CONSTANTS.SEX_FEMALE) {
+  
+  if (target.props.form.getFieldsValue().sex === constants.BASE_CONSTANTS.SEX_FEMALE) {
     endOptions.push({
       type:'select', 
       name:'s_gen_gao', 
@@ -232,11 +233,9 @@ const getOrderShoesOptions = function(target) {
         },    
         {
           type:'select', name:'s_color_palette', label:'颜色', itemOptions:{labelLeft:true}, 
-          selectItems:listToSelectOptions(target.props.sales.colorPaletteList, (item)=>item.name), 
+          selectItems:listToSelectOptions(target.props.sales.colorPaletteList), 
           options:{
-            defaultActiveFirstOption:true, 
-            mode:"combobox", 
-            filterOption:false, 
+            defaultActiveFirstOption:true,
             onChange:(value)=>target.onNIDPropertyChange('s_color_palette', value)
           }, 
           rule:{required:true}
@@ -279,8 +278,16 @@ const getOrderShoesOptions = function(target) {
           //   onChange:(value)=>target.onNIDPropertyChange('s_bottom_side_color', value)
           // }, 
           // rule:{required:true}
-        },       
-      ].concat(endOptions).concat([
+        },  
+        {
+          type:'select', name:'sex', label:'性别', itemOptions:{labelLeft:true}, 
+          selectItems:constants.BASE_CONSTANTS.SEX_DATA,
+          options:{
+            defaultActiveFirstOption:true, 
+            onChange:(value)=>target.onNIDPropertyChange('sex', value)
+          }, 
+          rule:{required:true}
+        },
         {
           type:'select', name:'s_tie_di', label:'贴底', itemOptions:{labelLeft:true}, 
           selectItems:listToSelectOptions(target.props.sales.shoesTieBianList, (item)=>item.name), 
@@ -288,9 +295,11 @@ const getOrderShoesOptions = function(target) {
             defaultActiveFirstOption:true,
             mode:"combobox", 
             filterOption:false, 
+            onChange:(value)=>target.onNIDPropertyChange('s_tie_di', value)
           }, 
           rule:{required:true}
-        },    
+        },        
+      ].concat(endOptions).concat([   
         {type:'number', name:'price', label:'价格', itemOptions:{labelLeft:true}, options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, rule:{required:true}},    
         {type:'textarea', name:'remark', label:'备注', itemOptions:{labelLeft:true}, options:{}},    
       ])
