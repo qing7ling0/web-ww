@@ -115,7 +115,7 @@ const ORDER_MAINTAIN = [
   { title: '价格', dataIndex: 'price', key: 'price_label', render:(item) => item+' RMB'},
   { title: '护理内容', dataIndex: 'm_name', key: 'm_name'},
   { title: '护理时间', dataIndex: 'm_time', key: 'm_time'},
-  { title: '颜色', dataIndex: 'm_color', key: 'm_color', render:(item) => item.name},
+  { title: '颜色', dataIndex: 'm_color', key: 'm_color', render:(item) => item||""},
   { title: '是否水洗', dataIndex: 'm_wash', key: 'm_wash', render:(item) => item?'是':'否'},
   { title: '样品', dataIndex: 'm_demo', key: 'm_demo'},
 ]

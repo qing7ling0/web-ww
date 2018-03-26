@@ -204,7 +204,8 @@ const getOrderShoesOptions = function(target) {
         options:{
           defaultActiveFirstOption:true,
           onChange:(value)=>target.onNIDPropertyChange('s_color_palette', value)
-        }
+        }, 
+        rule:{required:target.props.isReview}
       },
       {
         type:'select', name:'s_out_color', label:'皮胚色', itemOptions:{labelLeft:true}, 
@@ -515,7 +516,7 @@ const getOrderMaintainOptions = function(target) {
         {type:'text', name:'m_name', label:'护理项目', options:{disabled:false}, itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
         {type:'text', name:'m_price', label:'护理费用', options:{disabled:true}, itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
         {type:'text', name:'m_time', label:'时间', options:{disabled:true}, itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-        {type:'select', name:'m_wash', label:'是否水洗', itemOptions:{labelLeft:true}, selectItems:[{value:0, label:'否'},{value:1, label:'是'}], options:{defaultActiveFirstOption:true}, rule:{required:true}},    
+        {type:'select', name:'m_wash', label:'是否水洗', itemOptions:{labelLeft:true}, selectItems:[{value:false, label:'否'},{value:true, label:'是'}], options:{defaultActiveFirstOption:true}, rule:{required:true}},    
         {type:'input', name:'m_color', label:'颜色', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
         {type:'input', name:'m_demo', label:'色卡编号', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
       ]

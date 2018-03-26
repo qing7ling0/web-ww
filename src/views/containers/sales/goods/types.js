@@ -87,8 +87,9 @@ const getGoodsShoesAddOptions = function(target) {
   return [
     {type:'input', name:'NID', label:'货号', itemOptions:{hasFeedback:true}},
     {type:'input', name:'name', label:'名称', itemOptions:{hasFeedback:true}, rule:{required:true}},
+    {type:'upload', name:'pics', label:'图片', itemOptions:{hasFeedback:true}, render:target.renderPicUpload},
     {type:'number', name:'price', label:'价格', options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, itemOptions:{hasFeedback:true}, rule:{required:true}},
-    {type:'select', name:'type', label:'分类', selectItems:listToSelectOptions(target.props.sales['goodsTypeList']), options:{defaultActiveFirstOption:true}, rule:{}},
+    {type:'select', name:'type', label:'分类', selectItems:listToSelectOptions(target.props.sales['goodsTypeList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
     {type:'select', name:'style', label:'系列', selectItems:listToSelectOptions(target.props.sales['goodsStyleList']), options:{defaultActiveFirstOption:true}, rule:{}},
     {type:'select', name:'season', label:'季节', selectItems:listToSelectOptions(target.props.sales['goodsSeasonList']), options:{defaultActiveFirstOption:true}, rule:{}},
     {type:'select', name:'sex', label:'性别', selectItems:constants.BASE_CONSTANTS.SEX_DATA, options:{defaultActiveFirstOption:true}, rule:{required:true}},

@@ -47,6 +47,7 @@ class GoodsAddModal extends Component {
 
     this.state = {
       visible:false,
+      pics:['']
     }
   }
 
@@ -67,6 +68,69 @@ class GoodsAddModal extends Component {
     }
 
     return '';
+  }
+
+  renderPicUpload = (item, record) => {
+    <Row style={{width:'100%'}}>
+      <Col span={6}>
+        <Upload
+          name="order"
+          accept="image/*"
+          listType="picture-card"
+          className="avatar-uploader"
+          showUploadList={false}
+          style={{padding:0, position:'relative'}}
+          action={config.GetServerAddress() + '/upload'}
+          onChange={({file, fileList})=>this.onUploadPicChange(0, file)}
+          withCredentials={true}
+          disabled={disabled}
+        >
+          {
+            item.file ? 
+            <div style={{width:'100%', height:'100%', position:'relative'}}>
+              <img src={config.GetServerAddress() + '/file/'+item.file} alt="" style={{width:'100%', height:'100%'}} /> 
+              {
+                disabled ? null :
+                <PhotoDeleteBtn icon='minus' type="danger" shape="circle" size="small" ghost onClick={(e)=>{
+                  e.stopPropagation();
+                  this.onRemovePhoto(0);
+                }} />
+              }
+            </div>
+            :
+            <PhotoUploadBtnCotnainer>
+              <Icon type='plus' />
+              <div className="ant-upload-text">Upload</div>
+            </PhotoUploadBtnCotnainer>
+          }
+        </Upload>
+      </Col>
+      <Col span={12}>
+        <TextArea disabled={disabled} placeholder="请输入拍照备注" autosize={{ minRows: 2, maxRows: 10 }} defaultValue={item.desc} onChange={(e)=>{
+          let pics = this.state.pics;
+          let pic = pics[index];
+          if (pic) {
+            pic.desc = e.target.value;
+            this.setState({pics:pics})
+          }
+        }} />
+      </Col>
+    </Row>
+  }
+
+  onRemovePhoto = (index) => {
+    let pics = this.state.pics;
+    pics.splice(index, 1);
+    this.setState({pics:pics});
+  }
+  
+  onUploadPicChange = (index, file) => {
+    let pics = this.state.pics;
+    let pic = pics[index];
+    if (pic && file.response && file.response.data.files && file.response.data.files.length > 0) {
+      pic.file = file.response.data.files[0];
+      this.setState({pics:pics})
+    }
   }
 
   render() {

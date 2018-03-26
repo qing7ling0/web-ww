@@ -117,6 +117,7 @@ class SalesData {
           if (NID && NID !== constants.NULL_NID) {
             await goodsModel.findByIdAndUpdate(newGoods._id, {NID,NID});
           } else {
+            // 还原
             await goodsModel.findByIdAndRemove(newGoods._id);
             throw new ApiError(ApiErrorNames.ADD_FAIL, '添加失败，创建货号失败！');
           }
@@ -546,6 +547,10 @@ class SalesData {
           throw new ApiError(ApiErrorNames.ADD_FAIL);
         }
 
+        doc.customer = sub.customer;
+        doc.shop = sub.shop;
+        doc.guide = sub.guide;
+
         if (customerInfo === null) {
           customerInfo = await customerModel.findOne({phone:sub.customer.phone});
         }
@@ -723,7 +728,7 @@ class SalesData {
       throw new ApiError(ApiErrorNames.UPDATE_FAIL);
     }
     if (!doc.NID || doc.NID === constants.NULL_NID) {
-      let nid = commonData.createNID(doc.type, doc.sex, doc);
+      let nid = await commonData.createNID(doc.type, doc.sex, doc);
       if (!nid || nid === constants.NULL_NID) {
         throw new ApiError(ApiErrorNames.UPDATE_FAIL, '审核失败，创建货号错误！');
       }
