@@ -31,6 +31,7 @@ import {
   vip_level: {type: GraphQLInt},
   vip_exp:{type:GraphQLInt},
   balance:{type:GraphQLFloat},
+  point:{type:GraphQLFloat},
   join_type: { type:GraphQLString, description:'加入方式' },
 };
 export const customerFields = {

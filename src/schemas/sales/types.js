@@ -352,6 +352,45 @@ export const sampleAllotUpdateInputType = new GraphQLInputObjectType({
   }
 })
 
+const orderCustomMaterialType = new GraphQLObjectType({
+  name: 'orderCustomMaterialType',
+  fields: {
+    _id: {type:GraphQLString, decription:'ID'},
+    name: {type:GraphQLString, decription:'名称'},
+    NID: {type:GraphQLString, decription:'编号'},
+  }
+})
+const orderCustomMaterialInputType = new GraphQLInputObjectType({
+  name: 'orderCustomMaterialInputType',
+  fields: {
+    _id: {type:GraphQLString, decription:'ID'},
+    name: {type:GraphQLString, decription:'名称'},
+    NID: {type:GraphQLString, decription:'编号'},
+  }
+})
+
+const orderCustomType = new GraphQLObjectType({
+  name: 'orderCustomType',
+  fields: {
+    _id: {type:GraphQLString, decription:'ID'},
+    name: {type:GraphQLString, decription:'名称'},
+    price: {type:GraphQLFloat, decription:'价格'},
+    NID: {type:GraphQLString, decription:'编号'},
+    n_material:{type:orderCustomMaterialType, decription:'内增高皮料'},
+    d_material:{type:orderCustomMaterialType, decription:'内增高皮料'}
+  }
+});
+const orderCustomInputType = new GraphQLInputObjectType({
+  name: 'orderCustomInputType',
+  fields: {
+    _id: {type:GraphQLString, decription:'ID'},
+    name: {type:GraphQLString, decription:'名称'},
+    price: {type:GraphQLFloat, decription:'价格'},
+    NID: {type:GraphQLString, decription:'编号'},
+    n_material:{type:orderCustomMaterialInputType, decription:'内增高皮料'},
+    d_material:{type:orderCustomMaterialInputType, decription:'内增高皮料'}
+  }
+});
 // 鞋
 const orderShoesBaseFields = {
   s_foot_size: {type: GraphQLFloat, description:'尺码'},
@@ -375,7 +414,7 @@ const orderShoesFields = {
   s_bottom_color:{type:orderBaseCommonType, decription:'鞋底颜色'},
   s_bottom_side_color:{type:orderBaseCommonType, decription:'底边颜色'},
   s_tie_di:{type:orderBaseCommonType, decription:'贴底'},
-  s_customs:{type:new GraphQLList(orderBaseCommonType)}, // 特殊定制
+  s_customs:{type:new GraphQLList(orderCustomType)}, // 特殊定制
   s_shoes: {type:goodsType, decription:'商品'}
 }
 const orderShoesInputFields = {
@@ -389,7 +428,7 @@ const orderShoesInputFields = {
   s_bottom_side_color:{type:orderBaseCommonInputType, decription:'底边颜色'},
   s_gen_gao:{type:orderBaseCommonInputType, decription:'跟高'},
   s_tie_di:{type:orderBaseCommonInputType, decription:'贴底'},
-  s_customs:{type:new GraphQLList(orderBaseCommonInputType)}, // 特殊定制
+  s_customs:{type:new GraphQLList(orderCustomInputType)}, // 特殊定制
   s_shoes: {type:GraphQLString, decription:'商品'},
 }
 

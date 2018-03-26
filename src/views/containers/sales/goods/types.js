@@ -85,8 +85,8 @@ const getGoodsShoesListOptions = function(target) {
 }
 const getGoodsShoesAddOptions = function(target) {
   return [
+    {type:'input', name:'NID', label:'货号', itemOptions:{hasFeedback:true}},
     {type:'input', name:'name', label:'名称', itemOptions:{hasFeedback:true}, rule:{required:true}},
-    {type:'input', name:'NID', label:'货号', itemOptions:{hasFeedback:true}, rule:{required:true}},
     {type:'number', name:'price', label:'价格', options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, itemOptions:{hasFeedback:true}, rule:{required:true}},
     {type:'select', name:'type', label:'分类', selectItems:listToSelectOptions(target.props.sales['goodsTypeList']), options:{defaultActiveFirstOption:true}, rule:{}},
     {type:'select', name:'style', label:'系列', selectItems:listToSelectOptions(target.props.sales['goodsStyleList']), options:{defaultActiveFirstOption:true}, rule:{}},
@@ -165,6 +165,7 @@ const getGoodsBeltListOptions = function(target) {
 }
 const getGoodsBeltAddOptions = function(target) {
   return [
+    {type:'input', name:'NID', label:'货号', itemOptions:{hasFeedback:true}},
     {type:'input', name:'name', label:'名称', itemOptions:{hasFeedback:true}, rule:{required:true}},
     {type:'number', name:'price', label:'价格', options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, itemOptions:{hasFeedback:true}, rule:{required:true}},
     {type:'select', name:'type', label:'分类', selectItems:listToSelectOptions(target.props.sales['goodsTypeList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
@@ -224,6 +225,7 @@ const getGoodsWatchStrapListOptions = function(target) {
 }
 const getGoodsWatchStrapAddOptions = function(target) {
   return [
+    {type:'input', name:'NID', label:'货号', itemOptions:{hasFeedback:true}},
     {type:'input', name:'name', label:'名称', itemOptions:{hasFeedback:true}, rule:{required:true}},
     {type:'number', name:'price', label:'价格', options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, itemOptions:{hasFeedback:true}, rule:{required:true}},
     {type:'select', name:'type', label:'分类', selectItems:listToSelectOptions(target.props.sales['goodsTypeList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
@@ -280,8 +282,8 @@ const getGoodsOrnamentListOptions = function(target) {
 }
 const getGoodsOrnamentAddOptions = function(target) {
   return [
+    {type:'input', name:'NID', label:'货号', itemOptions:{hasFeedback:true}},
     {type:'input', name:'name', label:'名称', itemOptions:{hasFeedback:true}, rule:{required:true}},
-    {type:'input', name:'NID', label:'货号', itemOptions:{hasFeedback:true}, rule:{required:true}},
     {type:'number', name:'price', label:'价格', options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, itemOptions:{hasFeedback:true}, rule:{required:true}},
     {type:'select', name:'type', label:'分类', selectItems:listToSelectOptions(target.props.sales['goodsTypeList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
     {type:'select', name:'style', label:'系列', selectItems:listToSelectOptions(target.props.sales['goodsStyleList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},

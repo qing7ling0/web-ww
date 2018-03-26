@@ -65,14 +65,21 @@ class CommonData {
       }
       options.conditions.type = type;
     }
-    return await DB.getList(commonModel, options, page);
+    return await DB.getList(commonModel, options, page, (query)=>{
+      return query.populate('n_material').populate('d_material')
+    });
   }
   async addCommon(doc, options={}) {
     let NIDUnique = await this.checkNIDUnique(doc.NID, doc.type);
     if (!NIDUnique) {
       throw new ApiError(ApiErrorNames.ADD_FAIL, '编号已存在!');
     }
-
+    if (!doc.n_material) {
+      doc.n_material = null;
+    }
+    if (!doc.d_material) {
+      doc.d_material = null;
+    }
     return await DB.add(commonModel, doc, options);
   }
   async updateCommon(conditions, doc, options) {
@@ -86,8 +93,16 @@ class CommonData {
         throw new ApiError(ApiErrorNames.ADD_FAIL, '编号已使用!');
       }
     }
+    if (!doc.n_material) {
+      doc.n_material = null;
+    }
+    if (!doc.d_material) {
+      doc.d_material = null;
+    }
     // console.log(JSON.stringify(doc));
-    return await DB.update(commonModel, conditions, doc, options);
+    return await DB.update(commonModel, conditions, doc, options, (query)=>{
+      return query.populate('n_material').populate('d_material')
+    });
   }
   
   async checkCanRemoveByIds(ids, type) {
@@ -187,7 +202,7 @@ class CommonData {
   }
 
   createCurrentOrderIndex() {
-    let _time = Math.floor(new Date().getTime() / 1000);
+    let _time = Math.floor(new Date().getTime() / (1000*60));
     // console.log('createCurrentOrderIndex' + _time)
     if (!CommonData.currentOrderTime) {
       CommonData.currentOrderTime = _time;
@@ -204,6 +219,7 @@ class CommonData {
   }
 
   async createNID(type, sex, goods) {
+    console.log('createNID type=' + type + '; sex=' + sex + '; goods=' + JSON.stringify(goods) );
     let NID = '';
     let sexData = commonUtils.getSex(sex);
     if (!sexData) return constants.NULL_NID;
@@ -215,31 +231,35 @@ class CommonData {
     let orderType = commonUtils.getOrderType(type);
     if(!orderType) return constants.NULL_NID;
     let orderNID = orderType.etc;
-
+    let nid1 = null;
+    let nid2 = null;
     switch(type) {
       case constants.E_ORDER_TYPE.SHOES:
+      case constants.E_ORDER_TYPE.DESIGN:
         if (!goods.s_xuan_hao || !goods.s_material || (sex === constants.SEX_FEMALE && !goods.s_gen_gao)) return constants.NULL_NID;
-        let nid1 = await this.getNIDByKey(`${sexNID}${goods.s_xuan_hao.NID}`);
-        let nid2 = await this.getNIDByKey(`${sex === constants.SEX_FEMALE?goods.s_gen_gao.NID:''}${goods.s_material.NID}`);
+        nid1 = await this.getNIDByKey(`${sexNID}${goods.s_xuan_hao.NID}`);
+        nid2 = await this.getNIDByKey(`${sex === constants.SEX_FEMALE?goods.s_gen_gao.NID:''}${goods.s_material.NID}`);
         if (!nid1 || !nid2) return constants.NULL_NID;
         
         return `${nid1.key}${formatCount(nid1.count)}-${nid2.key}${formatCount(nid2.count)}`;
         
       case constants.E_ORDER_TYPE.BELT:
         if (!goods.b_material) return constants.NULL_NID;
-        let nid1 = await this.getNIDByKey(`${sexNID}${goods.b_material.NID}`);
-        if (!nid1) return constants.NULL_NID;
+        nid1 = await this.getNIDByKey(`${sexNID}${orderNID}`);
+        nid2 = await this.getNIDByKey(`${goods.b_material.NID}`);
+        if (!nid1 || !nid2) return constants.NULL_NID;
         
-        return `${nid1.key}${formatCount(nid1.count)}`;
+        return `${nid1.key}${formatCount(nid1.count)}-${nid2.key}${formatCount(nid2.count)}`;
       
       case constants.E_ORDER_TYPE.WATCH_STRAP:
         if (!goods.ws_material) return constants.NULL_NID;
-        let nid1 = await this.getNIDByKey(`${sexNID}${goods.ws_material.NID}`);
-        if (!nid1) return constants.NULL_NID;
+        nid1 = await this.getNIDByKey(`${sexNID}${orderNID}`);
+        nid2 = await this.getNIDByKey(`${goods.ws_material.NID}`);
+        if (!nid1 || !nid2) return constants.NULL_NID;
         
-        return `${nid1.key}${formatCount(nid1.count)}`;
+        return `${nid1.key}${formatCount(nid1.count)}-${nid2.key}${formatCount(nid2.count)}`;
       default:
-        let nid1 = await this.getNIDByKey(orderNID);
+        nid1 = await this.getNIDByKey(orderNID);
         if (!nid1) return constants.NULL_NID;
         
         return `${nid1.key}${formatCount(nid1.count)}`;
@@ -258,16 +278,18 @@ class CommonData {
       if (nid) {
         nid = await NIDModel.findByIdAndUpdate(nid._id, {$inc:{count:1}}, {new:true})
         if (nid) {
+          // console.log('getNIDByKey key=' + key +"; nid=" + JSON.stringify(nid));
           return nid;
         }
       } else {
-        let nid = await NIDModel.create([{key:key, count:1}]);
+        nid = await NIDModel.create({key:key, count:1});
         if (nid) {
+          // console.log('getNIDByKey key=' + key +"; 2 nid=" + JSON.stringify(nid));
           return nid;
         }
       }
     }
-    throw new ApiError(ApiErrorNames.ADD_FAIL, '商品货号创建失败');
+    return null;
   }
 }
 CommonData.currentOrderTime = 0;

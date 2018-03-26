@@ -89,7 +89,7 @@ export const shopType = `{
 
 export const customerType = `{
   _id,name,phone,sex,birthday,weixin,weixin_code_pic,country,city,address,zipcode,tags{tag},
-  vip_card_date,vip_card_shop{_id, name},vip_card_guide{_id,name},vip_level,vip_exp,balance,join_type,
+  vip_card_date,vip_card_shop{_id, name},vip_card_guide{_id,name},vip_level,vip_exp,balance,point,join_type,
 }`
 
 export const rechargeType = `{_id, mount, reward}`
@@ -102,7 +102,7 @@ export const materialType = `{_id, name, NID, color{_id,name}, count, maintain_c
 export const salesBaseType = `{_id, name, NID, editor_name, editor_time}`
 export const colorType = `{_id, name, NID, editor_name, editor_time}`
 export const maintainType = `{_id, name, NID, price, time, editor_name, editor_time}`
-export const customType = `{_id, name, NID, price, editor_name, editor_time}`
+export const customType = `{_id, name, NID, price, n_material{_id,name,NID}, d_material{_id,name,NID}, editor_name, editor_time}`
 export const urgentType = `{_id, NID, day, price, editor_name, editor_time}`
 export const xuanHaoType = `{_id, NID, name, editor_name, editor_time}`
 export const guiGeType = `{_id, NID, name, editor_name, editor_time}`

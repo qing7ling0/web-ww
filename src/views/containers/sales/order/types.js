@@ -177,7 +177,80 @@ const getOrderShoesOptions = function(target) {
         filterOption:!target.isDesign, 
         onChange:(value)=>target.onNIDPropertyChange('s_gen_gao', value)
       }, 
-      rule:{required:true}});
+      rule:{required:true}}
+    );
+  }
+
+  let colors = [ 
+    {
+      type:'select', name:'s_color_palette', label:'颜色', itemOptions:{labelLeft:true}, 
+      selectItems:listToSelectOptions(target.props.sales.colorPaletteList), 
+      options:{
+        defaultActiveFirstOption:true,
+        onChange:(value)=>target.onNIDPropertyChange('s_color_palette', value)
+      }, 
+      rule:{required:true}
+    },
+    {type:'text', name:'s_out_color', label:'皮胚色', itemOptions:{labelLeft:true}},    
+    {type:'text', name:'s_in_color', label:'内里色', itemOptions:{labelLeft:true}},   
+    {type:'text', name:'s_bottom_color', label:'底侧色', itemOptions:{labelLeft:true}},    
+    {type:'text', name:'s_bottom_side_color', label:'底板色', itemOptions:{labelLeft:true}}
+  ]
+  if (target.isDesign && target.isDesign()) {
+    colors = [ 
+      {
+        type:'select', name:'s_color_palette', label:'颜色', itemOptions:{labelLeft:true}, 
+        selectItems:listToSelectOptions(target.props.sales.colorPaletteList), 
+        options:{
+          defaultActiveFirstOption:true,
+          onChange:(value)=>target.onNIDPropertyChange('s_color_palette', value)
+        }
+      },
+      {
+        type:'select', name:'s_out_color', label:'皮胚色', itemOptions:{labelLeft:true}, 
+        selectItems:listToSelectOptions(target.props.sales.outColorList, (item)=>item.name), 
+        options:{
+          defaultActiveFirstOption:true, 
+          mode:"combobox", 
+          filterOption:false, 
+          onChange:(value)=>target.onColorChange('s_out_color', value)
+        }, 
+        rule:{required:true}
+      },    
+      {
+        type:'select', name:'s_in_color', label:'内里色', itemOptions:{labelLeft:true}, 
+        selectItems:listToSelectOptions(target.props.sales.inColorList, (item)=>item.name), 
+        options:{
+          defaultActiveFirstOption:true, 
+          mode:"combobox", 
+          filterOption:false, 
+          onChange:(value)=>target.onColorChange('s_in_color', value)
+        }, 
+        rule:{required:true}
+      },   
+      {
+        type:'select', name:'s_bottom_color', label:'底板色', itemOptions:{labelLeft:true}, 
+        selectItems:listToSelectOptions(target.props.sales.bottomColorList, (item)=>item.name), 
+        options:{
+          defaultActiveFirstOption:true, 
+          mode:"combobox", 
+          filterOption:false, 
+          onChange:(value)=>target.onColorChange('s_bottom_color', value)
+        }, 
+        rule:{required:true}
+      },    
+      {
+        type:'select', name:'s_bottom_side_color', label:'底侧色', itemOptions:{labelLeft:true}, 
+        selectItems:listToSelectOptions(target.props.sales.bottomSideColorList, (item)=>item.name), 
+        options:{
+          defaultActiveFirstOption:true, 
+          mode:"combobox", 
+          filterOption:false, 
+          onChange:(value)=>target.onColorChange('s_bottom_side_color', value)
+        }, 
+        rule:{required:true}
+      },  
+    ]
   }
   return [
     {
@@ -230,55 +303,8 @@ const getOrderShoesOptions = function(target) {
             onChange:(value)=>target.onNIDPropertyChange('s_material', value)
           }, 
           rule:{required:true}
-        },    
-        {
-          type:'select', name:'s_color_palette', label:'颜色', itemOptions:{labelLeft:true}, 
-          selectItems:listToSelectOptions(target.props.sales.colorPaletteList), 
-          options:{
-            defaultActiveFirstOption:true,
-            onChange:(value)=>target.onNIDPropertyChange('s_color_palette', value)
-          }, 
-          rule:{required:true}
-        },    
-        {
-          type:'text', name:'s_out_color', label:'皮胚色', itemOptions:{labelLeft:true}
-        },    
-        {
-          type:'text', name:'s_in_color', label:'皮胚色', itemOptions:{labelLeft:true}
-          // type:'select', name:'s_in_color', label:'内里色', itemOptions:{labelLeft:true}, 
-          // selectItems:listToSelectOptions(target.props.sales.inColorList, (item)=>item.name), 
-          // options:{
-          //   defaultActiveFirstOption:true, 
-          //   mode:"combobox", 
-          //   filterOption:false, 
-          //   onChange:(value)=>target.onNIDPropertyChange('s_in_color', value)
-          // }, 
-          // rule:{required:true}}, 
         },   
-        {
-          type:'text', name:'s_bottom_color', label:'皮胚色', itemOptions:{labelLeft:true}
-          // type:'select', name:'s_bottom_color', label:'底板色', itemOptions:{labelLeft:true}, 
-          // selectItems:listToSelectOptions(target.props.sales.bottomColorList, (item)=>item.name), 
-          // options:{
-          //   defaultActiveFirstOption:true, 
-          //   mode:"combobox", 
-          //   filterOption:false, 
-          //   onChange:(value)=>target.onNIDPropertyChange('s_bottom_color', value)
-          // }, 
-          // rule:{required:true}
-        },    
-        {
-          type:'text', name:'s_bottom_side_color', label:'皮胚色', itemOptions:{labelLeft:true}
-          // type:'select', name:'s_bottom_side_color', label:'底侧色', itemOptions:{labelLeft:true}, 
-          // selectItems:listToSelectOptions(target.props.sales.bottomSideColorList, (item)=>item.name), 
-          // options:{
-          //   defaultActiveFirstOption:true, 
-          //   mode:"combobox", 
-          //   filterOption:false, 
-          //   onChange:(value)=>target.onNIDPropertyChange('s_bottom_side_color', value)
-          // }, 
-          // rule:{required:true}
-        },  
+        ...colors,
         {
           type:'select', name:'sex', label:'性别', itemOptions:{labelLeft:true}, 
           selectItems:constants.BASE_CONSTANTS.SEX_DATA,
@@ -355,6 +381,15 @@ const getOrderBeltOptions = function(target) {
             onChange:(value)=>target.onNIDPropertyChange('b_color', value)
           }, rule:{required:true}
         },    
+        {
+          type:'select', name:'sex', label:'性别', itemOptions:{labelLeft:true}, 
+          selectItems:constants.BASE_CONSTANTS.SEX_DATA,
+          options:{
+            defaultActiveFirstOption:true, 
+            onChange:(value)=>target.onNIDPropertyChange('sex', value)
+          }, 
+          rule:{required:true}
+        },
         {type:'number', name:'price', label:'价格', itemOptions:{labelLeft:true}, options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, rule:{required:true}},    
         {type:'number', name:'b_A', label:'A', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
         {type:'number', name:'b_B', label:'B', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
@@ -424,9 +459,19 @@ const getOrderWatchStrapOptions = function(target) {
           selectItems:listToSelectOptions(target.props.sales.materialColorList), 
           options:{
             defaultActiveFirstOption:true,
+            onChange:(value)=>target.onNIDPropertyChange('ws_color', value)
           }, 
           rule:{required:true}
         },   
+        {
+          type:'select', name:'sex', label:'性别', itemOptions:{labelLeft:true}, 
+          selectItems:constants.BASE_CONSTANTS.SEX_DATA,
+          options:{
+            defaultActiveFirstOption:true, 
+            onChange:(value)=>target.onNIDPropertyChange('sex', value)
+          }, 
+          rule:{required:true}
+        },
         {type:'number', name:'price', label:'价格', itemOptions:{labelLeft:true}, options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, rule:{required:true}},    
         {type:'number', name:'ws_A', label:'A', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
         {type:'number', name:'ws_B', label:'B', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},

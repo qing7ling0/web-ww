@@ -39,7 +39,7 @@ const listToSelectOptions = (list, valueFormat, labelFormat) => {
 const getListOptions = function(target) {
   let options = [
     { title: '等级', dataIndex: 'level', key: 'level', className:"table-column-left", render:(text)=>text+' 级'},
-    { title: '升级充值', dataIndex: 'exp', key: 'exp', className:"table-column-left", render:(text)=>text+' RMB'},
+    { title: '升级积分', dataIndex: 'exp', key: 'exp', className:"table-column-left", render:(text)=>text+' RMB'},
     { title: '折扣', dataIndex: 'discount', key: 'discount', className:"table-column-left", render:(text)=>text+' 折'},
   ]
 
@@ -60,7 +60,7 @@ const getListOptions = function(target) {
 const getAddOptions = function(target) {
   return [
     {type:'number', name:'level', step:1, label:'等级', itemOptions:{hasFeedback:true}, options:{formatter:(value) => `${value}级`, parser:value => value.replace('级', '')}, rule:{required:true}},
-    {type:'number', name:'exp', step:1, label:'充值金额', itemOptions:{hasFeedback:true}, options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, rule:{required:true}},
+    {type:'number', name:'exp', step:1, label:'升级积分', itemOptions:{hasFeedback:true}, options:{rule:{required:true}}},
     {type:'number', name:'discount', label:'折扣', itemOptions:{hasFeedback:true}, options:{formatter:(value) => `${value}折`, parser:value => value.replace('折', '')}, rule:{required:true}},
   ];
 }

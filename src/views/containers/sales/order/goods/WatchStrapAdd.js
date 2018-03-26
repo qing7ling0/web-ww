@@ -382,11 +382,29 @@ class WatchStrapAdd extends Component {
         forms.setFieldsValue({ws_material:watchStrap.ws_material._id});
         forms.setFieldsValue({ws_style:watchStrap.ws_style._id});
         forms.setFieldsValue({ws_color:watchStrap.ws_color._id});
+        forms.setFieldsValue({sex:watchStrap.sex});
         forms.setFieldsValue({price:watchStrap.price});
 
         this.setState({selectGoods:watchStrap});
       }
     }
+  }
+
+  getGoodsByCurrentInput = (goodsInputInfo) => {
+    if (goodsInputInfo.ws_material && goodsInputInfo.sex && goodsInputInfo.ws_color && goodsInputInfo.ws_style) {
+      for(let goods of this.props.sales.goodsWatchStrapList) {
+        if (goods.ws_material && goods.ws_color && goods.sex && goods.ws_style) {
+          if (goods.ws_material._id === goodsInputInfo.ws_material._id
+            && goods.ws_color._id === goodsInputInfo.ws_color._id
+            && goods.ws_style._id === goodsInputInfo.ws_style._id
+            && goods.sex === goodsInputInfo.sex
+          ) {
+            return goods;
+          }
+        }
+      }
+    }
+    return null;
   }
 
   onNIDPropertyChange = (key, value) => {
@@ -396,18 +414,32 @@ class WatchStrapAdd extends Component {
     watchStrapInfo.ws_material = this.getValueFromListById(this.props.sales.materialList, watchStrapInfo.ws_material);
     watchStrapInfo.ws_style = this.getValueFromListById(this.props.sales.watchStrapStyleList, watchStrapInfo.ws_style);
     watchStrapInfo.ws_color = this.getValueFromListById(this.props.sales.materialColorList, watchStrapInfo.ws_color);
-    let nid = commonUtils.createGoodsNID(this.props.orderType.key, watchStrapInfo, this.props.customer.sex);
-    if (nid !== constants.BASE_CONSTANTS.NULL_NID) {
-      let watchStrap = this.getValueFromListById(this.props.sales.goodsWatchStrapList, 0, (item)=>item.NID === nid);
-      if (watchStrap) {
-        forms.setFieldsValue({price:watchStrap.price});
+    
+    let goods = this.getGoodsByCurrentInput(watchStrapInfo);
+    if (!this.props.isReview) { // 审核过程不修改价格
+      if (goods) {
+        forms.setFieldsValue({price:goods.price});
       } else {
         forms.setFieldsValue({price:null});
       }
-    } else {
-      forms.setFieldsValue({price:null});
     }
-    forms.setFieldsValue({NID:nid});
+    if (goods) {
+      forms.setFieldsValue({NID:goods.NID});
+    } else {
+      forms.setFieldsValue({NID:constants.BASE_CONSTANTS.NULL_NID});
+    }
+    // let nid = commonUtils.createGoodsNID(this.props.orderType.key, watchStrapInfo, this.props.customer.sex);
+    // if (nid !== constants.BASE_CONSTANTS.NULL_NID) {
+    //   let watchStrap = this.getValueFromListById(this.props.sales.goodsWatchStrapList, 0, (item)=>item.NID === nid);
+    //   if (watchStrap) {
+    //     forms.setFieldsValue({price:watchStrap.price});
+    //   } else {
+    //     forms.setFieldsValue({price:null});
+    //   }
+    // } else {
+    //   forms.setFieldsValue({price:null});
+    // }
+    // forms.setFieldsValue({NID:nid});
   }
 
   getValueFromListById = (list, id, checkFn) => {

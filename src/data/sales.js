@@ -48,10 +48,13 @@ const logUtil = require('../utils/log-utils');
 class SalesData {
 
   createOrderId = function(type, count) {
+    let orderType = commonUtils.getOrderType(type);
+    if (!orderType) return '';
+
     const moment = require('moment')
-    let date = moment().format('MMDDHHmmss');
+    let date = moment().format('YYMMDDHHmm');
   
-    return type+date+count;
+    return orderType.etc+date+count;
   }
 
   goodsPopulate(query) {
@@ -105,24 +108,23 @@ class SalesData {
           throw new ApiError(ApiErrorNames.ADD_FAIL, '添加失败，当前货号已存在');
         }
       }
-      let order = new goodsModel(doc);
-      if (order) {
-        let newOrder = await order.save(options);
-        if (newOrder) {
-          newOrder = await this.goodsPopulate(newOrder).execPopulate();
-          if (!doc.NID) { // 如果没有制定NID，则创建NID
-            let NID = await commonData.createGoodsNID(newOrder.goods, newOrder.sex, newOrder);
-            await goodsModel.findOneAndUpdate({_id:newOrder._id}, {NID:NID});
+      
+      let newGoods = await goodsModel.create(doc);
+      if (newGoods) {
+        if (!doc.NID) {
+          newGoods = await this.goodsPopulate(newGoods).execPopulate(); // 如果没有制定NID，则创建NID
+          let NID = await commonData.createNID(newGoods.goods, newGoods.sex, newGoods);
+          if (NID && NID !== constants.NULL_NID) {
+            await goodsModel.findByIdAndUpdate(newGoods._id, {NID,NID});
+          } else {
+            await goodsModel.findByIdAndRemove(newGoods._id);
+            throw new ApiError(ApiErrorNames.ADD_FAIL, '添加失败，创建货号失败！');
           }
-          return newOrder;
         }
-        throw new ApiError(ApiErrorNames.ADD_FAIL);
-      } else {
-        throw new ApiError(ApiErrorNames.ADD_FAIL);
+        return newGoods;
       }
-    } else {
-      throw new ApiError(ApiErrorNames.ADD_FAIL);
     }
+    throw new ApiError(ApiErrorNames.ADD_FAIL);
   }
 
   async addGoodsBySuborder(suborder) {
@@ -173,47 +175,53 @@ class SalesData {
 
   async updateGoods(conditions, doc, options) {
     if (doc) {
-      let NIDChange = false;
-      if (doc.sex) {
-        NIDChange = true;
-      }
-      if (!NIDChange) {
-        for(let key of constants.GOODS_SHOES_NID_FIELDS) {
-          if (doc[key]) {
-            NIDChange = true;
-            break;
-          }
-        }
-      }
-      if (!NIDChange) {
-        for(let key of constants.GOODS_BLET_NID_FIELDS) {
-          if (doc[key]) {
-            NIDChange = true;
-            break;
-          }
-        }
-      }
-      if (!NIDChange) {
-        for(let key of constants.GOODS_WATCH_STRAP_NID_FIELDS) {
-          if (doc[key]) {
-            NIDChange = true;
-            break;
-          }
-        }
-      }
-      if (doc.NID !== null || doc.NID !== undefined) {
-        if (doc.NID !== '') {
-          console.log("111=" + JSON.stringify(doc));
-          let goods = await goodsModel.findOne(conditions);
-          console.log("222=" + JSON.stringify(goods));
+      // let NIDChange = false;
+      // if (doc.sex) {
+      //   NIDChange = true;
+      // }
+      // if (!NIDChange) {
+      //   for(let key of constants.GOODS_SHOES_NID_FIELDS) {
+      //     if (doc[key]) {
+      //       NIDChange = true;
+      //       break;
+      //     }
+      //   }
+      // }
+      // if (!NIDChange) {
+      //   for(let key of constants.GOODS_BLET_NID_FIELDS) {
+      //     if (doc[key]) {
+      //       NIDChange = true;
+      //       break;
+      //     }
+      //   }
+      // }
+      // if (!NIDChange) {
+      //   for(let key of constants.GOODS_WATCH_STRAP_NID_FIELDS) {
+      //     if (doc[key]) {
+      //       NIDChange = true;
+      //       break;
+      //     }
+      //   }
+      // }
+      if (doc.NID !== null && doc.NID !== undefined && doc.NID !== '') {
+        // console.log("111=" + JSON.stringify(doc));
+        let goods = await goodsModel.findOne(conditions);
+        // console.log("222=" + JSON.stringify(goods));
+        if (goods) {
+          goods = await goodsModel.findOne({_id:{$nin:[goods._id]}, NID:doc.NID});
           if (goods) {
-            goods = await goodsModel.findOne({_id:{$nin:[goods._id]}, NID:doc.NID});
-            if (goods) {
-              throw new ApiError(ApiErrorNames.UPDATE_FAIL, '更新失败，当前货号已存在');
-            }
+            throw new ApiError(ApiErrorNames.UPDATE_FAIL, '更新失败，当前货号已存在');
           }
-          NIDChange = false;
         }
+      }
+      if (!doc.type) {
+        doc.type = null;
+      }
+      if (!doc.style) {
+        doc.style = null;
+      }
+      if (!doc.season) {
+        doc.season = null;
       }
       let ret = await goodsModel.update(conditions, doc, options);
       // if (NIDChange) {
@@ -333,6 +341,11 @@ class SalesData {
 
       let subOrders = await subOrderModel.find({$or:[{s_material:{$in:ids}},{b_material:{$in:ids}},{ws_material:{$in:ids}}]});
       if (subOrders && subOrders.length > 0) {
+        throw new ApiError(ApiErrorNames.DELETE_FAIL, '此材料已被使用，无法删除!');
+      }
+
+      let commonDatas = await commonModel.find({$or:[{n_material:{$in:ids}},{d_material:{$in:ids}}]});
+      if (commonDatas && commonDatas.length > 0) {
         throw new ApiError(ApiErrorNames.DELETE_FAIL, '此材料已被使用，无法删除!');
       }
 
@@ -484,6 +497,7 @@ class SalesData {
   async pay(customer, payInfo) {
     payInfo.real_pay_price = Math.round((payInfo.undiscount_mount + payInfo.discount * payInfo.discount_mount)*10)/10;
     payInfo.discount_price = payInfo.discount_mount+payInfo.undiscount_mount - payInfo.real_pay_price;
+    
     if (!payInfo.select_store_card) return payInfo; // 只有选择从充值卡中支付才去计算
     if (!customer) return payInfo; // 如果不是会员则不用扣除金钱了
 
@@ -493,6 +507,7 @@ class SalesData {
     }
     // console.log(payInfo)
     let balance = customer.balance - payInfo.real_pay_price;
+    let point = customer.point;
     await customerModel.findOneAndUpdate({_id:customer._id}, {$set:{balance:balance}});
     return payInfo;
   }
@@ -575,16 +590,17 @@ class SalesData {
       doc.real_pay_price = payInfo.real_pay_price;
       doc.discount_price = payInfo.discount_price;
 
+      let customerPoint = doc.store_card_select?0:Math.round(doc.real_pay_price);
       let customers = [];
       let newSubOrders = [];
       let isRechargeOrder = false;
+      let customer = await this.updateOrAddCustomerByOrder(doc, doc.customer);
+      if (!customer) {
+        // TODO
+        // 必须有用户
+        throw new ApiError(ApiErrorNames.ADD_FAIL);
+      }
       for(let sub of subOrders) {
-        let customer = await this.updateOrAddCustomerByOrder(sub, sub.customer);
-        if (!customer) {
-          // TODO
-          // 必须有用户
-          throw new ApiError(ApiErrorNames.ADD_FAIL);
-        }
         sub.customer = customer._id;
         // handle pics
         let fileIds = sub.pics && sub.pics.map((item)=>item.file);
@@ -592,6 +608,9 @@ class SalesData {
           await fileData.update({_id:{$in:fileIds}}, {temp:false});
         }
         sub.sub_order_id = this.createOrderId(sub.type, commonData.createCurrentOrderIndex());
+        if (!sub.sub_order_id) {
+          throw new ApiError(ApiErrorNames.ADD_FAIL, '订单号生成失败');
+        }
         sub.state = constants.E_ORDER_STATUS.REVIEW;
         if (sub.type === constants.E_ORDER_TYPE.RECHARGE) { // 充值订单
           sub = await this.recharge(customer, sub);
@@ -625,6 +644,10 @@ class SalesData {
         if (newOrder) {
           await fileModel.findByIdAndUpdate(doc.signature_pic, {temp:false});
           await subOrderModel.updateMany({_id:{$in:newSubOrders}}, {order:newOrder._id});
+          if (customerPoint) {
+            customerPoint = customer.point+customerPoint;
+            await customerModel.updateOne({_id:customer._id}, {point:customerPoint});
+          }
           return newOrder;
         }
         throw new ApiError(ApiErrorNames.ADD_FAIL);

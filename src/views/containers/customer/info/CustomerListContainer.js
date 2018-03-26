@@ -70,6 +70,7 @@ class CustomerListContainer extends Component {
       { title: '地址', dataIndex: 'address', key: 'address'},
       { title: '开卡门店', dataIndex: 'vip_card_shop_label', key: 'vip_card_shop_label'},
       { title: '开卡人员', dataIndex: 'vip_card_shop_guide_label', key: 'vip_card_shop_guide_label'},
+      { title: '积分', dataIndex: 'point', key: 'point', render:((value)=>value||0)},
       { title: 'vip等级', dataIndex: 'vip_level', key: 'vip_level'},
       { title: '申请方式', dataIndex: 'join_type_label', key: 'join_type_label'},
       { title: '客户标签', dataIndex: 'tags', key: 'tags', render:((value)=>{

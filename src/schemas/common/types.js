@@ -49,6 +49,16 @@ const colorFields = {
   name:{type:GraphQLString, description:'名字'}
 }
 
+const customMaterialType = new GraphQLObjectType({
+  name: 'customMaterialType',
+  fields: {
+    _id:{type:GraphQLString, description:''},
+    name: {type:GraphQLString, description:'名称'},
+    NID: {type:GraphQLString, description:'编号'},
+    maintain_cycle: {type:GraphQLInt, decription:'保养周期'}
+  }
+})
+
 // 特殊定制
 const customFields = {
   name:{type:GraphQLString, description:'名字'},
@@ -133,6 +143,8 @@ export const commonType = new GraphQLObjectType({
   fields: {
     _id: { type: GraphQLString },
     hide: {type:GraphQLBoolean, description:'是否删除了'},
+    n_material:{type: customMaterialType, decription:'内增皮料'},
+    d_material:{type: customMaterialType, decription:'特大码皮料'},
     ...commonTypeFields,
     ...commonFields.defaultCreateFields
   }
@@ -142,6 +154,8 @@ export const commonInputType = new GraphQLInputObjectType({
   name: 'commonInputType',
   fields: {
     _id: { type: GraphQLString },
+    n_material:{type: GraphQLString, decription:'内增皮料'},
+    d_material:{type: GraphQLString, decription:'特大码皮料'},
     ...commonTypeFields,
   }
 });

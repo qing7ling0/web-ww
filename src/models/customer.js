@@ -30,6 +30,7 @@ export const customerFields = {
   tags:[new Schema({
     tag:{type: Schema.Types.ObjectId, ref:'common', description:'标签'}
   })],
+  point:{type:Number, default:0, description:'积分'},
   ...baseFields
 };
 // 店铺

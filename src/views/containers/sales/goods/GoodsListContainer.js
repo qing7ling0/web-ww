@@ -176,12 +176,12 @@ class GoodsListContainer extends Component {
     }
   }
   onEdit = (values) => {
+    if (values.put_date) {
+      values.put_date = moment(values.put_date).format('YYYY-MM-DD HH:mm:ss');
+    }
     values = utils.diffent(values, this.state.editData);
     if (values) {
       if (values) {
-        if (values.put_date) {
-          values.put_date = moment(values.put_date).format('YYYY-MM-DD');
-        }
         this.onReqUpdate(this.state.editData._id, values);
       }
     }

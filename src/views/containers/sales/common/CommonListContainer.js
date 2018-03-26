@@ -69,6 +69,7 @@ class CommonListContainer extends Component {
   }
 
   componentDidMount(){
+    this.props.reqMaterialList();
   }
 
   render() {
@@ -148,12 +149,24 @@ class CommonListContainer extends Component {
     if (data) {
       data.type = this.commonType.key;
     }
+    if (data.type === constants.BASE_CONSTANTS.COMMON_DATA_TYPES.CUSTOM) {
+      if (!data.n_material && !data.d_material) {
+        message.error('至少选择一个定制内容!');
+        return;
+      }
+    }
     this.props.reqUpdateSalesBase(this.commonType.tag, id, data);
   }
   
   onReqAdd = (data) => {
     if (data) {
       data.type = this.commonType.key;
+    }
+    if (data.type === constants.BASE_CONSTANTS.COMMON_DATA_TYPES.CUSTOM) {
+      if (!data.n_material && !data.d_material) {
+        message.error('至少选择一个定制内容!');
+        return;
+      }
     }
     this.props.reqAddSalesBase(this.commonType.tag, this.commonType.graphqlType, data);
   }
@@ -210,6 +223,7 @@ export default connect(
       reqAddSalesBase: Actions.addSalesBase,
       reqDeleteSalesBase: Actions.deleteSalesBase,
       reqUpdateSalesBase: Actions.updateSalesBase,
+      reqMaterialList: Actions.getMaterialList
     }, dispatch);
   }
 )(CommonListContainer);

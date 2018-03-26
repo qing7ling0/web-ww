@@ -377,10 +377,27 @@ class BeltAdd extends Component {
         forms.setFieldsValue({b_material:belt.b_material._id});
         forms.setFieldsValue({b_color:belt.b_color._id});
         forms.setFieldsValue({price:belt.price});
+        forms.setFieldsValue({sex:belt.sex});
 
         this.setState({selectGoods:belt});
       }
     }
+  }
+
+  getGoodsByCurrentInput = (goodsInputInfo) => {
+    if (goodsInputInfo.b_material && goodsInputInfo.sex && goodsInputInfo.b_color) {
+      for(let goods of this.props.sales.goodsBeltList) {
+        if (goods.b_material && goods.b_color && goods.sex) {
+          if (goods.b_material._id === goodsInputInfo.b_material._id
+            && goods.b_color._id === goodsInputInfo.b_color._id
+            && goods.sex === goodsInputInfo.sex
+          ) {
+            return goods;
+          }
+        }
+      }
+    }
+    return null;
   }
 
   onNIDPropertyChange = (key, value) => {
@@ -389,18 +406,33 @@ class BeltAdd extends Component {
     beltInfo[key] = value;
     beltInfo.b_material = this.getValueFromListById(this.props.sales.materialList, beltInfo.b_material);
     beltInfo.b_color = this.getValueFromListById(this.props.sales.materialColorList, beltInfo.b_color);
-    let nid = commonUtils.createGoodsNID(this.props.orderType.key, beltInfo, this.props.customer.sex);
-    if (nid !== constants.BASE_CONSTANTS.NULL_NID) {
-      let belt = this.getValueFromListById(this.props.sales.goodsBeltList, 0, (item)=>item.NID === nid);
-      if (belt) {
-        forms.setFieldsValue({price:belt.price});
+
+    let goods = this.getGoodsByCurrentInput(beltInfo);
+    if (!this.props.isReview) { // 审核过程不修改价格
+      if (goods) {
+        forms.setFieldsValue({price:goods.price});
       } else {
         forms.setFieldsValue({price:null});
       }
-    } else {
-      forms.setFieldsValue({price:null});
     }
-    forms.setFieldsValue({NID:nid});
+    if (goods) {
+      forms.setFieldsValue({NID:goods.NID});
+    } else {
+      forms.setFieldsValue({NID:constants.BASE_CONSTANTS.NULL_NID});
+    }
+
+    // let nid = commonUtils.createGoodsNID(this.props.orderType.key, beltInfo, this.props.customer.sex);
+    // if (nid !== constants.BASE_CONSTANTS.NULL_NID) {
+    //   let belt = this.getValueFromListById(this.props.sales.goodsBeltList, 0, (item)=>item.NID === nid);
+    //   if (belt) {
+    //     forms.setFieldsValue({price:belt.price});
+    //   } else {
+    //     forms.setFieldsValue({price:null});
+    //   }
+    // } else {
+    //   forms.setFieldsValue({price:null});
+    // }
+    // forms.setFieldsValue({NID:nid});
   }
 
   getValueFromListById = (list, id, checkFn) => {

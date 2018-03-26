@@ -72,7 +72,6 @@ class ShoesAdd extends Component {
       customReviewSure:false,
       photoReviewSure:false
     }
-    this.isDesign = true;
   }
 
   //在组件挂载之前调用一次。如果在这个函数里面调用setState，本次的render函数可以看到更新后的state，并且只渲染一次
@@ -435,7 +434,6 @@ class ShoesAdd extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         if (this.props.onAddSuccess) {
-          values.type = this.props.orderType.type;
           let shoesInfo = this.getGoodsInfo(values);
           if (shoesInfo.s_material) {
             shoesInfo.s_material = {...shoesInfo.s_material};
@@ -535,8 +533,12 @@ class ShoesAdd extends Component {
         if (!this.props.isReview) { // 审核过程不修改价格
           forms.setFieldsValue({price:shoes.price});
         }
-        if (this.props.customer.sex === constants.BASE_CONSTANTS.SEX_FEMALE) {
-          forms.setFieldsValue({s_gen_gao:shoes.s_gen_gao.name});
+        if (shoes.sex === constants.BASE_CONSTANTS.SEX_FEMALE) {
+          if (this.shoes.s_gen_gao) {
+            forms.setFieldsValue({s_gen_gao:shoes.s_gen_gao.name});
+          } else {
+            forms.setFieldsValue({s_gen_gao:null});
+          }
         }
 
         this.setState({selectShoes:shoes});
@@ -629,6 +631,37 @@ class ShoesAdd extends Component {
     }
   }
 
+  onColorChange = (key, value) => {
+    const {form:forms} = this.props;
+    let shoesInfo = forms.getFieldsValue();
+    if (key) {
+      shoesInfo[key] = value;
+    }
+    shoesInfo = this.getGoodsInfo(shoesInfo);
+    let _palette = null;
+    let paletteList = this.props.sales.colorPaletteList || [];
+    for(let palette of paletteList) {
+      if (palette.out_color && palette.in_color && palette.bottom_color && palette.bottom_side_color &&
+        shoesInfo.s_out_color && shoesInfo.s_in_color && shoesInfo.s_bottom_color && shoesInfo.s_bottom_side_color
+      ) {
+        if (palette.out_color._id === shoesInfo.s_out_color._id &&
+          palette.in_color._id === shoesInfo.s_in_color._id &&
+          palette.bottom_color._id === shoesInfo.s_bottom_color._id &&
+          palette.bottom_side_color._id === shoesInfo.s_bottom_side_color._id
+        ) {
+          _palette = palette;
+          break;
+        }
+      }
+    }
+
+    if (_palette) {
+      forms.setFieldsValue({s_color_palette:_palette._id});
+    } else {
+      forms.setFieldsValue({s_color_palette:null});
+    }
+  }
+
   getValueFromListById = (list, id, checkFn) => {
     if (!list) return null;
     let ret = null;
@@ -671,6 +704,10 @@ class ShoesAdd extends Component {
     } else {
       return {_id:'', NID:'', name:name};
     }
+  }
+
+  isDesign = () => {
+    return this.props.orderType.key === constants.BASE_CONSTANTS.E_ORDER_TYPE.DESIGN;
   }
 }
 

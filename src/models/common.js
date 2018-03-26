@@ -26,6 +26,8 @@ const colorFields = {
 // 特殊定制
 const customFields = {
   name:{type:String, description:'名字'},
+  n_material:{type: Schema.Types.ObjectId, ref:'material', decription:'内增皮料'},
+  d_material:{type: Schema.Types.ObjectId, ref:'material', decription:'特大码皮料'},
   price:{type:Number, description:'价格'},
 }
 

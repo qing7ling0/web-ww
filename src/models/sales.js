@@ -189,6 +189,20 @@ const orderBaseSchema = new Schema({
   day: {type:Number, decription:'天数'},
   maintain_cycle: {type:Number, decription:'保养周期'},
 });
+
+const customMaterialSchema = new Schema({
+  _id: {type:String, decription:'ID'},
+  name: {type:String, decription:'名称'},
+  NID: {type:String, decription:'编号'},
+})
+
+const orderCustomSchema = new Schema({
+  _id: {type:String, decription:'ID'},
+  name: {type:String, decription:'名称'},
+  price: {type:Number, decription:'价格'},
+  n_material:{type:customMaterialSchema, decription:'内增高皮料'},
+  d_material:{type:customMaterialSchema, decription:'内增高皮料'}
+});
 // 订单信息
 // 鞋
 const shoesFields = {
@@ -214,7 +228,7 @@ const shoesFields = {
   s_right_length: {type: Number, description:'右脚长度'},
   s_right_zhiWei: {type: Number, decription:'右脚趾围'},
   s_right_fuWei: {type: Number, decription:'右脚附维'},
-  s_customs:[orderBaseSchema], // 特殊定制
+  s_customs:[orderCustomSchema], // 特殊定制
 }
 
 // 皮带

@@ -72,15 +72,15 @@ const getNIDBaseListOptions = function(target) {
   let options = [
     { title: '名称', dataIndex: 'name', key: 'name', className:"table-column-left"},
     { title: '编号', dataIndex: 'NID', key: 'NID', className:"table-column-left"},
-    { title: '编辑人', dataIndex: 'editor_name', key: 'editor_name', width:120},
-    { title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
-      return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={()=>target.onDelete([record._id])} />);
-    }}
+    { title: '编辑人', dataIndex: 'editor_name', key: 'editor_name', width:120}
   ]
   if (target.canOperate()) {
     options.push({
       title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
-        return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={()=>target.onDelete([record._id])} />);
+        return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
+          e.stopPropagation();
+          target.onDelete([record._id])
+        }} />);
       }
     })
   }
@@ -102,13 +102,18 @@ const getNIDBaseEditOptions = function(target) {
 const getCustomListOptions = function(target) {
   let options = [
     { title: '名称', dataIndex: 'name', key: 'name'},
+    { title: '内增皮料', dataIndex: 'n_material', key: 'n_material', render:(item)=>item&&item.name||''},
+    { title: '特大码皮料', dataIndex: 'd_material', key: 'd_material', render:(item)=>item&&item.name||''},
     { title: '价格', dataIndex: 'price', key: 'price', render:(text)=>text+'RMB'},
     { title: '编辑人', dataIndex: 'editor_name', width:120, key: 'editor_name'}
   ]
   if (target.canOperate()) {
     options.push({
       title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
-        return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={()=>target.onDelete([record._id])} />);
+        return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
+          e.stopPropagation();
+          target.onDelete([record._id])
+        }} />);
       }
     })
   }
@@ -118,6 +123,8 @@ const getCustomListOptions = function(target) {
 const getCustomAddOptions = function(target) {
   return [
     {type:'input', name:'name', label:'名称', itemOptions:{hasFeedback:true}, rule:{required:true}},
+    {type:'select', name:'n_material', label:'内增皮料', selectItems:listToSelectOptions(target.props['materialList']), options:{defaultActiveFirstOption:true}},
+    {type:'select', name:'d_material', label:'特大码皮料', selectItems:listToSelectOptions(target.props['materialList']), options:{defaultActiveFirstOption:true}},
     {type:'number', name:'price', label:'价格', itemOptions:{hasFeedback:true}, options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, rule:{required:true}},
   ];
 }
@@ -136,7 +143,10 @@ const getUrgentListOptions = function(target) {
   if (target.canOperate()) {
     options.push({
       title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
-        return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={()=>target.onDelete([record._id])} />);
+        return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
+          e.stopPropagation();
+          target.onDelete([record._id])
+        }} />);
       }
     })
   }

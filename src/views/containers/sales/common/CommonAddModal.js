@@ -91,6 +91,7 @@ class CommonAddModal extends Component {
 export default connect(
   state => ({
     loading:state.sales.loading,
-    result:state.sales.result
+    result:state.sales.result,
+    materialList:state.sales.materialList
   })
 )(Form.create()(CommonAddModal));
