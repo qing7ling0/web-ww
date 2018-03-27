@@ -15,7 +15,9 @@ import {
   Switch,
   Radio,
   Slider, Upload,
-  Modal
+  Modal,
+  Row,
+  Col
 } from 'antd'
 
 const FormItem = Form.Item;
@@ -29,12 +31,22 @@ import {
 
 import {
   Root,
+  ProfileCol,
+  ProfileColLabel,
+  ProfileColValue,
+  ProfileBtnBack,
+  ProfileRowTitle,
+  PhotoDeleteBtn,
+  PhotoUploadBtnCotnainer,
+  UploadIconContainer,
+  UploadIcon
 } from './styled'
 
 import * as ActionTypes from '../../../constants/ActionTypes'
 import Actions from '../../../actions'
 import * as validate from '../../../../base/utils/validate'
 import * as constants from '../../../constants/Constants'
+import * as config from '../../../constants/Config'
 import * as common from '../../../modules/common'
 import FormItemComponent from '../../common/FormItemComponent'
 import BaseFormModal from '../../common/BaseFormModal'
@@ -47,7 +59,8 @@ class GoodsAddModal extends Component {
 
     this.state = {
       visible:false,
-      pics:['']
+      pics:[''],
+      sex:'男'
     }
   }
 
@@ -70,8 +83,9 @@ class GoodsAddModal extends Component {
     return '';
   }
 
-  renderPicUpload = (item, record) => {
-    <Row style={{width:'100%'}}>
+  renderPicUpload = () => {
+    let file = this.state.pics[0];
+    return (<Row style={{width:'100%'}}>
       <Col span={6}>
         <Upload
           name="order"
@@ -81,22 +95,14 @@ class GoodsAddModal extends Component {
           showUploadList={false}
           style={{padding:0, position:'relative'}}
           action={config.GetServerAddress() + '/upload'}
-          onChange={({file, fileList})=>this.onUploadPicChange(0, file)}
+          onChange={this.onUploadPicChange}
           withCredentials={true}
-          disabled={disabled}
         >
           {
-            item.file ? 
-            <div style={{width:'100%', height:'100%', position:'relative'}}>
-              <img src={config.GetServerAddress() + '/file/'+item.file} alt="" style={{width:'100%', height:'100%'}} /> 
-              {
-                disabled ? null :
-                <PhotoDeleteBtn icon='minus' type="danger" shape="circle" size="small" ghost onClick={(e)=>{
-                  e.stopPropagation();
-                  this.onRemovePhoto(0);
-                }} />
-              }
-            </div>
+            file ? 
+            <UploadIconContainer>
+              <UploadIcon src={config.GetServerAddress() + '/file/'+file} alt="" /> 
+            </UploadIconContainer>
             :
             <PhotoUploadBtnCotnainer>
               <Icon type='plus' />
@@ -105,31 +111,17 @@ class GoodsAddModal extends Component {
           }
         </Upload>
       </Col>
-      <Col span={12}>
-        <TextArea disabled={disabled} placeholder="请输入拍照备注" autosize={{ minRows: 2, maxRows: 10 }} defaultValue={item.desc} onChange={(e)=>{
-          let pics = this.state.pics;
-          let pic = pics[index];
-          if (pic) {
-            pic.desc = e.target.value;
-            this.setState({pics:pics})
-          }
-        }} />
-      </Col>
-    </Row>
+    </Row>)
   }
 
-  onRemovePhoto = (index) => {
-    let pics = this.state.pics;
-    pics.splice(index, 1);
-    this.setState({pics:pics});
+  getUploadAction = () => {
+    return config.GetServerAddress() + '/upload';
   }
   
-  onUploadPicChange = (index, file) => {
-    let pics = this.state.pics;
-    let pic = pics[index];
-    if (pic && file.response && file.response.data.files && file.response.data.files.length > 0) {
-      pic.file = file.response.data.files[0];
-      this.setState({pics:pics})
+  onUploadPicChange = (result) => {
+    const {file} = result;
+    if (file.response && file.response.data.files && file.response.data.files.length > 0) {
+      this.setState({pics:[file.response.data.files[0]]})
     }
   }
 
@@ -175,6 +167,12 @@ class GoodsAddModal extends Component {
   onSubmit = (err, values) => {
     if (!err) {
       if (this.props.onAdd) {
+        values.pics = [];
+        this.state.pics.forEach(item=>{
+          if (item) {
+            values.pics.push(item);
+          }
+        });
         this.props.onAdd(values);
       }
     }
@@ -186,6 +184,14 @@ class GoodsAddModal extends Component {
     } else {
       callback('格式不合法，手机或者电话号码');
     }
+  }
+  
+  onSexChange = (value) => {
+    this.setState({sex:value});
+  }
+
+  isFemale = () => {
+    return this.state.sex === constants.BASE_CONSTANTS.SEX_FEMALE;
   }
 }
 

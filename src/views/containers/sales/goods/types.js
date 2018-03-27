@@ -48,9 +48,10 @@ const getGoodsShoesBaseColumns = function(target) {
     { title: '季节', dataIndex: 'season', key: 'season_label', render:(item) => item&&item.name||''},
     { title: '性别', dataIndex: 'sex', key: 'sex'},
     { title: '楦号', dataIndex: 's_xuan_hao', key: 's_xuan_hao', render:(item) => item&&item.name||''},
-    { title: '跟高', dataIndex: 's_gen_gao', key: 's_gen_gao', render:(item) => item&&item.name||''},
+    { title: '跟高', dataIndex: 's_gen_gao', key: 's_gen_gao', render:(item, record) => record&&record.sex===constants.BASE_CONSTANTS.SEX_FEMALE&&item&&item.name||'无'},
     { title: '材质', dataIndex: 's_material', key: 's_material', render:(item) => item&&item.name||''},
     { title: '贴底', dataIndex: 's_tie_di', key: 's_tie_di', render:(item) => item&&item.name||''},
+    { title: '规格', dataIndex: 's_gui_ge', key: 's_gui_ge', render:(item) => item||''},
     { title: '皮胚色', dataIndex: 's_out_color', key: 's_out_color', render:(item) => item&&item.name||''},
     { title: '内里色', dataIndex: 's_in_color', key: 's_in_color', render:(item) => item&&item.name||''},
     { title: '底板色', dataIndex: 's_bottom_color', key: 's_bottom_color', render:(item) => item&&item.name||''},
@@ -84,22 +85,27 @@ const getGoodsShoesListOptions = function(target) {
   return options;
 }
 const getGoodsShoesAddOptions = function(target) {
+  let genGao = [
+  ];
+  if (target.isFemale()) {
+    genGao.push({type:'select', name:'s_gen_gao', label:'跟高', selectItems:listToSelectOptions(target.props.sales['genGaoList']), options:{defaultActiveFirstOption:true}, rule:{required:true}});
+  }
   return [
     {type:'input', name:'NID', label:'货号', itemOptions:{hasFeedback:true}},
     {type:'input', name:'name', label:'名称', itemOptions:{hasFeedback:true}, rule:{required:true}},
-    {type:'upload', name:'pics', label:'图片', itemOptions:{hasFeedback:true}, render:target.renderPicUpload},
+    {type:'upload', name:'pics', label:'图片',  itemOptions:{hasFeedback:true}, render:target.renderPicUpload, rule:{required:true}},
     {type:'number', name:'price', label:'价格', options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, itemOptions:{hasFeedback:true}, rule:{required:true}},
     {type:'select', name:'type', label:'分类', selectItems:listToSelectOptions(target.props.sales['goodsTypeList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
     {type:'select', name:'style', label:'系列', selectItems:listToSelectOptions(target.props.sales['goodsStyleList']), options:{defaultActiveFirstOption:true}, rule:{}},
     {type:'select', name:'season', label:'季节', selectItems:listToSelectOptions(target.props.sales['goodsSeasonList']), options:{defaultActiveFirstOption:true}, rule:{}},
-    {type:'select', name:'sex', label:'性别', selectItems:constants.BASE_CONSTANTS.SEX_DATA, options:{defaultActiveFirstOption:true}, rule:{required:true}},
+    {type:'select', name:'sex', label:'性别', selectItems:constants.BASE_CONSTANTS.SEX_DATA, options:{defaultActiveFirstOption:true, onChange:target.onSexChange}, rule:{required:true}},
     
     {type:'select', name:'s_xuan_hao', label:'楦号', selectItems:listToSelectOptions(target.props.sales['xuanHaoList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
     {type:'select', name:'s_tie_di', label:'贴底', selectItems:listToSelectOptions(target.props.sales['shoesTieBianList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    // {type:'select', name:'s_gui_ge', label:'规格', selectItems:listToSelectOptions(target.props.sales['guiGeList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    {type:'select', name:'s_gen_gao', label:'跟高', selectItems:listToSelectOptions(target.props.sales['genGaoList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    
     {type:'select', name:'s_material', label:'材质', selectItems:listToSelectOptions(target.props.sales['materialList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
+    {type:'input', name:'s_gui_ge', label:'规格', itemOptions:{hasFeedback:true}, rule:{required:true}},
+    // {type:'select', name:'s_gui_ge', label:'规格', selectItems:listToSelectOptions(target.props.sales['guiGeList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
+    ...genGao,
     {
       type:'select', name:'s_color_palette', label:'颜色', 
       selectItems:listToSelectOptions(target.props.sales['colorPaletteList']), 
@@ -168,6 +174,7 @@ const getGoodsBeltAddOptions = function(target) {
   return [
     {type:'input', name:'NID', label:'货号', itemOptions:{hasFeedback:true}},
     {type:'input', name:'name', label:'名称', itemOptions:{hasFeedback:true}, rule:{required:true}},
+    {type:'upload', name:'pics', label:'图片',  itemOptions:{hasFeedback:true}, render:target.renderPicUpload, rule:{required:true}},
     {type:'number', name:'price', label:'价格', options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, itemOptions:{hasFeedback:true}, rule:{required:true}},
     {type:'select', name:'type', label:'分类', selectItems:listToSelectOptions(target.props.sales['goodsTypeList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
     {type:'select', name:'style', label:'系列', selectItems:listToSelectOptions(target.props.sales['goodsStyleList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
@@ -228,6 +235,7 @@ const getGoodsWatchStrapAddOptions = function(target) {
   return [
     {type:'input', name:'NID', label:'货号', itemOptions:{hasFeedback:true}},
     {type:'input', name:'name', label:'名称', itemOptions:{hasFeedback:true}, rule:{required:true}},
+    {type:'upload', name:'pics', label:'图片',  itemOptions:{hasFeedback:true}, render:target.renderPicUpload, rule:{required:true}},
     {type:'number', name:'price', label:'价格', options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, itemOptions:{hasFeedback:true}, rule:{required:true}},
     {type:'select', name:'type', label:'分类', selectItems:listToSelectOptions(target.props.sales['goodsTypeList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
     {type:'select', name:'style', label:'系列', selectItems:listToSelectOptions(target.props.sales['goodsStyleList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
@@ -285,6 +293,7 @@ const getGoodsOrnamentAddOptions = function(target) {
   return [
     {type:'input', name:'NID', label:'货号', itemOptions:{hasFeedback:true}},
     {type:'input', name:'name', label:'名称', itemOptions:{hasFeedback:true}, rule:{required:true}},
+    {type:'upload', name:'pics', label:'图片',  itemOptions:{hasFeedback:true}, render:target.renderPicUpload, rule:{required:true}},
     {type:'number', name:'price', label:'价格', options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, itemOptions:{hasFeedback:true}, rule:{required:true}},
     {type:'select', name:'type', label:'分类', selectItems:listToSelectOptions(target.props.sales['goodsTypeList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
     {type:'select', name:'style', label:'系列', selectItems:listToSelectOptions(target.props.sales['goodsStyleList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},

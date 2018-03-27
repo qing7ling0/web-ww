@@ -141,12 +141,13 @@ const goodsInputFields = {
 }
 
 // 鞋
-const goodsShoesBaseFields = {};
+const goodsShoesBaseFields = {
+  s_gui_ge: {type:GraphQLString, decription:'规格'}
+};
 const goodsShoesFields = {
   ...goodsShoesBaseFields,
   s_material: {type:orderBaseCommonType, decription:'材质'},
   s_xuan_hao: {type:orderBaseCommonType, decription:'楦号'},
-  s_gui_ge: {type:orderBaseCommonType, decription:'规格'},
   s_color_palette: {type:orderBaseCommonType, decription:'颜色搭配'},
   s_out_color: {type:orderBaseCommonType, decription:'鞋面颜色'},
   s_in_color: {type:orderBaseCommonType, decription:'里皮颜色'},
@@ -402,6 +403,7 @@ const orderShoesBaseFields = {
   s_right_fuWei: {type: GraphQLFloat, decription:'右脚附维'},
   s_design_self: {type: GraphQLBoolean, decription:'是否来样设计'},
   s_production_step: {type: GraphQLInt, decription:'正品鞋制作环境'},
+  s_gui_ge:{type:GraphQLString, decription:'规格'},
 }
 const orderShoesFields = {
   ...orderShoesBaseFields,

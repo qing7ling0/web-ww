@@ -78,7 +78,7 @@ const getSampleGoodsShoesProfileOptions = function(target) {
         { title: '名称', dataIndex: 'name', key: 'name'},
         { title: '性别', dataIndex: 'sex', key: 'sex'},
         { title: '楦号', dataIndex: 's_xuan_hao', key: 's_xuan_hao', render:(item) => item&&item.name||''},
-        // { title: '规格', dataIndex: 's_gui_ge', key: 's_gui_ge', render:(item) => item&&item.name||''},
+        { title: '规格', dataIndex: 's_gui_ge', key: 's_gui_ge', render:(item) => item||''},
         { title: '跟高', dataIndex: 's_gen_gao', key: 's_gen_gao', render:(item) => item&&item.name||''},
         { title: '材质', dataIndex: 's_material', key: 's_material', render:(item) => item&&item.name||''},
         { title: '皮胚色', dataIndex: 's_out_color', key: 's_out_color', render:(item) => item&&item.name||''},

@@ -530,6 +530,7 @@ class ShoesAdd extends Component {
         forms.setFieldsValue({s_bottom_side_color:shoes.s_bottom_side_color.name});
         forms.setFieldsValue({s_tie_di:shoes.s_tie_di.name});
         forms.setFieldsValue({sex:shoes.sex});
+        forms.setFieldsValue({s_gui_ge:shoes.s_gui_ge});
         if (!this.props.isReview) { // 审核过程不修改价格
           forms.setFieldsValue({price:shoes.price});
         }
@@ -562,14 +563,15 @@ class ShoesAdd extends Component {
   }
 
   getGoodsByCurrentInput = (shoesInfo) => {
-    if (shoesInfo.s_material && shoesInfo.sex && shoesInfo.s_xuan_hao && shoesInfo.s_color_palette && shoesInfo.s_tie_di) {
+    if (shoesInfo.s_material && shoesInfo.sex && shoesInfo.s_gui_ge && shoesInfo.s_xuan_hao && shoesInfo.s_color_palette && shoesInfo.s_tie_di) {
       for(let goods of this.props.sales.goodsShoesList) {
-        if (goods.s_material && goods.s_xuan_hao && goods.sex && goods.s_color_palette && goods.s_tie_di) {
+        if (goods.s_material && goods.s_gui_ge && goods.s_xuan_hao && goods.sex && goods.s_color_palette && goods.s_tie_di) {
           if (goods.s_material._id === shoesInfo.s_material._id
             && goods.s_xuan_hao._id === shoesInfo.s_xuan_hao._id
             && goods.s_color_palette._id === shoesInfo.s_color_palette
             && goods.s_tie_di._id === shoesInfo.s_tie_di._id
             && goods.sex === shoesInfo.sex
+            && goods.s_gui_ge === shoesInfo.s_gui_ge
           ) {
             if ((goods.sex === constants.BASE_CONSTANTS.SEX_FEMALE && goods.s_gen_gao && shoesInfo.s_gen_gao && shoesInfo.s_gen_gao._id === goods.s_gen_gao._id) ||
             goods.sex !== constants.BASE_CONSTANTS.SEX_FEMALE
@@ -595,7 +597,7 @@ class ShoesAdd extends Component {
 
   onNIDPropertyChange = (key, value) => {
     const {form:forms} = this.props;
-    if (key === 's_color_palette') {
+    if (key === 's_color_palette' && value) {
       let palette = null;
       let list = this.props.sales.colorPaletteList || [];
       for(let pa of list) {
@@ -607,27 +609,30 @@ class ShoesAdd extends Component {
       if (palette) {
         this.setColorByColorPalette(palette);
       }
-    } else {
-      let shoesInfo = forms.getFieldsValue();
-      if (key) {
-        shoesInfo[key] = value;
-      }
-      shoesInfo = this.getGoodsInfo(shoesInfo);
-  
-      // let nid = commonUtils.createGoodsNID(constants.BASE_CONSTANTS.GOODS_SHOES, shoesInfo, this.props.customer.sex);
-      let goods = this.getGoodsByCurrentInput(shoesInfo);
-      if (!this.props.isReview) { // 审核过程不修改价格
-        if (goods) {
-          forms.setFieldsValue({price:goods.price});
-        } else {
-          forms.setFieldsValue({price:null});
-        }
-      }
+    } 
+    if (key === 's_gui_ge') {
+      value = value.target.value;
+    }
+
+    let shoesInfo = forms.getFieldsValue();
+    if (key) {
+      shoesInfo[key] = value;
+    }
+    shoesInfo = this.getGoodsInfo(shoesInfo);
+
+    // let nid = commonUtils.createGoodsNID(constants.BASE_CONSTANTS.GOODS_SHOES, shoesInfo, this.props.customer.sex);
+    let goods = this.getGoodsByCurrentInput(shoesInfo);
+    if (!this.props.isReview) { // 审核过程不修改价格
       if (goods) {
-        forms.setFieldsValue({NID:goods.NID});
+        forms.setFieldsValue({price:goods.price});
       } else {
-        forms.setFieldsValue({NID:constants.BASE_CONSTANTS.NULL_NID});
+        forms.setFieldsValue({price:null});
       }
+    }
+    if (goods) {
+      forms.setFieldsValue({NID:goods.NID});
+    } else {
+      forms.setFieldsValue({NID:constants.BASE_CONSTANTS.NULL_NID});
     }
   }
 
@@ -657,8 +662,10 @@ class ShoesAdd extends Component {
 
     if (_palette) {
       forms.setFieldsValue({s_color_palette:_palette._id});
+      this.onNIDPropertyChange('s_color_palette', _palette._id);
     } else {
       forms.setFieldsValue({s_color_palette:null});
+      this.onNIDPropertyChange('s_color_palette', null);
     }
   }
 

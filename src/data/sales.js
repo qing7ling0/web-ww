@@ -61,7 +61,7 @@ class SalesData {
     return query
       .populate('type').populate('season').populate('style')
       .populate('s_material').populate('s_out_color').populate('s_in_color').populate('s_color_palette')
-      .populate('s_bottom_color').populate('s_bottom_side_color').populate('s_xuan_hao').populate('s_gui_ge').populate('s_gen_gao').populate('s_tie_di')
+      .populate('s_bottom_color').populate('s_bottom_side_color').populate('s_xuan_hao').populate('s_gen_gao').populate('s_tie_di')
       .populate('b_material').populate('b_color')
       .populate('ws_material').populate('ws_style').populate('ws_color');
   }
@@ -111,6 +111,9 @@ class SalesData {
       
       let newGoods = await goodsModel.create(doc);
       if (newGoods) {
+        if (doc.pics && doc.pics.length > 0 && doc.pics[0]) {
+          await fileModel.updateOne({_id:doc.pics[0]}, {temp:false});
+        }
         if (!doc.NID) {
           newGoods = await this.goodsPopulate(newGoods).execPopulate(); // 如果没有制定NID，则创建NID
           let NID = await commonData.createNID(newGoods.goods, newGoods.sex, newGoods);
@@ -119,6 +122,9 @@ class SalesData {
           } else {
             // 还原
             await goodsModel.findByIdAndRemove(newGoods._id);
+            if (doc.pics && doc.pics.length > 0 && doc.pics[0]) {
+              await fileModel.updateOne({_id:doc.pics[0]}, {temp:true});
+            }
             throw new ApiError(ApiErrorNames.ADD_FAIL, '添加失败，创建货号失败！');
           }
         }
@@ -146,7 +152,7 @@ class SalesData {
       if (suborder.type === constants.E_ORDER_TYPE.SHOES) {
         goods.s_material = suborder.s_material && suborder.s_material._id || '';
         goods.s_xuan_hao = suborder.s_xuan_hao && suborder.s_xuan_hao._id || '';
-        goods.s_gui_ge = suborder.s_gui_ge && suborder.s_gui_ge._id || '';
+        goods.s_gui_ge = suborder.s_gui_ge || '';
         goods.s_color_palette = suborder.s_color_palette && suborder.s_color_palette._id || '';
         goods.s_in_color = suborder.s_in_color && suborder.s_in_color._id || '';
         goods.s_out_color = suborder.s_out_color && suborder.s_out_color._id || '';
@@ -223,6 +229,9 @@ class SalesData {
       }
       if (!doc.season) {
         doc.season = null;
+      }
+      if (doc.pics && doc.pics.length > 0 && doc.pics[0]) {
+        await fileModel.updateOne({_id:doc.pics[0]}, {temp:false});
       }
       let ret = await goodsModel.update(conditions, doc, options);
       // if (NIDChange) {

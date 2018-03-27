@@ -140,11 +140,18 @@ export default class FormItemComponent extends Component {
       break;
       case 'upload':
         child = (
-          <Upload {...childOptions} >
-            <Button>
-              <Icon type="upload" />点击上传
-            </Button>
-          </Upload>
+          <div>
+            {
+              options.render ?
+              options.render()
+              :
+              <Upload {...childOptions} >
+                <Button>
+                  <Icon type="upload" />点击上传
+                </Button>
+              </Upload>
+            }
+          </div>
         );
       break;
       case 'datePicker':

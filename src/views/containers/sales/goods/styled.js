@@ -40,3 +40,27 @@ export const ProfileBtnBack = styled.span`
 export const Loading = styled(Spin)`
   margin:0 auto;
 `
+export const PhotoUploadBtnCotnainer = styled.div`
+  position: absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%, -50%);
+`
+export const PhotoDeleteBtn = styled(Button)`
+  position: absolute;
+  right:0;
+  top:0;
+`
+export const UploadIconContainer = styled.div`
+  position:relative; 
+  width:100px;
+  height:75px;
+`
+export const UploadIcon = styled.img`
+  position:absolute; 
+  max-width:98px;
+  max-height:71px;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%);
+`

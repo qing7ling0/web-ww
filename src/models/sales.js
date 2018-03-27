@@ -47,15 +47,13 @@ const goodsBaseFields = {
   put_date: {type:Date, decription:'上架时间'},
   sex: {type:String, decription:'男女'},
   price: {type:Number, decription:'价格'},
-  pics:[new Schema({
-    file:{type: Schema.Types.ObjectId, ref:'file', description:'图片'}
-  })],
+  pics:[{type:String, decription:'男女'}],
   hide:{type:Boolean, description:'是否隐藏，前端进行删除操作，进行假删除', default:false}
 };
 const goodsShoesFields = {
   s_material: {type:Schema.Types.ObjectId, ref:'material', decription:'材质'},
   s_xuan_hao: {type:Schema.Types.ObjectId, ref:'common', decription:'楦号'},
-  s_gui_ge: {type:Schema.Types.ObjectId, ref:'common', decription:'规格'},
+  s_gui_ge: {type:String, decription:'规格'},
   s_color_palette: {type:Schema.Types.ObjectId, ref:'shoes_color_palette', decription:'颜色搭配'},
   s_out_color: {type:Schema.Types.ObjectId, ref:'common', decription:'鞋面颜色'},
   s_in_color: {type:Schema.Types.ObjectId, ref:'common', decription:'里皮颜色'},
@@ -208,7 +206,7 @@ const orderCustomSchema = new Schema({
 const shoesFields = {
   s_material: {type:orderBaseSchema, decription:'材质'},
   s_xuan_hao: {type:orderBaseSchema, decription:'楦号'},
-  s_gui_ge: {type:orderBaseSchema, decription:'规格'},
+  s_gui_ge: {type:String, decription:'规格'},
   s_gen_gao: {type:orderBaseSchema, decription:'跟高'},
   s_color_palette: {type:String, decription:'颜色搭配'},
   s_out_color: {type:orderBaseSchema, decription:'鞋面颜色'},
@@ -333,6 +331,7 @@ const orderFields = {
   shop: {type:Schema.Types.ObjectId, ref:'shop', decription:'店铺'},
   guide: {type:Schema.Types.ObjectId, ref:'user_shop_guide', decription:'导购'},
   customer: {type:Schema.Types.ObjectId, ref:'customer', decription:'客户'},
+  neigua_guide: {type:Schema.Types.ObjectId, ref:'user_shop_guide', decription:'导购'},
   pay:{type:Number, decription:'支付金额'},
   pay_type:{type:String, decription:'支付方式'},
   store_card_selected:{type:Boolean, decription:'储值卡是否选择', default:false},

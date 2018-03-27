@@ -98,11 +98,7 @@ var addOrderTest = async function(ctx, time) {
         name:xuanHaoList[0].name,
         NID:xuanHaoList[0].NID
       };
-      subOrder.s_gui_ge = {
-        _id:guigeList[0]._id,
-        name:guigeList[0].name,
-        NID:guigeList[0].NID
-      };
+      subOrder.s_gui_ge = "111";
       subOrder.s_material = {
         _id:material._id,
         name:material.name,

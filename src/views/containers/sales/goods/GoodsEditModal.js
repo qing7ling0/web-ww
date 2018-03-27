@@ -15,7 +15,9 @@ import {
   Switch,
   Radio,
   Slider, Upload,
-  Modal
+  Modal,
+  Row,
+  Col
 } from 'antd'
 
 const FormItem = Form.Item;
@@ -29,12 +31,22 @@ import {
 
 import {
   Root,
+  ProfileCol,
+  ProfileColLabel,
+  ProfileColValue,
+  ProfileBtnBack,
+  ProfileRowTitle,
+  PhotoDeleteBtn,
+  PhotoUploadBtnCotnainer,
+  UploadIconContainer,
+  UploadIcon
 } from './styled'
 
 import * as ActionTypes from '../../../constants/ActionTypes'
 import Actions from '../../../actions'
 import * as validate from '../../../../base/utils/validate'
 import * as constants from '../../../constants/Constants'
+import * as config from '../../../constants/Config'
 import * as common from '../../../modules/common'
 import FormItemComponent from '../../common/FormItemComponent'
 import BaseFormModal from '../../common/BaseFormModal'
@@ -48,11 +60,19 @@ class GoodsEditModal extends Component {
 
     this.state = {
       visible:false,
+      pics:[''],
+      sex:'男'
     }
   }
 
   //在组件挂载之前调用一次。如果在这个函数里面调用setState，本次的render函数可以看到更新后的state，并且只渲染一次
   componentWillMount(){
+    if (this.props.data && this.props.data.pics && this.props.data.pics.length > 0) {
+      this.setState({pics:[this.props.data.pics[0]]});
+    } 
+    if (this.props.data) {
+      this.setState({sex:this.props.data.sex});
+    } 
     this.setState({visible:this.props.visible})
   }
 
@@ -68,6 +88,48 @@ class GoodsEditModal extends Component {
     }
 
     return '';
+  }
+
+  renderPicUpload = () => {
+    let file = this.state.pics[0];
+    return (<Row style={{width:'100%'}}>
+      <Col span={6}>
+        <Upload
+          name="order"
+          accept="image/*"
+          listType="picture-card"
+          className="avatar-uploader"
+          showUploadList={false}
+          style={{padding:0, position:'relative'}}
+          action={config.GetServerAddress() + '/upload'}
+          onChange={this.onUploadPicChange}
+          withCredentials={true}
+        >
+          {
+            file ? 
+            <UploadIconContainer>
+              <UploadIcon src={config.GetServerAddress() + '/file/'+file} alt="" /> 
+            </UploadIconContainer>
+            :
+            <PhotoUploadBtnCotnainer>
+              <Icon type='plus' />
+              <div className="ant-upload-text">Upload</div>
+            </PhotoUploadBtnCotnainer>
+          }
+        </Upload>
+      </Col>
+    </Row>)
+  }
+
+  getUploadAction = () => {
+    return config.GetServerAddress() + '/upload';
+  }
+  
+  onUploadPicChange = (result) => {
+    const {file} = result;
+    if (file.response && file.response.data.files && file.response.data.files.length > 0) {
+      this.setState({pics:[file.response.data.files[0]]})
+    }
   }
 
   render() {
@@ -112,6 +174,12 @@ class GoodsEditModal extends Component {
   onSubmit = (err, values) => {
     if (!err) {
       if (this.props.onEdit) {
+        values.pics = [];
+        this.state.pics.forEach(item=>{
+          if (item) {
+            values.pics.push(item);
+          }
+        });
         this.props.onEdit(values);
       }
     }
@@ -123,6 +191,24 @@ class GoodsEditModal extends Component {
     } else {
       callback('格式不合法，手机或者电话号码');
     }
+  }
+  
+  isFemale = () => {
+    if (this.refs.formModal) {
+      let forms = this.refs.formModal;
+      let sex = forms.getFieldsValue(sex);
+      return sex === constants.BASE_CONSTANTS.SEX_FEMALE;
+    }
+
+    return false;
+  }
+  
+  onSexChange = (value) => {
+    this.setState({sex:value});
+  }
+
+  isFemale = () => {
+    return this.state.sex === constants.BASE_CONSTANTS.SEX_FEMALE;
   }
 }
 
