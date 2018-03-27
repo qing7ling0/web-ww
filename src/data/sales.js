@@ -559,6 +559,8 @@ class SalesData {
         doc.customer = sub.customer;
         doc.shop = sub.shop;
         doc.guide = sub.guide;
+        sub.is_neigua = doc.is_neigua;
+        sub.neigua_mark = doc.neigua_mark;
 
         if (customerInfo === null) {
           customerInfo = await customerModel.findOne({phone:sub.customer.phone});

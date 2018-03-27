@@ -314,6 +314,9 @@ const subOrderSchema = new Schema({
   transport_address: {type:String, decription:'收货地址'},
   transport_zipcode: {type:String, decription:'邮编'},
 
+  is_neigua: {type:Boolean, decription:'是否内挂'},
+  neigua_mark: {type:String, decription:'内挂备注'},
+  
   urgent:{type:orderBaseSchema, decription:'加急'},
   shop: {type:Schema.Types.ObjectId, ref:'shop', decription:'店铺'},
   guide: {type:Schema.Types.ObjectId, ref:'user_shop_guide', decription:'导购'},
@@ -331,7 +334,8 @@ const orderFields = {
   shop: {type:Schema.Types.ObjectId, ref:'shop', decription:'店铺'},
   guide: {type:Schema.Types.ObjectId, ref:'user_shop_guide', decription:'导购'},
   customer: {type:Schema.Types.ObjectId, ref:'customer', decription:'客户'},
-  neigua_guide: {type:Schema.Types.ObjectId, ref:'user_shop_guide', decription:'导购'},
+  is_neigua: {type:Boolean, decription:'是否内挂'},
+  neigua_mark: {type:String, decription:'内挂备注'},
   pay:{type:Number, decription:'支付金额'},
   pay_type:{type:String, decription:'支付方式'},
   store_card_selected:{type:Boolean, decription:'储值卡是否选择', default:false},
