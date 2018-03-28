@@ -70,3 +70,6 @@ var adminSchema = new Schema({
   timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
 });
 module.exports.userAdminModel = mongoose.model('user_admin', adminSchema);
+
+
+// var workSchema = new Schema({})

@@ -349,14 +349,8 @@ const orderFields = {
   ...baseFields
 }
 const orderSchema = new Schema({
-  ...orderFields
-}
-,{
-  timestamps: {updatedAt: 'editor_time' }
-}
-// ,{
-//   timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
-// }
+    ...orderFields
+  },{ timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }}
 );
 module.exports.orderModel = mongoose.model('order', orderSchema);
 
