@@ -526,13 +526,16 @@ class SalesData {
     if (doc) {
       if (doc.pay!==0 && !doc.pay || !doc.pay_type) {
         // 必须有支付信息
-        throw new ApiError(ApiErrorNames.ADD_FAIL);
+        throw new ApiError(ApiErrorNames.ADD_FAIL, '下单失败，没有支付信息！');
+      }
+      if (!doc.signature_pic) {
+        // throw new ApiError(ApiErrorNames.ADD_FAIL, '下单失败,没有签名文件!');
       }
 
       let subOrders = doc.sub_orders;
       if (!subOrders || !subOrders.length || subOrders.length < 1) {
         // 必须有自订单
-        throw new ApiError(ApiErrorNames.ADD_FAIL);
+        throw new ApiError(ApiErrorNames.ADD_FAIL, '下单失败,没有下单的产品!');
       }
 
       let payInfo = {
@@ -658,7 +661,9 @@ class SalesData {
       if (order) {
         let newOrder = await order.save(options);
         if (newOrder) {
-          await fileModel.findByIdAndUpdate(doc.signature_pic, {temp:false});
+          if (doc.signature_pic) {
+            await fileModel.findByIdAndUpdate(doc.signature_pic, {temp:false});
+          }
           await subOrderModel.updateMany({_id:{$in:newSubOrders}}, {order:newOrder._id});
           if (customerPoint) {
             customerPoint = customer.point+customerPoint;
@@ -776,7 +781,7 @@ class SalesData {
         }
         doc.customer = customer._id;
       }
-      if (doc.pics) {
+      if (doc.pics && doc.pics.length>0) {
         let subOrder = await subOrderModel.findOne(conditions);
         if (subOrder) {
           // handle pics
