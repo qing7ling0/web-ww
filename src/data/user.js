@@ -410,6 +410,8 @@ class UserData {
     return constants.USER_TYPES;
   }
 
+  // async 
+
 }
 
 module.exports = new UserData();

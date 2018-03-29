@@ -72,4 +72,39 @@ var adminSchema = new Schema({
 module.exports.userAdminModel = mongoose.model('user_admin', adminSchema);
 
 
-// var workSchema = new Schema({})
+// 工作日历
+var workCalendarSchema = new Schema({
+  day: Date, // 日期
+  guide: {type: Schema.Types.ObjectId, ref:'user_shop_guide', decription:'导购ID'},
+  status: Number, // 状态，班，假，串，休
+},{
+  timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
+})
+module.exports.workCalendarModel = mongoose.model('guide_work_calendar', workCalendarSchema);
+
+// 排班记录
+var workSchema = new Schema({
+  day: Date, // 日期
+  guide: {type: Schema.Types.ObjectId, ref:'user_shop_guide', decription:'导购ID'},
+  type: Number, // 类型，请假，调班
+  holiday_type: Number, // 假期类型，病假，事假，年假等
+  change_guide: {type: Schema.Types.ObjectId, ref:'user_shop_guide', decription:'调班的导购ID'},
+  change_day: Date, // 调班的日期
+  status: Number, // 状态，是否同意
+},{
+  timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
+})
+module.exports.guideWorkModel = mongoose.model('guide_work', workSchema);
+
+// 工作留言
+var workMessageSchema = new Schema({
+  guide: {type: Schema.Types.ObjectId, ref:'user_shop_guide', decription:'导购ID'},
+  type: Number, // 留言类型，个人，店铺
+  date: Date, // 留言查看时间
+  message: String, // 内容
+  message_guide: {type: Schema.Types.ObjectId, ref:'user_shop_guide', decription:'留言的导购'},
+  status:Number, // 状态，是否查看
+},{
+  timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
+})
+module.exports.guideWorkMessageModel = mongoose.model('guide_work_message', workMessageSchema);
