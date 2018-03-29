@@ -90,6 +90,7 @@ const getGoodsShoesAddOptions = function(target) {
   if (target.isFemale()) {
     genGao.push({type:'select', name:'s_gen_gao', label:'跟高', selectItems:listToSelectOptions(target.props.sales['genGaoList']), options:{defaultActiveFirstOption:true}, rule:{required:true}});
   }
+  let colorPaletteList = [{label:'自定义', value:''}].concat(listToSelectOptions(target.props.sales.colorPaletteList));
   return [
     {type:'input', name:'NID', label:'货号', itemOptions:{hasFeedback:true}},
     {type:'input', name:'name', label:'名称', itemOptions:{hasFeedback:true}, rule:{required:true}},
@@ -108,21 +109,53 @@ const getGoodsShoesAddOptions = function(target) {
     ...genGao,
     {
       type:'select', name:'s_color_palette', label:'颜色', 
-      selectItems:listToSelectOptions(target.props.sales['colorPaletteList']), 
+      selectItems:colorPaletteList, 
       options:{
         defaultActiveFirstOption:true,
         onChange:(value)=>target.onColorPaletteChange('s_color_palette', value)
       }, 
+      rule:{required:false}
+    },
+    // {type:'text', name:'s_out_color', label:'皮胚色', options:{render:(value)=>target.renderColor(target.props.sales['outColorList'], value)}},
+    // {type:'text', name:'s_in_color', label:'内里色', options:{render:(value)=>target.renderColor(target.props.sales['inColorList'], value)}},
+    // {type:'text', name:'s_bottom_color', label:'底板色', options:{render:(value)=>target.renderColor(target.props.sales['bottomColorList'], value)}},
+    // {type:'text', name:'s_bottom_side_color', label:'底侧色', options:{render:(value)=>target.renderColor(target.props.sales['bottomSideColorList'], value)}},
+    {
+      type:'select', name:'s_out_color', label:'皮胚色', 
+      selectItems:listToSelectOptions(target.props.sales['outColorList']), 
+      options:{
+        defaultActiveFirstOption:true,
+        onChange:(value)=>target.onColorChange('s_out_color', value)
+      }, 
       rule:{required:true}
     },
-    {type:'text', name:'s_out_color', label:'皮胚色', options:{render:(value)=>target.renderColor(target.props.sales['outColorList'], value)}},
-    {type:'text', name:'s_in_color', label:'内里色', options:{render:(value)=>target.renderColor(target.props.sales['inColorList'], value)}},
-    {type:'text', name:'s_bottom_color', label:'底板色', options:{render:(value)=>target.renderColor(target.props.sales['bottomColorList'], value)}},
-    {type:'text', name:'s_bottom_side_color', label:'底侧色', options:{render:(value)=>target.renderColor(target.props.sales['bottomSideColorList'], value)}},
-    // {type:'select', name:'s_out_color', label:'皮胚色', selectItems:listToSelectOptions(target.props.sales['outColorList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    // {type:'select', name:'s_in_color', label:'内里色', selectItems:listToSelectOptions(target.props.sales['inColorList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    // {type:'select', name:'s_bottom_color', label:'底板色', selectItems:listToSelectOptions(target.props.sales['bottomColorList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    // {type:'select', name:'s_bottom_side_color', label:'底侧色', selectItems:listToSelectOptions(target.props.sales['bottomSideColorList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
+    {
+      type:'select', name:'s_in_color', label:'内里色', 
+      selectItems:listToSelectOptions(target.props.sales['inColorList']), 
+      options:{
+        defaultActiveFirstOption:true,
+        onChange:(value)=>target.onColorChange('s_in_color', value)
+      }, 
+      rule:{required:true}
+    },
+    {
+      type:'select', name:'s_bottom_color', label:'底板色', 
+      selectItems:listToSelectOptions(target.props.sales['bottomColorList']), 
+      options:{
+        defaultActiveFirstOption:true,
+        onChange:(value)=>target.onColorChange('s_bottom_color', value)
+      }, 
+      rule:{required:true}
+    },
+    {
+      type:'select', name:'s_bottom_side_color', label:'底侧色', 
+      selectItems:listToSelectOptions(target.props.sales['bottomSideColorList']), 
+      options:{
+        defaultActiveFirstOption:true,
+        onChange:(value)=>target.onColorChange('s_bottom_side_color', value)
+      }, 
+      rule:{required:true}
+    },
     
     {type:'datePicker', name:'put_date', label:'上架时间', rule:{required:true}},
   ];

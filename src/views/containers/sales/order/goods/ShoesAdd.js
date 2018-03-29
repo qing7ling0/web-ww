@@ -389,14 +389,21 @@ class ShoesAdd extends Component {
 
   checkGoodsOK = () => {
     let shoesInfo = this.getGoodsInfo(this.props.form.getFieldsValue());
-    let NID = commonUtils.createGoodsNID(constants.BASE_CONSTANTS.GOODS_SHOES, shoesInfo, this.props.customer.sex);
 
-    // let NID = this.props.form.getFieldValue('NID');
-    if (NID === constants.BASE_CONSTANTS.NULL_NID) {
-      message.error('请确定货号是否已有');
-      return false;
+    if (shoesInfo.s_material._id && shoesInfo.s_xuan_hao._id &&
+      shoesInfo.s_out_color._id && shoesInfo.s_in_color._id &&
+      shoesInfo.s_bottom_color._id && shoesInfo.s_bottom_side_color._id
+    ) {
+      return true;
     }
-    return true;
+    if (!shoesInfo.s_material._id) {
+      message.error('请确定当前材料是否已录入');
+    } else if (!shoesInfo.s_xuan_hao._id) {
+      message.error('请确定当前楦号是否已录入');
+    } else if (!shoesInfo.s_out_color._id ||!shoesInfo.s_in_color._id ||!shoesInfo.s_bottom_color._id ||!shoesInfo.s_bottom_side_color._id) {
+      message.error('请确定当前颜色是否已录入');
+    }
+    return false;
   }
 
   onUploadPicChange = (index, file) => {
@@ -523,7 +530,7 @@ class ShoesAdd extends Component {
         forms.setFieldsValue({s_material:shoes.s_material.name});
         forms.setFieldsValue({s_xuan_hao:shoes.s_xuan_hao.name});
         // forms.setFieldsValue({s_gui_ge:shoes.s_gui_ge.name});
-        forms.setFieldsValue({s_color_palette:shoes.s_color_palette._id});
+        forms.setFieldsValue({s_color_palette:shoes.s_color_palette&&shoes.s_color_palette._id||''});
         forms.setFieldsValue({s_out_color:shoes.s_out_color.name});
         forms.setFieldsValue({s_in_color:shoes.s_in_color.name});
         forms.setFieldsValue({s_bottom_color:shoes.s_bottom_color.name});
@@ -664,8 +671,8 @@ class ShoesAdd extends Component {
       forms.setFieldsValue({s_color_palette:_palette._id});
       this.onNIDPropertyChange('s_color_palette', _palette._id);
     } else {
-      forms.setFieldsValue({s_color_palette:null});
-      this.onNIDPropertyChange('s_color_palette', null);
+      forms.setFieldsValue({s_color_palette:''});
+      this.onNIDPropertyChange('s_color_palette', '');
     }
   }
 

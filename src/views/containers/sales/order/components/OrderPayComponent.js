@@ -245,8 +245,9 @@ class OrderPayComponent extends Component {
     let discount = 1;
     if (!this.state.select_store_card) {
       let list = this.props.sales.vipLevelList || [];
+      let cusVipLv = this.props.customer.vip_level || 1;
       for(let lv of list) {
-        if (lv.level === this.props.customer.vip_level) {
+        if (lv.level === cusVipLv) {
           discount = lv.discount/10;
           break;
         }

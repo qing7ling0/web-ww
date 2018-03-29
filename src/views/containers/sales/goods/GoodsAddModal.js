@@ -140,14 +140,14 @@ class GoodsAddModal extends Component {
         confirmLoading={this.state.confirmLoading}
         actionType={ActionTypes.GOODS_ADD}
         onSubmitSuccess={this.props.onSubmitSuccess}
-        ref="formModal"
+        wrappedComponentRef={(inst) => this.formRef = inst}
       />
     );
   }
 
   setColorByColorPalette = (palette) => {
-    if (this.refs.formModal) {
-      let forms = this.refs.formModal;
+    if (this.formRef) {
+      let forms = this.formRef.props.form;
       forms.setFieldsValue({s_out_color:palette.out_color._id});
       forms.setFieldsValue({s_in_color:palette.in_color._id});
       forms.setFieldsValue({s_bottom_color:palette.bottom_color._id});
@@ -160,6 +160,31 @@ class GoodsAddModal extends Component {
     for(let palette of list) {
       if (palette._id === value) {
         this.setColorByColorPalette(palette);
+      }
+    }
+  }
+
+  onColorChange = (key, value) => {
+    if (this.formRef) {
+      let forms = this.formRef.props.form;
+      let values = forms.getFieldsValue();
+      values[key] = value;
+      let list = this.props.sales.colorPaletteList || [];
+      let _palette = null;
+      for(let palette of list) {
+        if (palette.out_color._id === values.s_out_color &&
+          palette.in_color._id === values.s_in_color &&
+          palette.bottom_color._id === values.s_bottom_color &&
+          palette.bottom_side_color._id === values.s_bottom_side_color
+        ) {
+          _palette = palette;
+          break;
+        }
+      }
+      if (_palette) {
+        forms.setFieldsValue({s_color_palette:_palette._id});
+      } else {
+        forms.setFieldsValue({s_color_palette:""});
       }
     }
   }

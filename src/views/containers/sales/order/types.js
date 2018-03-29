@@ -184,28 +184,40 @@ const getOrderShoesOptions = function(target) {
   let colors = [ 
     {
       type:'select', name:'s_color_palette', label:'颜色', itemOptions:{labelLeft:true}, 
-      selectItems:listToSelectOptions(target.props.sales.colorPaletteList), 
+      selectItems:[{label:'自定义', value:''}].concat(listToSelectOptions(target.props.sales.colorPaletteList)), 
       options:{
         defaultActiveFirstOption:true,
         onChange:(value)=>target.onNIDPropertyChange('s_color_palette', value)
       }, 
-      rule:{required:true}
+      rule:{required:false}
     },
-    {type:'text', name:'s_out_color', label:'皮胚色', itemOptions:{labelLeft:true}},    
-    {type:'text', name:'s_in_color', label:'内里色', itemOptions:{labelLeft:true}},   
-    {type:'text', name:'s_bottom_color', label:'底侧色', itemOptions:{labelLeft:true}},    
-    {type:'text', name:'s_bottom_side_color', label:'底板色', itemOptions:{labelLeft:true}}
+    {type:'text', name:'s_out_color', label:'皮胚色', itemOptions:{labelLeft:true}, rule:{required:true}},    
+    {type:'text', name:'s_in_color', label:'内里色', itemOptions:{labelLeft:true}, rule:{required:true}},  
+    {type:'text', name:'s_bottom_side_color', label:'底侧色', itemOptions:{labelLeft:true}, rule:{required:true}},   
+    {
+      type:'select', name:'s_bottom_color', label:'底板色', itemOptions:{labelLeft:true}, 
+      selectItems:listToSelectOptions(target.props.sales.bottomColorList, (item)=>item.name), 
+      options:{
+        defaultActiveFirstOption:true, 
+        mode:"combobox", 
+        filterOption:false, 
+        onChange:(value)=>target.onColorChange('s_bottom_color', value)
+      }, 
+      rule:{required:true}
+    },  
+    // {type:'text', name:'s_bottom_color', label:'底板色', itemOptions:{labelLeft:true}, rule:{required:true}},    
+    // {type:'text', name:'s_bottom_side_color', label:'底板色', itemOptions:{labelLeft:true}}
   ]
   if (target.isDesign && target.isDesign()) {
     colors = [ 
       {
         type:'select', name:'s_color_palette', label:'颜色', itemOptions:{labelLeft:true}, 
-        selectItems:listToSelectOptions(target.props.sales.colorPaletteList), 
+        selectItems:[{label:'自定义', value:''}].concat(listToSelectOptions(target.props.sales.colorPaletteList)), 
         options:{
           defaultActiveFirstOption:true,
           onChange:(value)=>target.onNIDPropertyChange('s_color_palette', value)
         }, 
-        rule:{required:target.props.isReview}
+        rule:{required:false}
       },
       {
         type:'select', name:'s_out_color', label:'皮胚色', itemOptions:{labelLeft:true}, 
@@ -228,18 +240,7 @@ const getOrderShoesOptions = function(target) {
           onChange:(value)=>target.onColorChange('s_in_color', value)
         }, 
         rule:{required:true}
-      },   
-      {
-        type:'select', name:'s_bottom_color', label:'底板色', itemOptions:{labelLeft:true}, 
-        selectItems:listToSelectOptions(target.props.sales.bottomColorList, (item)=>item.name), 
-        options:{
-          defaultActiveFirstOption:true, 
-          mode:"combobox", 
-          filterOption:false, 
-          onChange:(value)=>target.onColorChange('s_bottom_color', value)
-        }, 
-        rule:{required:true}
-      },    
+      },     
       {
         type:'select', name:'s_bottom_side_color', label:'底侧色', itemOptions:{labelLeft:true}, 
         selectItems:listToSelectOptions(target.props.sales.bottomSideColorList, (item)=>item.name), 
@@ -248,6 +249,17 @@ const getOrderShoesOptions = function(target) {
           mode:"combobox", 
           filterOption:false, 
           onChange:(value)=>target.onColorChange('s_bottom_side_color', value)
+        }, 
+        rule:{required:true}
+      },  
+      {
+        type:'select', name:'s_bottom_color', label:'底板色', itemOptions:{labelLeft:true}, 
+        selectItems:listToSelectOptions(target.props.sales.bottomColorList, (item)=>item.name), 
+        options:{
+          defaultActiveFirstOption:true, 
+          mode:"combobox", 
+          filterOption:false, 
+          onChange:(value)=>target.onColorChange('s_bottom_color', value)
         }, 
         rule:{required:true}
       },  

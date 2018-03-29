@@ -108,7 +108,9 @@ class SalesData {
           throw new ApiError(ApiErrorNames.ADD_FAIL, '添加失败，当前货号已存在');
         }
       }
-      
+      if (doc.s_color_palette === "") {
+        doc.s_color_palette = null;
+      }
       let newGoods = await goodsModel.create(doc);
       if (newGoods) {
         if (doc.pics && doc.pics.length > 0 && doc.pics[0]) {
@@ -150,25 +152,25 @@ class SalesData {
       }
       let goods = createBase(suborder);
       if (suborder.type === constants.E_ORDER_TYPE.SHOES) {
-        goods.s_material = suborder.s_material && suborder.s_material._id || '';
-        goods.s_xuan_hao = suborder.s_xuan_hao && suborder.s_xuan_hao._id || '';
+        goods.s_material = suborder.s_material && suborder.s_material._id || null;
+        goods.s_xuan_hao = suborder.s_xuan_hao && suborder.s_xuan_hao._id || null;
         goods.s_gui_ge = suborder.s_gui_ge || '';
-        goods.s_color_palette = suborder.s_color_palette && suborder.s_color_palette._id || '';
-        goods.s_in_color = suborder.s_in_color && suborder.s_in_color._id || '';
-        goods.s_out_color = suborder.s_out_color && suborder.s_out_color._id || '';
-        goods.s_bottom_color = suborder.s_bottom_color && suborder.s_bottom_color._id || '';
-        goods.s_bottom_side_color = suborder.s_bottom_side_color && suborder.s_bottom_side_color._id || '';
-        goods.s_tie_di = suborder.s_tie_di && suborder.s_tie_di._id || '';
+        goods.s_color_palette = suborder.s_color_palette && suborder.s_color_palette._id || null;
+        goods.s_in_color = suborder.s_in_color && suborder.s_in_color._id || null;
+        goods.s_out_color = suborder.s_out_color && suborder.s_out_color._id || null;
+        goods.s_bottom_color = suborder.s_bottom_color && suborder.s_bottom_color._id || null;
+        goods.s_bottom_side_color = suborder.s_bottom_side_color && suborder.s_bottom_side_color._id || null;
+        goods.s_tie_di = suborder.s_tie_di && suborder.s_tie_di._id || null;
         if(suborder.s_gen_gao && suborder.s_gen_gao._id) {
           goods.s_gen_gao = suborder.s_gen_gao._id;
         }
       } else if (suborder.type === constants.E_ORDER_TYPE.BELT){
-        goods.b_material = suborder.b_material && suborder.b_material._id || '';
-        goods.b_color = suborder.b_color && suborder.b_color._id || '';
+        goods.b_material = suborder.b_material && suborder.b_material._id || null;
+        goods.b_color = suborder.b_color && suborder.b_color._id || null;
       } else if (suborder.type === constants.E_ORDER_TYPE.WATCH_STRAP){
-        goods.ws_material = suborder.ws_material && suborder.ws_material._id || '';
-        goods.ws_style = suborder.ws_style && suborder.ws_style._id || '';
-        goods.ws_color = suborder.ws_color && suborder.ws_color._id || '';
+        goods.ws_material = suborder.ws_material && suborder.ws_material._id || null;
+        goods.ws_style = suborder.ws_style && suborder.ws_style._id || null;
+        goods.ws_color = suborder.ws_color && suborder.ws_color._id || null;
       } else if (suborder.type === constants.E_ORDER_TYPE.ORNAMENT){
         goods.o_name = suborder.o_name || '';
       }
@@ -210,6 +212,9 @@ class SalesData {
       //     }
       //   }
       // }
+      if (doc.s_color_palette === "") {
+        doc.s_color_palette = null;
+      }
       if (doc.NID !== null && doc.NID !== undefined && doc.NID !== '') {
         // console.log("111=" + JSON.stringify(doc));
         let goods = await goodsModel.findOne(conditions);
@@ -492,24 +497,25 @@ class SalesData {
     sub.state = constants.E_ORDER_STATUS.COMPLETED; // 充值订单直接完成
 
     let mount = sub.r_amount + sub.r_reward;
-    // 计算vip等级
-    let vipLevelList = await commonData.getCommonList(constants.COMMON_DATA_TYPES.VIP) || [];
-    vipLevelList = vipLevelList && vipLevelList.list || [];
-    vipLevelList.sort((a,b)=>a.level>b.level?1:-1);
 
-    let exp = customer.vip_exp;
     let balance = customer.balance + mount;
     let recharge = customer.recharge + sub.r_amount;
     let rechargeReward = customer.recharge_reward + sub.r_reward;
-    exp += mount;
-    let vipLevel = 0;
-    for(let lv of vipLevelList) {
-      if (exp >= lv.exp) {
-        vipLevel = lv.level;
-        break;
-      }
-    }
-    await customerModel.findOneAndUpdate({_id:customer._id}, {vip_level:vipLevel, vip_exp:exp, balance:balance, recharge:recharge, recharge_reward:rechargeReward});
+
+    // 计算vip等级
+    // let vipLevelList = await commonData.getCommonList(constants.COMMON_DATA_TYPES.VIP) || [];
+    // vipLevelList = vipLevelList && vipLevelList.list || [];
+    // vipLevelList.sort((a,b)=>a.level>b.level?1:-1);
+    // let exp = customer.vip_exp;
+    // exp += mount;
+    // let vipLevel = 0;
+    // for(let lv of vipLevelList) {
+    //   if (exp >= lv.exp) {
+    //     vipLevel = lv.level;
+    //     break;
+    //   }
+    // }
+    await customerModel.findOneAndUpdate({_id:customer._id}, {balance:balance, recharge:recharge, recharge_reward:rechargeReward});
 
     return sub;
   }
@@ -528,7 +534,6 @@ class SalesData {
     }
     // console.log(payInfo)
     let balance = customer.balance - payInfo.real_pay_price;
-    let point = customer.point;
     await customerModel.findOneAndUpdate({_id:customer._id}, {$set:{balance:balance}});
     return payInfo;
   }
@@ -593,9 +598,9 @@ class SalesData {
       }
 
       // 查找vip等级
-      let vipLevel = -1;
+      let vipLevel = 1;
       if (customerInfo) {
-        vipLevel = customerInfo.vip_level || 0;
+        vipLevel = customerInfo.vip_level || 1;
       }
 
       // 查找vip对应的折扣，首次购买没有折扣,因为首次不是会员
@@ -677,8 +682,18 @@ class SalesData {
           }
           await subOrderModel.updateMany({_id:{$in:newSubOrders}}, {order:newOrder._id});
           if (customerPoint) {
-            customerPoint = customer.point+customerPoint;
-            await customerModel.updateOne({_id:customer._id}, {point:customerPoint});
+            customerPoint = customer.point+customerPoint;  
+            // 计算vip等级
+            let exp = customer.vip_exp||0;
+            exp += customerPoint;
+            let vipLevel = 0;
+            for(let lv of vipLevelList) {
+              if (exp >= lv.exp) {
+                vipLevel = lv.level;
+                break;
+              }
+            }
+            await customerModel.updateOne({_id:customer._id}, {vip_level:vipLevel, vip_exp:exp, point:customerPoint});
           }
           return newOrder;
         }
