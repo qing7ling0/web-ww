@@ -39,7 +39,7 @@ export const getMaterialAddOptions = function(target) {
   return [
     {type:'input', name:'name', label:'名称', itemOptions:{hasFeedback:true}, rule:{required:true}},
     {type:'input', name:'NID', label:'编号', itemOptions:{hasFeedback:true}, rule:{required:true}},
-    {type:'select', name:'color', label:'颜色', selectItems:listToSelectOptions(target.props.materialColorList), options:{defaultActiveFirstOption:true}, rule:{required:true}},
+    {type:'select', name:'color', label:'颜色', selectItems:listToSelectOptions(target.props.materialColorList), options:{defaultActiveFirstOption:true}, rule:{required:false}},
     {type:'switch', name:'count', label:'库存', decoratorOptions:{valuePropName:"checked"}, itemOptions:{hasFeedback:true}, rule:{required:true}},
     {type:'number', name:'maintain_cycle', label:'保养周期', decoratorOptions:{}, options:{hasFeedback:true, formatter:value=>`${value}天`, parser:value=>value.replace('天', '')}, rule:{required:true}},
   ];
