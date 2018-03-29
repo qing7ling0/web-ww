@@ -305,7 +305,7 @@ const getOrderShoesOptions = function(target) {
           }, 
           rule:{required:true}
         },   
-        {type:'input', name:'s_gui_ge', label:'规格', itemOptions:{labelLeft:true}, options:{onChange:(value)=>target.onNIDPropertyChange('s_gui_ge', value)}, rule:{required:true}},   
+        {type:'input', name:'s_gui_ge', label:'规格', itemOptions:{labelLeft:true}, options:{onChange:(value)=>target.onNIDPropertyChange('s_gui_ge', value)}, rule:{required:false}},   
         ...colors,
         {
           type:'select', name:'sex', label:'性别', itemOptions:{labelLeft:true}, 
@@ -325,7 +325,7 @@ const getOrderShoesOptions = function(target) {
             filterOption:false, 
             onChange:(value)=>target.onNIDPropertyChange('s_tie_di', value)
           }, 
-          rule:{required:true}
+          rule:{required:false}
         },        
       ].concat(endOptions).concat([   
         {type:'number', name:'price', label:'价格', itemOptions:{labelLeft:true}, options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, rule:{required:true}},    

@@ -339,27 +339,38 @@ class SalesData {
   // 删除原材料
   async removeMaterialByIds(ids) {
     if (ids && ids.length > 0) {
+      console.log(111);
       let goods = await goodsModel.find({$or:[{s_material:{$in:ids}},{b_material:{$in:ids}},{ws_material:{$in:ids}}]});
       if (goods && goods.length > 0) {
         throw new ApiError(ApiErrorNames.DELETE_FAIL, '此材料已被使用，无法删除!');
       }
+      console.log(222);
 
       goods = await sampleGoodsModel.find({$or:[{s_material:{$in:ids}},{b_material:{$in:ids}},{ws_material:{$in:ids}}]});
       if (goods && goods.length > 0) {
         throw new ApiError(ApiErrorNames.DELETE_FAIL, '此材料已被使用，无法删除!');
       }
 
-      let subOrders = await subOrderModel.find({$or:[{s_material:{$in:ids}},{b_material:{$in:ids}},{ws_material:{$in:ids}}]});
-      if (subOrders && subOrders.length > 0) {
-        throw new ApiError(ApiErrorNames.DELETE_FAIL, '此材料已被使用，无法删除!');
-      }
+      // console.log(333);
+      // let subOrders = await subOrderModel.find({$or:[
+      //   {s_material:{$in:ids}},
+      //   {b_material:{$in:ids}},
+      //   {ws_material:{$in:ids}}
+      // ]});
+      // console.log(363);
+      // if (subOrders && subOrders.length > 0) {
+      //   throw new ApiError(ApiErrorNames.DELETE_FAIL, '此材料已被使用，无法删除!');
+      // }
 
+      console.log(444);
       let commonDatas = await commonModel.find({$or:[{n_material:{$in:ids}},{d_material:{$in:ids}}]});
       if (commonDatas && commonDatas.length > 0) {
         throw new ApiError(ApiErrorNames.DELETE_FAIL, '此材料已被使用，无法删除!');
       }
 
-      return await materialModel.deleteMany({_id:{$in:ids}});
+      console.log(555);
+      let cond = {_id:{$in:ids}}
+      return await materialModel.deleteMany(cond);
     } else {
       throw new ApiError(ApiErrorNames.DELETE_FAIL);
     }

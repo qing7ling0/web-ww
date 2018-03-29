@@ -101,9 +101,9 @@ const getGoodsShoesAddOptions = function(target) {
     {type:'select', name:'sex', label:'性别', selectItems:constants.BASE_CONSTANTS.SEX_DATA, options:{defaultActiveFirstOption:true, onChange:target.onSexChange}, rule:{required:true}},
     
     {type:'select', name:'s_xuan_hao', label:'楦号', selectItems:listToSelectOptions(target.props.sales['xuanHaoList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    {type:'select', name:'s_tie_di', label:'贴底', selectItems:listToSelectOptions(target.props.sales['shoesTieBianList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
+    {type:'select', name:'s_tie_di', label:'贴底', selectItems:listToSelectOptions(target.props.sales['shoesTieBianList']), options:{defaultActiveFirstOption:true}, rule:{required:false}},
     {type:'select', name:'s_material', label:'材质', selectItems:listToSelectOptions(target.props.sales['materialList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    {type:'input', name:'s_gui_ge', label:'规格', itemOptions:{hasFeedback:true}, rule:{required:true}},
+    {type:'input', name:'s_gui_ge', label:'规格', itemOptions:{hasFeedback:true}, rule:{required:false}},
     // {type:'select', name:'s_gui_ge', label:'规格', selectItems:listToSelectOptions(target.props.sales['guiGeList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
     ...genGao,
     {
