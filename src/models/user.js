@@ -80,7 +80,7 @@ var workCalendarSchema = new Schema({
 },{
   timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
 })
-module.exports.workCalendarModel = mongoose.model('guide_work_calendar', workCalendarSchema);
+module.exports.guideWorkCalendarModel = mongoose.model('guide_work_calendar', workCalendarSchema);
 
 // 排班记录
 var workSchema = new Schema({
@@ -103,7 +103,7 @@ var workMessageSchema = new Schema({
   date: Date, // 留言查看时间
   message: String, // 内容
   message_guide: {type: Schema.Types.ObjectId, ref:'user_shop_guide', decription:'留言的导购'},
-  status:Number, // 状态，是否查看
+  status: {type: Number, default:0}, // 状态，是否查看
 },{
   timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
 })
