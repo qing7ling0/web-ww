@@ -163,23 +163,23 @@ const getOrderShoesListColumns = function(target) {
 }
 const getOrderShoesOptions = function(target) {
   let endOptions = [];
-  
-  if (target.props.form.getFieldsValue().sex === constants.BASE_CONSTANTS.SEX_FEMALE) {
+  let isFemale = target.props.form.getFieldsValue().sex === constants.BASE_CONSTANTS.SEX_FEMALE;
+  // if (target.props.form.getFieldsValue().sex === constants.BASE_CONSTANTS.SEX_FEMALE) {
     endOptions.push({
       type:'select', 
       name:'s_gen_gao', 
       label:'跟高', 
       itemOptions:{labelLeft:true}, 
-      selectItems:listToSelectOptions(target.props.sales.genGaoList, (item)=>item.name, (item)=>item.name), 
+      selectItems:listToSelectOptions(target.props.sales.genGaoList, (item)=>item.name), 
       options:{
         defaultActiveFirstOption:true, 
-        mode:target.isDesign?"combobox":"default", 
-        filterOption:!target.isDesign, 
+        mode:"combobox", 
+        filterOption:false, 
         onChange:(value)=>target.onNIDPropertyChange('s_gen_gao', value)
       }, 
-      rule:{required:true}}
+      rule:{required:isFemale}}
     );
-  }
+  // }
 
   let colors = [ 
     {

@@ -129,7 +129,12 @@ class ShoesAdd extends Component {
           {
             item.options.map((item, index) => {
               if (!item.options) item.options = {};
-              item.options.disabled = this.props.isReview&&this.state.goodsReviewSure;
+              if (item.name === 's_gen_gao') {
+                let isFemale = this.props.form.getFieldsValue().sex === constants.BASE_CONSTANTS.SEX_FEMALE;
+                item.options.disabled = !isFemale || (this.props.isReview&&this.state.goodsReviewSure);
+              } else {
+                item.options.disabled = this.props.isReview&&this.state.goodsReviewSure;
+              }
               return <Col key={index} {...span}><FormItemComponent key={item.name} options={item} form={this.props.form} /></Col>
             })
           }
@@ -459,6 +464,9 @@ class ShoesAdd extends Component {
             })
             shoesInfo.pics = pics;
           }
+          if (shoesInfo.sex !== constants.BASE_CONSTANTS.SEX_FEMALE) {
+            delete shoesInfo.s_gen_gao;
+          }
 
           this.props.onAddSuccess(shoesInfo);
           return true;
@@ -541,12 +549,10 @@ class ShoesAdd extends Component {
         if (!this.props.isReview) { // 审核过程不修改价格
           forms.setFieldsValue({price:shoes.price});
         }
-        if (shoes.sex === constants.BASE_CONSTANTS.SEX_FEMALE) {
-          if (this.shoes.s_gen_gao) {
-            forms.setFieldsValue({s_gen_gao:shoes.s_gen_gao.name});
-          } else {
-            forms.setFieldsValue({s_gen_gao:null});
-          }
+        if (shoes.sex === constants.BASE_CONSTANTS.SEX_FEMALE && shoes.s_gen_gao) {
+          forms.setFieldsValue({s_gen_gao:shoes.s_gen_gao.name});
+        } else {
+          forms.setFieldsValue({s_gen_gao:null});
         }
 
         this.setState({selectShoes:shoes});
@@ -619,6 +625,12 @@ class ShoesAdd extends Component {
     } 
     if (key === 's_gui_ge') {
       value = value.target.value;
+    }
+
+    if(key === 'sex') {
+      if (value !== constants.BASE_CONSTANTS.SEX_FEMALE) {
+        forms.setFieldsValue({s_gen_gao:''});
+      }
     }
 
     let shoesInfo = forms.getFieldsValue();
