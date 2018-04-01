@@ -321,6 +321,8 @@ class NetHandler {
   `);
   }
 
+  static getLast3MonthWork()
+
   static getDefaultList(tag, type, conditions, pageIndex=-1, pageSize=constants.DEFAULT_PAGE_SIZE) {
     
     let _conditions = '';

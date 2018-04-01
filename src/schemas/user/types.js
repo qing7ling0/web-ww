@@ -223,3 +223,81 @@ export const logoutType = new GraphQLObjectType({
     success: { type:GraphQLString }
   }
 });
+
+
+// 工作日历
+const workCalendarFields = {
+  day: {type:GraphQLString}, // 日期
+  guide: {type:GraphQLString},
+  status: {type:GraphQLInt}, // 状态，班，假，串，休
+}
+export const workCalendarType = new GraphQLObjectType({
+  name: 'workCalendarType',
+  fields: {
+    _id: {type:GraphQLString},
+    ...workCalendarFields
+  }
+})
+export const workCalendarInputType = new GraphQLInputObjectType({
+  name: 'workCalendarInputType',
+  fields: {
+    ...workCalendarFields
+  }
+})
+
+
+// 排班记录
+const workRecordFields = {
+  date: {type:GraphQLString}, // 日期
+  guide: {type:GraphQLString},
+  type: {type:GraphQLInt}, // 类型，请假，调班
+  leave_type: {type:GraphQLInt}, // 假期类型，病假，事假，年假等
+  change_guide: {type:GraphQLString},
+  change_day: {type:GraphQLString}, // 调班的日期
+  status: {type:GraphQLInt}, // 状态，是否同意
+}
+export const workRecordType = new GraphQLObjectType({
+  name: 'workRecordType',
+  fields: {
+    _id: {type:GraphQLString},
+    ...workRecordFields
+  }
+})
+export const workRecordInputType = new GraphQLInputObjectType({
+  name: 'workRecordInputType',
+  fields: {
+    ...workRecordFields
+  }
+})
+
+
+// 工作留言
+const workMessageFields = {
+  guide: {type:GraphQLString},
+  type: {type:GraphQLInt}, // 留言类型，个人，店铺
+  date: {type:GraphQLString}, // 留言查看时间
+  message: {type:GraphQLString}, // 内容
+  status: {type:GraphQLInt}, // 状态，是否查看
+}
+export const workMessageType = new GraphQLObjectType({
+  name: 'workMessageType',
+  fields: {
+    _id: {type:GraphQLString},
+    ...workMessageFields,
+    message_guide: {type:new GraphQLObjectType({
+      name: 'message_guide',
+      fields: {
+        _id: {type:GraphQLString},
+        name: {type:GraphQLString}
+      }
+    })}
+  }
+})
+export const workMessageInputType = new GraphQLInputObjectType({
+  name: 'workMessageInputType',
+  fields: {
+    _id: {type:GraphQLString},
+    ...workMessageFields,
+    message_guide: {type:GraphQLString},
+  }
+})

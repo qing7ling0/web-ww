@@ -106,3 +106,36 @@ export const productionList = {
 		return ret;
 	}
 }
+
+export const getLast3MonthWork = {
+	type: new GraphQLObjectType({
+    name: 'getLast3MonthWork',
+    fields: {
+      page: {type:commonFields.defaultPageType},
+      list: {type:new GraphQLList(types.workCalendarType)}
+    }
+  }),
+  args: {
+    id: {type:GraphQLString}
+  },
+	async resolve (root, params, options) {
+    return await userData.getLast3MonthWork(params.id);
+  }
+}
+
+export const getGuideMessage = {
+	type: new GraphQLObjectType({
+    name: 'getGuideMessage',
+    fields: {
+      page: {type:commonFields.defaultPageType},
+      list: {type:new GraphQLList(types.workMessageType)}
+    }
+  }),
+  args: {
+    id: {type:GraphQLString},
+    date: {type:GraphQLString}
+  },
+	async resolve (root, params, options) {
+    return await userData.getGuideMessage(params.id);
+  }
+}

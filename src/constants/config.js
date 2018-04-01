@@ -2,6 +2,16 @@ const {MENU_IDS, POWER_TYPES} = require('./constants')
 
 module.exports.Menus = [
   {
+    id:MENU_IDS.user, 
+    name: '个人管理',
+    icon: 'database',
+    subMenus: [
+      {id:MENU_IDS.userWork, name:'店员排班'},
+      {id:MENU_IDS.userMessage, name:'留言管理'},
+      {id:MENU_IDS.userLeaveApply, name:'假期申请'}
+    ]
+  },
+  {
     id:MENU_IDS.report, 
     name: '销售报表',
     icon: 'database',
@@ -70,6 +80,11 @@ module.exports.Menus = [
 module.exports.Routers = [
   { id:0, name:'首页', url: '/home' },
 
+  { id:MENU_IDS.user, name:'个人管理', url: '/home/user' },
+  { id:MENU_IDS.userWork, name:'店员排班', url: '/home/user/work' },
+  { id:MENU_IDS.userMessage, name:'留言管理', url: '/home/user/message' },
+  { id:MENU_IDS.userLeaveApply, name:'假期申请', url: '/home/user/leave' },
+
   { id:MENU_IDS.report, name:'报表系统', url: '/home/report' },
   { id:MENU_IDS.reportTable, name:'销售报表', url: '/home/report/table' },
 
@@ -106,6 +121,27 @@ module.exports.Routers = [
 ]
 
 module.exports.Powers = [
+  { 
+    id:MENU_IDS.userWork, 
+    powers:[
+      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true} },
+      { id:POWER_TYPES.SHOP_GUIDE, power:{view:false} },
+    ]
+  },
+  { 
+    id:MENU_IDS.userMessage, 
+    powers:[
+      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true} },
+      { id:POWER_TYPES.SHOP_GUIDE, power:{view:false} },
+    ]
+  },
+  { 
+    id:MENU_IDS.userLeaveApply, 
+    powers:[
+      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true} },
+      { id:POWER_TYPES.SHOP_GUIDE, power:{view:false} },
+    ]
+  },
   { 
     id:MENU_IDS.reportTable, 
     powers:[

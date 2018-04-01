@@ -10,3 +10,7 @@ th.table-column-right,
 td.table-column-right {
   text-align: right !important;
 }
+
+.ant-fullcalendar-fullscreen .ant-fullcalendar-content {
+  height:80px;
+}
