@@ -29,6 +29,7 @@ const Search = Input.Search;
 
 import Actions from '../../../actions'
 import BaseListComponent from '../../common/BaseListComponent'
+import DataContentComponent from '../../common/DataContentComponent'
 import * as common from '../../../modules/common'
 import * as constants from '../../../constants/Constants'
 import { commonUtils } from '../../../modules/common';
@@ -120,19 +121,29 @@ class ReportListContainer extends Component {
   render() {
     this.options = this.itemType.listOptions(this);
     this.list = this.currentList();
+    let pagination = {
+      pageSize:constants.DEFAULT_PAGE_SIZE,
+      showTotal:total => `Total:${total}`,
+      total: this.list.length
+    }
     return (
-      <BaseListComponent
-        columns={this.options} 
-        dataSource={this.list} 
-        loading={this.props.loading}
-        onRowClick={this.onRowClick}
-        onGetList={(pageInfo)=>{
-          this.onReqList();
-        }}
-        onDelItems={this.onDelete}
-        onItemConver={this.onItemConver}
-        headerRender={this.renderHeader}
-      />
+      <Root>
+        <DataContentComponent
+          headerRender={this.renderHeader}
+          canOperate={false}
+          canDelete={false}
+          hasSearch={false}
+          searchPlaceholder={''}>
+          <Table 
+            bordered={true}
+            columns={this.options} 
+            dataSource={this.list} 
+            loading={this.props.loading}
+            rowKey={record=>record._id || record.key}
+            pagination={pagination}
+          />
+        </DataContentComponent>
+      </Root>
     );
   }
 
@@ -153,7 +164,10 @@ class ReportListContainer extends Component {
   currentList = () => {
 		let listKey = this.itemType.listKey;
 		let list = this.props.sales[listKey] || [];
-    return this.itemType.getReport(this, list);
+    let time = new Date().getTime();
+    let ret = this.itemType.getReport(this, list);
+    console.log('ReportListContainer currentList time=' + (new Date().getTime()-time));
+    return ret;
   }
 
   onReqList = () => {

@@ -11,6 +11,7 @@ import customer from '../customer/index'
 import sales from '../sales/index'
 import activity from '../activity/index'
 import report from '../report/index'
+import guide from '../guide/index'
 
 let routers = [];
 
@@ -21,3 +22,4 @@ export default routers
   .concat(sales)
   .concat(activity)
   .concat(report)
+  .concat(guide)

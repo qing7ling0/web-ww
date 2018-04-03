@@ -15,6 +15,7 @@ import { ApiError, ApiErrorNames } from '../error/api-errors'
 import utils from '../utils/utils'
 import baseUtils from '../base/utils/utils'
 import constants from '../constants/constants'
+import { subOrderModel } from '../models/sales.js';
 // import 
 
 const logUtil = require('../utils/log-utils');
@@ -29,26 +30,7 @@ class AnalyseData {
    * @memberof ShopData
    */
   async getAnalyseShopSalesList(params) {
-    let date = moment();
-    let dateBegan = date.toDate();
-    let dateEnd = date.toDate();
-    if (params.date_type === 2) { // 周
-      let _date = moment(date.weekday(0));
-      dateBegan = _date.toDate();
-      dateEnd = _date.add(7, 'days').toDate();
-    } else if (params.date_type === 3) { // 月
-      let _date = moment(date.format("YYYY-MM")+"-01");
-      dateBegan = _date.toDate();
-      dateEnd = _date.add(1, 'month').toDate();
-    } else if (params.date_type === 4) { // 年
-      let _date = moment(date.format("YYYY")+"-01-01");
-      dateBegan = _date.toDate();
-      dateEnd = _date.add(1, 'year').toDate();
-    } else {
-      let _date = moment(date.format("YYYY-MM-DD"));
-      dateBegan = _date.toDate();
-      dateEnd = _date.add(1, 'day').toDate();
-    }
+    const {dateBegan, dateEnd} = this.getDate(params.date_type);
 
     let aggOptions = [
       { $match: {is_recharge:false, create_time:{$gte:dateBegan, $lt:dateEnd}} },
@@ -223,6 +205,153 @@ class AnalyseData {
     }
 
     return list;
+  }
+
+  getDate(date_type) {
+    let date = moment();
+    let dateBegan = date.toDate();
+    let dateEnd = date.toDate();
+    if (date_type === 2) { // 周
+      let _date = moment(date.weekday(0));
+      dateBegan = _date.toDate();
+      dateEnd = _date.add(7, 'days').toDate();
+    } else if (date_type === 3) { // 月
+      let _date = moment(date.format("YYYY-MM")+"-01");
+      dateBegan = _date.toDate();
+      dateEnd = _date.add(1, 'month').toDate();
+    } else if (date_type === 4) { // 年
+      let _date = moment(date.format("YYYY")+"-01-01");
+      dateBegan = _date.toDate();
+      dateEnd = _date.add(1, 'year').toDate();
+    } else { // 日
+      let _date = moment(date.format("YYYY-MM-DD"));
+      dateBegan = _date.toDate();
+      dateEnd = _date.add(1, 'day').toDate();
+    }
+
+    return {dateBegan, dateEnd};
+  }
+
+  // 获取top10
+  async getAnalyseGoodsTop10(params) {
+    const {dateBegan, dateEnd} = this.getDate(params.date_type);
+
+    let notGoodsTypes = [constants.E_ORDER_TYPE.RECHARGE]
+    let aggOptions = [
+      { $match: {type:{$nin:notGoodsTypes}, create_time:{$gte:dateBegan, $lt:dateEnd}}},
+      { $group: {"_id": { "NID": "$NID","s_material": "$s_material","b_material": "$b_material","ws_material": "$ws_material"}, "amount":{$sum:"$system_price"}, "count":{$sum:1}}},
+      { $project : {"_id": 0, "NID" : "$_id.NID", "amount" : "$amount", "count" : "$count", "s_material":"$_id.s_material", "b_material":"$_id.b_material", "ws_material":"$_id.ws_material"}}
+    ];
+    let orders = await subOrderModel.aggregate(aggOptions).sort({amount: -1, NID:-1});
+    // console.log('getAnalyseGoodsTop10 orders=' + JSON.stringify(orders))
+    // let newOrders = await subOrderModel.populate(orders, {path:'s_material', model:'material'})
+    // .populate(orders, {path:'b_material', model:'material'})
+    // .populate(orders, {path:'ws_material', model:'material'});
+    // console.log('getAnalyseShopSalesList orders=' + JSON.stringify(newOrders))
+    
+    return orders;
+  } 
+
+  /**
+   * 获取商品销售比（top10/else）
+   * @param {*} params 
+   */
+  async getAnalyseGoodsSalesPer(params) {
+    const {dateBegan, dateEnd} = this.getDate(params.date_type);
+
+    let notGoodsTypes = [constants.E_ORDER_TYPE.RECHARGE, constants.E_ORDER_TYPE.MAINTAIN, constants.E_ORDER_TYPE.ORNAMENT]
+    let aggOptions = [
+      { $match: {type:{$nin:notGoodsTypes}, create_time:{$gte:dateBegan, $lt:dateEnd}},  },
+      { $group: {"_id": { "NID": "$NID"}, "amount":{$sum:"$system_price"}, "count":{$sum:1}}},
+    ];
+    let orders = await subOrderModel.aggregate(aggOptions).sort({amount: -1, create_time:-1}).limit(10);
+    let top10Price = 0;
+    let top10Count = 0;
+    for(let order of orders) {
+      top10Price += order.amount;
+      top10Count += order.count;
+    }
+
+    aggOptions = [
+      { $match: {type:{$nin:notGoodsTypes}, create_time:{$gte:dateBegan, $lt:dateEnd}},  },
+      { $group: {"_id": { "type": "$type"}, "amount":{$sum:"$system_price"}, "count":{$sum:1}}}
+    ];
+    let allSuborders = await subOrderModel.aggregate(aggOptions);
+    let allPrice = 0;
+    let allCount = 0;
+    for(let order of allSuborders) {
+      allPrice += order.amount;
+      allCount += order.count;
+    }
+
+
+    let ret = { top10Price, top10Count, allPrice, allCount };
+    
+    // console.log('getAnalyseGoodsSalesPer ret=' + JSON.stringify(ret))
+    return ret;
+  }
+
+  
+  /**
+   * 获取商品材质销售比
+   * @param {*} params 
+   */
+  async getAnalyseGoodsMaterial(params) {
+    const {dateBegan, dateEnd} = this.getDate(params.date_type);
+
+    let notGoodsTypes = [constants.E_ORDER_TYPE.RECHARGE, constants.E_ORDER_TYPE.MAINTAIN, constants.E_ORDER_TYPE.ORNAMENT]
+    let aggOptions = [
+      { $match: {type:{$nin:notGoodsTypes}, create_time:{$gte:dateBegan, $lt:dateEnd}},  },
+      { $group: {"_id": {"s_material": "$s_material","b_material": "$b_material","ws_material": "$ws_material"}, "count":{$sum:1}}},
+      { $project : {"s_material": "$_id.s_material", "b_material": "$_id.b_material", "ws_material": "$_id.ws_material", "count":"$count"}},
+    ];
+    let orders = await subOrderModel.aggregate(aggOptions);
+    let total = 0;
+    orders = orders.map(item=> {
+      let ret = {
+        NID:'',
+        name:'',
+        count:0
+      }
+      if (item.s_material) {
+        ret.NID = item.s_material.NID;
+        ret.name = item.s_material.name;
+      } else if (item.b_material) {
+        ret.NID = item.b_material.NID;
+        ret.name = item.b_material.name;
+      } else if (item.ws_material) {
+        ret.NID = item.ws_material.NID;
+        ret.name = item.ws_material.name;
+      }
+      ret.count = item.count;
+      total += item.count;
+      if (ret.NID) return ret;
+      return null;
+    }).filter(item=>item!==null);
+    // console.log('getAnalyseGoodsMaterial orders=' + JSON.stringify(orders))
+    // console.log('getAnalyseGoodsMaterial total=' + total)
+    
+    return orders;
+  }
+
+  /**
+   * 获取商品性别销售比
+   * @param {*} params 
+   */
+  async getAnalyseGoodsSex(params) {
+    const {dateBegan, dateEnd} = this.getDate(params.date_type);
+
+    let notGoodsTypes = [constants.E_ORDER_TYPE.RECHARGE]
+    let aggOptions = [
+      { $match: {type:{$nin:notGoodsTypes}, create_time:{$gte:dateBegan, $lt:dateEnd}},  },
+      { $group: {"_id": {"sex": "$sex"}, "count":{$sum:1}}},
+      { $project : {"sex": "$_id.sex", "count":"$count"}},
+    ];
+    let orders = await subOrderModel.aggregate(aggOptions);
+    console.log('getAnalyseGoodsSex orders=' + JSON.stringify(orders))
+    // console.log('getAnalyseGoodsMaterial total=' + total)
+    
+    return orders;
   }
 
 }

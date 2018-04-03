@@ -9,9 +9,9 @@ export const SHOP_SALSE_STATISTICS_COLS = [
   {key:'guide', sum:false, label:'导购', render:item=>item&&item.name || ''},
   {key:'vip_level', sum:false, label:'会员等级', render:item=>item&&item.vip_level || 0},
   {key:'count', sum:true, label:'销售数量', render:item=>item || 0},
-  {key:'system_price', sum:true, label:'吊牌金额', render:item=>item+'元' || '0元'},
-  {key:'real_pay_price', sum:true, label:'销售金额', render:item=>item+'元' || '0元'},
-  {key:'discount_price', sum:true, label:'折扣金额', render:item=>item+'元' || '0元'},
+  {key:'system_price', sum:true, label:'吊牌金额', render:item=>new Number(item).toFixed(2)+'元' || '0.00元'},
+  {key:'real_pay_price', sum:true, label:'销售金额', render:item=>new Number(item).toFixed(2)+'元' || '0.00元'},
+  {key:'discount_price', sum:true, label:'折扣金额', render:item=>new Number(item).toFixed(2)+'元' || '0.00元'},
 ]
 
 // 商品销售报表
@@ -27,7 +27,7 @@ export const GOODS_STATISTICS_COLS = [
   {key:'s_bottom_color', sum:false, label:'底板色', render:item=>item&&item.name || ''},
   {key:'s_bottom_side_color', sum:false, label:'底侧色', render:item=>item&&item.name || ''},
   {key:'count', sum:true, label:'销售数量', render:item=>item || 0},
-  {key:'system_price', sum:true, label:'吊牌金额', render:item=>item || ''},
+  {key:'system_price', sum:true, label:'吊牌金额', render:item=>new Number(item).toFixed(2)+'元' || '0.00元'},
 ]
 
 // 脚型报表

@@ -5,6 +5,7 @@ const customer = require('./customer')
 const sales = require('./sales')
 const file = require('./file')
 const analyseData = require('./analyse')
+const DBRepair = require('./DBRepair')
 
 module.exports = {
   userData: user,
@@ -13,5 +14,6 @@ module.exports = {
   customerData: customer,
   salesData: sales,
   fileData: file,
-  analyseData
+  analyseData,
+  DBRepair
 }

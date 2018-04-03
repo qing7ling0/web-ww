@@ -7,7 +7,10 @@ import {
   userProductionModel,
   userAdminModel,
   accountModel,
-  orderModel
+  orderModel,
+  guideWorkMessageModel,
+  guideWorkModel,
+  guideWorkCalendarModel
 } from '../models/index.js'
 
 import fileData from './file'
@@ -410,7 +413,170 @@ class UserData {
     return constants.USER_TYPES;
   }
 
-  // async 
+  // 获取导购最近3个月的排版情况
+  async getLast3MonthWork(guideId) {
+    if (!guideId) {
+      throw new ApiError(ApiErrorNames.GET_FAIL);
+    }
+    let dateStr = moment().add(1, 'days').format('YYYY-MM-DD');
+    let beganDate = moment(dateStr).subtract(3, 'months');
+    let endDate = moment(dateStr);
+
+    let conditions = {
+      guide:guideId,
+      day:{$gte:beganDate.toDate(), $lt:endDate.toDate()}
+    }
+
+    return await guideWorkCalendarModel.find(conditions);
+  }
+
+  /**
+   * 获取当前日期的导购排班情况
+   * 
+   * @param {any} day 
+   * @memberof UserData
+   */
+  async getDayWork(day) {
+    return await guideWorkCalendarModel.find({day:day});
+  }
+
+  /**
+   * 设置导购排班情况
+   * 
+   * @param {any} guideId 导购
+   * @param {any} day 排版时间
+   * @param {any} status 状态
+   * @memberof UserData
+   */
+  async changeGuideWork(guideId, day, status) {
+    if (!guideId) {
+      throw new ApiError(ApiErrorNames.UPDATE_FAIL);
+    }
+    if (!moment(day).isValid()) {
+      throw new ApiError(ApiErrorNames.UPDATE_FAIL, '修改失败, 日期格式不对！');
+    }
+    if (moment().isBefore(moment(day))){
+      throw new ApiError(ApiErrorNames.UPDATE_FAIL, '修改失败，已过期的时间！');
+    }
+    return await guideWorkCalendarModel.where({guide:guideId, day:moment(day).toDate()}).update({guide:guideId, day:moment(day).toDate(), status:status}, {upsert:true});
+  }
+
+  /**
+   * 发送留言
+   * @param {*} doc [
+   *  guide 留言对象
+   *  targetGuide 留言对象
+   *  type 留言类型，个人或者店铺，默认个人
+   *  date 留言查看时间，只能是3天内
+   *  message 留言内容
+   * ]
+   */
+  async sendGuideMessage(doc) {
+    if (!doc || !doc.guide) {
+      throw new ApiError(ApiErrorNames.UPDATE_FAIL, '留言失败');
+    }
+    if (!doc.targetGuide) {
+      throw new ApiError(ApiErrorNames.UPDATE_FAIL, '留言失败，请选择一个留言对象');
+    }
+    if (!doc.message) {
+      throw new ApiError(ApiErrorNames.UPDATE_FAIL, '留言失败，留言内容不能为空');
+    }
+    if (!moment(doc.date).isValid()) {
+      throw new ApiError(ApiErrorNames.UPDATE_FAIL, '留言失败, 日期格式不对！');
+    }
+
+    if (!doc.type) {
+      doc.type = constants.E_GUIDE_MESSAGE_TYPE.SELF;// 个人
+    }
+
+    let dayBegan = moment(0, 'HH').subtract(1, 'seconds');
+    let dayEnd = moment(0,'HH').add(3, 'day');
+    let dayCur = moment(doc.date);
+    if (dayCur.isBetween(dayBegan, dayEnd)){ // 3天内
+      throw new ApiError(ApiErrorNames.UPDATE_FAIL, '修改失败，只能留3天内的日期！');
+    }
+
+    return await guideWorkMessageModel.create(doc);
+  }
+
+  /**
+   * 获取当前日期的留言
+   * 
+   * @param {any} guide 
+   * @param {any} date 
+   * @returns 
+   * @memberof UserData
+   */
+  async getGuideMessage(guide, date) {
+    if (!guide) {
+      throw new ApiError(ApiErrorNames.GET_FAIL);
+    }
+
+    if (!moment(date).isValid()) {
+      throw new ApiError(ApiErrorNames.GET_FAIL, '获取失败, 日期格式不对！');
+    }
+
+    return await guideWorkMessageModel.find({guide:guide, date:moment(date).toDate()});
+  }
+
+  /**
+   * 假期申请
+   * 
+   * @param {any} guide 
+   * @param {any} date 
+   * @param {any} levelType 请假类型：事假，病假等
+   * @memberof UserData
+   */
+  async guideLeaveApply(ctx, guide, date, levelType) {
+    if (!guide || !levelType) {
+      throw new ApiError(ApiErrorNames.UPDATE_FAIL);
+    }
+
+    if (!moment(date).isValid()) {
+      throw new ApiError(ApiErrorNames.UPDATE_FAIL, '请假失败, 日期格式不对！');
+    }
+    
+    return await guideWorkApplyModel.create({guide:guide, date:moment(date).toDate(), type:constants.E_WORK_TYPE.SELF, leave_type:E_LEAVE_TYPE.levelType});
+  }
+
+  /**
+   * 同意或者拒绝请假申请
+   * @param {*} ctx 
+   * @param {*} id 申请ID
+   * @param {*} agree 是否同意
+   */
+  async guideHandelLeaveApply(ctx, id, agree) {
+    if (!id) {
+      throw new ApiError(ApiErrorNames.UPDATE_FAIL);
+    }
+    let data = await guideWorkModel.findById(id).populate("guide");
+    if (!data || !data.guide) {
+      throw new ApiError(ApiErrorNames.UPDATE_FAIL, '消息不存在');
+    }
+
+    // 检查是否是值班
+    let workCan = await guideWorkCalendarModel.findOne({guide:data.guide._id, day:data.date, status:constants.E_WORK_STATUS.BAN});
+    if (!workCan) {
+      throw new ApiError(ApiErrorNames.UPDATE_FAIL,`${moment(data.date).format('YYYY-MM-DD')}不是${data.guide.name}值班，不需要请假！`);
+    }
+
+    let ret = await guideWorkModel.findByIdAndUpdate(id, {status:agree?1:2})
+    if (ret) {
+      if (agree) {
+        if (ret.type === constants.E_WORK_TYPE.LEAVE) {
+          try{
+            let info = await this.changeGuideWork(ret.guide, ret.date, constants.E_WORK_STATUS.JIA);
+            if (!info) {
+              await guideWorkModel.findByIdAndUpdate(id, {status:0}) // 更新失败，还原
+            }
+          } catch(error) {
+            await guideWorkModel.findByIdAndUpdate(id, {status:0}) // 更新失败，还原
+            throw new ApiError(ApiErrorNames.UPDATE_FAIL, error.message);
+          }
+        }
+      }
+    }
+  }
 
 }
 

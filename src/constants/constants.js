@@ -29,6 +29,11 @@ module.exports.MENU_IDS = {
 
   report:               5,
   reportTable:          501, // 销售报表
+
+  user:                 6,// 个人管理
+  userWork:             601, // 店员排班
+  userMessage:          602, // 留言管理
+  userLeaveApply:       603, // 假期申请
   
   system:               9, // 系统管理
   systemSetting:        901, // 系统设置
@@ -315,4 +320,56 @@ module.exports.CUSTOMER_ANALYSE_TYPES_DATAS = [
   {value:E_CUSTOMER_ANALYSE_TYPES.OLD_VIP, label:'老会员'},
   {value:E_CUSTOMER_ANALYSE_TYPES.NEW_VIP, label:'新会员'},
   {value:E_CUSTOMER_ANALYSE_TYPES.NOT_VIP, label:'非会员'},
+]
+
+// 假期类型
+const E_LEAVE_TYPE = {
+  SHI:1, // 事假
+  BING:2, // 病假
+  NIAN:3, // 年假
+  TIAOXIU:4 // 调休
+}
+module.exports.E_LEAVE_TYPE = E_LEAVE_TYPE;
+module.exports.E_LEAVE_TYPE_DATAS = [
+  {value:E_LEAVE_TYPE.SHI, label:'事假'},
+  {value:E_LEAVE_TYPE.BING, label:'病假'},
+  {value:E_LEAVE_TYPE.NIAN, label:'年假'},
+  {value:E_LEAVE_TYPE.TIAOXIU, label:'调休'},
+]
+
+// 记录类型
+const E_WORK_TYPE = {
+  LEAVE:1, // 请假
+  CHANGE:2, // 调班
+}
+module.exports.E_WORK_TYPE = E_WORK_TYPE;
+module.exports.E_WORK_TYPE_DATAS = [
+  {value:E_WORK_TYPE.LEAVE, label:'请假'},
+  {value:E_WORK_TYPE.CHANGE, label:'调班'}
+]
+
+// 当天排版状态
+const E_WORK_STATUS = {
+  BAN:1, // 班
+  JIA:2, // 假
+  XIU:3, // 休息
+  CHUANG:4 // 串班
+}
+module.exports.E_WORK_STATUS = E_WORK_STATUS;
+module.exports.E_WORK_STATUS_DATAS = [
+  {value:E_WORK_STATUS.BAN, label:'班'},
+  {value:E_WORK_STATUS.JIA, label:'假'},
+  {value:E_WORK_STATUS.XIU, label:'休息'},
+  {value:E_WORK_STATUS.CHUANG, label:'串班'}
+]
+
+// 当天排版状态
+const E_GUIDE_MESSAGE_TYPE = {
+  SELF:1, // 个人
+  SHOP:2, // 店铺
+}
+module.exports.E_GUIDE_MESSAGE_TYPE = E_GUIDE_MESSAGE_TYPE;
+module.exports.E_GUIDE_MESSAGE_TYPE_DATAS = [
+  {value:E_GUIDE_MESSAGE_TYPE.BAN, label:'个人'},
+  {value:E_GUIDE_MESSAGE_TYPE.JIA, label:'店铺'}
 ]

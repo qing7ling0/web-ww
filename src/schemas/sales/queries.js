@@ -105,6 +105,27 @@ export const orderList = {
     return await salesData.getOrderList({page:params.page, pageSize:params.pageSize}, {conditions:params.conditions})
 	}
 }
+export const reportOrderList = {
+	type: new GraphQLObjectType({
+    name: 'reportOrderList',
+    fields: {
+      page: {type:commonFields.defaultPageType},
+      list: {type:new GraphQLList(types.orderType)}
+    }
+  }),
+  args: {
+    page: {type: GraphQLInt},
+    pageSize: {type: GraphQLInt},
+    conditions: {type:GraphQLString}
+  },
+	async resolve (root, params, options) {
+    if (params.conditions) {
+      params.conditions = commonUtils.urlString2Conditions(params.conditions);
+    }
+
+    return await salesData.getOrderListByReport({page:params.page, pageSize:params.pageSize}, {conditions:params.conditions})
+	}
+}
 
 export const subOrderList = {
 	type: new GraphQLObjectType({

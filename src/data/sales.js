@@ -103,7 +103,7 @@ class SalesData {
   async addGoods(doc, options={}) {
     if (doc) {
       if (doc.NID) {
-        let goods = await goodsModel.findOne({NID:doc.NID});
+        let goods = await goodsModel.findOne({NID:doc.NID, hide:false});
         if (goods) {
           throw new ApiError(ApiErrorNames.ADD_FAIL, '添加失败，当前货号已存在');
         }
@@ -123,7 +123,7 @@ class SalesData {
           newGoods = await this.goodsPopulate(newGoods).execPopulate(); // 如果没有制定NID，则创建NID
           let NID = await commonData.createNID(newGoods.goods, newGoods.sex, newGoods);
           if (NID && NID !== constants.NULL_NID) {
-            await goodsModel.findByIdAndUpdate(newGoods._id, {NID,NID});
+            await goodsModel.findByIdAndUpdate(newGoods._id, {NID,NID, hide:false});
           } else {
             // 还原
             await goodsModel.findByIdAndRemove(newGoods._id);
@@ -226,7 +226,7 @@ class SalesData {
         let goods = await goodsModel.findOne(conditions);
         // console.log("222=" + JSON.stringify(goods));
         if (goods) {
-          goods = await goodsModel.findOne({_id:{$nin:[goods._id]}, NID:doc.NID});
+          goods = await goodsModel.findOne({_id:{$nin:[goods._id]}, NID:doc.NID, hide:false});
           if (goods) {
             throw new ApiError(ApiErrorNames.UPDATE_FAIL, '更新失败，当前货号已存在');
           }
@@ -415,6 +415,15 @@ class SalesData {
     return list;
   }
 
+  async getOrderListByReport(page, options) {
+    options.projection={_id:1,shoe:1,guide:1,customer:1,system_price:1,real_pay_price:1,discount_price:1,create_time:1}
+    const list = await DB.getList(orderModel, options, page, (query)=>{
+      return query.populate({path:'shop', select:"_id name"}).populate({path:'guide', select:"_id name"})
+      .populate({path:'customer', select:"_id name"}).exec();
+    });
+    return list;
+  }
+
   // 子订单
   async subOrderPopulate(query) {
     return query.populate('shop').populate('guide').populate('customer');
@@ -591,16 +600,20 @@ class SalesData {
           customerInfo = await customerModel.findOne({phone:sub.customer.phone});
         }
 
+        sub.system_price = sub.price;
         // 计算价格
         payInfo.discount_mount += sub.price;
         if (sub.s_customs) {
           for(let c of sub.s_customs) {
             payInfo.undiscount_mount += c.price;
+            sub.system_price += c.price;
           }
         }
         if (sub.urgent) {
           payInfo.undiscount_mount += sub.urgent.price;
+          sub.system_price += sub.urgent.price;
         }
+
       }
 
       // 查找vip等级
