@@ -207,7 +207,15 @@ class AnalyseData {
     return list;
   }
 
-  getDate(date_type) {
+  /**
+   * 获取时间区间
+   * 
+   * @param {any} date_type 
+   * @param {any} index 第几个
+   * @returns 
+   * @memberof AnalyseData
+   */
+  getDate(date_type, index) {
     let date = moment();
     let dateBegan = date.toDate();
     let dateEnd = date.toDate();
@@ -223,6 +231,14 @@ class AnalyseData {
       let _date = moment(date.format("YYYY")+"-01-01");
       dateBegan = _date.toDate();
       dateEnd = _date.add(1, 'year').toDate();
+    } else if (date_type === 5) { // 季度
+      if (!index) {
+        let month = moment().month();
+        index = (month / 3) + 1;
+      }
+      let _date = moment(date.format("YYYY")+"-01-01");
+      dateBegan = moment(_date).add(3*(index-1), 'month').toDate();
+      dateEnd = moment(_date).add(3*index, 'month').toDate();
     } else { // 日
       let _date = moment(date.format("YYYY-MM-DD"));
       dateBegan = _date.toDate();
@@ -341,7 +357,7 @@ class AnalyseData {
   async getAnalyseGoodsSex(params) {
     const {dateBegan, dateEnd} = this.getDate(params.date_type);
 
-    let notGoodsTypes = [constants.E_ORDER_TYPE.RECHARGE]
+    let notGoodsTypes = [constants.E_ORDER_TYPE.RECHARGE];
     let aggOptions = [
       { $match: {type:{$nin:notGoodsTypes}, create_time:{$gte:dateBegan, $lt:dateEnd}},  },
       { $group: {"_id": {"sex": "$sex"}, "count":{$sum:1}}},
@@ -354,6 +370,150 @@ class AnalyseData {
     return orders;
   }
 
+  /**
+   * 获取商品销量的价格分布
+   * 
+   * @param {any} params 
+   * @returns 
+   * @memberof AnalyseData
+   */
+  async getAnalyseGoodsPrice(params) {
+    const {dateBegan, dateEnd} = this.getDate(params.date_type);
+
+    let notGoodsTypes = [constants.E_ORDER_TYPE.RECHARGE];
+    let prices = [0, 3999, 4999, 5999, 12999, 23999]
+    let ret = {};
+    let priceFileds = {};
+    let groupFileds = {};
+    for(let i=1; i<prices.length; i++) {
+      priceFileds[`price${i}`] = {
+        $cond: [{
+          $and:[
+            { $gt:['$system_price',prices[i-1]]},
+            { $lte:['$system_price',prices[i]]}
+          ]
+        }, 1, 0]
+      }
+      groupFileds[`price${i}`] = {$sum: `$price${i}`}
+      ret[`price${i}`] = {
+        price:prices[i],
+        count:0
+      };
+    }
+    let aggOptions = [  
+      { 
+        $match: { type:{$nin:notGoodsTypes}, create_time:{$gte:dateBegan, $lt:dateEnd} }
+      },
+      {
+        $project: { system_price:1, NID: 1, ...priceFileds} 
+      },
+      { 
+        $group: {'_id':null,...groupFileds} 
+      }
+    ]  
+    let orders = await subOrderModel.aggregate(aggOptions);
+    if (orders && orders.length > 0) {
+      for(let key in ret) {
+        if (orders[0][key]) {
+          ret[key].count = orders[0][key];
+        }
+      }
+    }
+
+    return ret;
+  }
+
+  /**
+   * 获取当年4个季度的材质销量分布
+   * 
+   * @memberof AnalyseData
+   */
+  async getAnalyseGoodsMaterialList4Quarter() {
+    let date = moment(moment().format("YYYY"+"-01-01"));
+    let dateBegan = moment(date);
+    let dateEnd = moment(date).add(3, 'months');
+
+    let notGoodsTypes = [constants.E_ORDER_TYPE.RECHARGE, constants.E_ORDER_TYPE.MAINTAIN, constants.E_ORDER_TYPE.ORNAMENT]
+    let list = [];
+    for(let i=0; i<4; i++) {
+      let aggOptions = [
+        { 
+          $match: {type:{$nin:notGoodsTypes}, create_time:{$gte:dateBegan.toDate(), $lt:dateEnd.toDate()}} 
+        },
+        { 
+          $group: {"_id": {"s_material": "$s_material","b_material": "$b_material","ws_material": "$ws_material"}, "count":{$sum:1}}
+        },
+        { 
+          $project : {"s_material": "$_id.s_material", "b_material": "$_id.b_material", "ws_material": "$_id.ws_material", "count":"$count"}
+        }
+      ];
+      let orders = await subOrderModel.aggregate(aggOptions);
+      if (orders.length > 0) {
+        list.push(orders);
+      } else {
+        list.push([]);
+      }
+      console.log('getAnalyseGoodsMaterialList4Quarter list=' + JSON.stringify(orders))
+
+      dateBegan = moment(dateEnd);
+      dateEnd = moment(dateEnd).add(3, 'month');
+    }
+
+    return list;
+  }
+  
+  /**
+   * 获取当年4个季度的男女销量分布
+   * 
+   * @memberof AnalyseData
+   */
+  async getAnalyseGoodsSexList4Quarter() {
+    let date = moment(moment().format("YYYY"+"-01-01"));
+    let dateBegan = moment(date);
+    let dateEnd = moment(date).add(3, 'months');
+
+    let notGoodsTypes = [constants.E_ORDER_TYPE.RECHARGE];
+    let list = [];
+    for(let i=0; i<4; i++) {
+      let aggOptions = [
+        { $match: {type:{$nin:notGoodsTypes}, create_time:{$gte:dateBegan, $lt:dateEnd}},  },
+        { $group: {"_id": {"sex": "$sex"}, "count":{$sum:1}}},
+        { $project : {"sex": "$_id.sex", "count":"$count"}},
+      ];
+      let orders = await subOrderModel.aggregate(aggOptions);
+      if (orders.length > 0) {
+        list.push(orders);
+      } else {
+        list.push([]);
+      }
+      console.log('getAnalyseGoodsMaterialList4Quarter list=' + JSON.stringify(orders))
+
+      dateBegan = moment(dateEnd);
+      dateEnd = moment(dateEnd).add(3, 'month');
+    }
+
+    return list;
+  }
+
+  
+  /**
+   * 获取当年4个季度的价格销量分布
+   * 
+   * @memberof AnalyseData
+   */
+  async getAnalyseGoodsSexList4Quarter() {
+    let list = [];
+    for(let i=0; i<4; i++) {
+      let orders = await this.getAnalyseGoodsPrice({date_type:5, index:i+1});
+      if (orders.length > 0) {
+        list.push(orders);
+      } else {
+        list.push([]);
+      };
+    }
+
+    return list;
+  }
 }
 
 module.exports = new AnalyseData()
