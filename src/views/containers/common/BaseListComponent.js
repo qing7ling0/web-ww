@@ -14,6 +14,7 @@ const Root = styled.div``
 class BaseListComponent extends Component {
 
   static defaultProps = {
+    tableOptions:{},
     columns : [],
     onGetList : () => {},
     onDelItems : (ids) => {},
@@ -80,6 +81,7 @@ class BaseListComponent extends Component {
         total: this.props.pageInfo.total
       }
     }
+    console.log('render')
     return (
       <Root>
         <DataContentComponent
@@ -114,6 +116,7 @@ class BaseListComponent extends Component {
             rowSelection={this.props.canDelete ? {onChange:this.onRowSelectionChange}:null}
             pagination={pagination}
             footer={this.props.footer}
+            {...this.props.tableOptions}
           />
         </DataContentComponent>
         {

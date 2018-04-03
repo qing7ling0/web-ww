@@ -409,6 +409,15 @@ class SalesData {
     return list;
   }
 
+  async getOrderListByReport(page, options) {
+    options.projection={_id:1,shoe:1,guide:1,customer:1,system_price:1,real_pay_price:1,discount_price:1,create_time:1}
+    const list = await DB.getList(orderModel, options, page, (query)=>{
+      return query.populate({path:'shop', select:"_id name"}).populate({path:'guide', select:"_id name"})
+      .populate({path:'customer', select:"_id name"}).exec();
+    });
+    return list;
+  }
+
   // 子订单
   async subOrderPopulate(query) {
     return query.populate('shop').populate('guide').populate('customer');

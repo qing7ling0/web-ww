@@ -84,10 +84,10 @@ class DB {
             // console.log('DB.getList ' + JSON.stringify(conditions) + '; findOptions='+ JSON.stringify(findOptions))
             let datas = null;
             if (onQuery) {
-                let query = model.find(conditions, null, findOptions);
+                let query = model.find(conditions, options.projection||null, findOptions);
                 datas = await onQuery(query);
             } else {
-                datas = await model.find(conditions, null, findOptions);
+                datas = await model.find(conditions, options.projection||null, findOptions);
             }
             // console.log('DB.getList datas' + datas.length)
             return {list:datas, page:newPage};
