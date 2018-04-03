@@ -576,15 +576,13 @@ class ShoesAdd extends Component {
   }
 
   getGoodsByCurrentInput = (shoesInfo) => {
-    if (shoesInfo.s_material && shoesInfo.sex && shoesInfo.s_gui_ge && shoesInfo.s_xuan_hao && shoesInfo.s_color_palette && shoesInfo.s_tie_di) {
+    if (shoesInfo.s_material && shoesInfo.sex&& shoesInfo.s_xuan_hao && shoesInfo.s_color_palette) {
       for(let goods of this.props.sales.goodsShoesList) {
-        if (goods.s_material && goods.s_gui_ge && goods.s_xuan_hao && goods.sex && goods.s_color_palette && goods.s_tie_di) {
+        if (goods.s_material && goods.s_xuan_hao && goods.sex && goods.s_color_palette) {
           if (goods.s_material._id === shoesInfo.s_material._id
             && goods.s_xuan_hao._id === shoesInfo.s_xuan_hao._id
             && goods.s_color_palette._id === shoesInfo.s_color_palette
-            && goods.s_tie_di._id === shoesInfo.s_tie_di._id
             && goods.sex === shoesInfo.sex
-            && goods.s_gui_ge === shoesInfo.s_gui_ge
           ) {
             if ((goods.sex === constants.BASE_CONSTANTS.SEX_FEMALE && goods.s_gen_gao && shoesInfo.s_gen_gao && shoesInfo.s_gen_gao._id === goods.s_gen_gao._id) ||
             goods.sex !== constants.BASE_CONSTANTS.SEX_FEMALE

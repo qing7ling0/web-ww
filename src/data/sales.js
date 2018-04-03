@@ -585,16 +585,20 @@ class SalesData {
           customerInfo = await customerModel.findOne({phone:sub.customer.phone});
         }
 
+        sub.system_price = sub.price;
         // 计算价格
         payInfo.discount_mount += sub.price;
         if (sub.s_customs) {
           for(let c of sub.s_customs) {
             payInfo.undiscount_mount += c.price;
+            sub.system_price += c.price;
           }
         }
         if (sub.urgent) {
           payInfo.undiscount_mount += sub.urgent.price;
+          sub.system_price += sub.urgent.price;
         }
+
       }
 
       // 查找vip等级

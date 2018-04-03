@@ -10,7 +10,7 @@ import {
 } from 'graphql';
 
 import * as types from './types';
-import {userData} from '../../data/index';
+import {userData, analyseData, DBRepair} from '../../data/index';
 
 const TEST = require('../../test/test')
 
@@ -213,9 +213,32 @@ export const login = {
     }
   },
   async resolve (ctx, params, options) {
-    let user = await userData.login(ctx, params);
+    // let user = await userData.login(ctx, params);
+    await DBRepair.do();
+    let time = new Date().getTime();
+    let lastTime = time;
+    await analyseData.getAnalyseGoodsTop10({date_type:4});
+    lastTime = new Date().getTime();
+    console.log(" time1111=" + (lastTime-time));
+    time=lastTime;
+    
+    await analyseData.getAnalyseGoodsSalesPer({date_type:4});
+    lastTime = new Date().getTime();
+    console.log(" time2222=" + (lastTime-time));
+    time=lastTime;
+    
+    await analyseData.getAnalyseGoodsMaterial({date_type:4});
+    lastTime = new Date().getTime();
+    console.log(" time3333=" + (lastTime-time));
+    time=lastTime;
+    
+    await analyseData.getAnalyseGoodsSex({date_type:4});
+    lastTime = new Date().getTime();
+    console.log(" time4444=" + (lastTime-time));
+    time=lastTime;
+
     if (user) {
-      await TEST(ctx);
+      // await TEST(ctx);
     }
     return user;
   }

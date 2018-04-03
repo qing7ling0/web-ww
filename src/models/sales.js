@@ -303,6 +303,7 @@ const subOrderSchema = new Schema({
   sex:{type:String, ddecription:'性别'},
   count:{type:Number, decription:'数量', default:1},
   price:{type:Number, decription:'价格'},
+  system_price:{type:Number, decription:'价格'},
   remark:{type:String, ddecription:'备注'},
   file:{type:Schema.Types.ObjectId, ref:'file', decription:'工程文件'},
   sub_order_id: {type:String, description:'子订单订单ID'},
