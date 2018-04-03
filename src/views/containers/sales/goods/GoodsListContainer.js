@@ -170,11 +170,10 @@ class GoodsListContainer extends Component {
       if (values.put_date) {
         values.put_date = moment(values.put_date).format('YYYY-MM-DD');
       }
-
-
       this.onReqAdd(values);
     }
   }
+  
   onEdit = (values) => {
     if (values.put_date) {
       values.put_date = moment(values.put_date).format('YYYY-MM-DD HH:mm:ss');
