@@ -138,12 +138,18 @@ class MaterialListContainer extends Component {
   }
 
   onAdd = (values) => {
+    if (!values.color) {
+      delete values.color
+    }
     this.onReqAdd(values);
   }
 
   onEdit = (values) => {
     values = utils.diffent(values, this.state.editData);
     if (values) {
+      if (!values.color) {
+        delete values.color
+      }
       this.onReqUpdate(this.state.editData._id, values);
     }
   }
