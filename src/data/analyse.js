@@ -311,17 +311,21 @@ class AnalyseData {
       let ret = {
         NID:'',
         name:'',
-        count:0
+        count:0,
+        color:''
       }
       if (item.s_material) {
         ret.NID = item.s_material.NID;
         ret.name = item.s_material.name;
+        ret.color = item.s_material.color_css;
       } else if (item.b_material) {
         ret.NID = item.b_material.NID;
         ret.name = item.b_material.name;
+        ret.color = item.b_material.color_css;
       } else if (item.ws_material) {
         ret.NID = item.ws_material.NID;
         ret.name = item.ws_material.name;
+        ret.color = item.ws_material.color_css;
       }
       ret.count = item.count;
       total += item.count;
