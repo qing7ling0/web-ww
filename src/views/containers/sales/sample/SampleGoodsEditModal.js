@@ -15,7 +15,9 @@ import {
   Switch,
   Radio,
   Slider, Upload,
-  Modal
+  Modal,
+  Row,
+  Col
 } from 'antd'
 
 const FormItem = Form.Item;
@@ -59,24 +61,65 @@ class SampleGoodsEditModal extends Component {
   componentWillReceiveProps(nextProps){
   }
 
+  renderBaseForm(item, index, vertical, isReviewRender) {
+    let span = {sm:24};
+    if (vertical) {
+      span={};
+    }
+    return (
+      <Card key={index} title={item.title} bordered={false}  bodyStyle={{padding:0}}>
+        <Row>
+          {
+            item.options.map((item, index) => {
+              if (!item.options) item.options = {};
+              return <Col key={index} {...span}><FormItemComponent key={item.name} options={item} form={this.props.form} /></Col>
+            })
+          }
+        </Row>
+      </Card>
+    )
+  }
+
   render() {
     this.options = this.props.sampleGoodsType.editOptions(this);
+    // return (
+    //   <BaseFormModal
+    //     title={this.props.title}
+    //     options={this.options}
+    //     visible={this.state.visible}
+    //     loading={this.props.loading}
+    //     result={this.props.result}
+    //     onSubmit={this.onSubmit}
+    //     onCancel={this.onCancel}
+    //     onAfterClose={this.props.afterClose || null}
+    //     confirmLoading={this.state.confirmLoading}
+    //     actionType={ActionTypes.GOODS_UPDATE}
+    //     onSubmitSuccess={this.props.onSubmitSuccess}
+    //     wrappedComponentRef={(inst) => this.formRef = inst}
+    //   />
+    // );
+
     return (
-      <BaseFormModal
-        title={this.props.title}
+      <Modal 
         options={this.options}
-        visible={this.state.visible}
         loading={this.props.loading}
-        result={this.props.result}
-        onSubmit={this.onSubmit}
+        title={this.props.title}
+        visible={this.state.visible}
+        onOk={this.onSubmit}
         onCancel={this.onCancel}
-        onAfterClose={this.props.afterClose || null}
         confirmLoading={this.state.confirmLoading}
-        actionType={ActionTypes.GOODS_UPDATE}
-        onSubmitSuccess={this.props.onSubmitSuccess}
-        wrappedComponentRef={(inst) => this.formRef = inst}
-      />
-    );
+        afterClose={this.props.afterClose || null}
+      >
+        
+        <NormalForm>
+          {
+            this.options.map((item, index) => {
+              return this.renderBaseForm(item, index, false, true);
+            })
+          }
+        </NormalForm>
+      </Modal>
+    )
   }
 
   onSubmit = (err, values) => {
@@ -88,8 +131,7 @@ class SampleGoodsEditModal extends Component {
   }
 
   onNIDSelect = (value, option) => {
-    if (!this.formRef) return;
-    let forms = this.formRef.props.form;
+    const {form:forms} = this.props;
     for(let i=0; i<this.props.sales.goodsShoesList.length; i++) {
       let shoes = this.props.sales.goodsShoesList[i];
       if (shoes.NID === value) {
@@ -156,8 +198,7 @@ class SampleGoodsEditModal extends Component {
   }
 
   setColorByColorPalette = (palette) => {
-    if (!this.formRef) return;
-    let forms = this.formRef.props.form;
+    const {form:forms} = this.props;
     if (forms) {
       forms.setFieldsValue({s_out_color:palette.out_color.name});
       forms.setFieldsValue({s_in_color:palette.in_color.name});

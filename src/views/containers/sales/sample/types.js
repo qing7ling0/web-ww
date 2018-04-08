@@ -55,6 +55,16 @@ const getSampleGoodsBaseColumns = function(target) {
       if (!record.left_count && record.right_count) return '右脚';
       return '无';
     }},
+    { title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
+      return (
+        <div>
+          <OpeateBtn type="primary" shape="circle" icon="edit" onClick={(e)=>{
+            e.stopPropagation();
+            target.onEditClick(record);
+          }} />
+        </div>
+      );
+    }}
   ]
 }
 
@@ -108,18 +118,18 @@ const getSampleGoodsShoesListOptions = function(target) {
 const getSampleGoodsShoesAddOptions = function(target) {
   return [
     {
-      name:'基础数据',
+      title:'基础数据',
       options: [
-        {type:'select', name:'shop', label:'门店', itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(target.props.shopList), options:{defaultActiveFirstOption:true, showSearch:true, optionFilterProp:'children'}, rule:{required:true}},    
+        {type:'select', name:'shop', label:'门店', span:{sm:24}, itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(target.props.shopList), options:{defaultActiveFirstOption:true, showSearch:true, optionFilterProp:'children'}, rule:{required:true}},    
         {type:'number', name:'s_left', label:'左脚', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
         {type:'number', name:'s_right', label:'右脚', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}}
       ]
     },
     {
-      name:'商品数据',
+      title:'商品数据',
       options: [
         {
-          type:'select', name:'NID', label:'货号', 
+          type:'select', name:'NID', label:'货号', span:{sm:24}, 
           itemOptions:{labelLeft:true}, 
           selectItems:listToSelectOptions(target.props.sales.goodsShoesList, (item)=>item.NID, (item)=>item.NID+'-'+item.name), 
           decoratorOptions:{initialValue:target.state.NID},
@@ -137,9 +147,8 @@ const getSampleGoodsShoesAddOptions = function(target) {
         { type:'text', name:'s_xuan_hao', label:'楦型', itemOptions:{labelLeft:true}, rule:{required:true} },
         { type:'text', name:'s_material', label:'材料', itemOptions:{labelLeft:true}, rule:{required:true} },   
         { type:'text', name:'sex', label:'性别', itemOptions:{labelLeft:true}, rule:{required:true} },
-        { type:'input', name:'s_gui_ge', label:'规格', itemOptions:{labelLeft:true}, options:{onChange:(value)=>target.onNIDPropertyChange('s_gui_ge', value)}, rule:{required:false}},   
         {
-          type:'select', name:'s_color_palette', label:'颜色', itemOptions:{labelLeft:true}, 
+          type:'select', name:'s_color_palette', span:{sm:24}, label:'颜色', itemOptions:{labelLeft:true}, 
           selectItems:[{label:'自定义', value:''}].concat(listToSelectOptions(target.props.sales.colorPaletteList)), 
           options:{
             defaultActiveFirstOption:true,
@@ -161,6 +170,7 @@ const getSampleGoodsShoesAddOptions = function(target) {
           }, 
           rule:{required:true}
         },
+        { type:'input', name:'s_gui_ge', label:'规格', itemOptions:{labelLeft:true}, options:{onChange:(value)=>target.onNIDPropertyChange('s_gui_ge', value)}, rule:{required:false}},   
         {
           type:'select', name:'s_tie_di', label:'贴底', itemOptions:{labelLeft:true}, 
           selectItems:listToSelectOptions(target.props.sales.shoesTieBianList, (item)=>item.name), 
@@ -353,6 +363,7 @@ export const GOODS_TYPES = [
   {
     key:BASE_CONSTANTS.GOODS_SHOES,
     listTag:'sampleShoesList:sampleGoodsList', tag:'sampleGoodsList', label:'鞋', 
+    goodsListTag:'goodsShoesList:goodsList',
     graphqlType:graphqlTypes.sampleGoodsType,
     listOptions:getSampleGoodsBaseColumns,
     addOptions:getSampleGoodsShoesAddOptions,

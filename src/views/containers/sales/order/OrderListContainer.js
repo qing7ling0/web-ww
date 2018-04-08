@@ -348,6 +348,7 @@ export default connect(
       reqUpdateOrder: Actions.updateOrder,
       reqGetOrderProfile: Actions.getOrderProfile,
       reqShopList:Actions.getShopList,
+      reqShopList:Actions.getShopList,
       reqShopGuideList:Actions.getShopGuideList,
       reqCustomerList:Actions.getCustomerList,
       reqGoodsShoesList:Actions.getGoodsShoesList,

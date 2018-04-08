@@ -20,6 +20,7 @@ import {
   BtnLogin
 } from './styled'
 
+import * as graphqlTypes from '../../../modules/graphqlTypes'
 import Actions from '../../../actions'
 import BaseListComponent from '../../common/BaseListComponent'
 import * as common from '../../../modules/common'
@@ -74,6 +75,7 @@ class SampleGoodsListContainer extends Component {
   componentDidMount() {
     this.props.reqShopList(1, 100);
     this.props.reqGetGoodsBaseDatas();
+    this.props.reqGetGoodsList(this.sampleGoodsType.goodsListTag, graphqlTypes.goodsType, {goods:this.sampleGoodsType.key}, {page:-1, pageSize:0});
   }
 
   render() {
@@ -225,7 +227,9 @@ export default connect(
       reqDeleteSampleGoods: Actions.deleteSampleGoods,
       reqUpdateSampleGoods: Actions.updateSampleGoods,
       reqGetSampleGoodsProfile: Actions.getSampleGoodsProfile,
-      reqGetGoodsBaseDatas: Actions.getGoodsBaseDatas
+      reqGetGoodsBaseDatas: Actions.getGoodsBaseDatas,
+      reqShopList:Actions.getShopList,
+      reqGetGoodsList: Actions.getGoodsList,
     }, dispatch);
   }
 )(SampleGoodsListContainer);
