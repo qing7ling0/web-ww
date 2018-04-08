@@ -1,7 +1,7 @@
 import * as constants from './Constants'
 import baseConfig from '../../constants/config'
 
-export const DEV = false;
+export const DEV = true;
 
 export const GetServerAddress = () => {
   return DEV ? constants.DEV_SERVER : constants.PROD_SERVER;

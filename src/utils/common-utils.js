@@ -2,6 +2,7 @@
 import constants from '../constants/constants'
 import config from '../constants/config'
 import transportCompanys from '../constants/transport'
+import BaseUtils from '../base/utils/utils'
 
 export const getMarketLevel = function(id) {
   for(let i=0; i<constants.MARKET_LEVEL.length; i++) {
@@ -86,19 +87,30 @@ export const getTransportCompany = function(id) {
   return null;
 }
 
+const conditionsRegexConver = function(object) {
+  if (!object) return object;
+
+  console.log('urlString2Conditions ' + JSON.stringify(object));
+  for(let key in object) {
+    if (key === '$regex') {
+      let v = object[key];
+      v = v.replace(/\/\//g,"\/");
+      object[key] = eval(v);//转成正则
+    } else if (BaseUtils.IsObject(object[key]) || BaseUtils.IsArray(object[key])) {
+      object[key] = conditionsRegexConver(object[key]);
+    }
+  }
+  return object;
+}
+
 export const urlString2Conditions = function(value) {
   if (!value) return '';
   let ret = JSON.parse(decodeURIComponent(value));
-  for(let key in ret) {
-    for(let subKey in ret[key]) {
-      if (subKey === '$regex') {
-        let v = ret[key][subKey];
-        v = v.replace(/\/\//g,"\/");
-        ret[key][subKey] = eval(v);//转成正则
-      }
-    }
+  if (ret) {
+    ret = conditionsRegexConver(ret);
   }
-
+  console.log('urlString2Conditions ' + JSON.stringify(ret));
+  
   return ret;
 }
 

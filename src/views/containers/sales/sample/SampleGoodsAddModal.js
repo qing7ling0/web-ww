@@ -77,6 +77,7 @@ class SampleGoodsAddModal extends Component {
     );
   }
 
+  
 
   onSubmit = (err, values) => {
     if (!err) {

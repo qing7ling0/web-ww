@@ -58,7 +58,6 @@ class SampleGoodsListContainer extends Component {
         this.sampleGoodsType = value;
       }
     }
-    this.props.reqGetGoodsBaseDatas();
   }
   
   componentWillReceiveProps(nextProps){
@@ -72,12 +71,17 @@ class SampleGoodsListContainer extends Component {
     }
   }
 
+  componentDidMount() {
+    this.props.reqShopList(1, 100);
+    this.props.reqGetGoodsBaseDatas();
+  }
+
   render() {
     this.options = this.sampleGoodsType.listOptions(this);
 
     return (
       <BaseListComponent
-        canOperate={false}
+        canOperate={this.canOperate()}
         columns={this.options} 
         dataSource={this.currentList()} 
         loading={this.props.loading}
@@ -99,7 +103,7 @@ class SampleGoodsListContainer extends Component {
         addVisible={this.state.addVisible}
         editVisible={this.state.editVisible}
         addNode={
-          <SampleGoodsAddModal 
+          <SampleGoodsEditModal 
             title={`添加${this.sampleGoodsType.label}`} 
             pageInfo={this.props.pageInfo} 
             visible={this.state.addVisible} 
@@ -199,8 +203,9 @@ class SampleGoodsListContainer extends Component {
     if (!this.canOperate()) return;
     this.setState({editVisible:true, editData:record});
   }
+
   canOperate = () => {
-    this.power = commonUtils.getPower(this.props.user, constants.MENU_IDS.salesSampleGoods)
+    this.power = commonUtils.getPower(this.props.user, constants.MENU_IDS.salesItems)
     return this.power && this.power.canOperate;
   }
 }

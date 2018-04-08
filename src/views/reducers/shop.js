@@ -15,6 +15,7 @@ const LOADING_ACTIONS = [
   ActionTypes.SHOP_GUIDE_ADD,
   ActionTypes.SHOP_GUIDE_DELETE,
   ActionTypes.SHOP_GUIDE_UPDATE,
+  ActionTypes.SHOP_GUIDE_PROFILE,
   ActionTypes.SHOP_GUIDE_LIST_GET,
 ];
 
@@ -28,6 +29,7 @@ const initialState = {
   shopGuideList: [],
   shopGuideListPage: {page:0,pageSize:constants.DEFAULT_PAGE_SIZE,total:0},
   shopGuideDeleteIDS: [],
+  shopGuideProfile: null
 };
 
 function createState(state, resState, values) {
@@ -70,11 +72,16 @@ function doActions(state, action) {
         return createState(state, resState, {shopGuideList:data.shopGuideList.list, shopGuideListPage:data.shopGuideList.page});
       }
       break;
-    case ActionTypes.SHOP_GUIDE_DELETE:
-      if (action.state === States.Fulfilled && result.code === 0) {
-        return createState(state, resState, {shopGuideDeleteIDS:data.deleteShopGuide});
-      }
+      case ActionTypes.SHOP_GUIDE_DELETE:
+        if (action.state === States.Fulfilled && result.code === 0) {
+          return createState(state, resState, {shopGuideDeleteIDS:data.deleteShopGuide});
+        }
         break;
+      case ActionTypes.SHOP_GUIDE_PROFILE:
+        if (action.state === States.Fulfilled && result.code === 0) {
+          return createState(state, resState, {shopGuideProfile:data.userProfile});
+        }
+          break;
     default:
       break;
   }

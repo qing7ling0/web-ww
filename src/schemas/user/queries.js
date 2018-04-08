@@ -47,6 +47,21 @@ export const userList = {
 	}
 }
 
+
+export const userProfile = {
+	type: types.userType,
+  args: {
+    conditions: {type:GraphQLString},
+    user_type: {type: GraphQLInt},
+  },
+	async resolve (root, params, options) {
+    params.conditions = commonUtils.urlString2Conditions(params.conditions);
+    var ret = await userData.getUserByConditions(params.user_type, params.conditions);
+    console.log("userProfile" + JSON.stringify(ret));
+		return ret;
+	}
+}
+
 export const shopGuideList = {
 	type: new GraphQLObjectType({
     name: 'shopGuideList',

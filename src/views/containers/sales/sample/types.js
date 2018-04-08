@@ -9,6 +9,8 @@ import * as optionsType from '../types'
 import * as graphqlTypes from '../../../modules/graphqlTypes'
 import * as orderTypes from '../../../modules/orderTypes'
 
+import * as goodsTypes from '../goods/types'
+
 const {BASE_CONSTANTS} = constants;
 
 const OpeateBtn = styled(Button)`
@@ -106,28 +108,72 @@ const getSampleGoodsShoesListOptions = function(target) {
 const getSampleGoodsShoesAddOptions = function(target) {
   return [
     {
-      type:'select', name:'NID', label:'货号', 
-      itemOptions:{labelLeft:true}, 
-      selectItems:listToSelectOptions(target.props.sales.maintainList, (item)=>item.NID, (item)=>item.NID+'-'+item.name), 
-      decoratorOptions:{initialValue:target.state.NID},
-      options:{
-        defaultActiveFirstOption:true,
-        showSearch:true,
-        optionFilterProp:"children",
-        filterOption:(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0,
-        onChange:target.onNIDChange, 
-        onFocus:target.onNIDFocus,
-        onSelect:target.onNIDSelect,
-      }, 
-      rule:{required:true}
+      name:'基础数据',
+      options: [
+        {type:'select', name:'shop', label:'门店', itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(target.props.shopList), options:{defaultActiveFirstOption:true, showSearch:true, optionFilterProp:'children'}, rule:{required:true}},    
+        {type:'number', name:'s_left', label:'左脚', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+        {type:'number', name:'s_right', label:'右脚', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}}
+      ]
     },
-    {type:'select', name:'shop', label:'门店', itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(target.props.shopList), options:{defaultActiveFirstOption:true, showSearch:true, optionFilterProp:'children'}, rule:{required:true}},    
-    {type:'number', name:'count', label:'数量', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-    {type:'select', name:'s_right', label:'左右脚', itemOptions:{labelLeft:true}, selectItems:[{value:0, label:'左脚'},{value:1, label:'右脚'}], options:{defaultActiveFirstOption:true}, rule:{required:true}},    
-    {type:'number', name:'s_foot_size', label:'尺码', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-    {type:'number', name:'s_length', label:'长度', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-    {type:'number', name:'s_zhiWei', label:'趾围', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},    
-    {type:'number', name:'s_fuWei', label:'附维', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}}, 
+    {
+      name:'商品数据',
+      options: [
+        {
+          type:'select', name:'NID', label:'货号', 
+          itemOptions:{labelLeft:true}, 
+          selectItems:listToSelectOptions(target.props.sales.goodsShoesList, (item)=>item.NID, (item)=>item.NID+'-'+item.name), 
+          decoratorOptions:{initialValue:target.state.NID},
+          options:{
+            defaultActiveFirstOption:true,
+            showSearch:true,
+            optionFilterProp:"children",
+            filterOption:(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0,
+            onChange:target.onNIDChange, 
+            onFocus:target.onNIDFocus,
+            onSelect:target.onNIDSelect,
+          }, 
+          rule:{required:true}
+        },    
+        { type:'text', name:'s_xuan_hao', label:'楦型', itemOptions:{labelLeft:true}, rule:{required:true} },
+        { type:'text', name:'s_material', label:'材料', itemOptions:{labelLeft:true}, rule:{required:true} },   
+        { type:'text', name:'sex', label:'性别', itemOptions:{labelLeft:true}, rule:{required:true} },
+        { type:'input', name:'s_gui_ge', label:'规格', itemOptions:{labelLeft:true}, options:{onChange:(value)=>target.onNIDPropertyChange('s_gui_ge', value)}, rule:{required:false}},   
+        {
+          type:'select', name:'s_color_palette', label:'颜色', itemOptions:{labelLeft:true}, 
+          selectItems:[{label:'自定义', value:''}].concat(listToSelectOptions(target.props.sales.colorPaletteList)), 
+          options:{
+            defaultActiveFirstOption:true,
+            onChange:(value)=>target.onNIDPropertyChange('s_color_palette', value)
+          }, 
+          rule:{required:false}
+        },
+        {type:'text', name:'s_out_color', label:'皮胚色', itemOptions:{labelLeft:true}, rule:{required:true}},    
+        {type:'text', name:'s_in_color', label:'内里色', itemOptions:{labelLeft:true}, rule:{required:true}},  
+        {type:'text', name:'s_bottom_side_color', label:'底侧色', itemOptions:{labelLeft:true}, rule:{required:true}},   
+        {
+          type:'select', name:'s_bottom_color', label:'底板色', itemOptions:{labelLeft:true}, 
+          selectItems:listToSelectOptions(target.props.sales.bottomColorList, (item)=>item.name), 
+          options:{
+            defaultActiveFirstOption:true, 
+            mode:"combobox", 
+            filterOption:false, 
+            onChange:(value)=>target.onColorChange('s_bottom_color', value)
+          }, 
+          rule:{required:true}
+        },
+        {
+          type:'select', name:'s_tie_di', label:'贴底', itemOptions:{labelLeft:true}, 
+          selectItems:listToSelectOptions(target.props.sales.shoesTieBianList, (item)=>item.name), 
+          options:{
+            defaultActiveFirstOption:true,
+            mode:"combobox", 
+            filterOption:false, 
+            onChange:(value)=>target.onNIDPropertyChange('s_tie_di', value)
+          }, 
+          rule:{required:false}
+        }
+      ]
+    },
   ]
 } 
 const getSampleGoodsShoesEditOptions = function(target) {
@@ -177,26 +223,12 @@ const getSampleGoodsBeltListOptions = function(target) {
 }
 const getSampleGoodsBeltAddOptions = function(target) {
   return [
-    {
-      type:'select', name:'NID', label:'货号', 
-      itemOptions:{labelLeft:true}, 
-      selectItems:listToSelectOptions(target.props.sales.maintainList, (item)=>item.NID, (item)=>item.NID+'-'+item.name), 
-      decoratorOptions:{initialValue:target.state.NID},
-      options:{
-        defaultActiveFirstOption:true,
-        showSearch:true,
-        optionFilterProp:"children",
-        filterOption:(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0,
-        onChange:target.onNIDChange, 
-        onFocus:target.onNIDFocus,
-        onSelect:target.onNIDSelect,
-      }, 
-      rule:{required:true}
-    },
     {type:'select', name:'shop', label:'门店', itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(target.props.shopList), options:{defaultActiveFirstOption:true, showSearch:true, optionFilterProp:'children'}, rule:{required:true}},    
+    {type:'number', name:'b_A', label:'A', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+    {type:'number', name:'b_B', label:'B', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+    {type:'number', name:'b_C', label:'C', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+    {type:'number', name:'b_D', label:'D', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
     {type:'number', name:'count', label:'数量', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-    {type:'select', name:'b_material', label:'材质', selectItems:listToSelectOptions(target.props.sales['materialList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    {type:'select', name:'b_color', label:'颜色', selectItems:listToSelectOptions(target.props.sales['materialColorList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
   ];
 } 
 const getSampleGoodsBeltEditOptions = function(target) {
@@ -264,27 +296,15 @@ const getSampleGoodsWatchStrapListOptions = function(target) {
 }
 const getSampleGoodsWatchStrapAddOptions = function(target) {
   return [
-    {
-      type:'select', name:'NID', label:'货号', 
-      itemOptions:{labelLeft:true}, 
-      selectItems:listToSelectOptions(target.props.sales.maintainList, (item)=>item.NID, (item)=>item.NID+'-'+item.name), 
-      decoratorOptions:{initialValue:target.state.NID},
-      options:{
-        defaultActiveFirstOption:true,
-        showSearch:true,
-        optionFilterProp:"children",
-        filterOption:(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0,
-        onChange:target.onNIDChange, 
-        onFocus:target.onNIDFocus,
-        onSelect:target.onNIDSelect,
-      }, 
-      rule:{required:true}
-    },
     {type:'select', name:'shop', label:'门店', itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(target.props.shopList), options:{defaultActiveFirstOption:true, showSearch:true, optionFilterProp:'children'}, rule:{required:true}},    
+    {type:'number', name:'ws_A', label:'A', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+    {type:'number', name:'ws_B', label:'B', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+    {type:'number', name:'ws_C', label:'C', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+    {type:'number', name:'ws_D', label:'D', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+    {type:'number', name:'ws_E', label:'E', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+    {type:'number', name:'ws_F', label:'F', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+    {type:'number', name:'ws_G', label:'G', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
     {type:'number', name:'count', label:'数量', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-    {type:'select', name:'ws_material', label:'材质', selectItems:listToSelectOptions(target.props.sales['materialList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    {type:'select', name:'ws_style', label:'类别', selectItems:listToSelectOptions(target.props.sales['watchStrapStyleList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    {type:'select', name:'ws_color', label:'颜色', selectItems:listToSelectOptions(target.props.sales['materialColorList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
   ];
 } 
 const getSampleGoodsWatchStrapEditOptions = function(target) {
@@ -320,22 +340,6 @@ const getSampleGoodsOrnamentListOptions = function(target) {
 }
 const getSampleGoodsOrnamentAddOptions = function(target) {
   return [
-    {
-      type:'select', name:'NID', label:'货号', 
-      itemOptions:{labelLeft:true}, 
-      selectItems:listToSelectOptions(target.props.sales.maintainList, (item)=>item.NID, (item)=>item.NID+'-'+item.name), 
-      decoratorOptions:{initialValue:target.state.NID},
-      options:{
-        defaultActiveFirstOption:true,
-        showSearch:true,
-        optionFilterProp:"children",
-        filterOption:(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0,
-        onChange:target.onNIDChange, 
-        onFocus:target.onNIDFocus,
-        onSelect:target.onNIDSelect,
-      }, 
-      rule:{required:true}
-    },
     {type:'select', name:'shop', label:'门店', itemOptions:{labelLeft:true}, selectItems:listToSelectOptions(target.props.shopList), options:{defaultActiveFirstOption:true, showSearch:true, optionFilterProp:'children'}, rule:{required:true}},    
     {type:'number', name:'count', label:'数量', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
   ];

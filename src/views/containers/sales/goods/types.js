@@ -67,14 +67,18 @@ const getGoodsShoesProfileOptions = function(target) {
 const getGoodsShoesListOptions = function(target) {
   let options = getGoodsShoesBaseColumns(target);
   if (target.canOperate()) {
-    options.push({ title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
+    options.push({ title: '操作', dataIndex: 'id', key: 'id', width:160, className:"table-column-center", render:(text, record, index)=>{
       return (
         <div>
-          <OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
+          <OpeateBtn type="primary" shape="circle" onClick={(e)=>{
+            e.stopPropagation();
+            target.onPut(record._id, !record.put)
+          }}>{record&&record.put?"下架":"上架"}</OpeateBtn>
+          <OpeateBtn type="primary" shape="circle" icon="delete" onClick={(e)=>{
             e.stopPropagation();
             target.onDelete([record._id])
           }} />
-          <OpeateBtn type="primary" shape="circle" icon="edit" size="large" onClick={(e)=>{
+          <OpeateBtn type="primary" shape="circle" icon="edit" onClick={(e)=>{
             e.stopPropagation();
             target.onEditClick(record);
           }} />

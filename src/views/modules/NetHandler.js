@@ -343,6 +343,28 @@ class NetHandler {
     return netUtils.graphqlJson(config.GetServerAddress() + '/api', query);
   }
   
+  static getDefaultProfileByCondition(tag, type, params) {
+    let paramsStr = '';
+    for(let key in params) {
+      if (params[key] !== null && params[key] !== undefined) {
+        paramsStr += (paramsStr?',':'');
+        paramsStr += key+":";
+        if (key === 'conditions') {
+          paramsStr += `"${encodeURIComponent(JSON.stringify(params[key]))}"`;
+        } else {
+          paramsStr += object2String(params[key]);
+        }
+      }
+    }
+    paramsStr = paramsStr ? `(${paramsStr})`:""
+    let query = `
+      query Query {
+        ${tag}${paramsStr}${type}
+      }
+    `;
+    return netUtils.graphqlJson(config.GetServerAddress() + '/api', query);
+  }
+  
   static getDefaultProfile(tag, type, id) {
     let query = `
       query Query {

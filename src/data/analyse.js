@@ -327,7 +327,7 @@ class AnalyseData {
       let ret = {
         NID:'',
         name:'',
-        count:0,
+        value:0,
         color:''
       }
       if (item.s_material) {
@@ -343,7 +343,7 @@ class AnalyseData {
         ret.name = item.ws_material.name;
         ret.color = item.ws_material.color_css;
       }
-      ret.count = item.count;
+      ret.value = item.count;
       total += item.count;
       if (ret.NID) return ret;
       return null;
@@ -365,7 +365,7 @@ class AnalyseData {
     let aggOptions = [
       { $match: {type:{$nin:notGoodsTypes}, create_time:{$gte:dateBegan, $lt:dateEnd}},  },
       { $group: {"_id": {"sex": "$sex"}, "count":{$sum:1}}},
-      { $project : {"sex": "$_id.sex", "count":"$count"}},
+      { $project : {"sex": "$_id.sex", "value":"$count"}},
     ];
     let orders = await subOrderModel.aggregate(aggOptions);
     console.log('getAnalyseGoodsSex orders=' + JSON.stringify(orders))
@@ -401,7 +401,7 @@ class AnalyseData {
       groupFileds[`price${i}`] = {$sum: `$price${i}`}
       ret[`price${i}`] = {
         price:prices[i],
-        count:0
+        value:0
       };
     }
     let aggOptions = [  
@@ -419,7 +419,7 @@ class AnalyseData {
     if (orders && orders.length > 0) {
       for(let key in ret) {
         if (orders[0][key]) {
-          ret[key].count = orders[0][key];
+          ret[key].value = orders[0][key];
         }
       }
     }

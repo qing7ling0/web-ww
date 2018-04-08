@@ -45,6 +45,7 @@ const goodsBaseFields = {
   style: {type: Schema.Types.ObjectId, ref:'common', decription:'系列'},
   season: {type: Schema.Types.ObjectId, ref:'common', decription:'季节'},
   put_date: {type:Date, decription:'上架时间'},
+  put: {type:Boolean, decription:'是否上架'},
   sex: {type:String, decription:'男女'},
   price: {type:Number, decription:'价格'},
   pics:[{type:String, decription:'男女'}],

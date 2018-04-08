@@ -19,6 +19,7 @@ export const SHOP_GUIDE_LIST_GET  = 'SHOP_GUIDE_LIST_GET';
 export const SHOP_GUIDE_ADD       = 'SHOP_GUIDE_ADD';
 export const SHOP_GUIDE_DELETE    = 'SHOP_GUIDE_DELETE';
 export const SHOP_GUIDE_UPDATE    = 'SHOP_GUIDE_UPDATE';
+export const SHOP_GUIDE_PROFILE   = 'SHOP_GUIDE_PROFILE';
 
 export const CUSTOMER_LIST_GET    = 'CUSTOMER_LIST_GET';
 export const CUSTOMER_ADD         = 'CUSTOMER_ADD';

@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import {bindActionCreators} from 'redux'
 import styled from 'styled-components'
-import { Table, Button, Input } from 'antd'
+import { Table, Button, Input, Icon } from 'antd'
 
 import * as constants from '../../constants/Constants'
+
+import SearchInput from './SearchInput'
 
 const Search = Input.Search;
 
@@ -16,7 +18,7 @@ const TableHeader = styled.div`
 const ButtonOp = styled(Button)`
   margin-right: 0.08rem;
 `
-const SearchOp = styled(Search)`
+const SearchOp = styled(SearchInput)`
   width: 2rem;
   margin
 `
@@ -63,7 +65,7 @@ class DataContentComponent extends Component {
               <ButtonOp type="primary" onClick={(e)=>this.onClick(e, 'delArray')}>批量删除</ButtonOp>
               : null
             }
-            {this.props.hasSearch ? <SearchOp placeholder={this.props.searchPlaceholder} onSearch={this.onSearch}/> : null}
+            {this.props.hasSearch ? <SearchOp placeholder={this.props.searchPlaceholder} onSearch={this.onSearch} enterButton/> : null}
           </TableHeader>
         );
       }

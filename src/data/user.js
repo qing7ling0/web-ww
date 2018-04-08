@@ -100,12 +100,15 @@ class UserData {
   }
 
   async getUserById(type, id) {
+    return await this.getUserByConditions({_id:id});
+  }
+  async getUserByConditions(type, conditions) {
     let user = null;
     let model = this.getUserModel(type);
     if (model) {
-      user = await this.populateUserModel(type, model.findOne({_id:id}));
+      user = await this.populateUserModel(type, model.findOne(conditions));
     } else {
-      throw new ApiError(ApiErrorNames.UPDATE_FAIL);
+      throw new ApiError(ApiErrorNames.GET_FAIL);
     }
     return user;
   }

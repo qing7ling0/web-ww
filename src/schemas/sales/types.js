@@ -122,6 +122,7 @@ const goodsBaseFields = {
   name: {type:GraphQLString, description:'名称'},
   goods: {type:GraphQLString, description:'商品（鞋皮带表带）'},
   put_date: {type:GraphQLString, decription:'上架时间'},
+  put: {type:GraphQLBoolean, decription:'是否上架'},
   sex: {type:GraphQLString, decription:'男女'},
   price: {type:GraphQLInt, decription:'价格'}
 };

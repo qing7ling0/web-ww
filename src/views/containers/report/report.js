@@ -198,7 +198,7 @@ export class Report {
     if (sumCols.length > 0) {
       totalList[statisticsCols[0]] = '总计:';
       totalList.key = ret.length;
-      ret.push(totalList);
+      // ret.push(totalList);
     }
     return ret;
   }

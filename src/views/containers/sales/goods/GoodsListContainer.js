@@ -86,7 +86,7 @@ class GoodsListContainer extends Component {
           this.onReqList(pageInfo);
         }}
         hasSearch={true}
-        searchPlaceholder={`请输入${this.goodsType.label}名称`}
+        searchPlaceholder={`请输入名称/货号`}
         onSearch={(value)=>{
           this.searchWord = value;
           this.onReqList(this.props.pageInfo);
@@ -141,8 +141,11 @@ class GoodsListContainer extends Component {
       goods:this.goodsType.key
     };
     if (this.searchWord) {
-      con = {};
-      con.name = {$regex:`/${this.searchWord}/i`}
+      con = {$or:[
+        {name: {$regex:`/${this.searchWord}/i`}},
+        {NID: {$regex:`/${this.searchWord}/i`}}
+      ]};
+      // con.name = {$regex:`/${this.searchWord}/i`}
     }
     this.props.reqGetGoodsList(this.goodsType.listTag, this.goodsType.graphqlType, con, pageInfo);
   }
@@ -187,6 +190,14 @@ class GoodsListContainer extends Component {
   }
   onDelete = (ids) => {
     this.onReqRemove(ids);
+  }
+
+  onPut = (id, put) => {
+    let data = {put};
+    if (put) {
+      data.put_date = moment("YYYY-MM-DD HH:mm:ss");
+    }
+    this.props.reqUpdateGoods(this.goodsType.tag, id, data);
   }
 
   onRowClick = (record, index, event) => {

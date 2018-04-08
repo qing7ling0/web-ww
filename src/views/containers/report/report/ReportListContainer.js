@@ -30,6 +30,7 @@ const Search = Input.Search;
 import Actions from '../../../actions'
 import BaseListComponent from '../../common/BaseListComponent'
 import DataContentComponent from '../../common/DataContentComponent'
+import SearchInputComponent from '../../common/SearchInput'
 import * as common from '../../../modules/common'
 import * as constants from '../../../constants/Constants'
 import { commonUtils } from '../../../modules/common';
@@ -42,8 +43,8 @@ const dateFormat = 'YYYY-MM-DD';
 const SearchContainer = styled.div`
   margin: 0.2rem 0 0 0;
 `
-const SearchInput = styled(Search)`
-  width: 1.6rem;
+const SearchInput = styled(SearchInputComponent)`
+  width: 2rem;
   margin-right: 0.15rem;
 `
 const SelectInput = styled(Select)`
@@ -87,6 +88,11 @@ class ReportListContainer extends Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if(prevProps.searchGuide !== this.props.searchGuide) {
+      this.onReqList();
+    }
+  }
   componentDidMount(){
     for(let value of TYPES) {
       if (value.key === this.props.match.params.type) {
@@ -94,6 +100,7 @@ class ReportListContainer extends Component {
       }
     }
     this.props.reqShopList(0, 100);
+    this.onReqList();
   }
 
   renderHeader = () => {
@@ -105,7 +112,7 @@ class ReportListContainer extends Component {
 						onChange={this.onDateChange}
 						format={dateFormat}
 					/>
-          <span> </span>
+          <span></span>
           <SelectInput placeholder={'请选择店铺'} allowClear={true} onChange={this.onShopChange}>
             {
               this.props.shopList.map((item) => {
@@ -113,6 +120,8 @@ class ReportListContainer extends Component {
               })
             }
           </SelectInput>
+          <span></span>
+          <SearchInput placeholder={'请输入手机号'} onSearch={this.onPhoneSearch} enterButton />
         </SearchContainer>
       </div>
     );
@@ -161,6 +170,10 @@ class ReportListContainer extends Component {
     this.onReqList();
   }
 
+  onPhoneSearch = (value) => {
+    this.props.reqShopGuideProfile({phone:value});
+  }
+
   currentList = () => {
 		let listKey = this.itemType.listKey;
 		let list = this.props.sales[listKey] || [];
@@ -174,6 +187,9 @@ class ReportListContainer extends Component {
     let con = {};
     if (this.shop) {
       con.shop = this.shop;
+    }
+    if (this.props.searchGuide) {
+      con.guide = this.props.searchGuide._id;
     }
     con.create_time = {$gt:this.beganDate, $lt:this.endDate};
 
@@ -191,12 +207,14 @@ export default connect(
     orderList:state.sales.orderList,
     subOrderList:state.sales.subOrderList,
     shoesOrderList:state.sales.shoesOrderList,
+    searchGuide: state.shop.shopGuideProfile
   }),
   (dispatch) => {
     return bindActionCreators({
       reqGetOrderList: Actions.getOrderList,
       reqGetSubOrderList: Actions.getSubOrderList,
       reqShopList:Actions.getShopList,
+      reqShopGuideProfile: Actions.shopGuideProfile
     }, dispatch);
   }
 )(ReportListContainer);
