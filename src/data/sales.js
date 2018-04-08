@@ -111,6 +111,9 @@ class SalesData {
       if (doc.s_color_palette === "") {
         doc.s_color_palette = null;
       }
+      if (doc.s_tie_di === "") {
+        doc.s_tie_di = null;
+      }
       let newGoods = await goodsModel.create(doc);
       if (newGoods) {
         if (doc.pics && doc.pics.length > 0 && doc.pics[0]) {
@@ -214,6 +217,9 @@ class SalesData {
       // }
       if (doc.s_color_palette === "") {
         doc.s_color_palette = null;
+      }
+      if (doc.s_tie_di === "") {
+        doc.s_tie_di = null;
       }
       if (doc.NID !== null && doc.NID !== undefined && doc.NID !== '') {
         // console.log("111=" + JSON.stringify(doc));
