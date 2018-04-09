@@ -948,8 +948,10 @@ class SalesData {
     let ret = await sampleGoodsModel.findOne(keyValues);
 
     if (ret) {
-      // console.log("addOrUpdateSample 1111-1111")
-      if (id && ret._id !== id) {
+      console.log("addOrUpdateSample 1111-1111")
+      let _id = ret._id.toString();
+      if (id && _id !== id) {
+        console.log("addOrUpdateSample 2222-2222 id=" + id+ "; _id=" + ret._id)
         throw new ApiError(ApiErrorNames.UPDATE_FAIL, '修改失败，当前商品样品已有库存！');
       }
       if (!id) { // 添加样品的时候，如果已经存在当前的样品，则直接把数量增加上去
