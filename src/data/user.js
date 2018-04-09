@@ -100,7 +100,7 @@ class UserData {
   }
 
   async getUserById(type, id) {
-    return await this.getUserByConditions({_id:id});
+    return await this.getUserByConditions(type, {_id:id});
   }
   async getUserByConditions(type, conditions) {
     let user = null;
@@ -376,7 +376,7 @@ class UserData {
     }
 
     if (ctx.session.user){
-      logUtil.debug('login user session====' + JSON.stringify(ctx.session.user))
+      // logUtil.debug('login user session====' + JSON.stringify(ctx.session.user))
       return this.loginSuccess(ctx, ctx.session.user, false);
     }
 
