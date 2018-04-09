@@ -72,7 +72,10 @@ class GoodsListContainer extends Component {
     }
     
     if ((nextProps.result.type === ActionTypes.GOODS_UPDATE) && nextProps.loading !== this.props.loading && !nextProps.loading) {
-      this.onReqList();
+      if (nextProps.result.code === 0) {
+        this.setState({editVisible:false, addVisible:false})
+        this.onReqList();
+      }
     }
   }
 

@@ -25,7 +25,7 @@ export const getMaterialListOptions = function(target) {
   options.push({ title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
     return (
       <div>
-        <OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
+        <OpeateBtn type="primary" shape="circle" icon="delete" onClick={(e)=>{
           e.stopPropagation();
           target.onDelete([record._id])
         }} />

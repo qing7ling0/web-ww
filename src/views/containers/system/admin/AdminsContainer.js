@@ -113,7 +113,7 @@ class AdminsContainer extends Component {
       { title: '姓名', dataIndex: 'name', key: 'name'},
       { title: '账号', dataIndex: 'account', key: 'account'},
       { title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
-        return (<Button type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
+        return (<Button type="primary" shape="circle" icon="delete" onClick={(e)=>{
           e.stopPropagation();
           this.onDelete([record._id])}
         } />);

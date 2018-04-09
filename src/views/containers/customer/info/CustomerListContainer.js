@@ -83,7 +83,7 @@ class CustomerListContainer extends Component {
         return list.join(',');
       })},
       { title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
-        return (<Button type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
+        return (<Button type="primary" shape="circle" icon="delete" onClick={(e)=>{
           e.stopPropagation();
           this.onDelete([record._id])}
         } />);

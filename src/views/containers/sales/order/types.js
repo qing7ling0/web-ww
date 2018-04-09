@@ -757,11 +757,11 @@ const getOrderAddStepGoodsListColumns = function(target) {
     { title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
       return (
         <div>
-          <OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
+          <OpeateBtn type="primary" shape="circle" icon="delete" onClick={(e)=>{
             e.stopPropagation();
             target.onGoodsDelete(record)
           }} />
-          <OpeateBtn type="primary" shape="circle" icon="edit" size="large" onClick={(e)=>{
+          <OpeateBtn type="primary" shape="circle" icon="edit" onClick={(e)=>{
             e.stopPropagation();
             target.onGoodsEdit(record);
           }} />

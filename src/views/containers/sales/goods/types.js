@@ -101,7 +101,16 @@ const getGoodsShoesAddOptions = function(target) {
   let genGao = [
   ];
   if (target.isFemale()) {
-    genGao.push({type:'select', name:'s_gen_gao', label:'跟高', selectItems:listToSelectOptions(target.props.sales['genGaoList']), options:{defaultActiveFirstOption:true}, rule:{required:true}});
+    genGao.push(
+      {
+        type:'select', name:'s_gen_gao', label:'跟高', selectItems:listToSelectOptions(target.props.sales['genGaoList']), 
+        options:{
+          showSearch:true,
+          optionFilterProp:"children",
+          filterOption:(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0,
+          defaultActiveFirstOption:true
+        }, rule:{required:true}
+      });
   }
   let colorPaletteList = [{label:'自定义', value:''}].concat(listToSelectOptions(target.props.sales.colorPaletteList));
   return [
@@ -114,9 +123,33 @@ const getGoodsShoesAddOptions = function(target) {
     {type:'select', name:'season', label:'季节', selectItems:listToSelectOptions(target.props.sales['goodsSeasonList']), options:{defaultActiveFirstOption:true}, rule:{}},
     {type:'select', name:'sex', label:'性别', selectItems:constants.BASE_CONSTANTS.SEX_DATA, options:{defaultActiveFirstOption:true, onChange:target.onSexChange}, rule:{required:true}},
     
-    {type:'select', name:'s_xuan_hao', label:'楦号', selectItems:listToSelectOptions(target.props.sales['xuanHaoList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    {type:'select', name:'s_tie_di', label:'贴底', selectItems:listToSelectOptions(target.props.sales['shoesTieBianList']), options:{defaultActiveFirstOption:true}, rule:{required:false}},
-    {type:'select', name:'s_material', label:'材质', selectItems:listToSelectOptions(target.props.sales['materialList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
+    {
+      type:'select', name:'s_xuan_hao', label:'楦号', selectItems:listToSelectOptions(target.props.sales['xuanHaoList']), 
+      options:{
+        showSearch:true,
+        optionFilterProp:"children",
+        filterOption:(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0,
+        defaultActiveFirstOption:true
+      }, rule:{required:true}
+    },
+    {
+      type:'select', name:'s_tie_di', label:'贴底', selectItems:listToSelectOptions(target.props.sales['shoesTieBianList']), 
+      options:{
+        showSearch:true,
+        optionFilterProp:"children",
+        filterOption:(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0,
+        defaultActiveFirstOption:true
+      }, rule:{required:false}
+    },
+    {
+      type:'select', name:'s_material', label:'材质', selectItems:listToSelectOptions(target.props.sales['materialList']), 
+      options:{
+        showSearch:true,
+        optionFilterProp:"children",
+        filterOption:(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0,
+        defaultActiveFirstOption:true
+      }, rule:{required:true}
+    },
     {type:'input', name:'s_gui_ge', label:'规格', itemOptions:{hasFeedback:true}, rule:{required:false}},
     // {type:'select', name:'s_gui_ge', label:'规格', selectItems:listToSelectOptions(target.props.sales['guiGeList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
     ...genGao,
@@ -125,6 +158,9 @@ const getGoodsShoesAddOptions = function(target) {
       selectItems:colorPaletteList, 
       options:{
         defaultActiveFirstOption:true,
+        showSearch:true,
+        optionFilterProp:"children",
+        filterOption:(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0,
         onChange:(value)=>target.onColorPaletteChange('s_color_palette', value)
       }, 
       rule:{required:false}
@@ -138,6 +174,9 @@ const getGoodsShoesAddOptions = function(target) {
       selectItems:listToSelectOptions(target.props.sales['outColorList']), 
       options:{
         defaultActiveFirstOption:true,
+        showSearch:true,
+        optionFilterProp:"children",
+        filterOption:(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0,
         onChange:(value)=>target.onColorChange('s_out_color', value)
       }, 
       rule:{required:true}
@@ -147,6 +186,9 @@ const getGoodsShoesAddOptions = function(target) {
       selectItems:listToSelectOptions(target.props.sales['inColorList']), 
       options:{
         defaultActiveFirstOption:true,
+        showSearch:true,
+        optionFilterProp:"children",
+        filterOption:(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0,
         onChange:(value)=>target.onColorChange('s_in_color', value)
       }, 
       rule:{required:true}
@@ -156,6 +198,9 @@ const getGoodsShoesAddOptions = function(target) {
       selectItems:listToSelectOptions(target.props.sales['bottomColorList']), 
       options:{
         defaultActiveFirstOption:true,
+        showSearch:true,
+        optionFilterProp:"children",
+        filterOption:(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0,
         onChange:(value)=>target.onColorChange('s_bottom_color', value)
       }, 
       rule:{required:true}
@@ -165,6 +210,9 @@ const getGoodsShoesAddOptions = function(target) {
       selectItems:listToSelectOptions(target.props.sales['bottomSideColorList']), 
       options:{
         defaultActiveFirstOption:true,
+        showSearch:true,
+        optionFilterProp:"children",
+        filterOption:(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0,
         onChange:(value)=>target.onColorChange('s_bottom_side_color', value)
       }, 
       rule:{required:true}
@@ -214,11 +262,11 @@ const getGoodsBeltListOptions = function(target) {
   options.push({ title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
     return (
       <div>
-        <OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
+        <OpeateBtn type="primary" shape="circle" icon="delete" onClick={(e)=>{
           e.stopPropagation();
           target.onDelete([record._id])
         }} />
-        <OpeateBtn type="primary" shape="circle" icon="edit" size="large" onClick={(e)=>{
+        <OpeateBtn type="primary" shape="circle" icon="edit" onClick={(e)=>{
           e.stopPropagation();
           target.onEditClick(record);
         }} />
@@ -238,8 +286,24 @@ const getGoodsBeltAddOptions = function(target) {
     {type:'select', name:'season', label:'季节', selectItems:listToSelectOptions(target.props.sales['goodsSeasonList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
     {type:'select', name:'sex', label:'性别', selectItems:constants.BASE_CONSTANTS.SEX_DATA, options:{defaultActiveFirstOption:true}, rule:{required:true}},
     
-    {type:'select', name:'b_material', label:'材质', selectItems:listToSelectOptions(target.props.sales['materialList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    {type:'select', name:'b_color', label:'颜色', selectItems:listToSelectOptions(target.props.sales['materialColorList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
+    {
+      type:'select', name:'b_material', label:'材质', selectItems:listToSelectOptions(target.props.sales['materialList']), 
+      options:{
+        showSearch:true,
+        optionFilterProp:"children",
+        filterOption:(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0,
+        defaultActiveFirstOption:true
+      }, rule:{required:true}
+    },
+    {
+      type:'select', name:'b_color', label:'颜色', selectItems:listToSelectOptions(target.props.sales['materialColorList']), 
+      options:{
+        showSearch:true,
+        optionFilterProp:"children",
+        filterOption:(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0,
+        defaultActiveFirstOption:true
+      }, rule:{required:true}
+    },
     
     {type:'datePicker', name:'put_date', label:'上架时间', rule:{required:true}},
   ];
@@ -286,11 +350,11 @@ const getGoodsWatchStrapListOptions = function(target) {
   options.push({ title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
     return (
       <div>
-        <OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
+        <OpeateBtn type="primary" shape="circle" icon="delete" onClick={(e)=>{
           e.stopPropagation();
           target.onDelete([record._id])
         }} />
-        <OpeateBtn type="primary" shape="circle" icon="edit" size="large" onClick={(e)=>{
+        <OpeateBtn type="primary" shape="circle" icon="edit" onClick={(e)=>{
           e.stopPropagation();
           target.onEditClick(record);
         }} />
@@ -310,9 +374,33 @@ const getGoodsWatchStrapAddOptions = function(target) {
     {type:'select', name:'season', label:'季节', selectItems:listToSelectOptions(target.props.sales['goodsSeasonList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
     {type:'select', name:'sex', label:'性别', selectItems:constants.BASE_CONSTANTS.SEX_DATA, options:{defaultActiveFirstOption:true}, rule:{required:true}},
     
-    {type:'select', name:'ws_material', label:'材质', selectItems:listToSelectOptions(target.props.sales['materialList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    {type:'select', name:'ws_style', label:'类别', selectItems:listToSelectOptions(target.props.sales['watchStrapStyleList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    {type:'select', name:'ws_color', label:'颜色', selectItems:listToSelectOptions(target.props.sales['materialColorList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
+    {
+      type:'select', name:'ws_material', label:'材质', selectItems:listToSelectOptions(target.props.sales['materialList']), 
+      options:{
+        showSearch:true,
+        optionFilterProp:"children",
+        filterOption:(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0,
+        defaultActiveFirstOption:true
+      }, rule:{required:true}
+    },
+    {
+      type:'select', name:'ws_style', label:'类别', selectItems:listToSelectOptions(target.props.sales['watchStrapStyleList']), 
+      options:{
+        showSearch:true,
+        optionFilterProp:"children",
+        filterOption:(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0,
+        defaultActiveFirstOption:true
+      }, rule:{required:true}
+    },
+    {
+      type:'select', name:'ws_color', label:'颜色', selectItems:listToSelectOptions(target.props.sales['materialColorList']), 
+      options:{
+        showSearch:true,
+        optionFilterProp:"children",
+        filterOption:(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0,
+        defaultActiveFirstOption:true
+      }, rule:{required:true}
+    },
     
     {type:'datePicker', name:'put_date', label:'上架时间', rule:{required:true}},
   ];
@@ -355,11 +443,11 @@ const getGoodsOrnamentListOptions = function(target) {
   options.push({ title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
     return (
       <div>
-        <OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
+        <OpeateBtn type="primary" shape="circle" icon="delete" onClick={(e)=>{
           e.stopPropagation();
           target.onDelete([record._id])
         }} />
-        <OpeateBtn type="primary" shape="circle" icon="edit" size="large" onClick={(e)=>{
+        <OpeateBtn type="primary" shape="circle" icon="edit" onClick={(e)=>{
           e.stopPropagation();
           target.onEditClick(record);
         }} />

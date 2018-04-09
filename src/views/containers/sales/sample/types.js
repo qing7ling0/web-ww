@@ -429,7 +429,7 @@ const getSampleGoodsOrnamentListOptions = function(target) {
   options.push({ title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
     return (
       <div>
-        <OpeateBtn type="primary" shape="circle" icon="edit" size="large" onClick={(e)=>{
+        <OpeateBtn type="primary" shape="circle" icon="edit" onClick={(e)=>{
           e.stopPropagation();
           target.onEditClick(record);
         }} />

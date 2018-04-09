@@ -51,7 +51,7 @@ const getSalesBaseListOptions = function(target) {
   if (target.canOperate()) {
     options.push({
       title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
-        return (<OpeateBtn type="primary" shape="circle" icon="delete" size="large" onClick={(e)=>{
+        return (<OpeateBtn type="primary" shape="circle" icon="delete" onClick={(e)=>{
           e.stopPropagation();
           target.onDelete([record._id])}
         } />);
