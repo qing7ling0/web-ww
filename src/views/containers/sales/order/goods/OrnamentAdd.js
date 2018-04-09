@@ -284,7 +284,7 @@ class OrnamentAdd extends Component {
   }
 
   onReqOrderGoodsList = (type) => {
-    this.props.reqGetGoodsList('goodsOrnamentList:goodsList', graphqlTypes.goodsType, {goods:type}, {page:-1, pageSize:0});
+    this.props.reqGetGoodsList('goodsOrnamentList:goodsList', graphqlTypes.goodsType, {goods:type, put:true}, {page:-1, pageSize:0});
   }
 
   onAdd = () => {

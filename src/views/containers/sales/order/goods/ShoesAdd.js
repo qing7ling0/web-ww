@@ -432,7 +432,7 @@ class ShoesAdd extends Component {
   }
 
   onReqOrderGoodsList = (type) => {
-    this.props.reqGetGoodsList('goodsShoesList:goodsList', graphqlTypes.goodsType, {goods:constants.BASE_CONSTANTS.E_ORDER_TYPE.SHOES}, {page:-1, pageSize:0});
+    this.props.reqGetGoodsList('goodsShoesList:goodsList', graphqlTypes.goodsType, {goods:constants.BASE_CONSTANTS.E_ORDER_TYPE.SHOES, put:true}, {page:-1, pageSize:0});
   }
 
   onAdd = () => {

@@ -306,31 +306,31 @@ class OrderGoodsReviewModal extends Component {
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.SHOES:
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.DESIGN:
         con = {
-          goods:type
+          goods:type, put:true
         };
         this.props.reqGetGoodsList('goodsShoesList:goodsList', graphqlTypes.goodsType, con, {page:-1, pageSize:0});
       break;
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.BELT:
         con = {
-          goods:type
+          goods:type, put:true
         };
         this.props.reqGetGoodsList('goodsBeltList:goodsList', graphqlTypes.goodsType, con, {page:-1, pageSize:0});
       break;
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.ORNAMENT:
         con = {
-          goods:type
+          goods:type, put:true
         };
         this.props.reqGetGoodsList('goodsOrnamentList:goodsList', graphqlTypes.goodsType, con, {page:-1, pageSize:0});
       break;
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.WATCH_STRAP:
         con = {
-          goods:type
+          goods:type, put:true
         };
         this.props.reqGetGoodsList('goodsWatchStrapList:goodsList', graphqlTypes.goodsType, con, {page:-1, pageSize:0});
       break;
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.MAINTAIN:
         con = {
-          type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.MAINTAIN
+          type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.MAINTAIN, put:true
         };
         this.props.reqGetGoodsList('maintainList:commonList', graphqlTypes.maintainType, con, {page:-1, pageSize:0});
       break;

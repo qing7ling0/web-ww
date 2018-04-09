@@ -284,7 +284,7 @@ class MaintainAdd extends Component {
   }
 
   onReqOrderGoodsList = (type) => {
-    this.props.reqGetGoodsList('maintainList:goodsList', graphqlTypes.goodsType, {goods:type}, {page:-1, pageSize:0});
+    this.props.reqGetGoodsList('maintainList:goodsList', graphqlTypes.goodsType, {goods:type, put:true}, {page:-1, pageSize:0});
   }
 
   onAdd = () => {

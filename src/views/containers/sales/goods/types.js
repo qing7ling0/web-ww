@@ -200,6 +200,17 @@ const getGoodsBeltProfileOptions = function(target) {
 }
 const getGoodsBeltListOptions = function(target) {
   let options = getGoodsBeltBaseColumns(target);
+  options.push(
+    { title: '上下架', dataIndex: 'id', key: 'id2', width:80, className:"table-column-center", render:(text, record, index)=>{
+    return (
+      <div>
+        <OpeateBtn type={record&&record.put?"danger":"primary"} onClick={(e)=>{
+          e.stopPropagation();
+          target.onPut(record._id, !record.put)
+        }}>{record&&record.put?"下架":"上架"}</OpeateBtn>
+      </div>
+    );
+  }})
   options.push({ title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
     return (
       <div>
@@ -261,6 +272,17 @@ const getGoodsWatchStrapProfileOptions = function(target) {
 }
 const getGoodsWatchStrapListOptions = function(target) {
   let options = getGoodsWatchStrapBaseColumns(target);
+  options.push(
+    { title: '上下架', dataIndex: 'id', key: 'id2', width:80, className:"table-column-center", render:(text, record, index)=>{
+    return (
+      <div>
+        <OpeateBtn type={record&&record.put?"danger":"primary"} onClick={(e)=>{
+          e.stopPropagation();
+          target.onPut(record._id, !record.put)
+        }}>{record&&record.put?"下架":"上架"}</OpeateBtn>
+      </div>
+    );
+  }})
   options.push({ title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
     return (
       <div>
@@ -319,6 +341,17 @@ const getGoodsOrnamentProfileOptions = function(target) {
 }
 const getGoodsOrnamentListOptions = function(target) {
   let options = getGoodsOrnamentBaseColumns(target);
+  options.push(
+    { title: '上下架', dataIndex: 'id', key: 'id2', width:80, className:"table-column-center", render:(text, record, index)=>{
+    return (
+      <div>
+        <OpeateBtn type={record&&record.put?"danger":"primary"} onClick={(e)=>{
+          e.stopPropagation();
+          target.onPut(record._id, !record.put)
+        }}>{record&&record.put?"下架":"上架"}</OpeateBtn>
+      </div>
+    );
+  }})
   options.push({ title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
     return (
       <div>
