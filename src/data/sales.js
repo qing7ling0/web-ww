@@ -899,8 +899,7 @@ class SalesData {
           let list = this.createSample(suborder);
           for(let item of list) {
             item.pics = pics;
-            let sample = new sampleGoodsModel(item);
-            let newSample = await sample.save();
+            let sample = await this.addOrUpdateSample(null, item);
             // TODO 这里出错需要还原
           }
         }
@@ -909,6 +908,73 @@ class SalesData {
     let ret = await subOrderModel.update({_id:id}, {state:constants.E_ORDER_STATUS.CANCEL});
 
     return ret;
+  }
+
+  async addOrUpdateSample(id, sample) {
+    let keyValues = {
+      type: sample.type,
+      shop: sample.shop,
+      NID: sample.NID,
+      sex: sample.sex,
+    };
+    switch(sample.type) {
+      case constants.E_ORDER_TYPE.SHOES:
+      keyValues.s_material = sample.s_material;
+      keyValues.s_xuan_hao = sample.s_xuan_hao;
+      keyValues.s_gui_ge = sample.s_gui_ge;
+      keyValues.s_color_palette = sample.s_color_palette;
+      keyValues.s_out_color = sample.s_out_color;
+      keyValues.s_in_color = sample.s_in_color;
+      keyValues.s_bottom_color = sample.s_bottom_color;
+      keyValues.s_bottom_side_color = sample.s_bottom_side_color;
+      keyValues.s_gen_gao = sample.s_gen_gao;
+      keyValues.s_tie_di = sample.s_tie_di;
+      break;
+      case constants.E_ORDER_TYPE.BELT:
+      keyValues.b_material = sample.b_material;
+      keyValues.b_color = sample.b_color;
+      break;
+      case constants.E_ORDER_TYPE.WATCH_STRAP:
+      keyValues.ws_material = sample.ws_material;
+      keyValues.ws_style = sample.ws_style;
+      keyValues.ws_color = sample.ws_color;
+      break;
+      case constants.E_ORDER_TYPE.ORNAMENT:
+      keyValues.o_name = sample.o_name;
+      break;
+    };
+
+    console.log("addOrUpdateSample 1111")
+    let ret = await sampleGoodsModel.findOne(keyValues);
+
+    if (ret) {
+      console.log("addOrUpdateSample 1111-1111")
+      if (id && ret._id !== id) {
+        throw new ApiError(ApiErrorNames.UPDATE_FAIL, '修改失败，当前商品样品已有库存！');
+      }
+      if (!id) { // 添加样品的时候，如果已经存在当前的样品，则直接把数量增加上去
+        if (sample.count && ret.count) {
+          ret.count += sample.count;
+        }
+        if (sample.left_count && ret.left_count) {
+          ret.left_count += sample.left_count;
+        }
+        if (sample.right_count && ret.right_count) {
+          ret.right_count += sample.right_count;
+        }
+        console.log("addOrUpdateSample 1111-3333")
+        return await sampleGoodsModel.findByIdAndUpdate({_id:ret.id}, ret);
+      }
+    }
+
+    console.log("addOrUpdateSample 2222")
+    if (id) {
+      console.log("addOrUpdateSample 3333")
+      return await sampleGoodsModel.updateOne({_id:id}, sample);
+    } else {
+      console.log("addOrUpdateSample 4444")
+      return await sampleGoodsModel.create(sample);
+    }
   }
 
   /**
@@ -931,10 +997,10 @@ class SalesData {
 
     if (suborder.type === constants.E_ORDER_TYPE.SHOES) {
       let shoes = createBase(suborder);
-      shoes.s_foot_size = suborder.s_foot_size;
-      shoes.s_length = suborder.s_right_length;
-      shoes.s_zhiWei = suborder.s_right_zhiWei;
-      shoes.s_fuWei = suborder.s_right_fuWei;
+      // shoes.s_foot_size = suborder.s_foot_size;
+      // shoes.s_length = suborder.s_right_length;
+      // shoes.s_zhiWei = suborder.s_right_zhiWei;
+      // shoes.s_fuWei = suborder.s_right_fuWei;
       shoes.left_count = 1;
       shoes.right_count = 1;
       list.push(shoes);

@@ -204,7 +204,9 @@ class OrderGoodsAddModal extends Component {
   }
 
   onReqOrderGoodsList = (type) => {
-    let con ={};
+    let con = {
+      put:true
+    };
     switch(type) {
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.SHOES:
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.DESIGN:

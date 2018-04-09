@@ -35,7 +35,17 @@ const material = schemasUtils.createDefaultMutaion('material', types.materialTyp
   remove:salesData.removeMaterialByIds.bind(salesData), 
 });
 const tryFeedback = schemasUtils.createDefaultMutaion('tryFeedback', types.tryFeedbackType, types.tryFeedbackInputType, tryFeedbackModel);
-const sampleGoods = schemasUtils.createDefaultMutaion('sampleGoods', types.sampleGoodsType, types.sampleGoodsInputType, sampleGoodsModel);
+const sampleGoods = schemasUtils.createDefaultMutaion('sampleGoods', types.sampleGoodsType, types.sampleGoodsInputType, sampleGoodsModel, {
+  add:async (doc)=>{
+    console.log("ddd")
+    return await salesData.addOrUpdateSample(null, doc);
+  }, 
+  update:async (conditions, doc)=>{
+    let id = conditions&&conditions._id || null;
+    if (!id) return null;
+    return await salesData.addOrUpdateSample(id, doc);
+  }
+});
 const goods = schemasUtils.createDefaultMutaion('goods', types.goodsType, types.goodsInputType, goodsModel, {
   add:salesData.addGoods.bind(salesData), 
   remove:salesData.removeGoodsByIds.bind(salesData), 

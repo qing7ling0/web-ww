@@ -66,6 +66,7 @@ export const checkPasswordInput = function(password) {
 }
 
 export const initFormDefaultValues = (options, values, getValue) => {
+  if (!values) return options;
   return options.map((item) => {
     let initValue = function(data) {
       let value = values[data.name] || '';

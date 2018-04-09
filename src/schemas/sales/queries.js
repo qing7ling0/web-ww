@@ -36,9 +36,17 @@ export const materialList = schemasUtils.createDefaultListQuery('materialList', 
 export const tryFeedbackList = schemasUtils.createDefaultListQuery('tryFeedbackList', types.tryFeedbackType, tryFeedbackModel);
 export const sampleGoodsList = schemasUtils.createDefaultListQuery('sampleGoodsList', types.sampleGoodsType, sampleGoodsModel, (query) =>{
   return query.populate('shop')
+  .populate('s_material').populate('s_out_color').populate('s_in_color').populate('s_color_palette')
+  .populate('s_bottom_color').populate('s_bottom_side_color').populate('s_xuan_hao').populate('s_gen_gao').populate('s_tie_di')
+  .populate('b_material').populate('b_color')
+  .populate('ws_material').populate('ws_style').populate('ws_color')
 });
 export const sampleGoodsProfile = schemasUtils.createDefaultProfileQuery(types.sampleGoodsType, sampleGoodsModel, (query) =>{
   return query.populate('shop')
+  .populate('s_material').populate('s_out_color').populate('s_in_color').populate('s_color_palette')
+  .populate('s_bottom_color').populate('s_bottom_side_color').populate('s_xuan_hao').populate('s_gen_gao').populate('s_tie_di')
+  .populate('b_material').populate('b_color')
+  .populate('ws_material').populate('ws_style').populate('ws_color')
 });
 
 export const goodsProfile = {

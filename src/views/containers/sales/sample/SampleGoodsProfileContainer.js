@@ -148,8 +148,8 @@ class SampleGoodsProfileContainer extends Component {
                 bordered={false} 
               >
                 <Row>
-                  {this.props.goodsProfile && this.options.goods.options.map((option, index) => {
-                    return this.renderCol(option, index, this.props.goodsProfile);
+                  {this.props.profile && this.options.goods.options.map((option, index) => {
+                    return this.renderCol(option, index, this.props.profile);
                   })}
                 </Row>
               </Card>

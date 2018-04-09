@@ -24,7 +24,13 @@ export const orderDetailType = `{
   _id, source, pay, pay_type, sub_orders${subOrderType}
 }`
 export const suborderTryFeedback = `{_id, message, suborder_id, transport_id, status, editor_name, editor_time, create_time}`
-export const sampleGoodsType=`{_id, type, NID, sex, pics shop{_id,name}, left_count, right_count, s_foot_size, s_length, s_fuWei, s_zhiWei, b_A, b_B, b_C, b_D, ws_A, ws_B, ws_C, ws_D, ws_E, ws_F, ws_G, o_name}`
+
+const sampleShoes = `s_gui_ge, s_xuan_hao{_id,NID,name}, s_gen_gao{_id,NID,name}, s_material{_id,NID,name}, s_color_palette{_id,name}, s_out_color{_id,NID,name},s_in_color{_id,NID,name},s_bottom_color{_id,NID,name},s_bottom_side_color{_id,NID,name}, s_tie_di{_id,NID,name}`
+const sampleBelt = `b_material{_id,NID,name,maintain_cycle}, b_color{_id,NID,name}`
+const sampleWatchStrap = `ws_material{_id,NID,name,maintain_cycle}, ws_style{_id,NID,name}, ws_color{_id,NID,name}`
+const sampleOrnament = 'o_name'
+
+export const sampleGoodsType=`{_id, type, NID, sex, pics shop{_id,name}, count, left_count, right_count, ${sampleShoes}, ${sampleBelt}, ${sampleWatchStrap}, ${sampleOrnament}, b_A, b_B, b_C, b_D, ws_A, ws_B, ws_C, ws_D, ws_E, ws_F, ws_G}`
 
 const sampleAllotBaseType = `{_id, name, phone}`
 export const sampleAllotType=`{

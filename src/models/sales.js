@@ -95,14 +95,11 @@ const sampleBaseFields = {
 }
 // 样品鞋数据
 const sampleShoesFields = {
-  s_right: {type:Boolean, decription:'右脚'},
-  s_foot_size: {type:Number, decription:'尺码'},
-  s_length: {type: Number, description:'长度'},
-  s_zhiWei: {type: Number, decription:'趾围'},
-  s_fuWei: {type: Number, decription:'附维'},
+  ...goodsShoesFields
 }
 // 样品皮带数据
 const sampleBeltFields = {
+  ...goodsBeltFields,
   b_A: {type: Number, decription:'皮带测量数据A'},
   b_B: {type: Number, decription:'皮带测量数据B'},
   b_C: {type: Number, decription:'皮带测量数据C'},
@@ -110,6 +107,7 @@ const sampleBeltFields = {
 }
 // 样品表带数据
 const sampleWatchStrapFields = {
+  ...goodsWatchStrapFields,
   ws_A: {type: Number, decription:'表带测量数据A'},
   ws_B: {type: Number, decription:'表带测量数据B'},
   ws_C: {type: Number, decription:'表带测量数据C'},

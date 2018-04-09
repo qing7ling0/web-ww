@@ -20,6 +20,7 @@ import {
   BtnLogin
 } from './styled'
 
+import * as ActionTypes from '../../../constants/ActionTypes'
 import Actions from '../../../actions'
 import BaseListComponent from '../../common/BaseListComponent'
 import * as common from '../../../modules/common'
@@ -67,6 +68,10 @@ class GoodsListContainer extends Component {
           this.goodsType = value;
         }
       }
+      this.onReqList();
+    }
+    
+    if ((nextProps.result.type === ActionTypes.GOODS_UPDATE) && nextProps.loading !== this.props.loading && !nextProps.loading) {
       this.onReqList();
     }
   }
@@ -195,7 +200,7 @@ class GoodsListContainer extends Component {
   onPut = (id, put) => {
     let data = {put};
     if (put) {
-      data.put_date = moment("YYYY-MM-DD HH:mm:ss");
+      data.put_date = moment().format("YYYY-MM-DD HH:mm:ss");
     }
     this.props.reqUpdateGoods(this.goodsType.tag, id, data);
   }
@@ -219,6 +224,7 @@ export default connect(
   state => ({
     sales:state.sales,
     loading:state.sales.loading,
+    result:state.sales.result,
     pageInfo:state.sales.goodsListPage,
     deleteIDS:state.sales.goodsDeleteIDS,
     user:state.app.loginInfo.user

@@ -276,8 +276,11 @@ export const sampleGoodsType = new GraphQLObjectType({
   fields: {
     _id: {type:GraphQLString},
     ...sampleGoodsInputFields,
-    ...sampleBeltFields,
+    ...goodsShoesFields,
     ...sampleShoesFields,
+    ...goodsBeltFields,
+    ...sampleBeltFields,
+    ...goodsWatchStrapFields,
     ...sampleWatchStrapFields,
     ...sampleOrnamentFields,
     shop: {type:shopTypes.shopType, ref:'shop', decription:'店铺'},
@@ -289,8 +292,11 @@ export const sampleGoodsInputType = new GraphQLInputObjectType({
   fields: {
     _id: {type:GraphQLString},
     ...sampleGoodsInputFields,
-    ...sampleBeltFields,
+    ...goodsShoesInputFields,
     ...sampleShoesFields,
+    ...goodsBeltInputFields,
+    ...sampleBeltFields,
+    ...goodsWatchStrapInputFields,
     ...sampleWatchStrapFields,
     ...sampleOrnamentFields,
     shop: {type:GraphQLString}

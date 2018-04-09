@@ -68,7 +68,8 @@ class SampleGoodsListContainer extends Component {
           this.sampleGoodsType = value;
         }
       }
-      this.onReqList();
+      this.onReqList();    
+      this.props.reqGetGoodsList(this.sampleGoodsType.goodsListTag, graphqlTypes.goodsType, {goods:this.sampleGoodsType.key}, {page:-1, pageSize:0});
     }
   }
 
@@ -110,7 +111,7 @@ class SampleGoodsListContainer extends Component {
             pageInfo={this.props.pageInfo} 
             visible={this.state.addVisible} 
             sampleGoodsType={this.sampleGoodsType} 
-            onAdd={this.onAdd}
+            onEdit={this.onAdd}
             onSubmitSuccess={this.onReqList}
             afterClose={()=>this.setState({addVisible:false})}/> 
         }
@@ -145,7 +146,7 @@ class SampleGoodsListContainer extends Component {
   onReqList = (pageInfo) => {
     let con = {
       type:this.sampleGoodsType.key,
-      $or:[{left_count:{$gt:0}}, {right_count:{$gt:0}}]
+      // $or:[{left_count:{$gt:0}}, {right_count:{$gt:0}}]
     };
     if (this.searchWord) {
       con = {};
@@ -174,23 +175,15 @@ class SampleGoodsListContainer extends Component {
 
   onAdd = (values) => {
     if (values) {
-      if (values.put_date) {
-        values.put_date = moment(values.put_date).format('YYYY-MM-DD');
-      }
-
-
+      values.type = this.sampleGoodsType.key;
       this.onReqAdd(values);
+      // this.onReqUpdate("", values);
     }
   }
   onEdit = (values) => {
-    values = utils.diffent(values, this.state.editData);
     if (values) {
-      if (values) {
-        if (values.put_date) {
-          values.put_date = moment(values.put_date).format('YYYY-MM-DD');
-        }
-        this.onReqUpdate(this.state.editData._id, values);
-      }
+      values.type = this.sampleGoodsType.key;
+      this.onReqUpdate(this.state.editData._id, values);
     }
   }
   onDelete = (ids) => {

@@ -90,7 +90,6 @@ export const getTransportCompany = function(id) {
 const conditionsRegexConver = function(object) {
   if (!object) return object;
 
-  console.log('urlString2Conditions ' + JSON.stringify(object));
   for(let key in object) {
     if (key === '$regex') {
       let v = object[key];
@@ -109,8 +108,6 @@ export const urlString2Conditions = function(value) {
   if (ret) {
     ret = conditionsRegexConver(ret);
   }
-  console.log('urlString2Conditions ' + JSON.stringify(ret));
-  
   return ret;
 }
 
