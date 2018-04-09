@@ -543,7 +543,7 @@ class ShoesAdd extends Component {
         forms.setFieldsValue({s_in_color:shoes.s_in_color.name});
         forms.setFieldsValue({s_bottom_color:shoes.s_bottom_color.name});
         forms.setFieldsValue({s_bottom_side_color:shoes.s_bottom_side_color.name});
-        forms.setFieldsValue({s_tie_di:shoes.s_tie_di.name});
+        forms.setFieldsValue({s_tie_di:shoes.s_tie_di && shoes.s_tie_di.name});
         forms.setFieldsValue({sex:shoes.sex});
         forms.setFieldsValue({s_gui_ge:shoes.s_gui_ge});
         if (!this.props.isReview) { // 审核过程不修改价格
