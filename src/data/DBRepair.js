@@ -16,14 +16,18 @@ import utils from '../utils/utils'
 import baseUtils from '../base/utils/utils'
 import constants from '../constants/constants'
 import { subOrderModel } from '../models/sales.js';
+import { goodsModel } from '../../lib/models/sales.js';
 // import 
 
 const logUtil = require('../utils/log-utils');
+
+let doSetGoodsPut = false;
 
 class DBRepair {
 
   async do() {
     // await this.subOrderSystemPriceCalc();
+    // await this.setGoodsPut();
   }
 
   /**
@@ -49,6 +53,15 @@ class DBRepair {
         await subOrderModel.updateOne({_id:sub._id}, {system_price});
       }
     }
+  }
+
+  /** 
+   * all goods put 
+  */
+  async setGoodsPut() {
+    if (doSetGoodsPut) return;
+    doSetGoodsPut = true;
+    await goodsModel.updateMany({}, {$set:{put:true}});
   }
 
 }

@@ -235,7 +235,7 @@ export const login = {
     // console.log(" time4444=" + (lastTime-time));
     // time=lastTime;
 
-    // await DBRepair.do();
+    await DBRepair.do();
     let user = await userData.login(ctx, params);
     if (user) {
       // await TEST(ctx);
