@@ -944,11 +944,11 @@ class SalesData {
       break;
     };
 
-    console.log("addOrUpdateSample 1111")
+    // console.log("addOrUpdateSample 1111")
     let ret = await sampleGoodsModel.findOne(keyValues);
 
     if (ret) {
-      console.log("addOrUpdateSample 1111-1111")
+      // console.log("addOrUpdateSample 1111-1111")
       if (id && ret._id !== id) {
         throw new ApiError(ApiErrorNames.UPDATE_FAIL, '修改失败，当前商品样品已有库存！');
       }
@@ -962,17 +962,17 @@ class SalesData {
         if (sample.right_count && ret.right_count) {
           ret.right_count += sample.right_count;
         }
-        console.log("addOrUpdateSample 1111-3333")
+        // console.log("addOrUpdateSample 1111-3333")
         return await sampleGoodsModel.findByIdAndUpdate({_id:ret.id}, ret);
       }
     }
 
-    console.log("addOrUpdateSample 2222")
+    // console.log("addOrUpdateSample 2222")
     if (id) {
-      console.log("addOrUpdateSample 3333")
+      // console.log("addOrUpdateSample 3333")
       return await sampleGoodsModel.updateOne({_id:id}, sample);
     } else {
-      console.log("addOrUpdateSample 4444")
+      // console.log("addOrUpdateSample 4444")
       return await sampleGoodsModel.create(sample);
     }
   }
