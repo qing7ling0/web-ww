@@ -232,13 +232,13 @@ class SalesData {
           }
         }
       }
-      if (!doc.type) {
+      if (doc.type === "") {
         doc.type = null;
       }
-      if (!doc.style) {
+      if (doc.style === "") {
         doc.style = null;
       }
-      if (!doc.season) {
+      if (doc.season === "") {
         doc.season = null;
       }
       if (doc.pics && doc.pics.length > 0 && doc.pics[0]) {

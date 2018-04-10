@@ -188,6 +188,9 @@ class SampleGoodsEditModal extends Component {
           if(!goodsInfo.s_gen_gao) {
             delete goodsInfo.s_gen_gao;
           }
+          if(!goodsInfo.s_tie_di) {
+            delete goodsInfo.s_tie_di;
+          }
           this.props.onEdit(goodsInfo);
           this.setState({confirmLoading:true});
         } else {
