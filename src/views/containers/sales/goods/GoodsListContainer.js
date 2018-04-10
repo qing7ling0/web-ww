@@ -202,9 +202,6 @@ class GoodsListContainer extends Component {
 
   onPut = (id, put) => {
     let data = {put};
-    if (put) {
-      data.put_date = moment().format("YYYY-MM-DD HH:mm:ss");
-    }
     this.props.reqUpdateGoods(this.goodsType.tag, id, data);
   }
 
