@@ -27,6 +27,7 @@ import {
 } from './styled'
 
 import Actions from '../../../actions'
+import * as ActionTypes from '../../../constants/ActionTypes'
 import * as config from '../../../constants/Config'
 import * as common from '../../../modules/common'
 import * as constants from '../../../constants/Constants'
@@ -107,6 +108,13 @@ class OrderListContainer extends Component {
       }
       this.onReqList();
     }
+
+    if ((nextProps.result.type === ActionTypes.ORDER_SUB_UPDATE) && nextProps.loading !== this.props.loading && !nextProps.loading) {
+      if (nextProps.result.code === 0) {
+        this.onReqList();
+      }
+    }
+
   }
 
   renderHeader = () => {
@@ -188,10 +196,11 @@ class OrderListContainer extends Component {
           headerRender={this.renderHeader}
           >
           <Table 
+            bordered={true}
             columns={this.columns} 
             dataSource={this.props.list} 
             loading={this.props.loading}
-            rowKey={(record)=>record._id}
+            rowKey={(record)=>record._id||record.key}
             onRow={(record, index) => ({
               onClick: ()=>this.onRowClick(record, index),
             })}
@@ -329,6 +338,7 @@ export default connect(
   state => ({
     sales:state.sales,
     loading:state.sales.loading,
+    result:state.sales.result,
     pageInfo:state.sales.subOrderListPage,
     list:state.sales.subOrderList,
     deleteIDS:state.sales.orderDeleteIDS,
@@ -346,6 +356,7 @@ export default connect(
       reqCancelSuborder: Actions.suborderCancel,
       reqAddOrder: Actions.addOrder,
       reqUpdateOrder: Actions.updateOrder,
+      reqUpdateSuborder: Actions.suborderUpdate,
       reqGetOrderProfile: Actions.getOrderProfile,
       reqShopList:Actions.getShopList,
       reqShopList:Actions.getShopList,

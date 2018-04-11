@@ -14,3 +14,13 @@ td.table-column-right {
 .ant-fullcalendar-fullscreen .ant-fullcalendar-content {
   height:80px;
 }
+
+.relative {
+  position: relative;
+}
+.absolute-center {
+  position: absolute;
+  left:50%;
+  right:50%;
+  transform: translate(-50%, -50%)
+}

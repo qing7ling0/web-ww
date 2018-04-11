@@ -300,7 +300,6 @@ class AnalyseData {
       allCount += order.count;
     }
 
-
     let ret = { top10Price, top10Count, allPrice, allCount };
     
     // console.log('getAnalyseGoodsSalesPer ret=' + JSON.stringify(ret))

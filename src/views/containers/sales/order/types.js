@@ -2,12 +2,17 @@ import React, { Component } from 'react';
 import { 
   Icon, 
   Button,
-  Popconfirm
+  Popconfirm,
+  Upload,
+  Spin,
+  Progress,
+  message
 } from 'antd'
 import styled from 'styled-components'
 import moment from 'moment'
 
 import { commonUtils } from '../../../modules/common';
+import * as config from '../../../constants/Config'
 import * as constants from '../../../constants/Constants'
 import * as optionsType from '../types'
 import * as graphqlTypes from '../../../modules/graphqlTypes'
@@ -591,8 +596,71 @@ const getOrderRechargeOptions = function(target) {
 
 const getOrderListColumns = function(target) {
   let options = getOrderBaseListColumns();
+  options.push({ title: '附件', dataIndex: 'file', key: 'file', width:140, className:"table-column-center relative", render:(text, record, index)=>{
+    return (
+      <div>
+        <span style={{color:`${record.file?"green":"red"}`, paddingRight:5}}>{record.file?"有":"无"}</span>
+        <span>
+        <Upload
+          name="order"
+          className="avatar-uploader"
+          style={{padding:0, position:'relative'}}
+          action={config.GetServerAddress() + '/upload'}
+          withCredentials={true}
+          showUploadList={false}
+          disabled={target.state.uploading&&target.state.uploading[record._id]}
+          onChange = {(info) => {
+            let {fileList} = info;
+
+            const status = info.file.status;
+            let uploadPercent = {};
+            let uploading = {};
+            uploading[record._id] = true;
+            uploadPercent[record._id] = info.file&&info.file.percent || 0;
+            // target.setState({uploadPercent:{record._id:info.file&&info.file.percent} || 0, uploading:true})
+            if (status !== 'uploading') {
+              console.log(info.file, info.fileList);
+            }
+            if (info.file.status === 'done') {
+              let file = info.file;
+              if (file.response && file.response.data.files && file.response.data.files.length > 0) {
+                let _file = file.response.data.files[0];
+                target.props.reqUpdateSuborder(record._id, {file:_file});
+                message.success(`${info.file.name} 上传成功`);
+              } else {
+                message.error('上传失败!');
+              }
+              uploading[record._id] = false;
+              uploadPercent[record._id] = 100;
+              target.setState({uploadPercent:100, uploading:false})
+            } else if (info.file.status === 'error') {
+              message.error(`${info.file.name} 上传失败!`);
+              uploading[record._id] = false;
+              uploadPercent[record._id] = 0;
+            }
+            target.setState({uploadPercent:uploadPercent, uploading:uploading})
+          }}
+          accept="application/x-zip-compressed"
+        >
+          <a style={{color:"rgba(0, 0, 0, 0.65)", paddingLeft:5}}>上传</a>
+        </Upload></span>
+        <span> </span>
+        {
+          record.file?
+          <a href={config.GetServerAddress() + '/file/'+record.file} style={{color:"rgba(0, 0, 0, 0.65)", paddingLeft:5}}>下载</a>
+          : null
+        }
+        {
+          target.state.uploading&&target.state.uploading[record._id] ?
+          <Progress showInfo={false} strokeWidth={2} percent={target.state.uploadPercent&&target.state.uploadPercent[record._id] || 0} />
+          : null
+        }
+          
+      </div>
+    );
+  }})
   if (target.power && target.power.canOperate) {
-    options.push({ title: '操作', dataIndex: 'id', key: 'id', render:(text, record, index)=>{
+    options.push({ title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
       if (record.state === constants.BASE_CONSTANTS.E_ORDER_STATUS.COMPLETED || record.state === constants.BASE_CONSTANTS.E_ORDER_STATUS.CANCEL) {
         return null;
       } else {

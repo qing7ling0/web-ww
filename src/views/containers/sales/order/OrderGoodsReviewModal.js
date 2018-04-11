@@ -93,6 +93,7 @@ class OrderGoodsReviewModal extends Component {
       customs:[],
       uploading: false,
       fileList:[],
+      uploadFile:'',
     }
     this.orderType = null;
   }
@@ -105,6 +106,9 @@ class OrderGoodsReviewModal extends Component {
     }
     if (this.props.data) {
       this.state.currentOrderType = this.props.data.type;
+      if (this.props.data.file) {
+        this.setState({uploadFile:this.props.data.file})
+      }
     }
     this.setState({visible:this.props.visible})
     
@@ -231,7 +235,7 @@ class OrderGoodsReviewModal extends Component {
                 className="avatar-uploader"
                 style={{padding:0, position:'relative'}}
                 action={config.GetServerAddress() + '/upload'}
-                fileList={this.state.fileList}
+                // fileList={this.state.fileList}
                 // onChange={({file, fileList})=>this.onUploadFileChange(file)}
                 withCredentials={true}
                 onChange = {(info) => {
@@ -241,14 +245,20 @@ class OrderGoodsReviewModal extends Component {
                   if (status !== 'uploading') {
                       console.log(info.file, info.fileList);
                   }
+                  this.setState({uploading:true});
                   if (info.file.status === 'done') {
-                    message.success(`${info.file.name} 上传成功`);
+                    if (file.response && file.response.data.files && file.response.data.files.length > 0) {
+                      let _file = file.response.data.files[0];
+                      this.setState({uploadFile:_file})
+                      message.success(`${info.file.name} 上传成功`);
+                    } else {
+                      message.error(`${info.file.name} 上传失败.`);
+                    }
+                    this.setState({uploading:false});
                   } else if (info.file.status === 'error') {
                     message.error(`${info.file.name} 上传失败.`);
+                    this.setState({uploading:false});
                   }
-
-                  //重新设置state
-                  this.setState( {fileList:[info.file]});
                 }}
                 accept="application/x-zip-compressed"
               >
@@ -256,7 +266,7 @@ class OrderGoodsReviewModal extends Component {
                   <Icon type="upload" /> 点击上传
                 </Button>
               </Upload>
-              <span>只支持.zip文件</span>
+              <span style={{color:`${this.state.uploadFile?"green":"red"}`, paddingRight:5}}>{this.state.uploadFile?"已上传":"未上传"}</span> <span>只支持.zip文件</span>
             </Col>
           </Row>
         </Card>
@@ -292,13 +302,13 @@ class OrderGoodsReviewModal extends Component {
     );
   }
 
-  onUploadFileChange = (file) => {
-    let _file = this.state.file;
-    if (file.response && file.response.data.files && file.response.data.files.length > 0) {
-      _file = file.response.data.files[0];
-      this.setState({fileList:[_file]})
-    }
-  }
+  // onUploadFileChange = (file) => {
+  //   let _file = this.state.file;
+  //   if (file.response && file.response.data.files && file.response.data.files.length > 0) {
+  //     _file = file.response.data.files[0];
+  //     this.setState({fileList:[_file]})
+  //   }
+  // }
 
   onReqOrderGoodsList = (type) => {
     let con ={};
@@ -355,17 +365,10 @@ class OrderGoodsReviewModal extends Component {
   }
 
   onAddSuccess = (values) => {
-    if (this.state.fileList && this.state.fileList.length > 0 && this.state.fileList[0].status === 'done') {
-      let file = this.state.fileList[0];
-      
-      if (file.response && file.response.data.files && file.response.data.files.length > 0) {
-        let _file = file.response.data.files[0];
-        values.type = this.state.currentOrderType;
-        values.file = _file;
-        this.props.reqReviewSuborder(this.props.data._id, values);
-      } else {
-        message.error('请上传工程文件!');
-      }
+    if (this.state.uploadFile) {
+      values.type = this.state.currentOrderType;
+      values.file = this.state.uploadFile;
+      this.props.reqReviewSuborder(this.props.data._id, values);
     } else {
       message.error('请上传工程文件!');
     }
