@@ -300,7 +300,7 @@ class AnalyseData {
       allCount += order.count;
     }
 
-    let ret = { top10Price, top10Count, allPrice, allCount };
+    let ret = [ top10Price, top10Count, allPrice, allCount ];
     
     // console.log('getAnalyseGoodsSalesPer ret=' + JSON.stringify(ret))
     return ret;
@@ -364,7 +364,7 @@ class AnalyseData {
     let aggOptions = [
       { $match: {type:{$nin:notGoodsTypes}, create_time:{$gte:dateBegan, $lt:dateEnd}},  },
       { $group: {"_id": {"sex": "$sex"}, "count":{$sum:1}}},
-      { $project : {"sex": "$_id.sex", "value":"$count"}},
+      { $project : {"name": "$_id.sex", "value":"$count"}},
     ];
     let orders = await subOrderModel.aggregate(aggOptions);
     console.log('getAnalyseGoodsSex orders=' + JSON.stringify(orders))
@@ -385,7 +385,7 @@ class AnalyseData {
 
     let notGoodsTypes = [constants.E_ORDER_TYPE.RECHARGE];
     let prices = [0, 3999, 4999, 5999, 12999, 23999]
-    let ret = {};
+    let data = {};
     let priceFileds = {};
     let groupFileds = {};
     for(let i=1; i<prices.length; i++) {
@@ -398,7 +398,7 @@ class AnalyseData {
         }, 1, 0]
       }
       groupFileds[`price${i}`] = {$sum: `$price${i}`}
-      ret[`price${i}`] = {
+      data[`price${i}`] = {
         price:prices[i],
         value:0
       };
@@ -415,10 +415,16 @@ class AnalyseData {
       }
     ]  
     let orders = await subOrderModel.aggregate(aggOptions);
+    let ret = [];
     if (orders && orders.length > 0) {
-      for(let key in ret) {
+      let item = {
+        price:0,value:0
+      }
+      for(let key in data) {
         if (orders[0][key]) {
-          ret[key].value = orders[0][key];
+          item.price = data[key].price;
+          item.value = orders[0][key];
+          ret.push(item);
         }
       }
     }
@@ -481,7 +487,7 @@ class AnalyseData {
       let aggOptions = [
         { $match: {type:{$nin:notGoodsTypes}, create_time:{$gte:dateBegan, $lt:dateEnd}},  },
         { $group: {"_id": {"sex": "$sex"}, "count":{$sum:1}}},
-        { $project : {"sex": "$_id.sex", "count":"$count"}},
+        { $project : {"name": "$_id.sex", "count":"$count"}},
       ];
       let orders = await subOrderModel.aggregate(aggOptions);
       if (orders.length > 0) {
@@ -504,9 +510,10 @@ class AnalyseData {
    * 
    * @memberof AnalyseData
    */
-  async getAnalyseGoodsSexList4Quarter() {
+  async getAnalyseGoodsPriceList4Quarter() {
     let list = [];
-    for(let i=0; i<4; i++) {
+    let length = 4;
+    for(let i=0; i<length; i++) {
       let orders = await this.getAnalyseGoodsPrice({date_type:5, index:i+1});
       if (orders.length > 0) {
         list.push(orders);
@@ -515,7 +522,28 @@ class AnalyseData {
       };
     }
 
-    return list;
+    let newList = {};
+    let ret = [];
+    list.forEach((item, index) => {
+      for(let data of item) {
+        let key = "id" + data.price;
+        let newItem = null;
+        if (newList[key]) {
+          newItem = newList[key];
+        } else {
+          newItem = {price:data.price, value:new Array(length)}
+          newList[key] = newItem;
+        }
+        newItem.value[index] = item.value;
+      }
+    })
+
+    for(let key of newList) {
+      ret.push(newList[key]);
+    }
+    ret.sort((a,b)=>a.price>b.price?1:-1);
+
+    return ret;
   }
 }
 

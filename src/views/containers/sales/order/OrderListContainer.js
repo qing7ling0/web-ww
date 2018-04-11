@@ -193,6 +193,7 @@ class OrderListContainer extends Component {
     return (
       <Root>
         <DataContentComponent
+          canOperate={this.canAdd()}
           headerRender={this.renderHeader}
           >
           <Table 
@@ -328,8 +329,18 @@ class OrderListContainer extends Component {
   }
 
   canOperate = () => {
-    this.power = commonUtils.getPower(this.props.user, constants.MENU_IDS.salesItems)
+    this.power = commonUtils.getPower(this.props.user, constants.MENU_IDS.salesOrder)
     return this.power && this.power.canOperate;
+  }
+
+  canAdd = () => {
+    this.power = commonUtils.getPower(this.props.user, constants.MENU_IDS.salesOrder)
+    return this.power && this.power.add;
+  }
+
+  canEdit = () => {
+    this.power = commonUtils.getPower(this.props.user, constants.MENU_IDS.salesOrder)
+    return this.power && this.power.edit;
   }
 
 }

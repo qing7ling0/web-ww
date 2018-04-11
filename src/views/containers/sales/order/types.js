@@ -659,7 +659,7 @@ const getOrderListColumns = function(target) {
       </div>
     );
   }})
-  if (target.power && target.power.canOperate) {
+  if (target.canEdit()) {
     options.push({ title: '操作', dataIndex: 'id', key: 'id', width:120, className:"table-column-center", render:(text, record, index)=>{
       if (record.state === constants.BASE_CONSTANTS.E_ORDER_STATUS.COMPLETED || record.state === constants.BASE_CONSTANTS.E_ORDER_STATUS.CANCEL) {
         return null;
