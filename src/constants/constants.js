@@ -81,11 +81,13 @@ module.exports.ORDER_UPLOAD_PIC_MAX_COUNT = 10;
 
 module.exports.SEX_MAN = '男';
 module.exports.SEX_FEMALE = '女';
+module.exports.SEX_ALL = '通用';
 
 /** 性别数据 */
 module.exports.SEX_DATA = [
   {id:0, value:exports.SEX_MAN, label:'男', etc:'BM'},
-  {id:1, value:exports.SEX_FEMALE, label:'女', etc:'BF'}
+  {id:1, value:exports.SEX_FEMALE, label:'女', etc:'BF'},
+  {id:2, value:exports.SEX_ALL, label:'通用', etc:'BT'}
 ]
 
 /** 商品属性，左脚，右脚，一双，一个 */
