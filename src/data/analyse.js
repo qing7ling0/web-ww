@@ -17,6 +17,7 @@ import utils from '../utils/utils'
 import baseUtils from '../base/utils/utils'
 import constants from '../constants/constants'
 import { subOrderModel } from '../models/sales.js';
+import { customerModel } from '../models/customer.js';
 // import 
 
 const logUtil = require('../utils/log-utils');
@@ -504,8 +505,8 @@ class AnalyseData {
         }
       })
     })
-    console.log('getAnalyseGoodsSexList4Quarter list=' + JSON.stringify(list))
-    console.log('getAnalyseGoodsSexList4Quarter list=' + JSON.stringify(ret))
+    // console.log('getAnalyseGoodsSexList4Quarter list=' + JSON.stringify(list))
+    // console.log('getAnalyseGoodsSexList4Quarter list=' + JSON.stringify(ret))
 
     return ret;
   }
@@ -550,6 +551,73 @@ class AnalyseData {
       list:ret,
       types:types
     };
+  }
+
+  /**
+   * 获取新增会员前三名店铺
+   * 
+   * @param {*} params 
+   * @param {*} dateOffset 
+   * 
+   * return [{shop{},count,total_count}]
+   */
+  async getAnalyseVipNew(params, dateOffset) {
+    const {dateBegan, dateEnd} = this.getDate(params.date_type, dateOffset);
+    let notGoodsTypes = [constants.E_ORDER_TYPE.RECHARGE]
+    let shops = await shopModel.find({});
+    let aggOptions = [
+      { $match: {vip_card_date:{$gte:dateBegan, $lt:dateEnd}}},
+      { $group: {"_id": { "shop": "$vip_card_shop"}, "count":{$sum:1}}},
+      { $project : {"_id": 0, "shop" : "$_id.shop",  "count" : "$count"}}
+    ];
+    let shopNewCustomers = await customerModel.aggregate(aggOptions).sort({count:-1}).limit(3);
+    shopNewCustomers = await customerModel.populate(shopNewCustomers, {path:'shop', model:'shop'});
+
+    let startIndex = shopNewCustomers.length;
+    for(let i=startIndex; i<3; i++) {
+      if (i<shops.length) {
+        shopNewCustomers.push({
+          shop:shops[i],
+          count:0,
+          total_count:0
+        })
+      }
+    }
+    
+    let ids = shopNewCustomers.map(item=>item.shop && item.shop._id.toString());
+    aggOptions = [
+      { $match: {vip_card_shop:{$in:ids}}},
+      { $group: {"_id": { "shop": "$vip_card_shop"}, "count":{$sum:1}}},
+      { $project : {"_id": 0, "shop" : "$_id.shop",  "count" : "$count"}}
+    ];
+    let shopCustomers = await customerModel.aggregate(aggOptions);
+
+    for(let cus of shopNewCustomers) {
+      let _cus = shopCustomers.find(item=>item.shop === cus.shop);
+      if (_cus) {
+        cus.total_count = _cus.count;
+      } else {
+        cus.total_count = 0;
+      }
+    }
+
+    return shopNewCustomers;
+  }
+
+  async getAnalyseVipNewAndOld(params, dateOffset) {
+    const {dateBegan, dateEnd} = this.getDate(params.date_type, dateOffset);
+    let notGoodsTypes = [constants.E_ORDER_TYPE.RECHARGE]
+    let shops = await shopModel.find({});
+    let aggOptions = [
+      { $match: {vip_card_date:{$gte:dateBegan, $lt:dateEnd}}},
+      { $group: {"_id": null, "count":{$sum:1}}},
+    ];
+    let newCustomers = await customerModel.find({vip_card_date:{$gte:dateBegan, $lt:dateEnd}}, {_id:1});
+    let allCustomers = await customerModel.find({}, {_id:1});
+    let newCount = newCustomers && newCustomers.length || 0;
+    let allCount = allCustomers && allCustomers.length || 0;
+
+    return [newCount, allCount-newCount];
   }
 }
 
