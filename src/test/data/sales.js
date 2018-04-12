@@ -4,6 +4,7 @@ import salesData from '../../data/sales'
 import constants, { ORDER_SOURCE } from '../../constants/constants'
 import { shopModel, userShopGuideModel, materialModel, commonModel, orderModel } from '../../models/index';
 import * as commonUtils from '../../utils/common-utils';
+import { subOrderModel } from '../../models/sales';
 
 var materialList= null;
 
@@ -28,6 +29,21 @@ var addOrderTest = async function(ctx, time) {
   order.store_card_selected = false;
   order.is_recharge = false;
   order.sub_orders = [];
+    
+  let shoesList = await salesData.getGoodsList(constants.GOODS_SHOES, {page:-1, pageSize:0}, {});
+  if (shoesList) {
+    shoesList = shoesList.list;
+  }
+  let shopList = await shopModel.find({});
+
+  let xuanHaoList = await commonModel.find({type:constants.COMMON_DATA_TYPES.XUAN_HAO});
+  let guigeList = await commonModel.find({type:constants.COMMON_DATA_TYPES.SHOES_GUI_GE});
+  let tiebianList = await commonModel.find({type:constants.COMMON_DATA_TYPES.SHOES_TIE_BIAN});
+  let genGaoList = await commonModel.find({type:constants.COMMON_DATA_TYPES.SHOES_GEN_GAO});
+  let inColorList = await commonModel.find({type:constants.COMMON_DATA_TYPES.SHOES_IN_COLOR});
+  let outColorList = await commonModel.find({type:constants.COMMON_DATA_TYPES.SHOES_OUT_COLOR});
+  let bottomColorList = await commonModel.find({type:constants.COMMON_DATA_TYPES.SHOES_BOTTOM_COLOR});
+  let bottomSideColorList = await commonModel.find({type:constants.COMMON_DATA_TYPES.SHOES_BOTTOM_SIDE_COLOR});
 
   try {
     let subCount = Math.floor(Math.random()*1000000) % 100;
@@ -49,26 +65,18 @@ var addOrderTest = async function(ctx, time) {
       let materialIndex = Math.floor(Math.random()*1000000) % materialList.length;
       let material = materialList[materialIndex];
     
-      let shoesList = await salesData.getGoodsList(constants.GOODS_SHOES, {page:-1, pageSize:0}, {});
       let index = Math.floor(Math.random()*1000000) % CUSTOMERS.length;
       let customer = CUSTOMERS[index];
     
-      let shopList = await shopModel.find({});
       let shopIndex = Math.floor(Math.random()*1000000) % shopList.length;
       let shopInfo = shopList[shopIndex];
     
       let guideList = await userShopGuideModel.find({shop:shopInfo._id});
       let guideIndex = Math.floor(Math.random()*1000000) % guideList.length;
       let guideInfo = guideList[guideIndex];
-    
-      let xuanHaoList = await commonModel.find({type:constants.COMMON_DATA_TYPES.XUAN_HAO});
-      let guigeList = await commonModel.find({type:constants.COMMON_DATA_TYPES.SHOES_GUI_GE});
-      let tiebianList = await commonModel.find({type:constants.COMMON_DATA_TYPES.SHOES_TIE_BIAN});
-      let genGaoList = await commonModel.find({type:constants.COMMON_DATA_TYPES.SHOES_GEN_GAO});
-      let inColorList = await commonModel.find({type:constants.COMMON_DATA_TYPES.SHOES_IN_COLOR});
-      let outColorList = await commonModel.find({type:constants.COMMON_DATA_TYPES.SHOES_OUT_COLOR});
-      let bottomColorList = await commonModel.find({type:constants.COMMON_DATA_TYPES.SHOES_BOTTOM_COLOR});
-      let bottomSideColorList = await commonModel.find({type:constants.COMMON_DATA_TYPES.SHOES_BOTTOM_SIDE_COLOR});
+
+      let shoesIndex = Math.floor(Math.random()*1000000) % shoesList.length;
+      let shoesInfo = shoesList[shoesIndex];
     // if (shoesList && shoesList.list.length > 0) {
       
       // console.log('----test add 1 order');
@@ -93,67 +101,17 @@ var addOrderTest = async function(ctx, time) {
       subOrder.s_right_fuWei = 12.5;
       subOrder.s_design_self = false;
       
-      subOrder.s_xuan_hao = {
-        _id:xuanHaoList[0]._id,
-        name:xuanHaoList[0].name,
-        NID:xuanHaoList[0].NID
-      };
+      subOrder.s_xuan_hao = shoesInfo.s_xuan_hao;
       subOrder.s_gui_ge = "111";
-      subOrder.s_material = {
-        _id:material._id,
-        name:material.name,
-        NID:material.NID
-      };
-      subOrder.s_out_color = {
-        _id:outColorList[0]._id,
-        name:outColorList[0].name,
-        NID:outColorList[0].NID
-      };
-      subOrder.s_in_color = {
-        _id:inColorList[0]._id,
-        name:inColorList[0].name,
-        NID:inColorList[0].NID
-      };
-      subOrder.s_bottom_color = {
-        _id:bottomColorList[0]._id,
-        name:bottomColorList[0].name,
-        NID:bottomColorList[0].NID
-      };
-      subOrder.s_bottom_side_color = {
-        _id:bottomSideColorList[0]._id,
-        name:bottomSideColorList[0].name,
-        NID:bottomSideColorList[0].NID
-      };
+      subOrder.s_material = shoesInfo.s_material;
+      subOrder.s_out_color = shoesInfo.s_out_color;
+      subOrder.s_in_color = shoesInfo.s_in_color;
+      subOrder.s_bottom_color = shoesInfo.s_bottom_color;
+      subOrder.s_bottom_side_color = shoesInfo.s_bottom_side_color;
       if (customer.sex === '女') {
-        subOrder.s_gen_gao = {
-          _id:genGaoList[0]._id,
-          name:genGaoList[0].name,
-          NID:genGaoList[0].NID
-        };
+        subOrder.s_gen_gao = shoesInfo.s_gen_gao;
       }
-      subOrder.s_tie_di = {
-        _id:tiebianList[0]._id,
-        name:tiebianList[0].name,
-        NID:tiebianList[0].NID
-      };
-      // subOrder.s_customs = [
-      //   {
-      //     _id: '5a2a5e04700447398cbf3e6b',
-      //     "type" : "9",
-      //     "name" : "鞋面皮护理",
-      //     "price" : 150,
-      //     "time" : 20,
-      //     NID:'CD01'
-      //   },
-      //   {
-      //     "_id" : "5a2a5e12700447398cbf3e6c",
-      //     "type" : "9",
-      //     "name" : "鳄鱼皮护理",
-      //     "price" : 2650,
-      //     "time" : 10,
-      //     NID:'CD02'
-      //   }
-      // ]
+      subOrder.s_tie_di = shoesInfo.s_tie_di;
       subOrder.customer = {
         // _id: '5a24fde67d72b74d6019aeaa',
         ...customer,
@@ -168,7 +126,7 @@ var addOrderTest = async function(ctx, time) {
       //   price: 3688,
       //   NID:'JD01'
       // }
-      subOrder.NID = commonUtils.createGoodsNID(subOrder.type, subOrder, subOrder.customer.sex);
+      subOrder.NID = shoesInfo.NID;
       order.sub_orders.push(subOrder);
     }
     
@@ -189,113 +147,154 @@ var addOrderTest = async function(ctx, time) {
   
 }
 
-module.exports.testAddOrder = async function(ctx) {
-  let xiaoshi = 24*12*30;
-  let orders = [];
-  let mi = new Date().getTime();
-  let mi2 = new Date().getTime();
-  for(let i=0; i<5000; i++) {
+const changeCreateEditTime = async function() {
+  let subOrders = await subOrderModel.find({},{_id:1}).limit(1000);
+  let xiaoshi = 24*1*30;
+  for(let sub of subOrders) {
     let h = Math.floor(Math.random()*100000000) % xiaoshi;
     let time = moment().subtract(h,'h');
-    let order = await addOrderTest(ctx, time.format("YYYY-MM-DD HH:mm:ss"));
-    orders.push({order, time});
+    let sexIndex = Math.floor(Math.random()*100000000) % 3;
+    await subOrderModel.updateOne({_id:sub._id}, {$set:{create_time:time, editor_time:time, sex:constants.SEX_DATA[sexIndex].value}});
   }
-  mi2 = new Date().getTime();
-  console.log('testAddOrder time 111111 =' + (mi2-mi));
-  mi = mi2;
-  
-  for(let item of orders) {
-    let newOrder = await salesData.addOrder(item.order);
-    if (item.time) {
-      // console.log('----test add 1 order time='  + item.time);
-      await orderModel.findByIdAndUpdate(newOrder._id, {create_time:item.time})
-    }
-  }
-  mi2 = new Date().getTime();
-  console.log('testAddOrder time 111222 =' + (mi2-mi));
-  mi = mi2;
-  
-  for(let i=0; i<3000; i++) {
-    let h = Math.floor(Math.random()*100000000) % xiaoshi + xiaoshi;
-    let time = moment().subtract(h,'h');
-    let order = await addOrderTest(ctx, time.format("YYYY-MM-DD HH:mm:ss"));
-    orders.push({order, time});
-  }
-  mi2 = new Date().getTime();
-  console.log('testAddOrder time 222111 =' + (mi2-mi));
-  mi = mi2;
-  
-  for(let item of orders) {
-    let newOrder = await salesData.addOrder(item.order);
-    if (item.time) {
-      // console.log('----test add 1 order time='  + item.time);
-      await orderModel.findByIdAndUpdate(newOrder._id, {create_time:item.time})
-    }
-  }
-  mi2 = new Date().getTime();
-  console.log('testAddOrder time 222222 =' + (mi2-mi));
-  mi = mi2;
+  console.log("changeCreateEditTime")
+}
 
-  for(let i=0; i<2000; i++) {
-    let h = Math.floor(Math.random()*100000000) % xiaoshi + xiaoshi*2;
-    let time = moment().subtract(h,'h');
-    let order = await addOrderTest(ctx, time.format("YYYY-MM-DD HH:mm:ss"));
-    orders.push({order, time});
-  }
-  mi2 = new Date().getTime();
-  console.log('testAddOrder time 333111 =' + (mi2-mi));
-  mi = mi2;
-  
-  for(let item of orders) {
-    let newOrder = await salesData.addOrder(item.order);
-    if (item.time) {
-      // console.log('----test add 1 order time='  + item.time);
-      await orderModel.findByIdAndUpdate(newOrder._id, {create_time:item.time})
-    }
-  }
-  mi2 = new Date().getTime();
-  console.log('testAddOrder time 333222 =' + (mi2-mi));
-  mi = mi2;
+module.exports.testAddOrder = async function(ctx) {
 
-  for(let i=0; i<3687; i++) {
-    let h = Math.floor(Math.random()*100000000) % xiaoshi + xiaoshi*3;
-    let time = moment().subtract(h,'h');
-    let order = await addOrderTest(ctx, time.format("YYYY-MM-DD HH:mm:ss"));
-    orders.push({order, time});
-  }
-  mi2 = new Date().getTime();
-  console.log('testAddOrder time 444111 =' + (mi2-mi));
-  mi = mi2;
+  changeCreateEditTime();
   
-  for(let item of orders) {
-    let newOrder = await salesData.addOrder(item.order);
-    if (item.time) {
-      // console.log('----test add 1 order time='  + item.time);
-      await orderModel.findByIdAndUpdate(newOrder._id, {create_time:item.time})
-    }
-  }
-  mi2 = new Date().getTime();
-  console.log('testAddOrder time 444222 =' + (mi2-mi));
-  mi = mi2;
+  // let xiaoshi = 24*12*30;
+  // let orders = [];
+  // let mi = new Date().getTime();
+  // let mi2 = new Date().getTime();
+  // for(let i=0; i<5000; i++) {
+  //   let h = Math.floor(Math.random()*100000000) % xiaoshi;
+  //   let time = moment().subtract(h,'h');
+  //   let order = await addOrderTest(ctx, time.format("YYYY-MM-DD HH:mm:ss"));
+  //   orders.push({order, time});
+  // }
+  // mi2 = new Date().getTime();
+  // console.log('testAddOrder time 111111 =' + (mi2-mi));
+  // mi = mi2;
+  
+  // for(let item of orders) {
+  //   let newOrder = await salesData.addOrder(item.order);
+  //   if (item.time) {
+  //     // console.log('----test add 1 order time='  + item.time);
+  //     await orderModel.findByIdAndUpdate(newOrder._id, {create_time:item.time})
+  //   }
+  // }
+  // mi2 = new Date().getTime();
+  // console.log('testAddOrder time 111222 =' + (mi2-mi));
+  // mi = mi2;
 
-  for(let i=0; i<2589; i++) {
-    let h = Math.floor(Math.random()*100000000) % xiaoshi + xiaoshi*4;
-    let time = moment().subtract(h,'h');
-    let order = await addOrderTest(ctx, time.format("YYYY-MM-DD HH:mm:ss"));
-    orders.push({order, time});
-  }
-  mi2 = new Date().getTime();
-  console.log('testAddOrder time 555111 =' + (mi2-mi));
-  mi = mi2;
+
+  // let xiaoshi = 24*1*30; // 1个月
+  // let orders = [];
+  // let mi = new Date().getTime();
+  // let mi2 = new Date().getTime();
+  // for(let i=0; i<1000; i++) {
+  //   let h = Math.floor(Math.random()*100000000) % xiaoshi;
+  //   let time = moment().subtract(h,'h');
+  //   let order = await addOrderTest(ctx, time.format("YYYY-MM-DD HH:mm:ss"));
+  //   orders.push({order, time});
+  // }
+  // mi2 = new Date().getTime();
+  // console.log('testAddOrder time 111111 =' + (mi2-mi));
+  // mi = mi2;
   
-  for(let item of orders) {
-    let newOrder = await salesData.addOrder(item.order);
-    if (item.time) {
-      // console.log('----test add 1 order time='  + item.time);
-      await orderModel.findByIdAndUpdate(newOrder._id, {create_time:item.time})
-    }
-  }
-  mi2 = new Date().getTime();
-  console.log('testAddOrder time 555222 =' + (mi2-mi));
-  mi = mi2;
+  // for(let item of orders) {
+  //   let newOrder = await salesData.addOrder(item.order);
+  //   if (item.time) {
+  //     // console.log('----test add 1 order time='  + item.time);
+  //     await orderModel.findByIdAndUpdate(newOrder._id, {create_time:item.time})
+  //   }
+  // }
+  // mi2 = new Date().getTime();
+  // console.log('testAddOrder time 111222 =' + (mi2-mi));
+  // mi = mi2;
+  
+  // for(let i=0; i<3000; i++) {
+  //   let h = Math.floor(Math.random()*100000000) % xiaoshi + xiaoshi;
+  //   let time = moment().subtract(h,'h');
+  //   let order = await addOrderTest(ctx, time.format("YYYY-MM-DD HH:mm:ss"));
+  //   orders.push({order, time});
+  // }
+  // mi2 = new Date().getTime();
+  // console.log('testAddOrder time 222111 =' + (mi2-mi));
+  // mi = mi2;
+  
+  // for(let item of orders) {
+  //   let newOrder = await salesData.addOrder(item.order);
+  //   if (item.time) {
+  //     // console.log('----test add 1 order time='  + item.time);
+  //     await orderModel.findByIdAndUpdate(newOrder._id, {create_time:item.time})
+  //   }
+  // }
+  // mi2 = new Date().getTime();
+  // console.log('testAddOrder time 222222 =' + (mi2-mi));
+  // mi = mi2;
+
+  // for(let i=0; i<2000; i++) {
+  //   let h = Math.floor(Math.random()*100000000) % xiaoshi + xiaoshi*2;
+  //   let time = moment().subtract(h,'h');
+  //   let order = await addOrderTest(ctx, time.format("YYYY-MM-DD HH:mm:ss"));
+  //   orders.push({order, time});
+  // }
+  // mi2 = new Date().getTime();
+  // console.log('testAddOrder time 333111 =' + (mi2-mi));
+  // mi = mi2;
+  
+  // for(let item of orders) {
+  //   let newOrder = await salesData.addOrder(item.order);
+  //   if (item.time) {
+  //     // console.log('----test add 1 order time='  + item.time);
+  //     await orderModel.findByIdAndUpdate(newOrder._id, {create_time:item.time})
+  //   }
+  // }
+  // mi2 = new Date().getTime();
+  // console.log('testAddOrder time 333222 =' + (mi2-mi));
+  // mi = mi2;
+
+  // for(let i=0; i<3687; i++) {
+  //   let h = Math.floor(Math.random()*100000000) % xiaoshi + xiaoshi*3;
+  //   let time = moment().subtract(h,'h');
+  //   let order = await addOrderTest(ctx, time.format("YYYY-MM-DD HH:mm:ss"));
+  //   orders.push({order, time});
+  // }
+  // mi2 = new Date().getTime();
+  // console.log('testAddOrder time 444111 =' + (mi2-mi));
+  // mi = mi2;
+  
+  // for(let item of orders) {
+  //   let newOrder = await salesData.addOrder(item.order);
+  //   if (item.time) {
+  //     // console.log('----test add 1 order time='  + item.time);
+  //     await orderModel.findByIdAndUpdate(newOrder._id, {create_time:item.time})
+  //   }
+  // }
+  // mi2 = new Date().getTime();
+  // console.log('testAddOrder time 444222 =' + (mi2-mi));
+  // mi = mi2;
+
+  // for(let i=0; i<2589; i++) {
+  //   let h = Math.floor(Math.random()*100000000) % xiaoshi + xiaoshi*4;
+  //   let time = moment().subtract(h,'h');
+  //   let order = await addOrderTest(ctx, time.format("YYYY-MM-DD HH:mm:ss"));
+  //   orders.push({order, time});
+  // }
+  // mi2 = new Date().getTime();
+  // console.log('testAddOrder time 555111 =' + (mi2-mi));
+  // mi = mi2;
+  
+  // for(let item of orders) {
+  //   let newOrder = await salesData.addOrder(item.order);
+  //   if (item.time) {
+  //     // console.log('----test add 1 order time='  + item.time);
+  //     await orderModel.findByIdAndUpdate(newOrder._id, {create_time:item.time})
+  //   }
+  // }
+  // mi2 = new Date().getTime();
+  // console.log('testAddOrder time 555222 =' + (mi2-mi));
+  // mi = mi2;
 }

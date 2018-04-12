@@ -85,9 +85,9 @@ module.exports.SEX_ALL = '通用';
 
 /** 性别数据 */
 module.exports.SEX_DATA = [
-  {id:0, value:exports.SEX_MAN, label:'男', etc:'BM'},
-  {id:1, value:exports.SEX_FEMALE, label:'女', etc:'BF'},
-  {id:2, value:exports.SEX_ALL, label:'通用', etc:'BT'}
+  {id:0, value:exports.SEX_MAN, label:'男', etc:'BM', color:"#2980D9"},
+  {id:1, value:exports.SEX_FEMALE, label:'女', etc:'BF', color:"#EB4986"},
+  {id:2, value:exports.SEX_ALL, label:'通用', etc:'BT', color:"#76EEC6"}
 ]
 
 /** 商品属性，左脚，右脚，一双，一个 */

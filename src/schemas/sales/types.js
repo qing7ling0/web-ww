@@ -55,6 +55,7 @@ export const materialInputFields = {
   name: {type:GraphQLString, description:'名称'},
   NID: {type:GraphQLString, description:'编号'},
   count: {type:GraphQLInt, description:'数量'},
+  color_css: {type:GraphQLInt, description:'css颜色'},
   maintain_cycle: {type:GraphQLInt, decription:'保养周期'}
 };
 export const materialType = new GraphQLObjectType({

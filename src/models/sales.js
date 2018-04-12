@@ -324,7 +324,7 @@ const subOrderSchema = new Schema({
   order:{type:Schema.Types.ObjectId, ref:'order', decription:'订单信息'},
   ...baseFields
 },{
-  timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
+  // timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
 });
 module.exports.subOrderModel = mongoose.model('sub_order', subOrderSchema);
 
@@ -350,7 +350,8 @@ const orderFields = {
 }
 const orderSchema = new Schema({
     ...orderFields
-  },{ timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }}
+  },
+  // { timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }}
 );
 module.exports.orderModel = mongoose.model('order', orderSchema);
 

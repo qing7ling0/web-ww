@@ -77,3 +77,84 @@ export const analyse4Quarter = {
     return await analyseData.getAnalyseSalesList4Quarter();
 	}
 }
+
+// 商品分析
+
+export const analyseGoodsTop10 = {
+  type: new GraphQLList(types.analyseGoodsType),
+  args: {
+    date_type:{type:GraphQLInt}
+  },
+	async resolve (root, params, options) {
+    return await analyseData.getAnalyseGoodsTop10(params);
+	}
+}
+export const analyseGoodsSalesPer = {
+  type: new GraphQLList(GraphQLFloat),
+  args: {
+    date_type:{type:GraphQLInt}
+  },
+	async resolve (root, params, options) {
+    return await analyseData.getAnalyseGoodsSalesPer(params);
+	}
+}
+export const analyseGoodsMaterial = {
+  type: new GraphQLList(types.analyseGoodsMaterialType),
+  args: {
+    date_type:{type:GraphQLInt}
+  },
+	async resolve (root, params, options) {
+    return await analyseData.getAnalyseGoodsMaterial(params);
+	}
+}
+export const analyseGoodsSex = {
+  type: new GraphQLList(types.analyseGoodsSexType),
+  args: {
+    date_type:{type:GraphQLInt}
+  },
+	async resolve (root, params, options) {
+    return await analyseData.getAnalyseGoodsSex(params);
+	}
+}
+export const analyseGoodsPrice = {
+  type: new GraphQLList(types.analyseGoodsPriceType),
+  args: {
+    date_type:{type:GraphQLInt}
+  },
+	async resolve (root, params, options) {
+    return await analyseData.getAnalyseGoodsPrice(params);
+	}
+}
+export const analyseGoodsMaterialList4Quarter = {
+  type: new GraphQLList(new GraphQLList(types.analyseGoodsQuarterMaterialType)),
+  args: {
+    date_type:{type:GraphQLInt}
+  },
+	async resolve (root, params, options) {
+    return await analyseData.getAnalyseGoodsMaterialList4Quarter(params);
+	}
+}
+export const analyseGoodsSexList4Quarter = {
+  type: new GraphQLList(types.analyseGoodsQuarterSexType),
+  args: {
+    date_type:{type:GraphQLInt}
+  },
+	async resolve (root, params, options) {
+    return await analyseData.getAnalyseGoodsSexList4Quarter(params);
+	}
+}
+export const analyseGoodsPriceList4Quarter = {
+  type: new GraphQLObjectType({
+    name: 'analyseGoodsPriceList4Quarter',
+    fields: {
+      list: {type:new GraphQLList(types.analyseGoodsQuarterPriceType)},
+      types: {type:new GraphQLList(GraphQLFloat)},
+    }
+  }),
+  args: {
+    date_type:{type:GraphQLInt}
+  },
+	async resolve (root, params, options) {
+    return await analyseData.getAnalyseGoodsPriceList4Quarter(params);
+	}
+}

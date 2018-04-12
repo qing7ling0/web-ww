@@ -12,6 +12,7 @@ import {
 } from '../models/index.js'
 
 import { ApiError, ApiErrorNames } from '../error/api-errors'
+import * as commonUtils from '../utils/common-utils'
 import utils from '../utils/utils'
 import baseUtils from '../base/utils/utils'
 import constants from '../constants/constants'
@@ -255,10 +256,10 @@ class AnalyseData {
     let notGoodsTypes = [constants.E_ORDER_TYPE.RECHARGE]
     let aggOptions = [
       { $match: {type:{$nin:notGoodsTypes}, create_time:{$gte:dateBegan, $lt:dateEnd}}},
-      { $group: {"_id": { "NID": "$NID","s_material": "$s_material","b_material": "$b_material","ws_material": "$ws_material"}, "amount":{$sum:"$system_price"}, "count":{$sum:1}}},
+      { $group: {"_id": { "NID": "$NID","s_material": "$s_material._id","b_material": "$b_material._id","ws_material": "$ws_material._id"}, "amount":{$sum:"$system_price"}, "count":{$sum:1}}},
       { $project : {"_id": 0, "NID" : "$_id.NID", "amount" : "$amount", "count" : "$count", "s_material":"$_id.s_material", "b_material":"$_id.b_material", "ws_material":"$_id.ws_material"}}
     ];
-    let orders = await subOrderModel.aggregate(aggOptions).sort({amount: -1, NID:-1});
+    let orders = await subOrderModel.aggregate(aggOptions).sort({amount: -1, NID:-1}).limit(10);
     // console.log('getAnalyseGoodsTop10 orders=' + JSON.stringify(orders))
     // let newOrders = await subOrderModel.populate(orders, {path:'s_material', model:'material'})
     // .populate(orders, {path:'b_material', model:'material'})
@@ -274,6 +275,8 @@ class AnalyseData {
    */
   async getAnalyseGoodsSalesPer(params) {
     const {dateBegan, dateEnd} = this.getDate(params.date_type);
+    console.log("getAnalyseGoodsSalesPer date_type=" + params.date_type + " dateBegan=" + moment(dateBegan).format("YYYY-MM-DD HH-mm-ss"));
+    console.log("getAnalyseGoodsSalesPer dateEnd=" + moment(dateBegan).format("YYYY-MM-DD HH-mm-ss"));
 
     let notGoodsTypes = [constants.E_ORDER_TYPE.RECHARGE, constants.E_ORDER_TYPE.MAINTAIN, constants.E_ORDER_TYPE.ORNAMENT]
     let aggOptions = [
@@ -290,7 +293,7 @@ class AnalyseData {
 
     aggOptions = [
       { $match: {type:{$nin:notGoodsTypes}, create_time:{$gte:dateBegan, $lt:dateEnd}},  },
-      { $group: {"_id": { "type": "$type"}, "amount":{$sum:"$system_price"}, "count":{$sum:1}}}
+      { $group: {"_id": null, "amount":{$sum:"$system_price"}, "count":{$sum:1}}}
     ];
     let allSuborders = await subOrderModel.aggregate(aggOptions);
     let allPrice = 0;
@@ -313,38 +316,33 @@ class AnalyseData {
    */
   async getAnalyseGoodsMaterial(params) {
     const {dateBegan, dateEnd} = this.getDate(params.date_type);
+    // console.log("getAnalyseGoodsMaterial date_type=" + params.date_type + " dateBegan=" + moment(dateBegan).format("YYYY-MM-DD HH-mm-ss"));
+    // console.log("getAnalyseGoodsMaterial dateEnd=" + moment(dateBegan).format("YYYY-MM-DD HH-mm-ss"));
 
     let notGoodsTypes = [constants.E_ORDER_TYPE.RECHARGE, constants.E_ORDER_TYPE.MAINTAIN, constants.E_ORDER_TYPE.ORNAMENT]
     let aggOptions = [
       { $match: {type:{$nin:notGoodsTypes}, create_time:{$gte:dateBegan, $lt:dateEnd}},  },
-      { $group: {"_id": {"s_material": "$s_material","b_material": "$b_material","ws_material": "$ws_material"}, "count":{$sum:1}}},
+      { $group: {"_id": {"s_material": "$s_material._id","b_material": "$b_material._id","ws_material": "$ws_material._id"}, "count":{$sum:1}}},
       { $project : {"s_material": "$_id.s_material", "b_material": "$_id.b_material", "ws_material": "$_id.ws_material", "count":"$count"}},
     ];
     let orders = await subOrderModel.aggregate(aggOptions);
     let total = 0;
+    // console.log('getAnalyseGoodsMaterial orders=' + JSON.stringify(orders))
     orders = orders.map(item=> {
       let ret = {
-        NID:'',
-        name:'',
+        _id:'',
         value:0,
-        color:''
       }
       if (item.s_material) {
-        ret.NID = item.s_material.NID;
-        ret.name = item.s_material.name;
-        ret.color = item.s_material.color_css;
+        ret._id = item.s_material;
       } else if (item.b_material) {
-        ret.NID = item.b_material.NID;
-        ret.name = item.b_material.name;
-        ret.color = item.b_material.color_css;
+        ret._id = item.b_material;
       } else if (item.ws_material) {
-        ret.NID = item.ws_material.NID;
-        ret.name = item.ws_material.name;
-        ret.color = item.ws_material.color_css;
+        ret._id = item.ws_material;
       }
       ret.value = item.count;
       total += item.count;
-      if (ret.NID) return ret;
+      if (ret._id) return ret;
       return null;
     }).filter(item=>item!==null);
     // console.log('getAnalyseGoodsMaterial orders=' + JSON.stringify(orders))
@@ -357,8 +355,8 @@ class AnalyseData {
    * 获取商品性别销售比
    * @param {*} params 
    */
-  async getAnalyseGoodsSex(params) {
-    const {dateBegan, dateEnd} = this.getDate(params.date_type);
+  async getAnalyseGoodsSex(params, dateOffset) {
+    const {dateBegan, dateEnd} = this.getDate(params.date_type, dateOffset);
 
     let notGoodsTypes = [constants.E_ORDER_TYPE.RECHARGE];
     let aggOptions = [
@@ -367,16 +365,11 @@ class AnalyseData {
       { $project : {"name": "$_id.sex", "value":"$count"}},
     ];
     let orders = await subOrderModel.aggregate(aggOptions);
-    console.log('getAnalyseGoodsSex orders=' + JSON.stringify(orders))
+    // console.log('getAnalyseGoodsSex orders=' + JSON.stringify(orders))
     // console.log('getAnalyseGoodsMaterial total=' + total)
     for(let order of orders) {
-      if (order.name === constants.SEX_MAN) {
-        order.color = "#2980D9";
-      } else if (order.name === constants.SEX_MAN) {
-        order.color = "#EB4986";
-      } else {
-        order.color = "#76EEC6";
-      }
+      let sexTypeInfo = commonUtils.getSex(order.name);
+      order.color = sexTypeInfo&&sexTypeInfo.color || "#76EEC6";
     }
     
     return orders;
@@ -389,8 +382,8 @@ class AnalyseData {
    * @returns 
    * @memberof AnalyseData
    */
-  async getAnalyseGoodsPrice(params) {
-    const {dateBegan, dateEnd} = this.getDate(params.date_type);
+  async getAnalyseGoodsPrice(params, dateOffset) {
+    const {dateBegan, dateEnd} = this.getDate(params.date_type, dateOffset);
 
     let notGoodsTypes = [constants.E_ORDER_TYPE.RECHARGE];
     let prices = [0, 3999, 4999, 5999, 12999, 23999]
@@ -424,13 +417,14 @@ class AnalyseData {
       }
     ]  
     let orders = await subOrderModel.aggregate(aggOptions);
+    // console.log('getAnalyseGoodsPrice orders=' + JSON.stringify(orders))
     let ret = [];
     if (orders && orders.length > 0) {
-      let item = {
-        price:0,value:0
-      }
       for(let key in data) {
-        if (orders[0][key]) {
+        if (orders[0][key] || orders[0][key] === 0) {
+          let item = {
+            price:0,value:0
+          }
           item.price = data[key].price;
           item.value = orders[0][key];
           ret.push(item);
@@ -459,7 +453,7 @@ class AnalyseData {
           $match: {type:{$nin:notGoodsTypes}, create_time:{$gte:dateBegan.toDate(), $lt:dateEnd.toDate()}} 
         },
         { 
-          $group: {"_id": {"s_material": "$s_material","b_material": "$b_material","ws_material": "$ws_material"}, "count":{$sum:1}}
+          $group: {"_id": {"s_material": "$s_material._id","b_material": "$b_material._id","ws_material": "$ws_material._id"}, "count":{$sum:1}}
         },
         { 
           $project : {"s_material": "$_id.s_material", "b_material": "$_id.b_material", "ws_material": "$_id.ws_material", "count":"$count"}
@@ -471,7 +465,7 @@ class AnalyseData {
       } else {
         list.push([]);
       }
-      console.log('getAnalyseGoodsMaterialList4Quarter list=' + JSON.stringify(orders))
+      // console.log('getAnalyseGoodsMaterialList4Quarter list=' + JSON.stringify(orders))
 
       dateBegan = moment(dateEnd);
       dateEnd = moment(dateEnd).add(3, 'month');
@@ -486,31 +480,34 @@ class AnalyseData {
    * @memberof AnalyseData
    */
   async getAnalyseGoodsSexList4Quarter() {
-    let date = moment(moment().format("YYYY"+"-01-01"));
-    let dateBegan = moment(date);
-    let dateEnd = moment(date).add(3, 'months');
-
-    let notGoodsTypes = [constants.E_ORDER_TYPE.RECHARGE];
     let list = [];
-    for(let i=0; i<4; i++) {
-      let aggOptions = [
-        { $match: {type:{$nin:notGoodsTypes}, create_time:{$gte:dateBegan, $lt:dateEnd}},  },
-        { $group: {"_id": {"sex": "$sex"}, "count":{$sum:1}}},
-        { $project : {"name": "$_id.sex", "count":"$count"}},
-      ];
-      let orders = await subOrderModel.aggregate(aggOptions);
+    let length = 4;
+    for(let i=0; i<length; i++) {
+      let orders = await this.getAnalyseGoodsSex({date_type:5}, i+1)
       if (orders.length > 0) {
         list.push(orders);
       } else {
         list.push([]);
       }
-      console.log('getAnalyseGoodsMaterialList4Quarter list=' + JSON.stringify(orders))
-
-      dateBegan = moment(dateEnd);
-      dateEnd = moment(dateEnd).add(3, 'month');
     }
 
-    return list;
+    let ret = constants.SEX_DATA.map(item=>{
+      return {name:item.value, color:item.color, value:new Array(length)}
+    });
+    list.forEach((sexList, index)=> {
+      sexList.forEach(item=>{
+        for(let _item of ret) {
+          if (_item.name === item.name) {
+            _item.value[index] = item.value;
+            break;
+          }
+        }
+      })
+    })
+    console.log('getAnalyseGoodsSexList4Quarter list=' + JSON.stringify(list))
+    console.log('getAnalyseGoodsSexList4Quarter list=' + JSON.stringify(ret))
+
+    return ret;
   }
 
   
@@ -523,7 +520,7 @@ class AnalyseData {
     let list = [];
     let length = 4;
     for(let i=0; i<length; i++) {
-      let orders = await this.getAnalyseGoodsPrice({date_type:5, index:i+1});
+      let orders = await this.getAnalyseGoodsPrice({date_type:5}, i+1);
       if (orders.length > 0) {
         list.push(orders);
       } else {
@@ -533,26 +530,26 @@ class AnalyseData {
 
     let newList = {};
     let ret = [];
+    let types = [];
+    // console.log('getAnalyseGoodsPriceList4Quarter list=' + JSON.stringify(list))
     list.forEach((item, index) => {
-      for(let data of item) {
-        let key = "id" + data.price;
-        let newItem = null;
-        if (newList[key]) {
-          newItem = newList[key];
-        } else {
-          newItem = {price:data.price, value:new Array(length)}
-          newList[key] = newItem;
+      let newItem = {price:index, value:new Array(item.length)};
+      ret.push(newItem)
+      item.forEach((ele, _index) => {
+        newItem.value[_index] = ele.value;
+        if (index === 0) {
+          types.push(ele.price);
         }
-        newItem.value[index] = item.value;
-      }
+      })
     })
 
-    for(let key of newList) {
-      ret.push(newList[key]);
-    }
-    ret.sort((a,b)=>a.price>b.price?1:-1);
+    // ret.sort((a,b)=>a.price>b.price?1:-1);
+    // console.log('getAnalyseGoodsPriceList4Quarter list=' + JSON.stringify(ret))
 
-    return ret;
+    return {
+      list:ret,
+      types:types
+    };
   }
 }
 

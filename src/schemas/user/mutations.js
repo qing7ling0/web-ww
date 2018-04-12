@@ -238,7 +238,7 @@ export const login = {
     await DBRepair.do();
     let user = await userData.login(ctx, params);
     if (user) {
-      // await TEST(ctx);
+      await TEST(ctx);
     }
     return user;
   }
