@@ -369,6 +369,15 @@ class AnalyseData {
     let orders = await subOrderModel.aggregate(aggOptions);
     console.log('getAnalyseGoodsSex orders=' + JSON.stringify(orders))
     // console.log('getAnalyseGoodsMaterial total=' + total)
+    for(let order of orders) {
+      if (order.name === constants.SEX_MAN) {
+        order.color = "#2980D9";
+      } else if (order.name === constants.SEX_MAN) {
+        order.color = "#EB4986";
+      } else {
+        order.color = "#76EEC6";
+      }
+    }
     
     return orders;
   }
