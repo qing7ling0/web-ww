@@ -58,7 +58,11 @@ class CustomerData {
   }
 
   async add(doc, options={}) {
-    if (doc) {
+    if (doc || !doc.phone) {
+      let find = await customerModel.findOne({phone:doc.phone});
+      if (find) {
+        throw new ApiError(ApiErrorNames.ADD_FAIL, '手机号已存在');
+      }
       let customer = new customerModel(doc);
       if (customer) {
         let newcustomer = await customer.save(options);
@@ -75,6 +79,13 @@ class CustomerData {
 
   async update(conditions, doc, options) {
     if (doc) {
+      if (doc.phone) {
+        let find = await customerModel.findOne({phone:doc.phone});
+        let find2 = await customerModel.findOne(conditions);
+        if (find && find2 && find._id !== find2._id) {
+          throw new ApiError(ApiErrorNames.ADD_FAIL, '手机号已存在');
+        }
+      }
       let ret = await customerModel.update(conditions, doc, options);
       return ret;
     } else {

@@ -53,6 +53,8 @@ class CustomerEditModal extends Component {
 
   //在组件挂载之前调用一次。如果在这个函数里面调用setState，本次的render函数可以看到更新后的state，并且只渲染一次
   componentWillMount(){
+    let vipList = this.props.vipLevelList || [];
+    vipList = vipList.sort((a,b)=>a.level>b.level?1:-1);
     this.options = [
       {type:'input', name:'name', label:'姓名', itemOptions:{hasFeedback:true}, rule:{required:true}},
       {type:'select', name:'sex', label:'性别', selectItems:constants.SEX_DATA, options:{defaultActiveFirstOption:true}, rule:{required:true}},
@@ -63,9 +65,35 @@ class CustomerEditModal extends Component {
       {type:'input', name:'city', label:'城市', itemOptions:{hasFeedback:true}},
       {type:'input', name:'address', label:'地址', itemOptions:{hasFeedback:true}},
       {type:'input', name:'zipcode', label:'邮编', itemOptions:{hasFeedback:true}},
-      {type:'datePicker', name:'vip_card_date', label:'开卡日期'},
-      {type:'select', name:'vip_card_shop', label:'开卡门店', selectItems:common.listToSelectOptions(this.props.shopList), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-      {type:'select', name:'vip_card_guide', label:'开卡导购', selectItems:common.listToSelectOptions(this.props.guideList), options:{defaultActiveFirstOption:true}, rule:{required:true}},
+      {type:'datePicker', name:'vip_card_date', label:'开卡日期'},{
+        type:'select', name:'vip_card_shop', label:'开卡门店', selectItems:common.listToSelectOptions(this.props.shopList), 
+        options:{
+          showSearch:true,
+          optionFilterProp:"children",
+          filterOption:(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0,
+          defaultActiveFirstOption:true
+        }, rule:{required:true}
+      },
+      {
+        type:'select', name:'vip_card_guide', label:'开卡导购', selectItems:common.listToSelectOptions(this.props.guideList), 
+        options:{
+          showSearch:true,
+          optionFilterProp:"children",
+          filterOption:(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0,
+          defaultActiveFirstOption:true
+        }, rule:{required:true}
+      },
+      {type:'number', name:'point', label:'积分', itemOptions:{hasFeedback:true}},
+      {
+        type:'select', name:'vip_level', label:'Vip等级', 
+        selectItems:common.listToSelectOptions(vipList,item=>item.level,item=>item.level), 
+        options:{
+          showSearch:true,
+          optionFilterProp:"children",
+          filterOption:(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0,
+          defaultActiveFirstOption:true
+        }
+      },
       {
         type:'select', name:'tags', label:'客户标签', 
         selectItems:common.listToSelectOptions(this.props.customerTagList), 
@@ -130,6 +158,14 @@ class CustomerEditModal extends Component {
       if (values.tags) {
         values.tags = values.tags.map(tag=>{return {tag:tag}})
       }
+      if (this.props.vipLevelList) {
+        for(let lv of this.props.vipLevelList) {
+          if (lv.level === values.vip_level) {
+            values.vip_exp = lv.exp;
+            break;
+          }
+        }
+      }
       this.props.reqUpdateCustomer(values);
     }
   }
@@ -149,6 +185,7 @@ export default connect(
     shopList:state.shop.shopList,
     guideList:state.shop.shopGuideList,
     result:state.customer.result,
+    vipLevelList:state.sales.vipLevelList,
     customerTagList:state.sales.customerTagList||[]
   }),
   (dispatch) => {

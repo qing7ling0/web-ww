@@ -168,7 +168,7 @@ module.exports.Powers = [
     id:MENU_IDS.salesOrder, 
     powers:[
       { id:POWER_TYPES.SALE_MANAGER, power:{view:true} },
-      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true, add:true, edit:false} },
       { id:POWER_TYPES.SHOP_GUIDE, power:{view:true, add:true, edit:false} },
       { id:POWER_TYPES.MANAGER_NORMAL, power:{view:true} },
       { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },

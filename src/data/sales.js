@@ -701,7 +701,6 @@ class SalesData {
           }
           await subOrderModel.updateMany({_id:{$in:newSubOrders}}, {order:newOrder._id});
           if (customerPoint) {
-            customerPoint = customer.point+customerPoint;  
             // 计算vip等级
             let exp = customer.vip_exp||0;
             exp += customerPoint;
@@ -712,7 +711,7 @@ class SalesData {
                 break;
               }
             }
-            await customerModel.updateOne({_id:customer._id}, {vip_level:vipLevel, vip_exp:exp, point:customerPoint});
+            await customerModel.updateOne({_id:customer._id}, {vip_level:vipLevel, vip_exp:exp, point:customer.point+customerPoint});
           }
           return newOrder;
         }
