@@ -234,7 +234,8 @@ class AnalyseData {
       dateBegan = _date.toDate();
       dateEnd = _date.add(1, 'year').toDate();
     } else if (date_type === 5) { // 季度
-      if (!index) {
+      if (index === undefined || index === null) {
+        // 未指定index，表示当前季度
         let month = moment().month();
         index = (month / 3) + 1;
       }
@@ -276,8 +277,8 @@ class AnalyseData {
    */
   async getAnalyseGoodsSalesPer(params) {
     const {dateBegan, dateEnd} = this.getDate(params.date_type);
-    console.log("getAnalyseGoodsSalesPer date_type=" + params.date_type + " dateBegan=" + moment(dateBegan).format("YYYY-MM-DD HH-mm-ss"));
-    console.log("getAnalyseGoodsSalesPer dateEnd=" + moment(dateBegan).format("YYYY-MM-DD HH-mm-ss"));
+    // console.log("getAnalyseGoodsSalesPer date_type=" + params.date_type + " dateBegan=" + moment(dateBegan).format("YYYY-MM-DD HH-mm-ss"));
+    // console.log("getAnalyseGoodsSalesPer dateEnd=" + moment(dateBegan).format("YYYY-MM-DD HH-mm-ss"));
 
     let notGoodsTypes = [constants.E_ORDER_TYPE.RECHARGE, constants.E_ORDER_TYPE.MAINTAIN, constants.E_ORDER_TYPE.ORNAMENT]
     let aggOptions = [
@@ -574,7 +575,7 @@ class AnalyseData {
     shopNewCustomers = await customerModel.populate(shopNewCustomers, {path:'shop', model:'shop'});
 
     let startIndex = shopNewCustomers.length;
-    for(let i=startIndex; i<3; i++) {
+    for(let i=startIndex; i<3; i++) { // 不足3个补齐3个
       if (i<shops.length) {
         shopNewCustomers.push({
           shop:shops[i],
@@ -604,21 +605,270 @@ class AnalyseData {
     return shopNewCustomers;
   }
 
-  async getAnalyseVipNewAndOld(params, dateOffset) {
+  /**
+   * 获取会员的客单价/客单件
+   * @param {} orders 
+   */
+  async getVipPerCountAndAmount(orders) {
+    let newCount = 0;
+    let newSubCount = 0;
+    let newAmount = 0;
+    let otherCount = 0;
+    let otherSubCount = 0;
+    let otherAmount = 0;
+
+    orders.forEach(item=>{
+      if (item.is_new) {
+        newCount += item.count;
+        newSubCount += item.sub_count;
+        newAmount += item.amount;
+      } else {
+        otherCount += item.count;
+        otherSubCount += item.sub_count;
+        otherAmount += item.amount;
+      }
+    })
+
+    // let newCountPer = newCount === 0 ? 0 : (newSubCount / newCount);
+    // let newAmountPer = newCount === 0 ? 0 : (newAmount / newCount);
+    // let countPer = otherCount === 0 ? 0 : (otherSubCount / otherCount);
+    // let amountPer = otherCount === 0 ? 0 : (otherAmount / otherCount);
+
+    return {newCount, newSubCount, newAmount, otherCount, otherSubCount, otherAmount};
+  }
+
+  async getVipOrders(params, dateOffset) {
     const {dateBegan, dateEnd} = this.getDate(params.date_type, dateOffset);
-    let notGoodsTypes = [constants.E_ORDER_TYPE.RECHARGE]
-    let shops = await shopModel.find({});
+
+    let newCustomers = await customerModel.find({vip_card_date:{$gte:dateBegan, $lt:dateEnd}}, {_id:1});
+    let newCusDatas = {};
+    newCustomers.forEach(item=>{
+      newCusDatas[item._id] = item;
+    })
+
     let aggOptions = [
-      { $match: {vip_card_date:{$gte:dateBegan, $lt:dateEnd}}},
+      { $match: {is_recharge:false, create_date:{$gte:dateBegan, $lt:dateEnd}}},
+      { $group: {"_id": {customer:'customer'}, amount:{$sum:"$system_price"}, "count":{$sum:1}, "sub_count":{$sum:{"$size":"$sub_orders"}}}},
+      { $project: {"_id": 0, "customer" : "$_id.customer", "count" : "$count", "sub_count" : "$sub_count", "amount" : "$amount"}},
+    ];
+    let orders = await orderModel.aggregate(aggOptions);
+    orders.forEach(item=>{
+      item.is_new = newCusDatas[item.customer];
+    })
+
+    return {orders, newCusDatas};
+  }
+
+  /**
+   * 复购人数
+   * @param {*} params 
+   * @param {*} dateOffset 
+   */
+  async getVipBuy2Count(params, dateOffset) {
+    const {dateBegan, dateEnd} = this.getDate(params.date_type, dateOffset);
+    let allCustomer = await customerModel.find({}, {_id:1});
+    let allCustomerCount = allCustomer && allCustomer.length || 0;
+
+    let aggOptions = [
+      { $match: {is_recharge:false, create_date:{$gte:dateBegan, $lt:dateEnd}}},
+      { $group: {"_id": {customer:'customer'}, "count":{$sum:1}}},
+      { $match: {count:{$gte:2}}},
       { $group: {"_id": null, "count":{$sum:1}}},
     ];
-    let newCustomers = await customerModel.find({vip_card_date:{$gte:dateBegan, $lt:dateEnd}}, {_id:1});
-    let allCustomers = await customerModel.find({}, {_id:1});
-    let newCount = newCustomers && newCustomers.length || 0;
-    let allCount = allCustomers && allCustomers.length || 0;
+    let orders = await orderModel.aggregate(aggOptions);
+    let buy2Count = orders && orders.length > 0 && orders[0].count;
 
-    return [newCount, allCount-newCount];
+    return buy2Count;
   }
+
+  /**
+   * 获取天的分析数据
+   * @param {*} params 
+   * @param {*} dateOffset 
+   */
+  async getAnalyseVipNewAndOld(params, dateOffset) {
+    if (dateOffset===null || dateOffset === undefined || isNaN(dateOffset)) dateOffset = 0;
+    const {orders} = await this.getVipOrders(params, dateOffset);
+
+    let countAndAmount = await this.getVipPerCountAndAmount(orders);
+
+    // 新老会员销售额
+    let newAndOldAmount = [countAndAmount.newAmount, countAndAmount.otherAmount];    
+
+    // 获取客单价和客单价
+    let countAndAmountPer = new Array(4);
+    countAndAmountPer[0] = countAndAmount.newCount === 0 ? 0 : (countAndAmount.newSubCount / countAndAmount.newCount);
+    countAndAmountPer[1] = countAndAmount.newCount === 0 ? 0 : (countAndAmount.newAmount / countAndAmount.newCount);
+    countAndAmountPer[2] = countAndAmount.otherCount === 0 ? 0 : (countAndAmount.otherSubCount / countAndAmount.otherCount);
+    countAndAmountPer[3] = countAndAmount.otherCount === 0 ? 0 : (countAndAmount.otherAmount / countAndAmount.otherCount);
+
+    let allCustomerCount = 0;
+
+    if (params.date_type === 1) { // 日
+      return {newAndOldAmount, countAndAmountPer};
+    } else if (params.date_type !== 2) { // 周/月/年
+      let allCustomer = await customerModel.find({}, {_id:1});
+      allCustomerCount = allCustomer && allCustomer.length || 0;
+
+      let _lastDate = this.getDate(params.date_type, dateOffset-1);
+      let lastAllCustomer = await customerModel.find({vip_card_date:{$lt:_lastDate.dateEnd}}, {_id:1});
+      allCustomerCount = lastAllCustomer && lastAllCustomer.length || 0;
+      
+      // 复购率
+      let repeatBuyPer = {
+        all_count:allCustomerCount,
+        old_count:countAndAmount.otherCount,
+        current_count:0,
+        last_count:0,
+        last_all_count:allCustomerCount,
+      };
+      orders.forEach(item=>{
+        if (item.count > 1) {
+          repeatBuyPer.current_count++;
+        }
+      })
+
+      repeatBuyPer.last_count = await this.getVipBuy2Count(params, dateOffset+1);
+
+      if (params.date_type === 2) { // 周
+        return {newAndOldAmount, countAndAmountPer, repeatBuyPer};
+      }
+
+      if (params.date_type === 3) { // 月
+        let monthBuyCountList = [];
+        // 最近5个月老会员消费次数
+        for(let i=4; i>0; i--) {
+          const monthVipOrders = await this.getVipOrders(params, dateOffset - i);
+          let _countAndAmount = await this.getVipPerCountAndAmount(monthVipOrders.orders);
+          monthBuyCountList.push(_countAndAmount.otherCount);
+        }
+        monthBuyCountList.push(countAndAmount.otherCount);
+
+        let vaildVip = {
+          all_count:allCustomerCount,
+          vaild_count:0,
+        };
+        
+        let _date = this.getDate(params.date_type, dateOffset);
+        let _dateEnd = _date.dateEnd;
+        let _dateBegan = moment(_dateEnd).subtract(365, 'days');
+        let aggOptions = [
+          { $match: {is_recharge:false, create_date:{$gte:_dateBegan, $lt:_dateEnd}}},
+          { $group: {"_id": {customer:'customer'}, "count":{$sum:1}}},
+        ];
+        let _orders = await orderModel.aggregate(aggOptions);
+        vaildVip.vaild_count = _orders && _orders.length;
+
+        return {newAndOldAmount, countAndAmountPer, repeatBuyPer, monthBuyCountList, vaildVip};
+      }
+
+      if (params.date_type === 4) { // 年
+
+        // 本年4季度老会员消费次数
+        let quarterBuyCountList = [];
+        for(let i=0; i<4; i++) {
+          const quarterVipOrders = this.getVipOrders({date_type:5}, i + 1 + dateOffset*4);
+          let _countAndAmount = this.getVipPerCountAndAmount(quarterVipOrders.orders);
+          quarterBuyCountList.push(_countAndAmount.otherCount);
+        }
+
+        let _date = this.getDate(params.date_type, dateOffset);
+        let aggOptions = [
+          { $match: {is_recharge:false, create_date:{$gte:_date.dateBegan, $lt:_date.dateEnd}}},
+          { $group: {"_id": {customer:'customer'}, "count":{$sum:1}}},
+          {
+            $project: { 
+              "customer": "$_id.customer", "count":"$count", 
+              "count1": {
+                $cond: [{
+                  $and:[
+                    { $gte:['$count',0]},
+                    { $lte:['$count',1]}
+                  ]
+                }, 1, 0]
+              }, 
+              "count3": {
+                $cond: [{
+                  $and:[
+                    { $gte:['$count',2]},
+                    { $lte:['$count',3]}
+                  ]
+                }, 1, 0]
+              }, 
+              "count5": {
+                $cond: [{
+                  $and:[
+                    { $gte:['$count',4]},
+                    { $lte:['$count',5]}
+                  ]
+                }, 1, 0]
+              }, 
+              "count_other": {
+                $cond: [{
+                  $and:[
+                    { $gte:['$count',6]}
+                  ]
+                }, 1, 0]
+              }
+            }
+          },
+          { 
+            $group: {
+              "_id": null, "count":{$sum:"$count"}, "max_count":{$max:"$count"}, "customer_count":{$sum:1},
+              "count1":{$sum:"count1"}, "count3":{$sum:"count3"}, "count5":{$sum:"count5"}, "count_other":{$sum:"count_other"},
+            }
+          }
+        ];
+        let _orders = await orderModel.aggregate(aggOptions);
+        let _order = _orders&&_orders.length>0&&_orders[0] || {
+          count:0, max_count:0, customer_count:0, count1:0, count3:0, count5:0, count_other:0
+        };
+
+        
+        let _lastYearDate = this.getDate(params.date_type, dateOffset-1);
+        let lastYearAggOptions = [
+          { $match: {is_recharge:false, create_date:{$gte:_lastYearDate.dateBegan, $lt:_lastYearDate.dateEnd}}},
+          { $group: {"_id": {customer:'customer'}, "count":{$sum:1}}},
+          { $group: {"_id": null, "customer_count":{$sum:1}, "count":{$sum:"$count"}}},
+        ];
+        let _lastYearOrders = await orderModel.aggregate(lastYearAggOptions);
+
+        // 有效会员数
+        let vaildVip = {
+          all_count:allCustomerCount, // 总会员数
+          vaild_count:_order.customer_count// 有效会员数
+        };
+
+        // 复购次数
+        let repeatBuyCount = {
+          current_all_count:vaildVip.vaild_count,
+          current:_order.count, // 本年
+          last:_lastYearOrders&&_lastYearOrders.length>0&&_lastYearOrders[0].count||0, // 上一年
+          last_all_count:_lastYearOrders&&_lastYearOrders.length>0&&_lastYearOrders[0].customer_count||0,
+          highest:_order.max_count // 最高消费次数
+        }
+
+        // 消费次数分布[1，3，5，999999]
+        let buyCount = [
+          { name:"消费1次", value:_order.count1}, 
+          { name:"消费2-3次", value:_order.count3}, 
+          { name:"消费4-5次", value:_order.count5}, 
+          { name:"消费5次以上", value:_order.count_other}
+        ];
+        return {
+          newAndOldAmount, 
+          countAndAmountPer, 
+          repeatBuyPer, 
+          quarterBuyCountList, 
+          repeatBuyCount,
+          buyCount, 
+          vaildVip
+        };
+      }
+
+    } 
+  }
+
 }
 
 module.exports = new AnalyseData()

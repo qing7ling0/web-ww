@@ -158,3 +158,55 @@ export const analyseGoodsPriceList4Quarter = {
     return await analyseData.getAnalyseGoodsPriceList4Quarter(params);
 	}
 }
+
+
+export const analyseVipShopTop = {
+  type: new GraphQLList(types.analyseVipShopType),
+  args: {
+    date_type:{type:GraphQLInt},
+    date_offset:{type:GraphQLInt}
+  },
+	async resolve (root, params, options) {
+    return await analyseData.getAnalyseVipNew(params, params.date_offset);
+	}
+}
+export const analyseVipDay = {
+  type: new GraphQLList(types.analyseVipDayType),
+  args: {
+    date_type:{type:GraphQLInt},
+    date_offset:{type:GraphQLInt}
+  },
+	async resolve (root, params, options) {
+    return await analyseData.getAnalyseVipNewAndOld(params, params.date_offset);
+	}
+}
+export const analyseVipWeek = {
+  type: new GraphQLList(types.analyseVipWeekType),
+  args: {
+    date_type:{type:GraphQLInt},
+    date_offset:{type:GraphQLInt}
+  },
+	async resolve (root, params, options) {
+    return await analyseData.getAnalyseVipNewAndOld(params, params.date_offset);
+	}
+}
+export const analyseVipMonth = {
+  type: new GraphQLList(types.analyseVipMonthType),
+  args: {
+    date_type:{type:GraphQLInt},
+    date_offset:{type:GraphQLInt}
+  },
+	async resolve (root, params, options) {
+    return await analyseData.getAnalyseVipNewAndOld(params, params.date_offset);
+	}
+}
+export const analyseVipYear = {
+  type: new GraphQLList(types.analyseVipYearType),
+  args: {
+    date_type:{type:GraphQLInt},
+    date_offset:{type:GraphQLInt}
+  },
+	async resolve (root, params, options) {
+    return await analyseData.getAnalyseVipNewAndOld(params, params.date_offset);
+	}
+}
