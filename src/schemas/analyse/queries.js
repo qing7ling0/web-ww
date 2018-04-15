@@ -171,7 +171,7 @@ export const analyseVipShopTop = {
 	}
 }
 export const analyseVipDay = {
-  type: new GraphQLList(types.analyseVipDayType),
+  type: types.analyseVipDayType,
   args: {
     date_type:{type:GraphQLInt},
     date_offset:{type:GraphQLInt}
@@ -181,7 +181,7 @@ export const analyseVipDay = {
 	}
 }
 export const analyseVipWeek = {
-  type: new GraphQLList(types.analyseVipWeekType),
+  type: types.analyseVipWeekType,
   args: {
     date_type:{type:GraphQLInt},
     date_offset:{type:GraphQLInt}
@@ -191,7 +191,7 @@ export const analyseVipWeek = {
 	}
 }
 export const analyseVipMonth = {
-  type: new GraphQLList(types.analyseVipMonthType),
+  type: types.analyseVipMonthType,
   args: {
     date_type:{type:GraphQLInt},
     date_offset:{type:GraphQLInt}
@@ -201,7 +201,7 @@ export const analyseVipMonth = {
 	}
 }
 export const analyseVipYear = {
-  type: new GraphQLList(types.analyseVipYearType),
+  type: types.analyseVipYearType,
   args: {
     date_type:{type:GraphQLInt},
     date_offset:{type:GraphQLInt}

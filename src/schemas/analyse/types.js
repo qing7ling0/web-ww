@@ -145,7 +145,7 @@ const vaildVipType = new GraphQLObjectType({
 });
 
 const baseAnalyseType = new GraphQLObjectType({
-  name: 'vaildVipType',
+  name: 'baseAnalyseType',
   fields: {
     name: {type: GraphQLString, description:'名称'},
     value: {type: GraphQLFloat, description:'值'}
@@ -170,7 +170,7 @@ export const analyseVipShopType = new GraphQLObjectType({
 export const analyseVipDayType = new GraphQLObjectType({
   name: 'analyseVipDayType',
   fields: {
-    countAndAmount: {type: new GraphQLList(GraphQLFloat), description:'新老会员销售额'},
+    newAndOldAmount: {type: new GraphQLList(GraphQLFloat), description:'新老会员销售额'},
     countAndAmountPer: {type: new GraphQLList(GraphQLFloat), description:'客单价和客单价'},
   }
 });
@@ -181,7 +181,7 @@ export const analyseVipDayType = new GraphQLObjectType({
 export const analyseVipWeekType = new GraphQLObjectType({
   name: 'analyseVipWeekType',
   fields: {
-    countAndAmount: {type: new GraphQLList(GraphQLFloat), description:'新老会员销售额'},
+    newAndOldAmount: {type: new GraphQLList(GraphQLFloat), description:'新老会员销售额'},
     countAndAmountPer: {type: new GraphQLList(GraphQLFloat), description:'客单价和客单价'},
     repeatBuyPer: {type: repeatBuyPerType, description:'复购率'},
   }
@@ -193,7 +193,7 @@ export const analyseVipWeekType = new GraphQLObjectType({
 export const analyseVipMonthType = new GraphQLObjectType({
   name: 'analyseVipMonthType',
   fields: {
-    countAndAmount: {type: new GraphQLList(GraphQLFloat), description:'新老会员销售额'},
+    newAndOldAmount: {type: new GraphQLList(GraphQLFloat), description:'新老会员销售额'},
     countAndAmountPer: {type: new GraphQLList(GraphQLFloat), description:'客单价和客单价'},
     repeatBuyPer: {type: repeatBuyPerType, description:'复购率'},
     vaildVip: {type: vaildVipType, description:'有效会员'},
@@ -207,7 +207,7 @@ export const analyseVipMonthType = new GraphQLObjectType({
 export const analyseVipYearType = new GraphQLObjectType({
   name: 'analyseVipYearType',
   fields: {
-    countAndAmount: {type: new GraphQLList(GraphQLFloat), description:'新老会员销售额'},
+    newAndOldAmount: {type: new GraphQLList(GraphQLFloat), description:'新老会员销售额'},
     countAndAmountPer: {type: new GraphQLList(GraphQLFloat), description:'客单价和客单价'},
     repeatBuyPer: {type: repeatBuyPerType, description:'复购率'},
     repeatBuyCount: {type: repeatBuyCountType, description:'复购率'},

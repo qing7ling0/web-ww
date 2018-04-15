@@ -33,6 +33,7 @@ class AnalyseData {
    */
   async getAnalyseShopSalesList(params) {
     const {dateBegan, dateEnd} = this.getDate(params.date_type);
+      console.log('getAnalyseShopSalesList dateBegan=' + moment(dateBegan).format("YYYY-MM-DD HH:mm:ss") + 'dateEnd=' + moment(dateEnd).format("YYYY-MM-DD HH:mm:ss"))
 
     let aggOptions = [
       { $match: {is_recharge:false, create_time:{$gte:dateBegan, $lt:dateEnd}} },
@@ -40,7 +41,7 @@ class AnalyseData {
       { $project : {"_id": 0, "shop" : "$_id.shop", "amount" : "$amount", "count" : "$count", "sub_count" : "$sub_count"}}
     ];
     let orders = await orderModel.aggregate(aggOptions);
-    // console.log('getAnalyseShopSalesList orders=' + JSON.stringify(orders))
+    console.log('getAnalyseShopSalesList orders=' + JSON.stringify(orders))
     let newOrders = await orderModel.populate(orders, {path:'shop', model:'shop'});
     // console.log('getAnalyseShopSalesList orders=' + JSON.stringify(newOrders))
     
@@ -86,7 +87,7 @@ class AnalyseData {
 
     let list = [];
     for(let i=0; i<12; i++) {
-      console.log('getAnalyseSalesListLast12Month dateBegan=' + dateBegan.format("YYYY-MM-DD HH:mm:ss") + 'dateEnd=' + dateEnd.format("YYYY-MM-DD HH:mm:ss"))
+      // console.log('getAnalyseSalesListLast12Month dateBegan=' + dateBegan.format("YYYY-MM-DD HH:mm:ss") + 'dateEnd=' + dateEnd.format("YYYY-MM-DD HH:mm:ss"))
 
       let aggOptions = [
         { $match: {is_recharge:false, create_time:{$gte:dateBegan.toDate(), $lt:dateEnd.toDate()}} },
@@ -223,16 +224,18 @@ class AnalyseData {
     let dateEnd = date.toDate();
     if (date_type === 2) { // 周
       let _date = moment(date.weekday(0));
-      dateBegan = _date.toDate();
+      dateBegan = _date.add(7*index, 'days').toDate();
       dateEnd = _date.add(7, 'days').toDate();
     } else if (date_type === 3) { // 月
       let _date = moment(date.format("YYYY-MM")+"-01");
-      dateBegan = _date.toDate();
+      dateBegan = _date.add(index, 'month').toDate();
       dateEnd = _date.add(1, 'month').toDate();
+      console.log('getdate month')
     } else if (date_type === 4) { // 年
       let _date = moment(date.format("YYYY")+"-01-01");
-      dateBegan = _date.toDate();
-      dateEnd = _date.add(1, 'year').toDate();
+      dateBegan = _date.add(index, 'years').toDate();
+      dateEnd = _date.add(1, 'years').toDate();
+      console.log('getdate year')
     } else if (date_type === 5) { // 季度
       if (index === undefined || index === null) {
         // 未指定index，表示当前季度
@@ -244,7 +247,7 @@ class AnalyseData {
       dateEnd = moment(_date).add(3*index, 'month').toDate();
     } else { // 日
       let _date = moment(date.format("YYYY-MM-DD"));
-      dateBegan = _date.toDate();
+      dateBegan = _date.add(index, 'day').toDate();
       dateEnd = _date.add(1, 'day').toDate();
     }
 
@@ -421,17 +424,13 @@ class AnalyseData {
     let orders = await subOrderModel.aggregate(aggOptions);
     // console.log('getAnalyseGoodsPrice orders=' + JSON.stringify(orders))
     let ret = [];
-    if (orders && orders.length > 0) {
-      for(let key in data) {
-        if (orders[0][key] || orders[0][key] === 0) {
-          let item = {
-            price:0,value:0
-          }
-          item.price = data[key].price;
-          item.value = orders[0][key];
-          ret.push(item);
-        }
+    for(let key in data) {
+      let item = {
+        price:0,value:0
       }
+      item.price = data[key].price;
+      item.value = orders && orders.length>0 && orders[0][key] || 0;
+      ret.push(item);
     }
 
     return ret;
@@ -587,14 +586,14 @@ class AnalyseData {
     
     let ids = shopNewCustomers.map(item=>item.shop && item.shop._id.toString());
     aggOptions = [
-      { $match: {vip_card_shop:{$in:ids}}},
       { $group: {"_id": { "shop": "$vip_card_shop"}, "count":{$sum:1}}},
       { $project : {"_id": 0, "shop" : "$_id.shop",  "count" : "$count"}}
     ];
     let shopCustomers = await customerModel.aggregate(aggOptions);
+    // console.log('getAnalyseVipNew shopCustomers=' + JSON.stringify(shopCustomers))
 
     for(let cus of shopNewCustomers) {
-      let _cus = shopCustomers.find(item=>item.shop === cus.shop);
+      let _cus = shopCustomers.find(item=>item.shop.toString() === (cus.shop && cus.shop._id.toString() || null));
       if (_cus) {
         cus.total_count = _cus.count;
       } else {
@@ -639,6 +638,8 @@ class AnalyseData {
 
   async getVipOrders(params, dateOffset) {
     const {dateBegan, dateEnd} = this.getDate(params.date_type, dateOffset);
+    // console.log("getVipOrders date_type=" + params.date_type + " dateBegan=" + moment(dateBegan).format("YYYY-MM-DD HH-mm-ss"));
+    // console.log("getVipOrders dateEnd=" + moment(dateEnd).format("YYYY-MM-DD HH-mm-ss"));
 
     let newCustomers = await customerModel.find({vip_card_date:{$gte:dateBegan, $lt:dateEnd}}, {_id:1});
     let newCusDatas = {};
@@ -647,16 +648,17 @@ class AnalyseData {
     })
 
     let aggOptions = [
-      { $match: {is_recharge:false, create_date:{$gte:dateBegan, $lt:dateEnd}}},
-      { $group: {"_id": {customer:'customer'}, amount:{$sum:"$system_price"}, "count":{$sum:1}, "sub_count":{$sum:{"$size":"$sub_orders"}}}},
+      { $match: {is_recharge:false, create_time:{$gte:dateBegan, $lt:dateEnd}}},
+      { $group: {"_id": {"customer":"$customer"}, amount:{$sum:"$system_price"}, "count":{$sum:1}, "sub_count":{$sum:{"$size":"$sub_orders"}}}},
       { $project: {"_id": 0, "customer" : "$_id.customer", "count" : "$count", "sub_count" : "$sub_count", "amount" : "$amount"}},
     ];
     let orders = await orderModel.aggregate(aggOptions);
     orders.forEach(item=>{
-      item.is_new = newCusDatas[item.customer];
+      item.is_new = !!newCusDatas[item.customer];
     })
+    // console.log('getVipOrders orders=' + JSON.stringify(orders))
 
-    return {orders, newCusDatas};
+    return {orders:orders, newCusDatas:newCusDatas};
   }
 
   /**
@@ -670,8 +672,8 @@ class AnalyseData {
     let allCustomerCount = allCustomer && allCustomer.length || 0;
 
     let aggOptions = [
-      { $match: {is_recharge:false, create_date:{$gte:dateBegan, $lt:dateEnd}}},
-      { $group: {"_id": {customer:'customer'}, "count":{$sum:1}}},
+      { $match: {is_recharge:false, create_time:{$gte:dateBegan, $lt:dateEnd}}},
+      { $group: {"_id": {"customer":'$customer'}, "count":{$sum:1}}},
       { $match: {count:{$gte:2}}},
       { $group: {"_id": null, "count":{$sum:1}}},
     ];
@@ -682,13 +684,14 @@ class AnalyseData {
   }
 
   /**
-   * 获取天的分析数据
+   * 获取分析数据
    * @param {*} params 
    * @param {*} dateOffset 
    */
   async getAnalyseVipNewAndOld(params, dateOffset) {
     if (dateOffset===null || dateOffset === undefined || isNaN(dateOffset)) dateOffset = 0;
     const {orders} = await this.getVipOrders(params, dateOffset);
+    // console.log('getAnalyseVipNewAndOld orders=' + JSON.stringify(orders))
 
     let countAndAmount = await this.getVipPerCountAndAmount(orders);
 
@@ -706,13 +709,13 @@ class AnalyseData {
 
     if (params.date_type === 1) { // 日
       return {newAndOldAmount, countAndAmountPer};
-    } else if (params.date_type !== 2) { // 周/月/年
+    } else if (params.date_type !== 1) { // 周/月/年
       let allCustomer = await customerModel.find({}, {_id:1});
       allCustomerCount = allCustomer && allCustomer.length || 0;
 
       let _lastDate = this.getDate(params.date_type, dateOffset-1);
       let lastAllCustomer = await customerModel.find({vip_card_date:{$lt:_lastDate.dateEnd}}, {_id:1});
-      allCustomerCount = lastAllCustomer && lastAllCustomer.length || 0;
+      lastAllCustomer = lastAllCustomer && lastAllCustomer.length || 0;
       
       // 复购率
       let repeatBuyPer = {
@@ -753,8 +756,8 @@ class AnalyseData {
         let _dateEnd = _date.dateEnd;
         let _dateBegan = moment(_dateEnd).subtract(365, 'days');
         let aggOptions = [
-          { $match: {is_recharge:false, create_date:{$gte:_dateBegan, $lt:_dateEnd}}},
-          { $group: {"_id": {customer:'customer'}, "count":{$sum:1}}},
+          { $match: {is_recharge:false, create_time:{$gte:_dateBegan, $lt:_dateEnd}}},
+          { $group: {"_id": {"customer":'$customer'}, "count":{$sum:1}}},
         ];
         let _orders = await orderModel.aggregate(aggOptions);
         vaildVip.vaild_count = _orders && _orders.length;
@@ -767,15 +770,15 @@ class AnalyseData {
         // 本年4季度老会员消费次数
         let quarterBuyCountList = [];
         for(let i=0; i<4; i++) {
-          const quarterVipOrders = this.getVipOrders({date_type:5}, i + 1 + dateOffset*4);
-          let _countAndAmount = this.getVipPerCountAndAmount(quarterVipOrders.orders);
+          const quarterVipOrders = await this.getVipOrders({date_type:5}, i + 1 + dateOffset*4);
+          let _countAndAmount = await this.getVipPerCountAndAmount(quarterVipOrders.orders);
           quarterBuyCountList.push(_countAndAmount.otherCount);
         }
 
         let _date = this.getDate(params.date_type, dateOffset);
         let aggOptions = [
-          { $match: {is_recharge:false, create_date:{$gte:_date.dateBegan, $lt:_date.dateEnd}}},
-          { $group: {"_id": {customer:'customer'}, "count":{$sum:1}}},
+          { $match: {is_recharge:false, create_time:{$gte:_date.dateBegan, $lt:_date.dateEnd}}},
+          { $group: {"_id": {"customer":'$customer'}, "count":{$sum:1}}},
           {
             $project: { 
               "customer": "$_id.customer", "count":"$count", 
@@ -804,22 +807,19 @@ class AnalyseData {
                 }, 1, 0]
               }, 
               "count_other": {
-                $cond: [{
-                  $and:[
-                    { $gte:['$count',6]}
-                  ]
-                }, 1, 0]
+                $cond: [{ $gte:['$count',6]}, 1, 0]
               }
             }
           },
           { 
             $group: {
               "_id": null, "count":{$sum:"$count"}, "max_count":{$max:"$count"}, "customer_count":{$sum:1},
-              "count1":{$sum:"count1"}, "count3":{$sum:"count3"}, "count5":{$sum:"count5"}, "count_other":{$sum:"count_other"},
+              "count1":{$sum:"$count1"}, "count3":{$sum:"$count3"}, "count5":{$sum:"$count5"}, "count_other":{$sum:"$count_other"},
             }
           }
         ];
         let _orders = await orderModel.aggregate(aggOptions);
+        // console.log('getVipOrders _orders=' + JSON.stringify(_orders))
         let _order = _orders&&_orders.length>0&&_orders[0] || {
           count:0, max_count:0, customer_count:0, count1:0, count3:0, count5:0, count_other:0
         };
@@ -827,8 +827,8 @@ class AnalyseData {
         
         let _lastYearDate = this.getDate(params.date_type, dateOffset-1);
         let lastYearAggOptions = [
-          { $match: {is_recharge:false, create_date:{$gte:_lastYearDate.dateBegan, $lt:_lastYearDate.dateEnd}}},
-          { $group: {"_id": {customer:'customer'}, "count":{$sum:1}}},
+          { $match: {is_recharge:false, create_time:{$gte:_lastYearDate.dateBegan, $lt:_lastYearDate.dateEnd}}},
+          { $group: {"_id": {"customer":'$customer'}, "count":{$sum:1}}},
           { $group: {"_id": null, "customer_count":{$sum:1}, "count":{$sum:"$count"}}},
         ];
         let _lastYearOrders = await orderModel.aggregate(lastYearAggOptions);
@@ -850,10 +850,10 @@ class AnalyseData {
 
         // 消费次数分布[1，3，5，999999]
         let buyCount = [
-          { name:"消费1次", value:_order.count1}, 
-          { name:"消费2-3次", value:_order.count3}, 
-          { name:"消费4-5次", value:_order.count5}, 
-          { name:"消费5次以上", value:_order.count_other}
+          { name:"1次", value:_order.count1}, 
+          { name:"2-3次", value:_order.count3}, 
+          { name:"4-5次", value:_order.count5}, 
+          { name:"5次以上", value:_order.count_other}
         ];
         return {
           newAndOldAmount, 
