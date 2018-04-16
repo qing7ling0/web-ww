@@ -707,6 +707,7 @@ class SalesData {
             await fileModel.findByIdAndUpdate(doc.signature_pic, {temp:false});
           }
           await subOrderModel.updateMany({_id:{$in:newSubOrders}}, {order:newOrder._id});
+          let _updateCustomerData = null;
           if (customerPoint) {
             // 计算vip等级
             let exp = customer.vip_exp||0;
@@ -718,7 +719,16 @@ class SalesData {
                 break;
               }
             }
-            await customerModel.updateOne({_id:customer._id}, {vip_level:vipLevel, vip_exp:exp, point:customer.point+customerPoint});
+            _updateCustomerData = {vip_level:vipLevel, vip_exp:exp, point:customer.point+customerPoint};
+          }
+          let shoesSubOrder = null;
+          newSubOrders.forEach(item=>{
+            if (item.type === constants.E_ORDER_TYPE.SHOES) {
+              shoesSubOrder = item;
+            }
+          })
+          if (!_updateCustomerData) {
+            await customerModel.updateOne({_id:customer._id}, _updateCustomerData);
           }
           return newOrder;
         }

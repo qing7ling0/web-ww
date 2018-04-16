@@ -225,6 +225,12 @@ const shoesFields = {
   s_right_length: {type: Number, description:'右脚长度'},
   s_right_zhiWei: {type: Number, decription:'右脚趾围'},
   s_right_fuWei: {type: Number, decription:'右脚附维'},
+
+  s_yang_ban: {type:String, decription:'样板'},
+  s_tie_xuan: {type:String, decription:'贴楦'},
+  s_tie_fa: {type:String, decription:'贴法'},
+  s_mark: {type:String, decription:'备注'},
+
   s_customs:[orderCustomSchema], // 特殊定制
 }
 

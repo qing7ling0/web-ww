@@ -29,6 +29,7 @@ module.exports.MENU_IDS = {
 
   report:               5,
   reportTable:          501, // 销售报表
+  reportTableVip:       502, // vip脚型数据
 
   user:                 6,// 个人管理
   userWork:             601, // 店员排班

@@ -128,7 +128,9 @@ class CustomerListContainer extends Component {
   onItemConver = (item, index) => {
     let info = Object.assign({}, item);
     let typeInfo = common.commonUtils.getCustomerType(info.join_type);
-    info.birthday = moment(info.birthday).format('YYYY-MM-DD');
+    if (info.birthday) {
+      info.birthday = moment(info.birthday).format('YYYY-MM-DD');
+    }
     if (info.vip_card_date) {
       info.vip_card_date = moment(info.vip_card_date).format('YYYY-MM-DD HH:mm:ss');
     }

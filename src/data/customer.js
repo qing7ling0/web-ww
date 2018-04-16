@@ -117,6 +117,39 @@ class CustomerData {
       throw new ApiError(ApiErrorNames.DELETE_FAIL);
     }
   }
+
+  /**
+   * 获取客户脚型数据列表
+   */
+  async getVipFooterList(page, options) {
+    let customers = await this.getList(page, options);
+
+    if (customers) {
+      for(let item of customers) {
+        let suborder = await subOrderModel.findOne({customer:item._id, type:constants.E_ORDER_TYPE.SHOES}, {
+          suber_order_id:1, s_foot_size:1, s_left_fuwei:1, s_left_zhiwei:1, s_left_length:1,
+          s_right_fuwei:1, s_right_zhiwei:1, s_right_length:1,
+        }).sort({create_time:-1});
+        if (suborder) {
+          item = {...item, ...suborder};
+        }
+      }
+    }
+
+    return customers;
+  }
+
+  async getVipFooterOrderList(page, options) {
+    let suborders  = await DB.getList(subOrderModel, options, page, (query) =>{
+       return query.populate('shop')
+    })
+    if (suborders) {
+      for(let item of suborders) {
+        item.s_xuan_hao_name = item.s_xuan_hao && item.s_xuan_hao.name;
+        item.shop_name = item.shop && item.shop.name;
+      }
+    }
+  }
 }
 
 module.exports = new CustomerData()

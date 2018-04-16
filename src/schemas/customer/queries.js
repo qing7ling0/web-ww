@@ -134,3 +134,14 @@ export const customerReportInfo = {
     return await salesData.getCustomerReportInfo(params.id);
 	}
 }
+
+export const customerVipFooterList = {
+  type: types.customerVipFooterType,
+  args: {
+    page: {type: GraphQLInt},
+    pageSize: {type: GraphQLInt},
+  },
+	async resolve (root, params, options) {
+    return await customerData.getVipFooterList({page:params.page, pageSize:params.pageSize}, {});
+	}
+}

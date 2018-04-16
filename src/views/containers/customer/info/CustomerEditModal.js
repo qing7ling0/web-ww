@@ -150,6 +150,8 @@ class CustomerEditModal extends Component {
       // values = utils.diffent(values, this.props.data);
       if (values.birthday) {
         values.birthday = values.birthday.format('YYYY-MM-DD')
+      } else {
+        values.birthday = "";
       }
       if (values.vip_card_date) {
         values.vip_card_date = values.vip_card_date.format('YYYY-MM-DD')

@@ -17,6 +17,7 @@ module.exports.Menus = [
     icon: 'database',
     subMenus: [
       {id:MENU_IDS.reportTable, name:'销售报表'},
+      {id:MENU_IDS.reportTableVip, name:'VIP脚型档案'},
     ]
   },
   {
@@ -87,6 +88,7 @@ module.exports.Routers = [
 
   { id:MENU_IDS.report, name:'报表系统', url: '/home/report' },
   { id:MENU_IDS.reportTable, name:'销售报表', url: '/home/report/table' },
+  { id:MENU_IDS.VIP脚型档案, name:'销售报表', url: '/home/report/vip' },
 
   { id:MENU_IDS.sales, name:'进销存管理', url: '/home/sales' },
   { id:MENU_IDS.salesItems, name:'商品', url: '/home/sales/items' },
@@ -144,6 +146,17 @@ module.exports.Powers = [
   },
   { 
     id:MENU_IDS.reportTable, 
+    powers:[
+      { id:POWER_TYPES.SALE_MANAGER, power:{view:true} },
+      { id:POWER_TYPES.SHOP_MANAGER, power:{view:true} },
+      { id:POWER_TYPES.SHOP_GUIDE, power:{view:false} },
+      { id:POWER_TYPES.MANAGER_NORMAL, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
+      { id:POWER_TYPES.FACTORY_PRODUCTION, power:{view:false} },
+    ]
+  },
+  { 
+    id:MENU_IDS.reportTableVip, 
     powers:[
       { id:POWER_TYPES.SALE_MANAGER, power:{view:true} },
       { id:POWER_TYPES.SHOP_MANAGER, power:{view:true} },

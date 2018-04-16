@@ -15,6 +15,8 @@ import {
  import constants from '../../constants/constants'
  import  * as shopTypes from '../shop/types'
  import  * as userTypes from '../user/types'
+//  import  * as salesTypes from '../sales/types'
+
 
  export const customerInputFields = {
   name: {type:GraphQLString, description:'姓名'},
@@ -101,5 +103,68 @@ export const customerShopReportType = new GraphQLObjectType({
     monthCount: {type:GraphQLInt},
     yearCount: {type:GraphQLInt},
     notBuyCount: {type:GraphQLInt}
+  }
+});
+
+const orderFooterType = new GraphQLObjectType({
+  name: 'orderFooterType',
+  fields: {
+    s_foot_size: {type: GraphQLFloat, description:'尺码'},
+    s_left_length: {type: GraphQLFloat, description:'左脚长度'},
+    s_left_zhiWei: {type: GraphQLFloat, decription:'左脚趾围'},
+    s_left_fuWei: {type: GraphQLFloat, decription:'左脚附维'},
+    s_right_length: {type: GraphQLFloat, description:'右脚长度'},
+    s_right_zhiWei: {type: GraphQLFloat, decription:'右脚趾围'},
+    s_right_fuWei: {type: GraphQLFloat, decription:'右脚附维'},
+  }
+});
+
+export const customerVipFooterType = new GraphQLObjectType({
+  name: 'customerVipFooterType',
+  fields: {
+    _id:{type: GraphQLString, description:"id"},
+    name:{type: GraphQLString, description:"姓名"},
+    phone: {type: GraphQLString, description:"手机"},
+    s_foot_size: {type: GraphQLFloat, description:'尺码'},
+    s_left_length: {type: GraphQLFloat, description:'左脚长度'},
+    s_left_zhiWei: {type: GraphQLFloat, decription:'左脚趾围'},
+    s_left_fuWei: {type: GraphQLFloat, decription:'左脚附维'},
+    s_right_length: {type: GraphQLFloat, description:'右脚长度'},
+    s_right_zhiWei: {type: GraphQLFloat, decription:'右脚趾围'},
+    s_right_fuWei: {type: GraphQLFloat, decription:'右脚附维'},
+  }
+});
+
+export const customerVipShoesOrderType = new GraphQLObjectType({
+  name: 'customerVipShoesOrderType',
+  fields: {
+    _id:{type: GraphQLString, description:"id"},
+    date:{type: GraphQLString, description:"姓名"},
+    sub_order_id: {type: GraphQLString, description:"订单号"},
+    NID: {type: GraphQLString, description:"货号"},
+    s_xuan_hao_name: {type: GraphQLString, description:"货号"},
+    shop_name: {type: GraphQLString, description:'店铺'},
+    s_yang_ban: {type:GraphQLString, decription:'样板'},
+    s_tie_xuan: {type:GraphQLString, decription:'贴楦'},
+    s_tie_fa: {type:GraphQLString, decription:'贴法'},
+    s_mark: {type:GraphQLString, decription:'备注'},
+    s_feedback_list : {type: new GraphQLList(new GraphQLObjectType({
+      name: 'customerVipFooterType',
+      fields: {
+        _id:{type: GraphQLString, description:"id"},
+        message:{type: GraphQLString, description:"内容"},
+        editor_time: {type: GraphQLString, description:"时间"},
+      }
+    })), decription:'试脚鞋反馈列表'}
+  }
+});
+
+export const customerVipShoesOrderInputType = new GraphQLInputObjectType({
+  name: 'customerVipShoesOrderInputType',
+  fields: {
+    s_yang_ban: {type:GraphQLString, decription:'样板'},
+    s_tie_xuan: {type:GraphQLString, decription:'贴楦'},
+    s_tie_fa: {type:GraphQLString, decription:'贴法'},
+    s_mark: {type:GraphQLString, decription:'备注'}
   }
 });
