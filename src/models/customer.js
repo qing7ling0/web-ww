@@ -18,7 +18,7 @@ export const customerFields = {
   city: {type:String, description:'城市'},
   address: {type:String, description:'地址'},
   zipcode: {type:String, description:'邮编'},
-  vip_card_date: {type: Date, default:moment().format('YYYY-MM-DD'), description:'开卡日期'},
+  vip_card_date: {type: Date, description:'开卡日期'},
   vip_card_shop: {type: Schema.Types.ObjectId, ref:'shop', description:'开卡门店'},
   vip_card_guide: {type: Schema.Types.ObjectId, ref:'user_shop_guide', description:'开卡导购'},
   vip_level: {type: Number, default:0},

@@ -480,6 +480,13 @@ class SalesData {
       if (customer.zipcode !== customerDoc.zipcode) {
         _customerData.zipcode = customerDoc.zipcode;
       }
+
+      if (!customer.vip_card_date) {
+        _customerData.vip_card_date = moment().format('YYYY-MM-DD HH:mm:ss');
+        _customerData.vip_card_shop = order.shop;
+        _customerData.vip_card_guide = order.guide;
+      }
+
       await customerModel.findOneAndUpdate({_id:customer._id}, _customerData);
       return customer;
     } else { // 添加客户

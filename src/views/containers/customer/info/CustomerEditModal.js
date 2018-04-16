@@ -147,17 +147,21 @@ class CustomerEditModal extends Component {
 
   onSubmit = (err, values) => {
     if (!err) {
-      values = utils.diffent(values, this.props.data);
+      // values = utils.diffent(values, this.props.data);
       if (values.birthday) {
         values.birthday = values.birthday.format('YYYY-MM-DD')
       }
       if (values.vip_card_date) {
         values.vip_card_date = values.vip_card_date.format('YYYY-MM-DD')
+      } else {
+        values.vip_card_date = "";
       }
       values._id = this.props.data._id;
       if (values.tags) {
         values.tags = values.tags.map(tag=>{return {tag:tag}})
       }
+      if (!values.vip_level) values.vip_level = 0;
+      if (!values.point) values.point = 0;
       if (this.props.vipLevelList) {
         for(let lv of this.props.vipLevelList) {
           if (lv.level === values.vip_level) {

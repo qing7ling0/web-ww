@@ -71,7 +71,7 @@ class CustomerListContainer extends Component {
       { title: '地址', dataIndex: 'address', key: 'address'},
       { title: '开卡门店', dataIndex: 'vip_card_shop_label', key: 'vip_card_shop_label'},
       { title: '开卡人员', dataIndex: 'vip_card_shop_guide_label', key: 'vip_card_shop_guide_label'},
-      { title: '开卡日期', dataIndex: 'vip_card_date', key: 'vip_card_date', render:value=>moment(value).format("YYYY-MM-DD")},
+      { title: '开卡日期', dataIndex: 'vip_card_date', key: 'vip_card_date', render:value=>value && moment(value).format("YYYY-MM-DD") || ""},
       { title: '积分', dataIndex: 'point', key: 'point', render:((value)=>value||0)},
       { title: 'vip等级', dataIndex: 'vip_level', key: 'vip_level'},
       { title: '申请方式', dataIndex: 'join_type_label', key: 'join_type_label'},
@@ -129,7 +129,9 @@ class CustomerListContainer extends Component {
     let info = Object.assign({}, item);
     let typeInfo = common.commonUtils.getCustomerType(info.join_type);
     info.birthday = moment(info.birthday).format('YYYY-MM-DD');
-    info.vip_card_date = moment(info.vip_card_date).format('YYYY-MM-DD HH:mm:ss');
+    if (info.vip_card_date) {
+      info.vip_card_date = moment(info.vip_card_date).format('YYYY-MM-DD HH:mm:ss');
+    }
     info.vip_card_shop_label = info.vip_card_shop ? info.vip_card_shop.name: '';
     info.vip_card_shop_guide_label = info.vip_card_guide ? info.vip_card_guide.name: '';
     info.join_type_label = typeInfo ? typeInfo.label : '';

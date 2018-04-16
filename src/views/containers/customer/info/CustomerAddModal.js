@@ -142,6 +142,8 @@ class CustomerAddModal extends Component {
       }
       if (values.vip_card_date) {
         values.vip_card_date = values.vip_card_date.format('YYYY-MM-DD HH:mm:ss')
+      } else {
+        values.vip_card_date = "";
       }
       values.join_type = constants.BASE_CONSTANTS.E_CUSTOMER_TYPE.ADMIN;
       if (values.tags) {

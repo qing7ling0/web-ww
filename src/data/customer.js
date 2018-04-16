@@ -82,7 +82,7 @@ class CustomerData {
       if (doc.phone) {
         let find = await customerModel.findOne({phone:doc.phone});
         let find2 = await customerModel.findOne(conditions);
-        if (find && find2 && find._id !== find2._id) {
+        if (find && find2 && find._id.toString() !== find2._id.toString()) {
           throw new ApiError(ApiErrorNames.ADD_FAIL, '手机号已存在');
         }
       }
