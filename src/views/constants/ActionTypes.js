@@ -99,3 +99,7 @@ export const URGENT_UPDATE        = 'URGENT_UPDATE';
 export const GUIDE_GET_WORK_LIST  = 'GUIDE_GET_WORK_LIST';
 export const GUIDE_SET_WORK       = 'GUIDE_SET_WORK';
 export const GUIDE_HANDLE_WORK_APPLY = 'GUIDE_HANDLE_WORK_APPLY';
+
+export const VIP_FOOT_LIST        = 'VIP_FOOT_LIST'
+export const VIP_ORDER_LIST       = 'VIP_ORDER_LIST'
+export const VIP_ORDER_UPDATE     = 'VIP_ORDER_UPDATE'

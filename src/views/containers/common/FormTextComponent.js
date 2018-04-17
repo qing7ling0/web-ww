@@ -33,13 +33,14 @@ class FormTextComponent extends Component {
   }
 
   render() {
+    let value = (this.state.value!==null && this.state.value !== undefined) ? this.state.value : "";
     return (
       <Root>
         {
           this.props.render ?
-          this.props.render(this.state.value||'')
+          this.props.render(value)
           :
-          this.state.value || ''
+          value
         }
       </Root>
     )

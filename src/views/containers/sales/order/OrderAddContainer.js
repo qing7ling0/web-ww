@@ -378,7 +378,11 @@ class OrderAddContainer extends Component {
         forms.setFieldsValue({name:value.name});
         forms.setFieldsValue({phone:value.phone});
         forms.setFieldsValue({sex:value.sex});
-        forms.setFieldsValue({birthday:new moment(value.birthday)});
+        if (value.birthday) {
+          forms.setFieldsValue({birthday:moment(value.birthday)});
+        } else {
+          forms.setFieldsValue({birthday:null});
+        }
         forms.setFieldsValue({weixin:value.weixin});
         
         if (value.leftFoot) {
@@ -445,7 +449,7 @@ class OrderAddContainer extends Component {
       for(let key in values) {
         if (key==='source' || key==='shop' || key==='guide') {
           order[key] = values[key];
-        } else if (key === 'birthday') {
+        } else if (key === 'birthday' && values[key]) {
           customer[key] = moment(values[key]).format('YYYY-MM-DD');
         } else {
           customer[key] = values[key];

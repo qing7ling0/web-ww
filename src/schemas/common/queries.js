@@ -54,3 +54,16 @@ export const commonList = {
     return await commonData.getCommonList(null, {conditions:params.conditions}, page)
 	}
 }
+
+export const commonDataModify = {
+  type: GraphQLInt,
+  args: {},
+  async resolve (ctx, params, options) {
+    let vipImport = require('../../tools/import/vip-import');
+    if (vipImport) {
+      // await vipImport(ctx);
+    }
+
+    return 1;
+  }
+}

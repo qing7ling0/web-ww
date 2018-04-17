@@ -59,6 +59,7 @@ class NetHandler {
         routers {
           id, name, url
         }
+        commonDataModify
       }
     `;
     return netUtils.graphqlJson(config.GetServerAddress() + '/login', graphqlValue)

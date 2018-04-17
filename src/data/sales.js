@@ -544,7 +544,8 @@ class SalesData {
 
   // 支付支付金额
   async pay(customer, payInfo) {
-    payInfo.real_pay_price = Math.round((payInfo.undiscount_mount + payInfo.discount * payInfo.discount_mount)*10)/10;
+    let discount = !payInfo.select_store_card ? payInfo.discount : 1;
+    payInfo.real_pay_price = Math.round((payInfo.undiscount_mount + discount * payInfo.discount_mount)*10)/10;
     payInfo.discount_price = payInfo.discount_mount+payInfo.undiscount_mount - payInfo.real_pay_price;
     
     if (!payInfo.select_store_card) return payInfo; // 只有选择从充值卡中支付才去计算
@@ -554,7 +555,7 @@ class SalesData {
     if (canUseBalance < payInfo.real_pay_price) {
       throw new ApiError(ApiErrorNames.MOUNT_NOT_ENOUGH);
     }
-    // console.log(payInfo)
+    console.log(payInfo)
     let balance = customer.balance - payInfo.real_pay_price;
     await customerModel.findOneAndUpdate({_id:customer._id}, {$set:{balance:balance}});
     return payInfo;
@@ -585,6 +586,7 @@ class SalesData {
         select_store_card:doc.store_card_select,
       }
       let customerInfo = null;
+      let isRecharge = false;
       for(let sub of subOrders) {
         if (!sub.customer || !sub.customer.phone) {
           // TODO
@@ -605,6 +607,10 @@ class SalesData {
 
         if (customerInfo === null) {
           customerInfo = await customerModel.findOne({phone:sub.customer.phone});
+        }
+
+        if (sub.type === constants.E_ORDER_TYPE.RECHARGE) {
+          isRecharge = true;
         }
 
         sub.system_price = sub.price;
@@ -635,7 +641,7 @@ class SalesData {
       vipLevelList = vipLevelList && vipLevelList.list || [];
       // console.log(vipLevelList)
       vipLevelList.sort((a,b)=>a.level>b.level?1:-1);
-      if (vipLevel > -1) {
+      if (vipLevel > -1 && !payInfo.select_store_card && !isRecharge) {
         for(let lv of vipLevelList) {
           if (lv.level === vipLevel) {
             payInfo.discount = lv.discount / 10;

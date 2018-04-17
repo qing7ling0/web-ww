@@ -65,9 +65,21 @@ const updateCustomer = {
   }
 }
 
+const customerVipFooterOrderUpdate = {
+  type: new GraphQLList(GraphQLString),
+  args: {
+    id: {type:GraphQLString},
+    doc: {type: types.customerVipShoesOrderInputType},
+  },
+  async resolve (ctx, params, options) {
+    return await customerData.updateVipFooterOrder(params.id, params.doc);  
+  }
+}
+
 let mutations = {
   addCustomer,
   deleteCustomer,
-  updateCustomer
+  updateCustomer,
+  customerVipFooterOrderUpdate
 };
 export default mutations;

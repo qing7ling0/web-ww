@@ -78,8 +78,8 @@ class OrderRechargeModal extends Component {
       if (!item.decoratorOptions) {
         item.decoratorOptions = {};
       }
-      let value = this.state.data[item.name] || '';
-      if (value._id) {
+      let value = this.state.data[item.name];
+      if (value && value._id) {
         value = value._id;
       }
       item.decoratorOptions.initialValue = value;

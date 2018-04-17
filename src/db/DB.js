@@ -2,6 +2,7 @@
 
 var logUtils = require('../utils/log-utils')
 var mongoose = require('mongoose');
+const config = require('../../config/index');
 
 import { ApiError, ApiErrorNames } from '../error/api-errors'
 
@@ -10,7 +11,7 @@ class DB {
     constructor() {}
 
     static async connect() {
-        await mongoose.connect('mongodb://localhost:27017/web-ww',{ 
+        await mongoose.connect(`mongodb://${config.mongodb_url}`,{ 
             server: { poolSize: 4 },
             useMongoClient: true,
             promiseLibrary: require('bluebird')

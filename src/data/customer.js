@@ -17,6 +17,7 @@ import utils from '../utils/utils'
 import baseUtils from '../base/utils/utils'
 import constants from '../constants/constants'
 import DB from '../db/DB'
+import { tryFeedbackModel } from '../models/sales.js';
 
 const logUtil = require('../utils/log-utils');
 
@@ -124,8 +125,8 @@ class CustomerData {
   async getVipFooterList(page, options) {
     let customers = await this.getList(page, options);
 
-    if (customers) {
-      for(let item of customers) {
+    if (customers && customers.list) {
+      for(let item of customers.list) {
         let suborder = await subOrderModel.findOne({customer:item._id, type:constants.E_ORDER_TYPE.SHOES}, {
           suber_order_id:1, s_foot_size:1, s_left_fuwei:1, s_left_zhiwei:1, s_left_length:1,
           s_right_fuwei:1, s_right_zhiwei:1, s_right_length:1,
@@ -143,12 +144,26 @@ class CustomerData {
     let suborders  = await DB.getList(subOrderModel, options, page, (query) =>{
        return query.populate('shop')
     })
-    if (suborders) {
-      for(let item of suborders) {
+    if (suborders && suborders.list) {
+      for(let item of suborders.list) {
         item.s_xuan_hao_name = item.s_xuan_hao && item.s_xuan_hao.name;
         item.shop_name = item.shop && item.shop.name;
+        let feedbackList = await tryFeedbackModel.find({suborder_id:item._id}, null).sort({create_time:-1});
+        item.s_feedback_list = feedbackList || [];
       }
     }
+
+    return suborders;
+  }
+
+  async updateVipFooterOrder(id, doc) {
+    if (id) {
+      let ret = subOrderModel.update({_id:id}, doc);
+      if (ret.ok) {
+        return [id];
+      }
+    }
+    throw new ApiError(ApiErrorNames.UPDATE_FAIL);
   }
 }
 

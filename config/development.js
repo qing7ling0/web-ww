@@ -6,6 +6,7 @@ module.exports = {
   env: 'development', //环境名称
   port: 3001,         //服务端口号
   mongodb_url: 'localhost:27017/web-ww',    //数据库地址
+  // mongodb_url: '106.14.138.141:27017/web-ww',    //数据库地址
   redis_url:'',       //redis地址
   redis_port: '',      //redis端口号
 

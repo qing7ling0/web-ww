@@ -17,3 +17,12 @@ export const lastCustomerOrderInfo = createAction(types.LAST_CUSTOMER_ORDER_INFO
   return netHandler.getLastCustomerOrderInfo(id, orderType, tag, orderTypes.subOrderType)
 });
 
+export const getVipFootList = createAction(types.VIP_FOOT_LIST, (query, conditions, page) => {
+  return netHandler.getDefaultList("customerVipFooterList", graphqlTypes.customerReportVipType, conditions, page?page.page:-1, page?page.pageSize:0);
+})
+
+export const getVipFootOrderList = createAction(types.VIP_ORDER_LIST, (query, conditions, page) => {
+  return netHandler.getDefaultList("customerVipFooterOrderList", graphqlTypes.customerReportVipFootOrderType, conditions, page?page.page:-1, page?page.pageSize:0);
+})
+
+// export const 

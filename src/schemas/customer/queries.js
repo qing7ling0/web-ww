@@ -135,13 +135,64 @@ export const customerReportInfo = {
 	}
 }
 
+// 获取vip脚型数据
 export const customerVipFooterList = {
-  type: types.customerVipFooterType,
+  type: new GraphQLObjectType({
+    name: 'customerVipFooterList',
+    fields: {
+      page: {type:commonFields.defaultPageType},
+      list: {type:new GraphQLList(types.customerVipFooterType)}
+    }
+  }),
   args: {
     page: {type: GraphQLInt},
     pageSize: {type: GraphQLInt},
+    conditions: {type:GraphQLString}
   },
 	async resolve (root, params, options) {
-    return await customerData.getVipFooterList({page:params.page, pageSize:params.pageSize}, {});
+    try {
+      if (params.conditions) {
+        params.conditions = commonUtils.urlString2Conditions(params.conditions);
+      } else {
+        params.conditions = {};
+      }
+
+      return await customerData.getVipFooterList({page:params.page, pageSize:params.pageSize}, {conditions:params.conditions});
+    } catch(error) {
+      console.log("customerVipFooterList" + error);
+    }
+    return { list:[], page:{page:0, pageSize:0, total:0} };
+	}
+}
+
+/**
+ * 当前客户的所以鞋子订单
+ */
+export const customerVipFooterOrderList = {
+  type: new GraphQLObjectType({
+    name: 'customerVipFooterOrderList',
+    fields: {
+      page: {type:commonFields.defaultPageType},
+      list: {type:new GraphQLList(types.customerVipShoesOrderType)}
+    }
+  }),
+  args: {
+    page: {type: GraphQLInt},
+    pageSize: {type: GraphQLInt},
+    conditions: {type:GraphQLString}
+  },
+	async resolve (root, params, options) {
+    try {
+      if (params.conditions) {
+        params.conditions = commonUtils.urlString2Conditions(params.conditions);
+      } else {
+        params.conditions = {};
+      }
+
+      return await customerData.getVipFooterOrderList({page:params.page, pageSize:params.pageSize}, {conditions:params.conditions});
+    } catch(error) {
+      console.log("customerVipFooterList" + error);
+    }
+    return { list:[], page:{page:0, pageSize:0, total:0} };
 	}
 }

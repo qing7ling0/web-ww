@@ -139,7 +139,7 @@ export const customerVipShoesOrderType = new GraphQLObjectType({
   name: 'customerVipShoesOrderType',
   fields: {
     _id:{type: GraphQLString, description:"id"},
-    date:{type: GraphQLString, description:"姓名"},
+    create_time:{type: GraphQLString, description:"日期"},
     sub_order_id: {type: GraphQLString, description:"订单号"},
     NID: {type: GraphQLString, description:"货号"},
     s_xuan_hao_name: {type: GraphQLString, description:"货号"},
@@ -149,11 +149,11 @@ export const customerVipShoesOrderType = new GraphQLObjectType({
     s_tie_fa: {type:GraphQLString, decription:'贴法'},
     s_mark: {type:GraphQLString, decription:'备注'},
     s_feedback_list : {type: new GraphQLList(new GraphQLObjectType({
-      name: 'customerVipFooterType',
+      name: 's_feedback_list_type',
       fields: {
         _id:{type: GraphQLString, description:"id"},
         message:{type: GraphQLString, description:"内容"},
-        editor_time: {type: GraphQLString, description:"时间"},
+        create_time: {type: GraphQLString, description:"时间"},
       }
     })), decription:'试脚鞋反馈列表'}
   }
