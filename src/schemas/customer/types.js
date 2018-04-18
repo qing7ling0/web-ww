@@ -124,6 +124,7 @@ export const customerVipFooterType = new GraphQLObjectType({
   fields: {
     _id:{type: GraphQLString, description:"id"},
     name:{type: GraphQLString, description:"姓名"},
+    sex:{type: GraphQLString, description:"性别"},
     phone: {type: GraphQLString, description:"手机"},
     s_foot_size: {type: GraphQLFloat, description:'尺码'},
     s_left_length: {type: GraphQLFloat, description:'左脚长度'},
@@ -148,14 +149,7 @@ export const customerVipShoesOrderType = new GraphQLObjectType({
     s_tie_xuan: {type:GraphQLString, decription:'贴楦'},
     s_tie_fa: {type:GraphQLString, decription:'贴法'},
     s_mark: {type:GraphQLString, decription:'备注'},
-    s_feedback_list : {type: new GraphQLList(new GraphQLObjectType({
-      name: 's_feedback_list_type',
-      fields: {
-        _id:{type: GraphQLString, description:"id"},
-        message:{type: GraphQLString, description:"内容"},
-        create_time: {type: GraphQLString, description:"时间"},
-      }
-    })), decription:'试脚鞋反馈列表'}
+    s_feedback: {type:GraphQLString, decription:'试脚鞋汇总'},
   }
 });
 
@@ -165,6 +159,7 @@ export const customerVipShoesOrderInputType = new GraphQLInputObjectType({
     s_yang_ban: {type:GraphQLString, decription:'样板'},
     s_tie_xuan: {type:GraphQLString, decription:'贴楦'},
     s_tie_fa: {type:GraphQLString, decription:'贴法'},
-    s_mark: {type:GraphQLString, decription:'备注'}
+    s_mark: {type:GraphQLString, decription:'备注'},
+    s_feedback: {type:GraphQLString, decription:'试脚鞋汇总'}
   }
 });

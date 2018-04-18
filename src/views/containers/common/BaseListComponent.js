@@ -90,6 +90,7 @@ class BaseListComponent extends Component {
           canDelete={this.props.canDelete}
           hasSearch={this.props.hasSearch}
           searchPlaceholder={this.props.searchPlaceholder}
+          showHeader={this.props.showHeader}
           listener={(e, value)=>{
             if (e === 'add') {
               if (this.props.onBtnAddClicked) {

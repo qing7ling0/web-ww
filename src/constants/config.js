@@ -88,7 +88,7 @@ module.exports.Routers = [
 
   { id:MENU_IDS.report, name:'报表系统', url: '/home/report' },
   { id:MENU_IDS.reportTable, name:'销售报表', url: '/home/report/table' },
-  { id:MENU_IDS.VIP脚型档案, name:'销售报表', url: '/home/report/vip' },
+  { id:MENU_IDS.reportTableVip, name:'VIP脚型档案', url: '/home/report/vip' },
 
   { id:MENU_IDS.sales, name:'进销存管理', url: '/home/sales' },
   { id:MENU_IDS.salesItems, name:'商品', url: '/home/sales/items' },

@@ -103,3 +103,15 @@ export const listToSelectOptions = (list, valueFormat, labelFormat) => {
     return ret;
   })
 }
+
+export const getDefaultListResponse = (result) => {
+  let list = {};
+  for(let key in result) {
+    if (key.indexOf('List') !== -1) {
+      list[key] = result[key].list;
+      list[key+'Page'] = result[key].page;
+    }
+  }
+
+  return list;
+}

@@ -141,7 +141,7 @@ class OrderProfileContainer extends Component {
           
           extra={
             <ProfileBtnBack>
-              {
+              {/* {
                 this.canOperate() && this.props.profile && this.props.profile.state !== constants.BASE_CONSTANTS.E_ORDER_STATUS.COMPLETED ?
                 <Popconfirm title="确定要取消订单吗，确定后无法返回?" onConfirm={()=>{
                   this.props.reqSuborderCancel(this.props.profile._id);
@@ -151,11 +151,11 @@ class OrderProfileContainer extends Component {
                 </Popconfirm>
                 :
                 null
-              }
+              } */}
               <span> </span>
-              <Button type="primary" shape="circle" icon="rollback" onClick={()=>{
+              <Button type="primary" onClick={()=>{
                 this.props.history.goBack();
-              }} />
+              }} >返回</Button>
             </ProfileBtnBack>
           }>
             <div>

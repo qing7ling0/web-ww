@@ -165,6 +165,16 @@ export const customerVipFooterList = {
 	}
 }
 
+export const customerVipFooterProfile = {
+  type: types.customerVipFooterType,
+  args: {
+    id: {type:GraphQLString}
+  },
+	async resolve (root, params, options) {
+    return customerData.getVipFooterProfile(params.id);
+	}
+}
+
 /**
  * 当前客户的所以鞋子订单
  */

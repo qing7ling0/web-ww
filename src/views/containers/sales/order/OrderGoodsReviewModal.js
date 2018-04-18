@@ -230,7 +230,7 @@ class OrderGoodsReviewModal extends Component {
         <Card title="工程文件" bordered={false}  bodyStyle={{padding:"10px 0 0 0"}}>
           <Row>
             <Col span={12}>
-              <Upload
+              {/* <Upload
                 name="order"
                 className="avatar-uploader"
                 style={{padding:0, position:'relative'}}
@@ -265,8 +265,17 @@ class OrderGoodsReviewModal extends Component {
                 <Button loading={this.state.uploading}>
                   <Icon type="upload" /> 点击上传
                 </Button>
-              </Upload>
+              </Upload> */}
+              
               <span style={{color:`${this.state.uploadFile?"green":"red"}`, paddingRight:5}}>{this.state.uploadFile?"已上传":"未上传"}</span> <span>只支持.zip文件</span>
+              <br/>
+              {
+                this.state.uploadFile ?
+                <a  href={config.GetServerAddress() + '/file/'+this.state.uploadFile} style={{color:"rgba(0, 0, 0, 0.65)", paddingLeft:5}}>
+                  点击下载 <Icon type="download" /> 
+                </a>
+                : null
+              }
             </Col>
           </Row>
         </Card>

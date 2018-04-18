@@ -230,6 +230,7 @@ const shoesFields = {
   s_tie_xuan: {type:String, decription:'贴楦'},
   s_tie_fa: {type:String, decription:'贴法'},
   s_mark: {type:String, decription:'备注'},
+  s_feedback: {type:String, decription:'试脚鞋汇总'},
 
   s_customs:[orderCustomSchema], // 特殊定制
 }

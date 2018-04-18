@@ -9,7 +9,8 @@ import {
   accountModel,
   shopModel,
   customerModel,
-  orderModel
+  orderModel,
+  subOrderModel
 } from '../models/index.js'
 
 import { ApiError, ApiErrorNames } from '../error/api-errors'
@@ -124,15 +125,19 @@ class CustomerData {
    */
   async getVipFooterList(page, options) {
     let customers = await this.getList(page, options);
+    // console.log("getVipFooterList customer length = " + JSON.stringify(customers.page) + "; page=" + JSON.stringify(page) + "; options=" + JSON.stringify(options));
 
+    let ret = [];
+    const keys = {_id:0, s_foot_size:1, s_left_fuWei:1, s_left_zhiWei:1, s_left_length:1, s_right_fuWei:1, s_right_zhiWei:1, s_right_length:1}
     if (customers && customers.list) {
       for(let item of customers.list) {
-        let suborder = await subOrderModel.findOne({customer:item._id, type:constants.E_ORDER_TYPE.SHOES}, {
-          suber_order_id:1, s_foot_size:1, s_left_fuwei:1, s_left_zhiwei:1, s_left_length:1,
-          s_right_fuwei:1, s_right_zhiwei:1, s_right_length:1,
-        }).sort({create_time:-1});
+        let suborder = await subOrderModel.findOne({customer:item._id, type:{$in:[constants.E_ORDER_TYPE.SHOES, constants.E_ORDER_TYPE.DESIGN]}}, keys).sort({create_time:-1});
         if (suborder) {
-          item = {...item, ...suborder};
+          for(let key in keys) {
+            if (keys[key]) {
+              item[key] = suborder[key];
+            }
+          }
         }
       }
     }
@@ -140,16 +145,40 @@ class CustomerData {
     return customers;
   }
 
+  async getVipFooterProfile(id) {
+    if (!id) {
+      throw new ApiError(ApiErrorNames.GET_FAIL);
+    }
+    let customer = await customerModel.findById(id);
+    if (!customer) {
+      return null;
+    }
+    
+    const keys = {_id:0, s_foot_size:1, s_left_fuWei:1, s_left_zhiWei:1, s_left_length:1, s_right_fuWei:1, s_right_zhiWei:1, s_right_length:1}
+    let suborder = await subOrderModel.findOne({customer:customer._id, type:{$in:[constants.E_ORDER_TYPE.SHOES, constants.E_ORDER_TYPE.DESIGN]}}, keys).sort({create_time:-1});
+    if (suborder) {
+      for(let key in keys) {
+        if (keys[key]) {
+          customer[key] = suborder[key];
+        }
+      }
+    }
+
+    return customer;
+  }
+
   async getVipFooterOrderList(page, options) {
+    
     let suborders  = await DB.getList(subOrderModel, options, page, (query) =>{
-       return query.populate('shop')
+      return query.populate('shop')
     })
+    console.log("getVipFooterOrderList suborders length = " + JSON.stringify(suborders.page) + "; page=" + JSON.stringify(page) + "; options=" + JSON.stringify(options));
     if (suborders && suborders.list) {
       for(let item of suborders.list) {
         item.s_xuan_hao_name = item.s_xuan_hao && item.s_xuan_hao.name;
         item.shop_name = item.shop && item.shop.name;
-        let feedbackList = await tryFeedbackModel.find({suborder_id:item._id}, null).sort({create_time:-1});
-        item.s_feedback_list = feedbackList || [];
+        // let feedbackList = await tryFeedbackModel.find({suborder_id:item._id}, null).sort({create_time:-1});
+        // item.s_feedback_list = feedbackList || [];
       }
     }
 
@@ -158,12 +187,13 @@ class CustomerData {
 
   async updateVipFooterOrder(id, doc) {
     if (id) {
-      let ret = subOrderModel.update({_id:id}, doc);
+      console.log("updateVipFooterOrder id=" + id + "; doc=" + JSON.stringify(doc));
+      // let suborder = await subOrderModel.findById(id);
+      let ret = await subOrderModel.update({_id:id}, doc);
       if (ret.ok) {
         return [id];
       }
     }
-    throw new ApiError(ApiErrorNames.UPDATE_FAIL);
   }
 }
 

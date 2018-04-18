@@ -5,6 +5,7 @@ import { States } from '../../base/modules/ReduxState'
 import results from './results'
 import baseUtils from '../../base/utils/utils'
 import * as constants from '../constants/Constants'
+import * as common from '../modules/common'
 
 const LOADING_ACTIONS = [
   ActionTypes.CUSTOMER_ADD,
@@ -17,11 +18,17 @@ const LOADING_ACTIONS = [
   ActionTypes.CUSTOMER_GUIDE_UPDATE,
   ActionTypes.CUSTOMER_GUIDE_LIST_GET,
   ActionTypes.CUSTOMER_PROFILE_GET,
+  
+  ActionTypes.VIP_FOOT_LIST,
+  ActionTypes.VIP_FOOT_PROFILE,
+  ActionTypes.VIP_ORDER_LIST,
+  ActionTypes.VIP_ORDER_UPDATE,
 ];
 
 const initialState = {
   loading:false,
   result: {code:0, message:'', type:0},
+
   customerList: [],
   customerListPage: {page:0,pageSize:constants.DEFAULT_PAGE_SIZE,total:0},
   customerDeleteIDS: [],
@@ -29,6 +36,14 @@ const initialState = {
   customerGuideList: [],
   customerGuideListPage: {page:0,pageSize:constants.DEFAULT_PAGE_SIZE,total:0},
   customerGuideDeleteIDS: [],
+
+  customerVipFooterProfile: null,
+  customerVipFooterList: [],
+  customerVipFooterListPage: {page:1,pageSize:constants.DEFAULT_PAGE_SIZE,total:0},
+
+  customerVipFooterOrderList: [],
+  customerVipFooterOrderListPage: {page:1,pageSize:constants.DEFAULT_PAGE_SIZE,total:0},
+  customerVipFooterOrderUpdateIDS: []  
 };
 
 function createState(state, resState, values) {
@@ -82,6 +97,24 @@ function doActions(state, action) {
         return createState(state, resState, {...data});
       }
       break;
+      
+    case ActionTypes.VIP_FOOT_LIST:
+    case ActionTypes.VIP_ORDER_LIST:
+      if (action.state === States.Fulfilled && result.code === 0) {
+        let list = common.getDefaultListResponse(data);
+        return createState(state, resState, list);
+      }
+      break;
+    case ActionTypes.VIP_ORDER_UPDATE:
+      if (action.state === States.Fulfilled && result.code === 0) {
+        return createState(state, resState, {customerVipFooterOrderUpdateIDS:data.customerVipFooterOrderUpdate});
+      }
+    break;
+    case ActionTypes.VIP_FOOT_PROFILE:
+      if (action.state === States.Fulfilled && result.code === 0) {
+        return createState(state, resState, {customerVipFooterProfile:data.customerVipFooterProfile});
+      }
+    break;
     default:
       break;
   }

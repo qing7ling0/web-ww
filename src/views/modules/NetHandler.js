@@ -404,16 +404,20 @@ class NetHandler {
     return netUtils.graphqlJson(config.GetServerAddress() + '/api', mut);
   }
 
-  static updateDefault(tag, id, data) {
+  static updateDefault(tag, id, data, type) {
     let name = tag;
     let index = tag.lastIndexOf('List');
     if (index !== -1) {
       name = tag.substring(0, index);
     }
+
+    if (type === null || type === undefined) {
+      type = types.resultType;
+    }
     
     let mut = `
       mutation Mutation {
-        ${name}Update(doc:${object2String(data)}, id:"${id}") ${types.resultType}
+        ${name}Update(doc:${object2String(data)}, id:"${id}") ${type}
       }
     `    
     return netUtils.graphqlJson(config.GetServerAddress() + '/api', mut);

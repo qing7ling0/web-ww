@@ -322,7 +322,7 @@ const getOrderShoesOptions = function(target) {
           }, 
           rule:{required:true}
         },   
-        {type:'input', name:'s_gui_ge', label:'规格', itemOptions:{labelLeft:true}, options:{onChange:(value)=>target.onNIDPropertyChange('s_gui_ge', value)}, rule:{required:false}},   
+        {type:'input', name:'s_gui_ge', label:'规格', itemOptions:{labelLeft:true}, options:{}, rule:{required:false}},   
         ...colors,
         {
           type:'select', name:'sex', label:'性别', itemOptions:{labelLeft:true}, 
