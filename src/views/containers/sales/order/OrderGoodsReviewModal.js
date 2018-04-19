@@ -267,7 +267,7 @@ class OrderGoodsReviewModal extends Component {
                 </Button>
               </Upload> */}
               
-              <span style={{color:`${this.state.uploadFile?"green":"red"}`, paddingRight:5}}>{this.state.uploadFile?"已上传":"未上传"}</span> <span>只支持.zip文件</span>
+              <span style={{color:`${this.state.uploadFile?"green":"red"}`, paddingRight:5}}>{this.state.uploadFile?"已上传":"未上传"}</span>
               <br/>
               {
                 this.state.uploadFile ?

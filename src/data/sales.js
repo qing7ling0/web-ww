@@ -583,7 +583,7 @@ class SalesData {
         real_pay_price:0,
         discount_price:0,
         discount:1,
-        select_store_card:doc.store_card_select,
+        select_store_card:doc.store_card_selected,
       }
       let customerInfo = null;
       let isRecharge = false;
@@ -657,7 +657,7 @@ class SalesData {
       doc.real_pay_price = payInfo.real_pay_price;
       doc.discount_price = payInfo.discount_price;
 
-      let customerPoint = doc.store_card_select?0:Math.round(doc.real_pay_price);
+      let customerPoint = doc.store_card_selected?0:Math.round(doc.real_pay_price);
       let customers = [];
       let newSubOrders = [];
       let isRechargeOrder = false;
