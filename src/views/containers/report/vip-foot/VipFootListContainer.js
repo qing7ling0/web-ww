@@ -92,7 +92,7 @@ class VipFootListContainer extends Component {
     return(
       <div>
         <SearchContainer>
-          <SearchInput placeholder={'请输入姓名'} onSearch={this.onSearch} enterButton />
+          <SearchInput placeholder={'请输入姓名/电话'} onSearch={this.onSearch} enterButton />
         </SearchContainer>
       </div>
     );
@@ -128,7 +128,10 @@ class VipFootListContainer extends Component {
   onReqList = (pageInfo) => {
     let con = {};
     if (this.searchWord) {
-      con.name = {$regex:`/${this.searchWord}/i`};
+      con = {$or:[
+        {name: {$regex:`/${this.searchWord}/i`}},
+        {phone: {$regex:`/${this.searchWord}/i`}}
+      ]};
     }
 
     return this.props.reqGetVipFootList(con, pageInfo);
