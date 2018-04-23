@@ -217,7 +217,7 @@ const getGoodsShoesAddOptions = function(target) {
       }, 
       rule:{required:true}
     },
-    
+    {type:'switch', name:'put', label:'是否上架', decoratorOptions:{initialValue:false, valuePropName:"checked"}, options:{defaultChecked:true}},            
     {type:'datePicker', name:'put_date', label:'上架时间', rule:{required:true}},
   ];
 } 

@@ -77,7 +77,6 @@ class ShoesAdd extends Component {
   //在组件挂载之前调用一次。如果在这个函数里面调用setState，本次的render函数可以看到更新后的state，并且只渲染一次
   componentDidMount(){
     this.props.setGoodsCallback(this.onAdd);
-    this.onReqOrderGoodsList(this.props.orderType.key);
     if (!this.props.isReview) {
       this.props.reqLastCustomerOrderInfo(this.props.customerId, constants.BASE_CONSTANTS.E_ORDER_TYPE.SHOES, 'lastShoesCustomerOrderInfo');
     }
@@ -97,11 +96,11 @@ class ShoesAdd extends Component {
 
   renderReviewBtn = (isReview, sure, onChange) => {
     let cardExtra = null;
-    if (isReview) {
-      cardExtra = (
-        <Switch checkedChildren="已审核" unCheckedChildren="未审核" checked={sure} onChange={onChange} />
-      )
-    }
+    // if (isReview) {
+    //   cardExtra = (
+    //     <Switch checkedChildren="已审核" unCheckedChildren="未审核" checked={sure} onChange={onChange} />
+    //   )
+    // }
     return cardExtra;
   }
 
@@ -190,8 +189,8 @@ class ShoesAdd extends Component {
                   >
                     {
                       item.file ? 
-                      <div style={{width:'100%', height:'100%', position:'relative'}}>
-                        <img src={config.GetServerAddress() + '/file/'+item.file} alt="" style={{width:'100%', height:'100%'}} /> 
+                      <div style={{width:'100%', height:'100%', position:'relative', padding:"2px"}}>
+                        <img src={config.GetServerAddress() + '/file/'+item.file} alt="" style={{width:'100%'}} /> 
                         {
                           disabled ? null :
                           <PhotoDeleteBtn icon='minus' type="danger" shape="circle" size="small" ghost onClick={(e)=>{
@@ -431,14 +430,16 @@ class ShoesAdd extends Component {
     this.setState({pics:pics});
   }
 
-  onReqOrderGoodsList = (type) => {
-    this.props.reqGetGoodsList('goodsShoesList:goodsList', graphqlTypes.goodsType, {goods:constants.BASE_CONSTANTS.E_ORDER_TYPE.SHOES, put:true}, {page:-1, pageSize:0});
-  }
-
   onAdd = () => {
+    // if (this.props.isReview) {
+    //   if (!this.state.customReviewSure || !this.state.goodsReviewSure || !this.state.photoReviewSure) {
+    //     message.error('还有部分信息未审核，请审核！')
+    //     return;
+    //   }
+    // }
+
     if (this.props.isReview) {
-      if (!this.state.customReviewSure || !this.state.goodsReviewSure || !this.state.photoReviewSure) {
-        message.error('还有部分信息未审核，请审核！')
+      if (!this.checkGoodsOK()) {
         return;
       }
     }
@@ -749,8 +750,6 @@ export default connect(
     return bindActionCreators({
       reqGetOrderList: Actions.getOrderList,
       reqAddOrder: Actions.addOrder,
-      reqGetGoodsList: Actions.getGoodsList,
-      reqGetGoodsBaseDatas: Actions.getGoodsBaseDatas,
       reqLastCustomerOrderInfo: Actions.lastCustomerOrderInfo
     }, dispatch);
   }

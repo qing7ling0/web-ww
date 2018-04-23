@@ -22,6 +22,18 @@ const defaultFormItemLayout = {
 
 const defaultInputMaxLength = 50;
 
+export const LeftAddon = styled.div `
+  position:absolute;
+  left: -5px;
+  top:50%;
+  transform:translate(100%, -50%);
+`
+export const RightAddon = styled.div `
+  position:absolute;
+  right: -5px;
+  top:50%;
+  transform:translate(100%, -50%);
+`
 
 export default class FormItemComponent extends Component {
   constructor(props) {
@@ -218,15 +230,6 @@ export default class FormItemComponent extends Component {
     if (options.decoratorOptions) {
       fieldOp = {...options.decoratorOptions}
     }
-    // if (options.hasOwnProperty("valuePropName")) {
-    //   fieldOp.valuePropName = options.valuePropName;
-    // }
-    // if (options.hasOwnProperty("getValueFromEvent")) {
-    //   fieldOp.getValueFromEvent = options.getValueFromEvent;
-    // }
-    // if (options.hasOwnProperty("value")) {
-    //   fieldOp.initialValue = options.value;
-    // }
     if (rules && rules.length > 0) {
       fieldOp.rules = rules
     }
@@ -234,10 +237,13 @@ export default class FormItemComponent extends Component {
       <FormItemNormal
         key={options.name}
         {...itemOptions}
+        style={{position:"relative"}}
       >
+        <LeftAddon>{options.addonBefore ? options.addonBefore:null}</LeftAddon>
         {
           getFieldDecorator(options.name, fieldOp)(child)
         }
+        <RightAddon>{options.addonAfter ? options.addonAfter:null}</RightAddon>
       </FormItemNormal>
     );
   }

@@ -69,17 +69,17 @@ export const getOrderBaseListColumns = function(target) {
 const FOOT_OPTIONS = {
   index:2, title:'脚型数据', 
   options:[
-    {type:'number', name:'s_foot_size', label:'尺码', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+    {type:'input', name:'s_foot_size', label:'尺码', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
   ],
   left:{title:'左脚', options:[
-    {type:'number', name:'s_left_length', label:'长度', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-    {type:'number', name:'s_left_zhiWei', label:'趾围', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},    
-    {type:'number', name:'s_left_fuWei', label:'附维', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},    
+    {type:'input', name:'s_left_length', label:'长度', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+    {type:'input', name:'s_left_zhiWei', label:'趾围', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},    
+    {type:'input', name:'s_left_fuWei', label:'附维', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},    
   ]},
   right:{title:'右脚', options:[
-    {type:'number', name:'s_right_length', label:'长度', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-    {type:'number', name:'s_right_zhiWei', label:'趾围', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},    
-    {type:'number', name:'s_right_fuWei', label:'附维', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},    
+    {type:'input', name:'s_right_length', label:'长度', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+    {type:'input', name:'s_right_zhiWei', label:'趾围', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},    
+    {type:'input', name:'s_right_fuWei', label:'附维', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},    
   ]}
 }
 // 快递信息
@@ -186,6 +186,34 @@ const getOrderShoesOptions = function(target) {
     );
   // }
 
+  // let colors = [ 
+  //   {
+  //     type:'select', name:'s_color_palette', label:'颜色', itemOptions:{labelLeft:true}, 
+  //     selectItems:[{label:'自定义', value:''}].concat(listToSelectOptions(target.props.sales.colorPaletteList)), 
+  //     options:{
+  //       defaultActiveFirstOption:true,
+  //       onChange:(value)=>target.onNIDPropertyChange('s_color_palette', value)
+  //     }, 
+  //     rule:{required:false}
+  //   },
+  //   {type:'text', name:'s_out_color', label:'皮胚色', itemOptions:{labelLeft:true}, rule:{required:true}},    
+  //   {type:'text', name:'s_in_color', label:'内里色', itemOptions:{labelLeft:true}, rule:{required:true}},  
+  //   {type:'text', name:'s_bottom_side_color', label:'底侧色', itemOptions:{labelLeft:true}, rule:{required:true}},   
+  //   {
+  //     type:'select', name:'s_bottom_color', label:'底板色', itemOptions:{labelLeft:true}, 
+  //     selectItems:listToSelectOptions(target.props.sales.bottomColorList, (item)=>item.name), 
+  //     options:{
+  //       defaultActiveFirstOption:true, 
+  //       mode:"combobox", 
+  //       filterOption:false, 
+  //       onChange:(value)=>target.onColorChange('s_bottom_color', value)
+  //     }, 
+  //     rule:{required:true}
+  //   },  
+  //   // {type:'text', name:'s_bottom_color', label:'底板色', itemOptions:{labelLeft:true}, rule:{required:true}},    
+  //   // {type:'text', name:'s_bottom_side_color', label:'底板色', itemOptions:{labelLeft:true}}
+  // ]
+  // if (target.isDesign && target.isDesign()) {
   let colors = [ 
     {
       type:'select', name:'s_color_palette', label:'颜色', itemOptions:{labelLeft:true}, 
@@ -196,9 +224,40 @@ const getOrderShoesOptions = function(target) {
       }, 
       rule:{required:false}
     },
-    {type:'text', name:'s_out_color', label:'皮胚色', itemOptions:{labelLeft:true}, rule:{required:true}},    
-    {type:'text', name:'s_in_color', label:'内里色', itemOptions:{labelLeft:true}, rule:{required:true}},  
-    {type:'text', name:'s_bottom_side_color', label:'底侧色', itemOptions:{labelLeft:true}, rule:{required:true}},   
+    {
+      type:'select', name:'s_out_color', label:'皮胚色', itemOptions:{labelLeft:true}, 
+      selectItems:listToSelectOptions(target.props.sales.outColorList, (item)=>item.name), 
+      options:{
+        defaultActiveFirstOption:true, 
+        mode:"combobox", 
+        filterOption:false, 
+        onChange:(value)=>target.onColorChange('s_out_color', value)
+      }, 
+      rule:{required:true},
+      addonAfter:(<Button icon="plus" type="primary" shape="circle" size="small" style={{marginLeft:4}} onClick={target.onAddOutColor} />)
+    },    
+    {
+      type:'select', name:'s_in_color', label:'内里色', itemOptions:{labelLeft:true}, 
+      selectItems:listToSelectOptions(target.props.sales.inColorList, (item)=>item.name), 
+      options:{
+        defaultActiveFirstOption:true, 
+        mode:"combobox", 
+        filterOption:false, 
+        onChange:(value)=>target.onColorChange('s_in_color', value)
+      }, 
+      rule:{required:true}
+    },     
+    {
+      type:'select', name:'s_bottom_side_color', label:'底侧色', itemOptions:{labelLeft:true}, 
+      selectItems:listToSelectOptions(target.props.sales.bottomSideColorList, (item)=>item.name), 
+      options:{
+        defaultActiveFirstOption:true, 
+        mode:"combobox", 
+        filterOption:false, 
+        onChange:(value)=>target.onColorChange('s_bottom_side_color', value)
+      }, 
+      rule:{required:true}
+    },  
     {
       type:'select', name:'s_bottom_color', label:'底板色', itemOptions:{labelLeft:true}, 
       selectItems:listToSelectOptions(target.props.sales.bottomColorList, (item)=>item.name), 
@@ -210,66 +269,8 @@ const getOrderShoesOptions = function(target) {
       }, 
       rule:{required:true}
     },  
-    // {type:'text', name:'s_bottom_color', label:'底板色', itemOptions:{labelLeft:true}, rule:{required:true}},    
-    // {type:'text', name:'s_bottom_side_color', label:'底板色', itemOptions:{labelLeft:true}}
   ]
-  if (target.isDesign && target.isDesign()) {
-    colors = [ 
-      {
-        type:'select', name:'s_color_palette', label:'颜色', itemOptions:{labelLeft:true}, 
-        selectItems:[{label:'自定义', value:''}].concat(listToSelectOptions(target.props.sales.colorPaletteList)), 
-        options:{
-          defaultActiveFirstOption:true,
-          onChange:(value)=>target.onNIDPropertyChange('s_color_palette', value)
-        }, 
-        rule:{required:false}
-      },
-      {
-        type:'select', name:'s_out_color', label:'皮胚色', itemOptions:{labelLeft:true}, 
-        selectItems:listToSelectOptions(target.props.sales.outColorList, (item)=>item.name), 
-        options:{
-          defaultActiveFirstOption:true, 
-          mode:"combobox", 
-          filterOption:false, 
-          onChange:(value)=>target.onColorChange('s_out_color', value)
-        }, 
-        rule:{required:true}
-      },    
-      {
-        type:'select', name:'s_in_color', label:'内里色', itemOptions:{labelLeft:true}, 
-        selectItems:listToSelectOptions(target.props.sales.inColorList, (item)=>item.name), 
-        options:{
-          defaultActiveFirstOption:true, 
-          mode:"combobox", 
-          filterOption:false, 
-          onChange:(value)=>target.onColorChange('s_in_color', value)
-        }, 
-        rule:{required:true}
-      },     
-      {
-        type:'select', name:'s_bottom_side_color', label:'底侧色', itemOptions:{labelLeft:true}, 
-        selectItems:listToSelectOptions(target.props.sales.bottomSideColorList, (item)=>item.name), 
-        options:{
-          defaultActiveFirstOption:true, 
-          mode:"combobox", 
-          filterOption:false, 
-          onChange:(value)=>target.onColorChange('s_bottom_side_color', value)
-        }, 
-        rule:{required:true}
-      },  
-      {
-        type:'select', name:'s_bottom_color', label:'底板色', itemOptions:{labelLeft:true}, 
-        selectItems:listToSelectOptions(target.props.sales.bottomColorList, (item)=>item.name), 
-        options:{
-          defaultActiveFirstOption:true, 
-          mode:"combobox", 
-          filterOption:false, 
-          onChange:(value)=>target.onColorChange('s_bottom_color', value)
-        }, 
-        rule:{required:true}
-      },  
-    ]
-  }
+  // }
   return [
     {
       index:3, title:'商品信息', options:[
@@ -286,9 +287,10 @@ const getOrderShoesOptions = function(target) {
             filterOption:(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0,
             onChange:target.onNIDChange, 
             onFocus:target.onNIDFocus,
-            onSelect:target.onNIDSelect,
+            onSelect:target.onNIDSelect
           }, 
-          rule:{required:true}
+          rule:{required:true},
+          addonAfter:(<Button icon="plus" type="primary" shape="circle" size="small" style={{marginLeft:4}} onClick={target.props.onAddGoods} />)
         },    
         {
           type:'select', name:'s_xuan_hao', label:'楦型', itemOptions:{labelLeft:true}, 
@@ -297,9 +299,13 @@ const getOrderShoesOptions = function(target) {
             defaultActiveFirstOption:true, 
             mode:"combobox", 
             filterOption:false, 
-            onChange:(value)=>target.onNIDPropertyChange('s_xuan_hao', value)
+            onChange:(value)=>target.onNIDPropertyChange('s_xuan_hao', value),
+            addonAfter:(<Button icon="add" onClick={()=>{
+              message.info("s_xuan_hao");
+            }} />)
           }, 
-          rule:{required:true}
+          rule:{required:true},
+          addonAfter:(<Button icon="plus" type="primary" shape="circle" style={{marginLeft:4}} onClick={target.onAddXuanHao} />)
         },    
         // {
         //   type:'select', name:'s_gui_ge', label:'规格', itemOptions:{labelLeft:true}, 
@@ -320,7 +326,8 @@ const getOrderShoesOptions = function(target) {
             filterOption:false, 
             onChange:(value)=>target.onNIDPropertyChange('s_material', value)
           }, 
-          rule:{required:true}
+          rule:{required:true},
+          addonAfter:(<Button icon="plus" type="primary" shape="circle" size="small" style={{marginLeft:4}} onClick={target.onAddMaterial} />)
         },   
         {type:'input', name:'s_gui_ge', label:'规格', itemOptions:{labelLeft:true}, options:{}, rule:{required:false}},   
         ...colors,
@@ -410,10 +417,10 @@ const getOrderBeltOptions = function(target) {
           rule:{required:true}
         },
         {type:'number', name:'price', label:'价格', itemOptions:{labelLeft:true}, options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, rule:{required:true}},    
-        {type:'number', name:'b_A', label:'A', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-        {type:'number', name:'b_B', label:'B', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-        {type:'number', name:'b_C', label:'C', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-        {type:'number', name:'b_D', label:'D', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+        {type:'input', name:'b_A', label:'A', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+        {type:'input', name:'b_B', label:'B', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+        {type:'input', name:'b_C', label:'C', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+        {type:'input', name:'b_D', label:'D', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
       ]
     },
   ];
@@ -492,13 +499,13 @@ const getOrderWatchStrapOptions = function(target) {
           rule:{required:true}
         },
         {type:'number', name:'price', label:'价格', itemOptions:{labelLeft:true}, options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, rule:{required:true}},    
-        {type:'number', name:'ws_A', label:'A', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-        {type:'number', name:'ws_B', label:'B', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-        {type:'number', name:'ws_C', label:'C', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-        {type:'number', name:'ws_D', label:'D', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-        {type:'number', name:'ws_E', label:'E', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-        {type:'number', name:'ws_F', label:'F', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
-        {type:'number', name:'ws_G', label:'G', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+        {type:'input', name:'ws_A', label:'A', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+        {type:'input', name:'ws_B', label:'B', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+        {type:'input', name:'ws_C', label:'C', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+        {type:'input', name:'ws_D', label:'D', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+        {type:'input', name:'ws_E', label:'E', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+        {type:'input', name:'ws_F', label:'F', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
+        {type:'input', name:'ws_G', label:'G', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
         {type:'input', name:'ws_watch_brand', label:'品牌型号', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{}},
       ]
     },

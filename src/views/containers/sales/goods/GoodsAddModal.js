@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import {bindActionCreators} from 'redux'
+import moment from 'moment'
 
 import {
   Card,
@@ -189,20 +190,6 @@ class GoodsAddModal extends Component {
     }
   }
 
-  onSubmit = (err, values) => {
-    if (!err) {
-      if (this.props.onAdd) {
-        values.pics = [];
-        this.state.pics.forEach(item=>{
-          if (item) {
-            values.pics.push(item);
-          }
-        });
-        this.props.onAdd(values);
-      }
-    }
-  }
-
   checkPhone = (rule, value, callback) => {
     if (validate.isTel(value) || validate.isMobile(value)) {
       callback();
@@ -218,6 +205,39 @@ class GoodsAddModal extends Component {
   isFemale = () => {
     return this.state.sex === constants.BASE_CONSTANTS.SEX_FEMALE;
   }
+
+  onSubmit = (err, values) => {
+    if (!err) {
+      if (this.onAdd) {
+        values.pics = [];
+        this.state.pics.forEach(item=>{
+          if (item) {
+            values.pics.push(item);
+          }
+        });
+        this.onAdd(values);
+      }
+    }
+  }
+
+  onReqAdd = (data) => {
+    if (data) {
+      data.goods = this.props.goodsType.key;
+    }
+    this.props.reqAddGoods(this.props.goodsType.tag, this.props.goodsType.graphqlType, data);
+  }
+
+  onAdd = (values) => {
+    if (values) {
+      if (values.put_date) {
+        values.put_date = moment(values.put_date).format('YYYY-MM-DD');
+      }
+      if (!values.put) {
+        values.put = false;
+      }
+      this.onReqAdd(values);
+    }
+  }
 }
 
 export default connect(
@@ -228,6 +248,7 @@ export default connect(
   }),
   (dispatch) => {
     return bindActionCreators({
+      reqAddGoods: Actions.addGoods,
     }, dispatch);
   }
 )(Form.create()(GoodsAddModal));

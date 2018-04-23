@@ -21,6 +21,12 @@ export const FormItemNormal = styled(Form.Item)`
   ${props => props.labelLeft ? 'div {text-align:left;}' : ''}
 `
 
+export const FlexSpaceBetween = styled.div `
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`
+
 export const ContentTitle = styled.div`
   width: 100%;
   padding: 0.15rem;

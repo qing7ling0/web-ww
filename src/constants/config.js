@@ -1,16 +1,16 @@
 const {MENU_IDS, POWER_TYPES} = require('./constants')
 
 module.exports.Menus = [
-  {
-    id:MENU_IDS.user, 
-    name: '个人管理',
-    icon: 'database',
-    subMenus: [
-      {id:MENU_IDS.userWork, name:'店员排班'},
-      {id:MENU_IDS.userMessage, name:'留言管理'},
-      {id:MENU_IDS.userLeaveApply, name:'假期申请'}
-    ]
-  },
+  // {
+  //   id:MENU_IDS.user, 
+  //   name: '个人管理',
+  //   icon: 'database',
+  //   subMenus: [
+  //     {id:MENU_IDS.userWork, name:'店员排班'},
+  //     {id:MENU_IDS.userMessage, name:'留言管理'},
+  //     {id:MENU_IDS.userLeaveApply, name:'假期申请'}
+  //   ]
+  // },
   {
     id:MENU_IDS.report, 
     name: '销售报表',

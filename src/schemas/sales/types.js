@@ -248,25 +248,25 @@ const sampleGoodsInputFields = {
 // 样品鞋数据
 const sampleShoesFields = {
   s_right: {type:GraphQLBoolean, decription:'右脚'},
-  s_foot_size: {type:GraphQLFloat, decription:'尺码'},
-  s_length: {type: GraphQLFloat, description:'长度'},
-  s_zhiWei: {type: GraphQLFloat, decription:'趾围'},
-  s_fuWei: {type: GraphQLFloat, decription:'附维'},
+  s_foot_size: {type:GraphQLString, decription:'尺码'},
+  s_length: {type: GraphQLString, description:'长度'},
+  s_zhiWei: {type: GraphQLString, decription:'趾围'},
+  s_fuWei: {type: GraphQLString, decription:'附维'},
 }
 const sampleBeltFields = {
-  b_A: {type: GraphQLFloat, decription:'皮带测量数据A'},
-  b_B: {type: GraphQLFloat, decription:'皮带测量数据B'},
-  b_C: {type: GraphQLFloat, decription:'皮带测量数据C'},
-  b_D: {type: GraphQLFloat, decription:'皮带测量数据D'},
+  b_A: {type: GraphQLString, decription:'皮带测量数据A'},
+  b_B: {type: GraphQLString, decription:'皮带测量数据B'},
+  b_C: {type: GraphQLString, decription:'皮带测量数据C'},
+  b_D: {type: GraphQLString, decription:'皮带测量数据D'},
 }
 const sampleWatchStrapFields = {
-  ws_A: {type: GraphQLFloat, decription:'表带测量数据A'},
-  ws_B: {type: GraphQLFloat, decription:'表带测量数据B'},
-  ws_C: {type: GraphQLFloat, decription:'表带测量数据C'},
-  ws_D: {type: GraphQLFloat, decription:'表带测量数据D'},
-  ws_E: {type: GraphQLFloat, decription:'表带测量数据E'},
-  ws_F: {type: GraphQLFloat, decription:'表带测量数据F'},
-  ws_G: {type: GraphQLFloat, decription:'表带测量数据G'},
+  ws_A: {type: GraphQLString, decription:'表带测量数据A'},
+  ws_B: {type: GraphQLString, decription:'表带测量数据B'},
+  ws_C: {type: GraphQLString, decription:'表带测量数据C'},
+  ws_D: {type: GraphQLString, decription:'表带测量数据D'},
+  ws_E: {type: GraphQLString, decription:'表带测量数据E'},
+  ws_F: {type: GraphQLString, decription:'表带测量数据F'},
+  ws_G: {type: GraphQLString, decription:'表带测量数据G'},
 }
 const sampleOrnamentFields = {
   o_name: {type: GraphQLString, decription:'名称'},
@@ -402,13 +402,13 @@ const orderCustomInputType = new GraphQLInputObjectType({
 });
 // 鞋
 const orderShoesBaseFields = {
-  s_foot_size: {type: GraphQLFloat, description:'尺码'},
-  s_left_length: {type: GraphQLFloat, description:'左脚长度'},
-  s_left_zhiWei: {type: GraphQLFloat, decription:'左脚趾围'},
-  s_left_fuWei: {type: GraphQLFloat, decription:'左脚附维'},
-  s_right_length: {type: GraphQLFloat, description:'右脚长度'},
-  s_right_zhiWei: {type: GraphQLFloat, decription:'右脚趾围'},
-  s_right_fuWei: {type: GraphQLFloat, decription:'右脚附维'},
+  s_foot_size: {type: GraphQLString, description:'尺码'},
+  s_left_length: {type: GraphQLString, description:'左脚长度'},
+  s_left_zhiWei: {type: GraphQLString, decription:'左脚趾围'},
+  s_left_fuWei: {type: GraphQLString, decription:'左脚附维'},
+  s_right_length: {type: GraphQLString, description:'右脚长度'},
+  s_right_zhiWei: {type: GraphQLString, decription:'右脚趾围'},
+  s_right_fuWei: {type: GraphQLString, decription:'右脚附维'},
   s_design_self: {type: GraphQLBoolean, decription:'是否来样设计'},
   s_production_step: {type: GraphQLInt, decription:'正品鞋制作环境'},
   s_gui_ge:{type:GraphQLString, decription:'规格'},
@@ -444,10 +444,10 @@ const orderShoesInputFields = {
 
 // 皮带
 const orderBeltBaseFields = {
-  b_A: {type: GraphQLFloat, decription:'皮带测量数据A'},
-  b_B: {type: GraphQLFloat, decription:'皮带测量数据B'},
-  b_C: {type: GraphQLFloat, decription:'皮带测量数据C'},
-  b_D: {type: GraphQLFloat, decription:'皮带测量数据D'},
+  b_A: {type: GraphQLString, decription:'皮带测量数据A'},
+  b_B: {type: GraphQLString, decription:'皮带测量数据B'},
+  b_C: {type: GraphQLString, decription:'皮带测量数据C'},
+  b_D: {type: GraphQLString, decription:'皮带测量数据D'},
   b_size_remark: {type: GraphQLString, decription:'皮带测量备注'}
 }
 const orderBeltFields = {
@@ -465,13 +465,13 @@ const orderBeltInputFields = {
 
 // 表带
 const orderWatchStrapBaseFields = {
-  ws_A: {type: GraphQLFloat, decription:'表带测量数据A'},
-  ws_B: {type: GraphQLFloat, decription:'表带测量数据B'},
-  ws_C: {type: GraphQLFloat, decription:'表带测量数据C'},
-  ws_D: {type: GraphQLFloat, decription:'表带测量数据D'},
-  ws_E: {type: GraphQLFloat, decription:'表带测量数据E'},
-  ws_F: {type: GraphQLFloat, decription:'表带测量数据F'},
-  ws_G: {type: GraphQLFloat, decription:'表带测量数据G'},
+  ws_A: {type: GraphQLString, decription:'表带测量数据A'},
+  ws_B: {type: GraphQLString, decription:'表带测量数据B'},
+  ws_C: {type: GraphQLString, decription:'表带测量数据C'},
+  ws_D: {type: GraphQLString, decription:'表带测量数据D'},
+  ws_E: {type: GraphQLString, decription:'表带测量数据E'},
+  ws_F: {type: GraphQLString, decription:'表带测量数据F'},
+  ws_G: {type: GraphQLString, decription:'表带测量数据G'},
   ws_watch_brand:{type: GraphQLString, decription:'手表品牌'},
   ws_size_remark: {type: GraphQLString, decription:'表带测量备注'},
 }

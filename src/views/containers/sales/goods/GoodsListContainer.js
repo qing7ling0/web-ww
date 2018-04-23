@@ -110,8 +110,7 @@ class GoodsListContainer extends Component {
             title={`添加${this.goodsType.label}`} 
             pageInfo={this.props.pageInfo} 
             visible={this.state.addVisible} 
-            goodsType={this.goodsType} 
-            onAdd={this.onAdd}
+            goodsType={this.goodsType}
             onSubmitSuccess={this.onReqList}
             afterClose={()=>this.setState({addVisible:false})}/> 
         }
@@ -163,31 +162,19 @@ class GoodsListContainer extends Component {
     }
     this.props.reqUpdateGoods(this.goodsType.tag, id, data);
   }
-  onReqAdd = (data) => {
-    if (data) {
-      data.goods = this.goodsType.key;
-    }
-    this.props.reqAddGoods(this.goodsType.tag, this.goodsType.graphqlType, data);
-  }
   onReqRemove = (ids) => {
     this.props.reqDeleteGoods(this.goodsType.tag, ids);
   }
   onReqProfile = (id) => {
     this.props.reqGetGoodsProfile(this.goodsType.tag, id);
   }
-
-  onAdd = (values) => {
-    if (values) {
-      if (values.put_date) {
-        values.put_date = moment(values.put_date).format('YYYY-MM-DD');
-      }
-      this.onReqAdd(values);
-    }
-  }
   
   onEdit = (values) => {
     if (values.put_date) {
       values.put_date = moment(values.put_date).format('YYYY-MM-DD HH:mm:ss');
+    }
+    if (!values.put) {
+      values.put = false;
     }
     values = utils.diffent(values, this.state.editData);
     if (values) {

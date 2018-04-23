@@ -56,6 +56,8 @@ import BeltAdd from './goods/BeltAdd'
 import WatchStrapAdd from './goods/WatchStrapAdd'
 import MaintainAdd from './goods/MaintainAdd'
 import OrnamentAdd from './goods/OrnamentAdd'
+import GoodsAddBase from './goods/GoodsAddBase'
+import { GOODS_TYPES } from '../goods/types'
 
 const CUSTOMOR_OPTIONS = [
   {key:'name', label:'名称'},
@@ -94,6 +96,8 @@ class OrderGoodsReviewModal extends Component {
       uploading: false,
       fileList:[],
       uploadFile:'',
+      goodsAddVisible:false,
+      goodsAddTypeIndex:0
     }
     this.orderType = null;
   }
@@ -116,7 +120,7 @@ class OrderGoodsReviewModal extends Component {
 
     this.orderType = ORDER_TYPES[0];
     for(let value of ORDER_TYPES) {
-      if (value.tag === this.state.currentOrderType) {
+      if (value.key === this.state.currentOrderType) {
         this.orderType = value;
       }
     }
@@ -145,6 +149,7 @@ class OrderGoodsReviewModal extends Component {
           onAddSuccess={this.onAddSuccess}
           isDesigon={(this.orderType.key===constants.BASE_CONSTANTS.E_ORDER_TYPE.DESIGN)}
           customerId={this.props.customerId}
+          onAddGoods={this.onAddGoods}
           customer={this.props.customer} />
       )
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.BELT:
@@ -292,22 +297,35 @@ class OrderGoodsReviewModal extends Component {
     }
 
     return (
-      <BaseFormModal
-        title={this.props.title}
-        visible={this.state.visible}
-        result={this.props.result}
-        renderBody={this.renderBody}
-        onSubmit={this.onSubmit}
-        onCancel={this.onCancel}
-        modalOptions={{width:'60%'}}
-        actionType={ActionTypes.ORDER_REVIEW}
-        onAfterClose={this.props.afterClose || null}
-        loading={this.props.loading}
-        onSubmitSuccess={()=>{
-          this.setState({visible:false})
-          this.props.onSubmitSuccess()
-        }}
-      />
+      <div>
+        <BaseFormModal
+          title={this.props.title}
+          visible={this.state.visible}
+          result={this.props.result}
+          renderBody={this.renderBody}
+          onSubmit={this.onSubmit}
+          onCancel={this.onCancel}
+          modalOptions={{width:'60%'}}
+          actionType={ActionTypes.ORDER_REVIEW}
+          onAfterClose={this.props.afterClose || null}
+          loading={this.props.loading}
+          onSubmitSuccess={()=>{
+            this.setState({visible:false})
+            this.props.onSubmitSuccess()
+          }}
+        />
+        <GoodsAddBase 
+          goodsAddProps= {{
+            title:`添加${GOODS_TYPES[this.state.goodsAddTypeIndex].label}`,
+            visible:this.state.goodsAddVisible,
+            goodsType:GOODS_TYPES[this.state.goodsAddTypeIndex],
+            onSubmitSuccess:()=>{
+              this.onReqOrderGoodsList(this.orderType.key);
+            },
+            afterClose:()=>{this.setState({goodsAddVisible:false})},
+          }}
+        />
+      </div>
     );
   }
 
@@ -324,9 +342,7 @@ class OrderGoodsReviewModal extends Component {
     switch(type) {
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.SHOES:
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.DESIGN:
-        con = {
-          goods:type, put:true
-        };
+        con = {goods:constants.BASE_CONSTANTS.E_ORDER_TYPE.SHOES, put:true}    
         this.props.reqGetGoodsList('goodsShoesList:goodsList', graphqlTypes.goodsType, con, {page:-1, pageSize:0});
       break;
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.BELT:
@@ -387,6 +403,34 @@ class OrderGoodsReviewModal extends Component {
     //   this.setState({visible:false})
     // }
   }
+
+  onAddGoods = () => {
+    let index = 0;
+
+    switch(this.orderType.key) {
+      case constants.BASE_CONSTANTS.E_ORDER_TYPE.SHOES:
+      case constants.BASE_CONSTANTS.E_ORDER_TYPE.DESIGN:
+        index = 0;
+      break;
+      case constants.BASE_CONSTANTS.E_ORDER_TYPE.BELT:
+        index = 1;
+      break;
+      case constants.BASE_CONSTANTS.E_ORDER_TYPE.WATCH_STRAP:
+        index = 2;
+      break;
+      case constants.BASE_CONSTANTS.E_ORDER_TYPE.MAINTAIN:
+        index = -1;
+      break;
+      case constants.BASE_CONSTANTS.E_ORDER_TYPE.ORNAMENT:
+        index = 4;
+      break;
+    }
+    if (index === -1) {
+      // 护理
+    } else {
+      this.setState({goodsAddTypeIndex:index, goodsAddVisible:true});
+    }
+  }
 }
 
 export default connect(
@@ -407,4 +451,4 @@ export default connect(
       reqGetGoodsBaseDatas: Actions.getGoodsBaseDatas
     }, dispatch);
   }
-)(Form.create()(OrderGoodsReviewModal));
+)(OrderGoodsReviewModal);
