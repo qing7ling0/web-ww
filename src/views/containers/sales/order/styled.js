@@ -102,3 +102,21 @@ export const PhotoDeleteBtn = styled(Button)`
   right:0;
   top:0;
 `
+
+export const GridBorder = styled.table`
+  border:1px solid rgb(232, 232, 232);
+`
+export const GridRow = styled.tr`
+  border-top:1px solid rgb(232, 232, 232);
+  &:first-child {
+    border-top: 0px;
+  }
+`
+export const GridCol = styled.td`
+  width:${props=>`${(props.width*100/24)}%`};
+  border-left:1px solid rgb(232, 232, 232);
+  &:first-child {
+    border-left: 0px;
+  }
+  padding: 16px;
+`

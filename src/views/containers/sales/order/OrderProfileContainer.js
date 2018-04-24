@@ -49,7 +49,8 @@ import { commonUtils } from '../../../modules/common';
 import DetailComponent from '../../common/DetailComponent'
 import utils from '../../../../utils/utils'
 import * as optionsType from '../types'
-import OrderShoesProfile from './editor/OrderShoesProfile'
+// import OrderShoesProfile from './editor/OrderShoesProfile'
+import OrderShoesProfile from './editor/OrderShoesProfileNew'
 import OrderBaseProfile from './editor/OrderBaseProfile'
 import OrderGoodsReviewModal from './OrderGoodsReviewModal'
 
