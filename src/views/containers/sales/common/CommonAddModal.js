@@ -81,10 +81,30 @@ class CommonAddModal extends Component {
 
   onSubmit = (err, values) => {
     if (!err) {
-      if (this.props.onAdd) {
-        this.props.onAdd(values);
+      if (this.onAdd) {
+        this.onAdd(values);
       }
     }
+  }
+  
+  onReqAdd = (data) => {
+    if (data) {
+      data.type = this.props.commonType.key;
+    }
+    if (data.type === constants.BASE_CONSTANTS.COMMON_DATA_TYPES.CUSTOM) {
+      if (!data.n_material && !data.d_material) {
+        message.error('至少选择一个定制内容!');
+        return;
+      }
+    }
+    this.props.reqAddSalesBase(this.props.commonType.tag, this.props.commonType.graphqlType, data);
+  }
+
+  onAdd = (values) => {
+    if (values.NID === undefined) {
+      values.NID = '0';
+    }
+    this.onReqAdd(values);
   }
 }
 
@@ -93,5 +113,10 @@ export default connect(
     loading:state.sales.loading,
     result:state.sales.result,
     materialList:state.sales.materialList
-  })
+  }),
+  (dispatch) => {
+    return bindActionCreators({
+      reqAddSalesBase: Actions.addSalesBase,
+    }, dispatch);
+  }
 )(Form.create()(CommonAddModal));

@@ -157,19 +157,6 @@ class CommonListContainer extends Component {
     }
     this.props.reqUpdateSalesBase(this.commonType.tag, id, data);
   }
-  
-  onReqAdd = (data) => {
-    if (data) {
-      data.type = this.commonType.key;
-    }
-    if (data.type === constants.BASE_CONSTANTS.COMMON_DATA_TYPES.CUSTOM) {
-      if (!data.n_material && !data.d_material) {
-        message.error('至少选择一个定制内容!');
-        return;
-      }
-    }
-    this.props.reqAddSalesBase(this.commonType.tag, this.commonType.graphqlType, data);
-  }
 
   onReqRemove = (ids) => {
     this.props.reqDeleteSalesBase(this.commonType.tag, ids);
@@ -182,13 +169,6 @@ class CommonListContainer extends Component {
   
   onDelete = (ids) => {
     this.onReqRemove(ids);
-  }
-
-  onAdd = (values) => {
-    if (values.NID === undefined) {
-      values.NID = '0';
-    }
-    this.onReqAdd(values);
   }
 
   onEdit = (values) => {

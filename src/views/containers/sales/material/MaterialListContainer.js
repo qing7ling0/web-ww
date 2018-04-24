@@ -119,10 +119,6 @@ class MaterialListContainer extends Component {
   onReqUpdate = (id, data) => {
     this.props.reqUpdateMaterial(id, data);
   }
-  
-  onReqAdd = (data) => {
-    this.props.reqAddMaterial(data);
-  }
 
   onReqRemove = (ids) => {
     this.props.reqDeleteMaterial(ids);
@@ -135,13 +131,6 @@ class MaterialListContainer extends Component {
   
   onDelete = (ids) => {
     this.onReqRemove(ids);
-  }
-
-  onAdd = (values) => {
-    if (!values.color) {
-      delete values.color
-    }
-    this.onReqAdd(values);
   }
 
   onEdit = (values) => {

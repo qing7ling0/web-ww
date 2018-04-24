@@ -52,14 +52,25 @@ class MaterialAddModal extends Component {
 
   onSubmit = (err, values) => {
     if (!err) {
-      if (this.props.onAdd) {
+      if (this.onAdd) {
         if (values.count !== null && values.count !== undefined) {
           if (values.count) values.count = 1;
           else values.count = 0;
         }
-        this.props.onAdd(values);
+        this.onAdd(values);
       }
     }
+  }
+  
+  onReqAdd = (data) => {
+    this.props.reqAddMaterial(data);
+  }
+
+  onAdd = (values) => {
+    if (!values.color) {
+      delete values.color
+    }
+    this.onReqAdd(values);
   }
 }
 
@@ -68,5 +79,10 @@ export default connect(
     loading:state.sales.loading,
     result:state.sales.result,
     materialColorList:state.sales.materialColorList,
-  })
+  }),
+  (dispatch) => {
+    return bindActionCreators({
+      reqAddMaterial: Actions.addMaterial,
+    }, dispatch);
+  }
 )(Form.create()(MaterialAddModal));

@@ -234,7 +234,7 @@ const getOrderShoesOptions = function(target) {
         onChange:(value)=>target.onColorChange('s_out_color', value)
       }, 
       rule:{required:true},
-      addonAfter:(<Button icon="plus" type="primary" shape="circle" size="small" style={{marginLeft:4}} onClick={target.onAddOutColor} />)
+      addonAfter:(<Button icon="plus" type="primary" shape="circle" size="small" style={{marginLeft:4}} onClick={()=>target.props.onAddCommon(constants.BASE_CONSTANTS.COMMON_DATA_TYPES.SHOES_OUT_COLOR)} />)
     },    
     {
       type:'select', name:'s_in_color', label:'内里色', itemOptions:{labelLeft:true}, 
@@ -305,7 +305,7 @@ const getOrderShoesOptions = function(target) {
             }} />)
           }, 
           rule:{required:true},
-          addonAfter:(<Button icon="plus" type="primary" shape="circle" style={{marginLeft:4}} onClick={target.onAddXuanHao} />)
+          addonAfter:(<Button icon="plus" type="primary" shape="circle" size="small" style={{marginLeft:4}} onClick={()=>target.props.onAddCommon(constants.BASE_CONSTANTS.COMMON_DATA_TYPES.XUAN_HAO)} />)
         },    
         // {
         //   type:'select', name:'s_gui_ge', label:'规格', itemOptions:{labelLeft:true}, 
@@ -327,7 +327,7 @@ const getOrderShoesOptions = function(target) {
             onChange:(value)=>target.onNIDPropertyChange('s_material', value)
           }, 
           rule:{required:true},
-          addonAfter:(<Button icon="plus" type="primary" shape="circle" size="small" style={{marginLeft:4}} onClick={target.onAddMaterial} />)
+          addonAfter:(<Button icon="plus" type="primary" shape="circle" size="small" style={{marginLeft:4}} onClick={target.props.onAddMaterial} />)
         },   
         {type:'input', name:'s_gui_ge', label:'规格', itemOptions:{labelLeft:true}, options:{}, rule:{required:false}},   
         ...colors,
@@ -385,7 +385,8 @@ const getOrderBeltOptions = function(target) {
             onFocus:target.onNIDFocus,
             onSelect:target.onNIDSelect,
           }, 
-          rule:{required:true}
+          rule:{required:true},
+          addonAfter:(<Button icon="plus" type="primary" shape="circle" size="small" style={{marginLeft:4}} onClick={target.props.onAddGoods} />)
         }, 
         {
           type:'select', 
@@ -397,15 +398,17 @@ const getOrderBeltOptions = function(target) {
             defaultActiveFirstOption:true,
             onChange:(value)=>target.onNIDPropertyChange('b_material', value)
           }, 
-          rule:{required:true}
-        },    
+          rule:{required:true},
+          addonAfter:(<Button icon="plus" type="primary" shape="circle" size="small" style={{marginLeft:4}} onClick={target.props.onAddMaterial} />)
+        },
         {
           type:'select', name:'b_color', label:'颜色', itemOptions:{labelLeft:true}, 
-          selectItems:listToSelectOptions(target.props.sales.materialColorList), 
+          selectItems:listToSelectOptions(target.props.sales.materialColorList),
           options:{
             defaultActiveFirstOption:true, 
             onChange:(value)=>target.onNIDPropertyChange('b_color', value)
-          }, rule:{required:true}
+          }, rule:{required:true},
+          addonAfter:(<Button icon="plus" type="primary" shape="circle" size="small" style={{marginLeft:4}} onClick={()=>target.props.onAddCommon(constants.BASE_CONSTANTS.COMMON_DATA_TYPES.MATERIAL_COLOR)} />)
         },    
         {
           type:'select', name:'sex', label:'性别', itemOptions:{labelLeft:true}, 
@@ -451,7 +454,8 @@ const getOrderWatchStrapOptions = function(target) {
             onFocus:target.onNIDFocus,
             onSelect:target.onNIDSelect,
           }, 
-          rule:{required:true}
+          rule:{required:true},
+          addonAfter:(<Button icon="plus" type="primary" shape="circle" size="small" style={{marginLeft:4}} onClick={target.props.onAddGoods} />)
         },  
         {
           type:'select', 
@@ -463,7 +467,8 @@ const getOrderWatchStrapOptions = function(target) {
             defaultActiveFirstOption:true,
             onChange:(value)=>target.onNIDPropertyChange('ws_material', value)
           }, 
-          rule:{required:true}
+          rule:{required:true},
+          addonAfter:(<Button icon="plus" type="primary" shape="circle" size="small" style={{marginLeft:4}} onClick={target.props.onAddMaterial} />)
         },    
         {
           type:'select', 
@@ -487,7 +492,8 @@ const getOrderWatchStrapOptions = function(target) {
             defaultActiveFirstOption:true,
             onChange:(value)=>target.onNIDPropertyChange('ws_color', value)
           }, 
-          rule:{required:true}
+          rule:{required:true},
+          addonAfter:(<Button icon="plus" type="primary" shape="circle" size="small" style={{marginLeft:4}} onClick={()=>target.props.onAddCommon(constants.BASE_CONSTANTS.COMMON_DATA_TYPES.MATERIAL_COLOR)} />)
         },   
         {
           type:'select', name:'sex', label:'性别', itemOptions:{labelLeft:true}, 
@@ -536,7 +542,8 @@ const getOrderMaintainOptions = function(target) {
             onFocus:target.onNIDFocus,
             onSelect:target.onNIDSelect,
           }, 
-          rule:{required:true}
+          rule:{required:true},
+          addonAfter:(<Button icon="plus" type="primary" shape="circle" size="small" style={{marginLeft:4}} onClick={()=>target.props.onAddCommon(constants.BASE_CONSTANTS.COMMON_DATA_TYPES.MAINTAIN)} />)
         }, 
         {type:'text', name:'m_name', label:'护理项目', options:{disabled:false}, itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
         {type:'text', name:'m_price', label:'护理费用', options:{disabled:true}, itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
@@ -574,7 +581,8 @@ const getOrderOrnamentOptions = function(target) {
             onFocus:target.onNIDFocus,
             onSelect:target.onNIDSelect,
           }, 
-          rule:{required:true}
+          rule:{required:true},
+          addonAfter:(<Button icon="plus" type="primary" shape="circle" size="small" style={{marginLeft:4}} onClick={target.props.onAddGoods} />)
         }, 
         {type:'text', name:'o_name', label:'品名', itemOptions:{hasFeedback:true, labelLeft:true}, rule:{required:true}},
         {type:'text', name:'price', label:'价格', itemOptions:{labelLeft:true}, options:{render:(value) => `${value}RMB`}, rule:{required:true}},

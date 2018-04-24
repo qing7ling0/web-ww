@@ -150,6 +150,8 @@ class OrderGoodsReviewModal extends Component {
           isDesigon={(this.orderType.key===constants.BASE_CONSTANTS.E_ORDER_TYPE.DESIGN)}
           customerId={this.props.customerId}
           onAddGoods={this.onAddGoods}
+          onAddMaterial={this.onAddMaterial}
+          onAddCommon={this.onAddCommon}
           customer={this.props.customer} />
       )
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.BELT:
@@ -161,6 +163,9 @@ class OrderGoodsReviewModal extends Component {
           setGoodsCallback={this.onSetGoodsAddCallback} 
           onAddSuccess={this.onAddSuccess}
           customerId={this.props.customerId}
+          onAddGoods={this.onAddGoods}
+          onAddMaterial={this.onAddMaterial}
+          onAddCommon={this.onAddCommon}
           customer={this.props.customer} />
       )
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.WATCH_STRAP:
@@ -172,6 +177,9 @@ class OrderGoodsReviewModal extends Component {
           setGoodsCallback={this.onSetGoodsAddCallback} 
           onAddSuccess={this.onAddSuccess}
           customerId={this.props.customerId}
+          onAddGoods={this.onAddGoods}
+          onAddMaterial={this.onAddMaterial}
+          onAddCommon={this.onAddCommon}
           customer={this.props.customer} />
       )
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.MAINTAIN:
@@ -183,6 +191,9 @@ class OrderGoodsReviewModal extends Component {
           setGoodsCallback={this.onSetGoodsAddCallback} 
           onAddSuccess={this.onAddSuccess}
           customerId={this.props.customerId}
+          onAddGoods={this.onAddGoods}
+          onAddMaterial={this.onAddMaterial}
+          onAddCommon={this.onAddCommon}
           customer={this.props.customer} />
       )
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.ORNAMENT:
@@ -194,6 +205,9 @@ class OrderGoodsReviewModal extends Component {
           setGoodsCallback={this.onSetGoodsAddCallback} 
           onAddSuccess={this.onAddSuccess}
           customerId={this.props.customerId}
+          onAddGoods={this.onAddGoods}
+          onAddMaterial={this.onAddMaterial}
+          onAddCommon={this.onAddCommon}
           customer={this.props.customer} />
       )
     }
@@ -316,26 +330,34 @@ class OrderGoodsReviewModal extends Component {
         />
         <GoodsAddBase 
           goodsAddProps= {{
-            title:`添加${GOODS_TYPES[this.state.goodsAddTypeIndex].label}`,
             visible:this.state.goodsAddVisible,
-            goodsType:GOODS_TYPES[this.state.goodsAddTypeIndex],
+            key: this.orderType.key,
             onSubmitSuccess:()=>{
               this.onReqOrderGoodsList(this.orderType.key);
             },
             afterClose:()=>{this.setState({goodsAddVisible:false})},
           }}
+
+          materialAddProps={{
+            visible:this.state.materialAddVisible,
+            onSubmitSuccess:()=>{
+              this.props.reqGetGoodsBaseDatas();
+            },
+            afterClose:()=>{this.setState({materialAddVisible:false})},
+          }}
+
+          commonAddProps={{
+            visible:this.state.commonAddVisible,
+            onSubmitSuccess:()=>{
+              this.props.reqGetGoodsBaseDatas();
+            },
+            afterClose:()=>{this.setState({commonAddVisible:false})},
+            key:this.state.commonAddKey
+          }}
         />
       </div>
     );
   }
-
-  // onUploadFileChange = (file) => {
-  //   let _file = this.state.file;
-  //   if (file.response && file.response.data.files && file.response.data.files.length > 0) {
-  //     _file = file.response.data.files[0];
-  //     this.setState({fileList:[_file]})
-  //   }
-  // }
 
   onReqOrderGoodsList = (type) => {
     let con ={};
@@ -430,6 +452,13 @@ class OrderGoodsReviewModal extends Component {
     } else {
       this.setState({goodsAddTypeIndex:index, goodsAddVisible:true});
     }
+  }
+
+  onAddMaterial = () => {
+    this.setState({materialAddVisible:true});
+  }
+  onAddCommon = (key) => {
+    this.setState({commonAddKey:key, commonAddVisible:true});
   }
 }
 

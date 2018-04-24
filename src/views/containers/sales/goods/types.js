@@ -282,8 +282,8 @@ const getGoodsBeltAddOptions = function(target) {
     {type:'upload', name:'pics', label:'图片',  itemOptions:{hasFeedback:true}, render:target.renderPicUpload, rule:{required:true}},
     {type:'number', name:'price', label:'价格', options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, itemOptions:{hasFeedback:true}, rule:{required:true}},
     {type:'select', name:'type', label:'分类', selectItems:listToSelectOptions(target.props.sales['goodsTypeList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    {type:'select', name:'style', label:'系列', selectItems:listToSelectOptions(target.props.sales['goodsStyleList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    {type:'select', name:'season', label:'季节', selectItems:listToSelectOptions(target.props.sales['goodsSeasonList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
+    {type:'select', name:'style', label:'系列', selectItems:listToSelectOptions(target.props.sales['goodsStyleList']), options:{defaultActiveFirstOption:true}, rule:{required:false}},
+    {type:'select', name:'season', label:'季节', selectItems:listToSelectOptions(target.props.sales['goodsSeasonList']), options:{defaultActiveFirstOption:true}, rule:{required:false}},
     {type:'select', name:'sex', label:'性别', selectItems:constants.BASE_CONSTANTS.SEX_DATA, options:{defaultActiveFirstOption:true}, rule:{required:true}},
     
     {
@@ -304,7 +304,7 @@ const getGoodsBeltAddOptions = function(target) {
         defaultActiveFirstOption:true
       }, rule:{required:true}
     },
-    
+    {type:'switch', name:'put', label:'是否上架', decoratorOptions:{initialValue:false, valuePropName:"checked"}, options:{defaultChecked:true}},            
     {type:'datePicker', name:'put_date', label:'上架时间', rule:{required:true}},
   ];
 } 
@@ -370,8 +370,8 @@ const getGoodsWatchStrapAddOptions = function(target) {
     {type:'upload', name:'pics', label:'图片',  itemOptions:{hasFeedback:true}, render:target.renderPicUpload, rule:{required:true}},
     {type:'number', name:'price', label:'价格', options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, itemOptions:{hasFeedback:true}, rule:{required:true}},
     {type:'select', name:'type', label:'分类', selectItems:listToSelectOptions(target.props.sales['goodsTypeList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    {type:'select', name:'style', label:'系列', selectItems:listToSelectOptions(target.props.sales['goodsStyleList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    {type:'select', name:'season', label:'季节', selectItems:listToSelectOptions(target.props.sales['goodsSeasonList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
+    {type:'select', name:'style', label:'系列', selectItems:listToSelectOptions(target.props.sales['goodsStyleList']), options:{defaultActiveFirstOption:true}, rule:{required:false}},
+    {type:'select', name:'season', label:'季节', selectItems:listToSelectOptions(target.props.sales['goodsSeasonList']), options:{defaultActiveFirstOption:true}, rule:{required:false}},
     {type:'select', name:'sex', label:'性别', selectItems:constants.BASE_CONSTANTS.SEX_DATA, options:{defaultActiveFirstOption:true}, rule:{required:true}},
     
     {
@@ -402,6 +402,7 @@ const getGoodsWatchStrapAddOptions = function(target) {
       }, rule:{required:true}
     },
     
+    {type:'switch', name:'put', label:'是否上架', decoratorOptions:{initialValue:false, valuePropName:"checked"}, options:{defaultChecked:true}},            
     {type:'datePicker', name:'put_date', label:'上架时间', rule:{required:true}},
   ];
 } 
@@ -463,10 +464,11 @@ const getGoodsOrnamentAddOptions = function(target) {
     {type:'upload', name:'pics', label:'图片',  itemOptions:{hasFeedback:true}, render:target.renderPicUpload, rule:{required:true}},
     {type:'number', name:'price', label:'价格', options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, itemOptions:{hasFeedback:true}, rule:{required:true}},
     {type:'select', name:'type', label:'分类', selectItems:listToSelectOptions(target.props.sales['goodsTypeList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    {type:'select', name:'style', label:'系列', selectItems:listToSelectOptions(target.props.sales['goodsStyleList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
-    {type:'select', name:'season', label:'季节', selectItems:listToSelectOptions(target.props.sales['goodsSeasonList']), options:{defaultActiveFirstOption:true}, rule:{required:true}},
+    {type:'select', name:'style', label:'系列', selectItems:listToSelectOptions(target.props.sales['goodsStyleList']), options:{defaultActiveFirstOption:true}, rule:{required:false}},
+    {type:'select', name:'season', label:'季节', selectItems:listToSelectOptions(target.props.sales['goodsSeasonList']), options:{defaultActiveFirstOption:true}, rule:{required:false}},
     {type:'select', name:'sex', label:'性别', selectItems:constants.BASE_CONSTANTS.SEX_DATA, options:{defaultActiveFirstOption:true}, rule:{required:true}},
 
+    {type:'switch', name:'put', label:'是否上架', decoratorOptions:{initialValue:false, valuePropName:"checked"}, options:{defaultChecked:true}},            
     {type:'datePicker', name:'put_date', label:'上架时间', rule:{required:true}},
   ];
 } 

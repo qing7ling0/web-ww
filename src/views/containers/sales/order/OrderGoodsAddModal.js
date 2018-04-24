@@ -50,6 +50,8 @@ import BeltAdd from './goods/BeltAdd'
 import WatchStrapAdd from './goods/WatchStrapAdd'
 import MaintainAdd from './goods/MaintainAdd'
 import OrnamentAdd from './goods/OrnamentAdd'
+import GoodsAddBase from './goods/GoodsAddBase'
+import { GOODS_TYPES } from '../goods/types'
 
 const initFormDefaultValues = (options, values) => {
   return options.map((item) => {
@@ -134,6 +136,9 @@ class OrderGoodsAddModal extends Component {
           onAddSuccess={this.onAddSuccess}
           isDesigon={(this.orderType.key===constants.BASE_CONSTANTS.E_ORDER_TYPE.DESIGN)}
           customerId={this.props.customerId}
+          onAddGoods={this.onAddGoods}
+          onAddMaterial={this.onAddMaterial}
+          onAddCommon={this.onAddCommon}
           customer={this.props.customer} />
       )
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.BELT:
@@ -144,6 +149,9 @@ class OrderGoodsAddModal extends Component {
           setGoodsCallback={this.onSetGoodsAddCallback} 
           onAddSuccess={this.onAddSuccess}
           customerId={this.props.customerId}
+          onAddGoods={this.onAddGoods}
+          onAddMaterial={this.onAddMaterial}
+          onAddCommon={this.onAddCommon}
           customer={this.props.customer} />
       )
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.WATCH_STRAP:
@@ -154,6 +162,9 @@ class OrderGoodsAddModal extends Component {
           setGoodsCallback={this.onSetGoodsAddCallback} 
           onAddSuccess={this.onAddSuccess}
           customerId={this.props.customerId}
+          onAddGoods={this.onAddGoods}
+          onAddMaterial={this.onAddMaterial}
+          onAddCommon={this.onAddCommon}
           customer={this.props.customer} />
       )
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.MAINTAIN:
@@ -164,6 +175,9 @@ class OrderGoodsAddModal extends Component {
           setGoodsCallback={this.onSetGoodsAddCallback} 
           onAddSuccess={this.onAddSuccess}
           customerId={this.props.customerId}
+          onAddGoods={this.onAddGoods}
+          onAddMaterial={this.onAddMaterial}
+          onAddCommon={this.onAddCommon}
           customer={this.props.customer} />
       )
       case constants.BASE_CONSTANTS.E_ORDER_TYPE.ORNAMENT:
@@ -174,6 +188,9 @@ class OrderGoodsAddModal extends Component {
           setGoodsCallback={this.onSetGoodsAddCallback} 
           onAddSuccess={this.onAddSuccess}
           customerId={this.props.customerId}
+          onAddGoods={this.onAddGoods}
+          onAddMaterial={this.onAddMaterial}
+          onAddCommon={this.onAddCommon}
           customer={this.props.customer} />
       )
     }
@@ -189,17 +206,46 @@ class OrderGoodsAddModal extends Component {
     }
 
     return (
-      <BaseFormModal
-        title={this.props.title}
-        visible={this.state.visible}
-        result={this.props.result}
-        renderHeader={this.renderHeader}
-        renderBody={this.renderBody}
-        onSubmit={this.onSubmit}
-        onCancel={this.onCancel}
-        modalOptions={{width:'60%'}}
-        onAfterClose={this.props.afterClose || null}
-      />
+      <div>
+        <BaseFormModal
+          title={this.props.title}
+          visible={this.state.visible}
+          result={this.props.result}
+          renderHeader={this.renderHeader}
+          renderBody={this.renderBody}
+          onSubmit={this.onSubmit}
+          onCancel={this.onCancel}
+          modalOptions={{width:'60%'}}
+          onAfterClose={this.props.afterClose || null}
+        />
+        <GoodsAddBase 
+          goodsAddProps= {{
+            visible:this.state.goodsAddVisible,
+            key: this.orderType.key,
+            onSubmitSuccess:()=>{
+              this.onReqOrderGoodsList(this.orderType.key);
+            },
+            afterClose:()=>{this.setState({goodsAddVisible:false})},
+          }}
+
+          materialAddProps={{
+            visible:this.state.materialAddVisible,
+            onSubmitSuccess:()=>{
+              this.props.reqGetGoodsBaseDatas();
+            },
+            afterClose:()=>{this.setState({materialAddVisible:false})},
+          }}
+
+          commonAddProps={{
+            visible:this.state.commonAddVisible,
+            onSubmitSuccess:()=>{
+              this.props.reqGetGoodsBaseDatas();
+            },
+            afterClose:()=>{this.setState({commonAddVisible:false})},
+            key:this.state.commonAddKey
+          }}
+        />
+      </div>
     );
   }
 
@@ -265,6 +311,41 @@ class OrderGoodsAddModal extends Component {
       this.props.onAdd(values);
       this.setState({visible:false})
     }
+  }
+
+  onAddGoods = () => {
+    let index = 0;
+
+    switch(this.orderType.key) {
+      case constants.BASE_CONSTANTS.E_ORDER_TYPE.SHOES:
+      case constants.BASE_CONSTANTS.E_ORDER_TYPE.DESIGN:
+        index = 0;
+      break;
+      case constants.BASE_CONSTANTS.E_ORDER_TYPE.BELT:
+        index = 1;
+      break;
+      case constants.BASE_CONSTANTS.E_ORDER_TYPE.WATCH_STRAP:
+        index = 2;
+      break;
+      case constants.BASE_CONSTANTS.E_ORDER_TYPE.MAINTAIN:
+        index = -1;
+      break;
+      case constants.BASE_CONSTANTS.E_ORDER_TYPE.ORNAMENT:
+        index = 4;
+      break;
+    }
+    if (index === -1) {
+      // 护理
+    } else {
+      this.setState({goodsAddTypeIndex:index, goodsAddVisible:true});
+    }
+  }
+
+  onAddMaterial = () => {
+    this.setState({materialAddVisible:true});
+  }
+  onAddCommon = (key) => {
+    this.setState({commonAddKey:key, commonAddVisible:true});
   }
 }
 
