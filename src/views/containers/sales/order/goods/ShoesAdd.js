@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import {bindActionCreators} from 'redux'
+import styled from 'styled-components'
 
 import {
   Card,
@@ -39,7 +40,8 @@ import {
   ProfileBtnBack,
   ProfileRowTitle,
   PhotoDeleteBtn,
-  PhotoUploadBtnCotnainer
+  PhotoUploadBtnCotnainer,
+  GoodsCard
 } from '../styled'
 
 import * as graphqlTypes from '../../../../modules/graphqlTypes'
@@ -70,7 +72,8 @@ class ShoesAdd extends Component {
       pics:[],
       goodsReviewSure:false,
       customReviewSure:false,
-      photoReviewSure:false
+      photoReviewSure:false,
+      fileList: [],
     }
   }
 
@@ -123,7 +126,7 @@ class ShoesAdd extends Component {
       }
     })
     return (
-      <Card key={index} title={item.title} bordered={false}  bodyStyle={{padding:0}} extra={cardExtra}>
+      <GoodsCard key={index} title={item.title} bordered={false}  bodyStyle={{padding:0}} extra={cardExtra}>
         <Row>
           {
             item.options.map((item, index) => {
@@ -138,13 +141,13 @@ class ShoesAdd extends Component {
             })
           }
         </Row>
-      </Card>
+      </GoodsCard>
     )
   }
 
   renderFoot(item, index) {
     return (
-      <Card key={index} title={item.title} bordered={false} >
+      <GoodsCard key={index} title={item.title} bordered={false} >
         <Row>
           {
             item.options.map((item, index) => {
@@ -158,7 +161,7 @@ class ShoesAdd extends Component {
           <Col xs={{span:24}} md={{span:10, offset:1}} lg={{span:8, offset:2}}>{this.renderBaseForm(item.left, index+1000, true)}</Col>
           <Col xs={{span:24}} md={{span:10, offset:2}} lg={{span:8, offset:4}}>{this.renderBaseForm(item.right, index+1000, true)}</Col>
         </Row>
-      </Card>
+      </GoodsCard>
     )
   }
 
@@ -168,71 +171,115 @@ class ShoesAdd extends Component {
     })
     let disabled = this.props.isReview&&this.state.photoReviewSure;
     return (
-      <Row>
-        <Col><span style={{float:'right'}}>{cardExtra}</span><ContentTitle>拍照信息</ContentTitle></Col>
-        {
-          this.state.pics.map((item,index) => {
-            return (
-              <Row key={index} style={{marginTop:20}}>
-                <Col span={6}>
-                  <Upload
-                    name="order"
-                    accept="image/*"
-                    listType="picture-card"
-                    className="avatar-uploader"
-                    showUploadList={false}
-                    style={{padding:0, position:'relative'}}
-                    action={config.GetServerAddress() + '/upload'}
-                    onChange={({file, fileList})=>this.onUploadPicChange(index, file)}
-                    withCredentials={true}
-                    disabled={disabled}
-                  >
-                    {
-                      item.file ? 
-                      <div style={{width:'100%', height:'100%', position:'relative', padding:"2px"}}>
-                        <img src={config.GetServerAddress() + '/file/'+item.file} alt="" style={{width:'100%'}} /> 
-                        {
-                          disabled ? null :
-                          <PhotoDeleteBtn icon='minus' type="danger" shape="circle" size="small" ghost onClick={(e)=>{
-                            e.stopPropagation();
-                            this.onRemovePhoto(index);
-                          }} />
-                        }
-                      </div>
-                      :
-                      <PhotoUploadBtnCotnainer>
-                        <Icon type='plus' />
-                        <div className="ant-upload-text">Upload</div>
-                      </PhotoUploadBtnCotnainer>
-                    }
-                  </Upload>
-                </Col>
-                <Col span={12}>
-                  <TextArea disabled={disabled} placeholder="请输入拍照备注" autosize={{ minRows: 2, maxRows: 10 }} defaultValue={item.desc} onChange={(e)=>{
-                    let pics = this.state.pics;
-                    let pic = pics[index];
-                    if (pic) {
-                      pic.desc = e.target.value;
-                      this.setState({pics:pics})
-                    }
-                  }} />
-                </Col>
-              </Row>
-            );
-          })
-        }
-        {
-          disabled || constants.BASE_CONSTANTS.ORDER_UPLOAD_PIC_MAX_COUNT<=this.state.pics.length?
-          null :
-          <Col span={24} style={{paddingTop:20}}>
-            <Button type="dashed" onClick={this.onAddPhoto} style={{ width: 120 }}>
-              <Icon type="plus" /> 增加
-            </Button>
-          </Col>
-        }
-      </Row>
+      <GoodsCard title="拍照信息" bordered={false}  bodyStyle={{padding:0}} extra={cardExtra} style={{padding:0}}>
+        <Row>
+          {
+            this.state.pics.map((item,index) => {
+              return (
+                <Row key={index} style={{marginTop:20}}>
+                  <Col span={6}>
+                    <Upload
+                      name="order"
+                      accept="image/*"
+                      listType="picture-card"
+                      className="avatar-uploader"
+                      showUploadList={false}
+                      style={{padding:0, position:'relative'}}
+                      action={config.GetServerAddress() + '/upload'}
+                      onChange={({file, fileList})=>this.onUploadPicChange(index, file)}
+                      withCredentials={true}
+                      disabled={disabled}
+                    >
+                      {
+                        item.file ? 
+                        <div style={{width:'100%', height:'100%', position:'relative', padding:"2px"}}>
+                          <img src={config.GetServerAddress() + '/file/'+item.file} alt="" style={{width:'100%'}} /> 
+                          {
+                            disabled ? null :
+                            <PhotoDeleteBtn icon='minus' type="danger" shape="circle" size="small" ghost onClick={(e)=>{
+                              e.stopPropagation();
+                              this.onRemovePhoto(index);
+                            }} />
+                          }
+                        </div>
+                        :
+                        <PhotoUploadBtnCotnainer>
+                          <Icon type='plus' />
+                          <div className="ant-upload-text">Upload</div>
+                        </PhotoUploadBtnCotnainer>
+                      }
+                    </Upload>
+                  </Col>
+                  <Col span={12}>
+                    <TextArea disabled={disabled} placeholder="请输入拍照备注" autosize={{ minRows: 2, maxRows: 10 }} defaultValue={item.desc} onChange={(e)=>{
+                      let pics = this.state.pics;
+                      let pic = pics[index];
+                      if (pic) {
+                        pic.desc = e.target.value;
+                        this.setState({pics:pics})
+                      }
+                    }} />
+                  </Col>
+                </Row>
+              );
+            })
+          }
+          {
+            disabled || constants.BASE_CONSTANTS.ORDER_UPLOAD_PIC_MAX_COUNT<=this.state.pics.length?
+            null :
+            <Col span={24} style={{paddingTop:20}}>
+              <Button type="dashed" onClick={this.onAddPhoto} style={{ width: 120 }}>
+                <Icon type="plus" /> 增加
+              </Button>
+            </Col>
+          }
+        </Row>
+      </GoodsCard>
     )
   }
+
+  // 特殊要求
+  renderSpecialNeeds = () => {
+    let specialNeedsOptionItem = {type:'textarea', name:'special_needs', label:'特殊要求', itemOptions:{labelLeft:false}, options:{}, rule:{required:false}};
+    if (this.props.data && this.props.data.special_needs) {
+      specialNeedsOptionItem.decoratorOptions.initialValue = this.props.data.special_needs;
+    }
+
+    let {fileList} = this.state;
+
+    const uploadButton = (
+      <div>
+        <Icon type="plus" />
+        <div className="ant-upload-text">Upload</div>
+      </div>
+    );
+
+    return(
+      <GoodsCard title="特殊要求" bordered={false} bodyStyle={{padding:0}} >
+        <Row style={{padding:"16px"}}>
+          <Col span={12}>
+            <FormItemComponent key={specialNeedsOptionItem.name} options={specialNeedsOptionItem} form={this.props.form} />
+          </Col>
+          <Col span={12}>
+            <Upload
+              name="order"
+              accept="image/*"
+              listType="picture-card"
+              action={config.GetServerAddress() + '/upload'}
+              // onChange={({file, fileList})=>this.onUploadPicChange(index, file)}
+              withCredentials={true}
+              fileList={fileList}
+              onPreview={this.handlePreview}
+              onChange={this.handleChange}
+            >
+              {fileList.length >= 10 ? null : uploadButton}
+            </Upload>
+          </Col>
+        </Row>
+      </GoodsCard>
+    )
+  }
+  handleChange = ({ fileList }) => this.setState({ fileList })
 
   render() {
     this.options = this.props.orderType.addOptions(this);
@@ -312,61 +359,65 @@ class ShoesAdd extends Component {
               return this.renderBaseForm(item, index, false, true);
             })
           }
+          {
+            this.renderSpecialNeeds()
+          }
           
-          <Row>
-            <Col><span style={{float:'right'}}>{customExtra}</span><ContentTitle>特殊定制</ContentTitle></Col>
-            {
-              this.state.customs.map((item,index) => {
-                return (
-                  <Col key={index} span={24}>
-                    <ProfileCol span={8}>
-                      <ProfileColLabel>收费内容：</ProfileColLabel>
-                      <ProfileColValue>
-                        <Select disabled={customDisable} style={{ width:120 }} value={item.name} 
-                          onChange={(value) => {
-                            this.onCustomChange(index, value)
-                          }}>
+          <GoodsCard title="特殊定制" bordered={false}  bodyStyle={{padding:0}} extra={customExtra}>
+            <Row>
+              {
+                this.state.customs.map((item,index) => {
+                  return (
+                    <Col key={index} span={24}>
+                      <ProfileCol span={8}>
+                        <ProfileColLabel>收费内容：</ProfileColLabel>
+                        <ProfileColValue>
+                          <Select disabled={customDisable} style={{ width:120 }} value={item.name} 
+                            onChange={(value) => {
+                              this.onCustomChange(index, value)
+                            }}>
+                            {
+                              this.props.sales.customList.map((item) => {
+                                if (this.state.customs.findIndex((value)=>value._id === item._id) === -1) {
+                                  return item;
+                                }
+                                return null;
+                              }).map((item) => {
+                                if (!item) return null;
+                                return <Option key={item._id} value={item._id}>{item.name}</Option>
+                              })
+                            }
+                          </Select>
                           {
-                            this.props.sales.customList.map((item) => {
-                              if (this.state.customs.findIndex((value)=>value._id === item._id) === -1) {
-                                return item;
-                              }
-                              return null;
-                            }).map((item) => {
-                              if (!item) return null;
-                              return <Option key={item._id} value={item._id}>{item.name}</Option>
-                            })
+                            customDisable ? null :
+                            <Button icon="delete" size="small" shape="circle" style={{marginLeft:'0.1rem'}} onClick={()=>{
+                              let cus = this.state.customs;
+                              cus.splice(index, 1);
+                              this.setState({customs:cus});
+                            }} />
                           }
-                        </Select>
-                        {
-                          customDisable ? null :
-                          <Button icon="delete" size="small" shape="circle" style={{marginLeft:'0.1rem'}} onClick={()=>{
-                            let cus = this.state.customs;
-                            cus.splice(index, 1);
-                            this.setState({customs:cus});
-                          }} />
-                        }
-                      </ProfileColValue>
-                    </ProfileCol>
-                    <ProfileCol span={8}>
-                      <ProfileColLabel>价  格：</ProfileColLabel>
-                      <ProfileColValue>
-                        {this.state.customs[index].price} RMB
-                      </ProfileColValue>
-                    </ProfileCol>
-                  </Col>
-                );
-              })
-            }
-            {
-              customDisable ? null :
-              <Col {...span} style={{paddingTop:20}}>
-                <Button type="dashed" onClick={this.addCustom} style={{ width: 120 }}>
-                  <Icon type="plus" /> 增加
-                </Button>
-              </Col>
-            }
-          </Row>
+                        </ProfileColValue>
+                      </ProfileCol>
+                      <ProfileCol span={8}>
+                        <ProfileColLabel>价  格：</ProfileColLabel>
+                        <ProfileColValue>
+                          {this.state.customs[index].price} RMB
+                        </ProfileColValue>
+                      </ProfileCol>
+                    </Col>
+                  );
+                })
+              }
+              {
+                customDisable ? null :
+                <Col {...span} style={{paddingTop:20}}>
+                  <Button type="dashed" onClick={this.addCustom} style={{ width: 120 }}>
+                    <Icon type="plus" /> 增加
+                  </Button>
+                </Col>
+              }
+            </Row>
+          </GoodsCard>
           <FormItemComponent key={urgentOptionItem.name} options={urgentOptionItem} form={this.props.form} />
         </NormalForm>
       </div>
@@ -477,6 +528,17 @@ class ShoesAdd extends Component {
           if (shoesInfo.sex !== constants.BASE_CONSTANTS.SEX_FEMALE) {
             delete shoesInfo.s_gen_gao;
           }
+
+          let needs_pics = [];
+          if (this.state.fileList) {
+            needs_pics = this.state.fileList.map(file=>{
+              if (file.response && file.response.data.files && file.response.data.files.length > 0) {
+                return file.response.data.files[0];
+              }
+              return null;
+            }).filter(item=>item);
+          }
+          shoesInfo.special_needs_pics = needs_pics;
 
           this.props.onAddSuccess(shoesInfo);
           return true;

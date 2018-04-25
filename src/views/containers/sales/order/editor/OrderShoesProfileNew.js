@@ -455,10 +455,16 @@ class OrderShoesProfile extends Component {
 
   renderPicItem = (imgId) => {
     let url = config.GetServerAddress() + '/file/'+imgId;
-    return <div style={{float:'left', width:"50%", position:"relative"}}>
-      <img src={url} alt="" style={{width:'100%'}}/> 
-      <a href="url" className="absolute-center">下载</a>
-    </div>
+    return <Col key={imgId} span={12}>
+      <Card.Grid style={{width:"100%"}}>
+        <img src={url} alt="" style={{width:'100%'}}/>
+        <a href={url} >下载</a>
+      </Card.Grid>
+    </Col>
+    // return <div style={{float:'left', width:"50%", position:"relative", padding:"16px", overflow:'hidden'}}>
+    //   <img src={url} alt="" style={{width:'100%'}}/> 
+    //   <a href={url} className="absolute-center">下载</a>
+    // </div>
   }
 
   renderShoesOrder = () => {
@@ -530,9 +536,11 @@ class OrderShoesProfile extends Component {
             <GridCol>特殊要求</GridCol>
             <GridCol colSpan="3">{this.props.profile.special_needs || ""}</GridCol>
             <GridCol colSpan="2">
-              {
-                this.props.profile.special_needs_pics && this.props.profile.special_needs_pics.map(item=>this.renderPicItem(item))
-              }
+              <Card>
+                {
+                  this.props.profile.special_needs_pics && this.props.profile.special_needs_pics.map(item=>this.renderPicItem(item))
+                }
+              </Card>
             </GridCol>
           </GridRow>
           <GridRow>
@@ -563,9 +571,11 @@ class OrderShoesProfile extends Component {
                 common.print(ReactDOM.findDOMNode(this.refs.table));
             }}>打印</Button>
             <span> </span>
-            <Button type="primary" onClick={()=>{
+            <Popconfirm title="请确定信息是否正确，确定后继续！" onConfirm={()=>{
               this.props.onOpenReview()
-            }}>审核</Button>
+            }} okText="确定" cancelText="取消">
+              <Button type="primary">审核</Button>
+            </Popconfirm>
           </Row>
           :null
         }

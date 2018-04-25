@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import {bindActionCreators} from 'redux'
+import styled from 'styled-components'
 
 import {
   Card,
@@ -39,7 +40,8 @@ import {
   ProfileBtnBack,
   ProfileRowTitle,
   PhotoDeleteBtn,
-  PhotoUploadBtnCotnainer
+  PhotoUploadBtnCotnainer,
+  GoodsCard
 } from '../styled'
 
 import * as graphqlTypes from '../../../../modules/graphqlTypes'
@@ -107,7 +109,7 @@ class OrnamentAdd extends Component {
       this.setState({goodsReviewSure:value})
     })
     return (
-      <Card key={index} title={item.title} bordered={false}  bodyStyle={{padding:0}} extra={cardExtra}>
+      <GoodsCard key={index} title={item.title} bordered={false}  bodyStyle={{padding:0}} extra={cardExtra}>
         <Row>
           {
             item.options.map((item, index) => {
@@ -117,27 +119,7 @@ class OrnamentAdd extends Component {
             })
           }
         </Row>
-      </Card>
-    )
-  }
-
-  renderFoot(item, index) {
-    return (
-      <Card key={index} title={item.title} bordered={false} >
-        <Row>
-          {
-            item.options.map((item, index) => {
-              if (!item.options) item.options = {};
-              item.options.disabled = this.props.isReview&&this.state.goodsReviewSure;
-              return (<Col key={index} xs={24} sm={12} lg={8}><FormItemComponent key={item.name} options={item} form={this.props.form} /></Col>);
-            })
-          }
-        </Row>
-        <Row>
-          <Col xs={{span:24}} md={{span:10, offset:1}} lg={{span:8, offset:2}}>{this.renderBaseForm(item.left, index+1000, true)}</Col>
-          <Col xs={{span:24}} md={{span:10, offset:2}} lg={{span:8, offset:4}}>{this.renderBaseForm(item.right, index+1000, true)}</Col>
-        </Row>
-      </Card>
+      </GoodsCard>
     )
   }
 
@@ -147,69 +129,70 @@ class OrnamentAdd extends Component {
     })
     let disabled = this.props.isReview&&this.state.photoReviewSure;
     return (
-      <Row>
-        <Col><span style={{float:'right'}}>{cardExtra}</span><ContentTitle>拍照信息</ContentTitle></Col>
-        {
-          this.state.pics.map((item,index) => {
-            return (
-              <Row key={index} style={{marginTop:20}}>
-                <Col span={6}>
-                  <Upload
-                    name="order"
-                    accept="image/*"
-                    listType="picture-card"
-                    className="avatar-uploader"
-                    showUploadList={false}
-                    style={{padding:0, position:'relative'}}
-                    action={config.GetServerAddress() + '/upload'}
-                    onChange={({file, fileList})=>this.onUploadPicChange(index, file)}
-                    withCredentials={true}
-                    disabled={disabled}
-                  >
-                    {
-                      item.file ? 
-                      <div style={{width:'100%', height:'100%', position:'relative'}}>
-                        <img src={config.GetServerAddress() + '/file/'+item.file} alt="" style={{width:'100%', height:'100%'}} /> 
-                        {
-                          disabled ? null :
-                          <PhotoDeleteBtn icon='minus' type="danger" shape="circle" size="small" ghost onClick={(e)=>{
-                            e.stopPropagation();
-                            this.onRemovePhoto(index);
-                          }} />
-                        }
-                      </div>
-                      :
-                      <PhotoUploadBtnCotnainer>
-                        <Icon type='plus' />
-                        <div className="ant-upload-text">Upload</div>
-                      </PhotoUploadBtnCotnainer>
-                    }
-                  </Upload>
-                </Col>
-                <Col span={12}>
-                  <TextArea disabled={disabled} placeholder="请输入拍照备注" autosize={{ minRows: 2, maxRows: 10 }} defaultValue={item.desc} onChange={(e)=>{
-                    let pics = this.state.pics;
-                    let pic = pics[index];
-                    if (pic) {
-                      pic.desc = e.target.value;
-                      this.setState({pics:pics})
-                    }
-                  }} />
-                </Col>
-              </Row>
-            );
-          })
-        }
-        {
-          disabled || constants.BASE_CONSTANTS.ORDER_UPLOAD_PIC_MAX_COUNT<=this.state.pics.length?
-          null :
-          <Col span={24} style={{paddingTop:20}}>
-            <Button type="dashed" onClick={this.onAddPhoto} style={{ width: 120 }}>
-              <Icon type="plus" /> 增加
-            </Button>
-          </Col>
-        }
-      </Row>
+      <GoodsCard title="拍照信息" bordered={false}  bodyStyle={{padding:0}} extra={cardExtra}>
+        <Row>
+          {
+            this.state.pics.map((item,index) => {
+              return (
+                <Row key={index} style={{marginTop:20}}>
+                  <Col span={6}>
+                    <Upload
+                      name="order"
+                      accept="image/*"
+                      listType="picture-card"
+                      className="avatar-uploader"
+                      showUploadList={false}
+                      style={{padding:0, position:'relative'}}
+                      action={config.GetServerAddress() + '/upload'}
+                      onChange={({file, fileList})=>this.onUploadPicChange(index, file)}
+                      withCredentials={true}
+                      disabled={disabled}
+                    >
+                      {
+                        item.file ? 
+                        <div style={{width:'100%', height:'100%', position:'relative'}}>
+                          <img src={config.GetServerAddress() + '/file/'+item.file} alt="" style={{width:'100%', height:'100%'}} /> 
+                          {
+                            disabled ? null :
+                            <PhotoDeleteBtn icon='minus' type="danger" shape="circle" size="small" ghost onClick={(e)=>{
+                              e.stopPropagation();
+                              this.onRemovePhoto(index);
+                            }} />
+                          }
+                        </div>
+                        :
+                        <PhotoUploadBtnCotnainer>
+                          <Icon type='plus' />
+                          <div className="ant-upload-text">Upload</div>
+                        </PhotoUploadBtnCotnainer>
+                      }
+                    </Upload>
+                  </Col>
+                  <Col span={12}>
+                    <TextArea disabled={disabled} placeholder="请输入拍照备注" autosize={{ minRows: 2, maxRows: 10 }} defaultValue={item.desc} onChange={(e)=>{
+                      let pics = this.state.pics;
+                      let pic = pics[index];
+                      if (pic) {
+                        pic.desc = e.target.value;
+                        this.setState({pics:pics})
+                      }
+                    }} />
+                  </Col>
+                </Row>
+              );
+            })
+          }
+          {
+            disabled || constants.BASE_CONSTANTS.ORDER_UPLOAD_PIC_MAX_COUNT<=this.state.pics.length?
+            null :
+            <Col span={24} style={{paddingTop:20}}>
+              <Button type="dashed" onClick={this.onAddPhoto} style={{ width: 120 }}>
+                <Icon type="plus" /> 增加
+              </Button>
+            </Col>
+          }
+        </Row>
+      </GoodsCard>
     )
   }
 
@@ -254,10 +237,11 @@ class OrnamentAdd extends Component {
           {
             this.renderPics()
           }
-          <Row>
-            <Col><span style={{float:'right'}}>{customExtra}</span><ContentTitle>加急</ContentTitle></Col>
-            <FormItemComponent key={urgentOptionItem.name} options={urgentOptionItem} form={this.props.form} />
-          </Row>
+          <GoodsCard title="加急" bordered={false}  bodyStyle={{padding:0}} extra={customExtra}>
+            <Row>
+              <FormItemComponent key={urgentOptionItem.name} options={urgentOptionItem} form={this.props.form} />
+            </Row>
+          </GoodsCard>
         </NormalForm>
       </div>
     );

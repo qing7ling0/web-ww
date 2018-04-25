@@ -310,9 +310,12 @@ class OrderBeltProfile extends Component {
           this.renderUrgent()
         }
         <Row style={{textAlign:'center', paddingTop:20, paddingBottom:20}}>
-          <Button type="primary" onClick={()=>{
-            this.props.onOpenReview()
-          }}>审核</Button>
+        
+          <Popconfirm title="请确定信息是否正确，确定后继续?" onConfirm={()=>{
+              this.props.onOpenReview()
+            }} okText="确定" cancelText="取消">
+              <Button type="primary">审核</Button>
+          </Popconfirm>
         </Row>
       </div>
     )

@@ -120,3 +120,9 @@ export const GridCol = styled.td`
   }
   padding: 16px;
 `
+
+export const GoodsCard = styled(Card) `
+  .ant-card-head {
+    padding:0;
+  }
+`

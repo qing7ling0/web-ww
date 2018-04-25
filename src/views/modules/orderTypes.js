@@ -17,7 +17,7 @@ const rechargeType = `r_amount`
 const ornamentType = `o_name`
 
 export const subOrderType = `{_id, NID, name, sex, price, count, type, sub_order_id, state, file, transport_company, transport_id, transport_price, remark, pics{file, desc}, transport_name, transport_phone, transport_address, transport_zipcode,
-  shop{_id,name}, guide{_id,name}, customer${graphqlTypes.customerType}, urgent{_id,day,price}, create_time, editor_time,
+  shop{_id,name}, guide{_id,name}, customer${graphqlTypes.customerType}, urgent{_id,day,price}, create_time, editor_time, s_di_hao, s_yan_tiao, s_yang_ban, s_tie_xuan, s_tie_fa, s_feedback, special_needs, special_needs_pics,
   ${shoesType}, ${beltType}, ${watchStrapType}, ${maintainType}, ${rechargeType}, ${ornamentType}}`
 export const orderType = `{_id, source, pay, pay_type, signature_pic, store_card_selected, cash_ticket_NID, shop{_id,name}, guide{_id,name},customer{_id,name,vip_level}, system_price, real_pay_price, discount_price, create_time}`
 export const orderDetailType = `{

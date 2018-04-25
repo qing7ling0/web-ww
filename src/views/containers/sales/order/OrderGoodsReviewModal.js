@@ -36,6 +36,7 @@ import {
   ProfileColValue,
   ProfileBtnBack,
   ProfileRowTitle,
+  GoodsCard
 } from './styled'
 
 import * as graphqlTypes from '../../../modules/graphqlTypes'
@@ -216,7 +217,7 @@ class OrderGoodsReviewModal extends Component {
 
   renderCustomer = () => {
     return (
-      <Card title="客户信息" bordered={false}  bodyStyle={{padding:0}}>
+      <GoodsCard title="客户信息" bordered={false}  bodyStyle={{padding:0}}>
         <Row>
           {
             CUSTOMOR_OPTIONS.map((item, index) => {
@@ -229,7 +230,7 @@ class OrderGoodsReviewModal extends Component {
             })
           }
         </Row>
-      </Card>
+      </GoodsCard>
     )
   }
 
@@ -246,7 +247,7 @@ class OrderGoodsReviewModal extends Component {
         {
           this.renderGoods()
         }
-        <Card title="工程文件" bordered={false}  bodyStyle={{padding:"10px 0 0 0"}}>
+        <GoodsCard title="工程文件" bordered={false}  bodyStyle={{padding:"10px 0 0 0"}}>
           <Row>
             <Col span={12}>
               {/* <Upload
@@ -297,7 +298,7 @@ class OrderGoodsReviewModal extends Component {
               }
             </Col>
           </Row>
-        </Card>
+        </GoodsCard>
       </div>
     );
   }
