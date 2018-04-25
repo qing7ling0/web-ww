@@ -48,7 +48,7 @@ const goodsBaseFields = {
   put: {type:Boolean, decription:'是否上架'},
   sex: {type:String, decription:'男女'},
   price: {type:Number, decription:'价格'},
-  pics:[{type:String, decription:'男女'}],
+  pics:[{type:String, decription:'图片'}],
   hide:{type:Boolean, description:'是否隐藏，前端进行删除操作，进行假删除', default:false}
 };
 const goodsShoesFields = {
@@ -226,6 +226,8 @@ const shoesFields = {
   s_right_zhiWei: {type: String, decription:'右脚趾围'},
   s_right_fuWei: {type: String, decription:'右脚附维'},
 
+  s_di_hao: {type:String, decription:'底号'},
+  s_yan_tiao: {type:String, decription:'沿条'},
   s_yang_ban: {type:String, decription:'样板'},
   s_tie_xuan: {type:String, decription:'贴楦'},
   s_tie_fa: {type:String, decription:'贴法'},
@@ -329,6 +331,8 @@ const subOrderSchema = new Schema({
   guide: {type:Schema.Types.ObjectId, ref:'user_shop_guide', decription:'导购'},
   customer: {type:Schema.Types.ObjectId, ref:'customer', decription:'客户'},
   order:{type:Schema.Types.ObjectId, ref:'order', decription:'订单信息'},
+  special_needs: {type:String, ddecription:'特殊要求'},
+  special_needs_pics:[{type:String, decription:'特殊要求图片'}],
   ...baseFields
 },{
   timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }

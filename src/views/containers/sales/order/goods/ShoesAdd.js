@@ -293,6 +293,8 @@ class ShoesAdd extends Component {
       urgentOptionItem.decoratorOptions.initialValue = this.props.data.urgent._id;
     }
 
+    let shoesExtraOptions = this.props.orderType.extraOptions(this);
+
     return (
       <div>
         <NormalForm>
@@ -304,6 +306,13 @@ class ShoesAdd extends Component {
           {
             this.renderPics()
           }
+          
+          {
+            shoesExtraOptions && shoesExtraOptions.map((item, index) => {
+              return this.renderBaseForm(item, index, false, true);
+            })
+          }
+          
           <Row>
             <Col><span style={{float:'right'}}>{customExtra}</span><ContentTitle>特殊定制</ContentTitle></Col>
             {

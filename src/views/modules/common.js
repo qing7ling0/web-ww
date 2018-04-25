@@ -115,3 +115,13 @@ export const getDefaultListResponse = (result) => {
 
   return list;
 }
+
+export const print = (obj) => {
+  //要打印的div的内容
+  var docStr = obj.innerHTML;
+  var printEle = document.getElementById("print");
+  printEle.innerHTML = docStr;
+  printEle.style.display = 'block';
+  window.print();
+  printEle.style.display = 'none';
+}

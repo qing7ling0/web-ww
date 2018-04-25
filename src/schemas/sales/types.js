@@ -412,6 +412,14 @@ const orderShoesBaseFields = {
   s_design_self: {type: GraphQLBoolean, decription:'是否来样设计'},
   s_production_step: {type: GraphQLInt, decription:'正品鞋制作环境'},
   s_gui_ge:{type:GraphQLString, decription:'规格'},
+
+  s_di_hao: {type:GraphQLString, decription:'底号'},
+  s_yan_tiao: {type:GraphQLString, decription:'沿条'},
+  s_yang_ban: {type:GraphQLString, decription:'样板'},
+  s_tie_xuan: {type:GraphQLString, decription:'贴楦'},
+  s_tie_fa: {type:GraphQLString, decription:'贴法'},
+  s_mark: {type:GraphQLString, decription:'备注'},
+  s_feedback: {type:GraphQLString, decription:'试脚鞋汇总'},
 }
 const orderShoesFields = {
   ...orderShoesBaseFields,
@@ -549,6 +557,8 @@ const subOrderBaseFields = {
   transport_zipcode: {type:GraphQLString, decription:'邮编'},
   transport_price:{type:GraphQLFloat, decription:'快递费用'},
   remark:{type:GraphQLString, ddecription:'备注'},
+  special_needs: {type:GraphQLString, ddecription:'特殊要求'},
+  special_needs_pics:{type:new GraphQLList(GraphQLString), decription:'特殊要求图片'}
 }
 
 export const orderPicType = new GraphQLObjectType({

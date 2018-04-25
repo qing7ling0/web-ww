@@ -79,6 +79,9 @@ class OrderProfileContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps){
+    if (nextProps.profile && nextProps.profile !== this.props.profile) {
+      this.props.reqGoodsProfile(nextProps.profile.NID)
+    }
   }
   componentDidMount() {
     this.props.reqSuborderProfile(this.props.match.params.id);
@@ -209,6 +212,7 @@ export default connect(
       reqSuborderProfile: Actions.suborderProfile,
       reqGetCustomerProfile:Actions.getCustomer,
       reqSuborderCancel:Actions.suborderCancel,
+      reqGoodsProfile:Actions.getGoodsProfileByNID
     }, dispatch);
   }
 )(OrderProfileContainer);

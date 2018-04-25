@@ -246,6 +246,7 @@ class OrderShoesProfile extends Component {
     );
   }
 
+  // 拍照信息
   renderPics = () => {
     const gridStyle = {
       width: '25%',
@@ -277,7 +278,7 @@ class OrderShoesProfile extends Component {
       }
     }
     return (
-      <Card title="拍照信息" bordered={false} type="inner" >
+      <Card title="" bordered={false} type="inner" bodyStyle={{padding:0}} >
         {
           list && list.length > 0 && list[0].length > 0 ?
           list.map((pics, index) => {
@@ -296,9 +297,10 @@ class OrderShoesProfile extends Component {
     )
   }
 
+  // 特殊定制
   renderCustoms = () => {
     return (
-      <Card title="特殊定制" bordered={false} type="inner" >
+      <Card title="" bordered={false} type="inner" bodyStyle={{padding:0}} >
         {
           this.props.profile.s_customs 
           ?
@@ -418,109 +420,133 @@ class OrderShoesProfile extends Component {
   //   )
   // }
 
+  renderGoods = () => {
+    return (<div ref="table" style={{width:"100%"}}>
+      {this.renderShoesOrder()}
+    </div>)
+  }
+
   renderDetail = () => {
     return (
       <div>
-          {
-            this.renderShoesOrder()
-          }
-          {
-            this.state.currentStep > 1 ?
-            this.renderFeedbackList()
-            : null
-          }
-          {
-            this.state.currentStep > 3 ?
-            this.renderTransform()
-            : null
-          }
+        <Collapse defaultActiveKey={['']}>
+          <Panel header="订单详情" key="1">
+            {this.renderGoods()}
+            <div style={{width:"100%", textAlign:"center", padding:"10px"}}>
+              <Button type="primary" onClick={()=>{
+                common.print(ReactDOM.findDOMNode(this.refs.table));
+              }}>打印</Button>
+            </div>
+          </Panel>
+        </Collapse>
+        {
+          this.state.currentStep > 1 ?
+          this.renderFeedbackList()
+          : null
+        }
+        {
+          this.state.currentStep > 3 ?
+          this.renderTransform()
+          : null
+        }
       </div>
     )
   }
 
+  renderPicItem = (imgId) => {
+    let url = config.GetServerAddress() + '/file/'+imgId;
+    return <div style={{float:'left', width:"50%", position:"relative"}}>
+      <img src={url} alt="" style={{width:'100%'}}/> 
+      <a href="url" className="absolute-center">下载</a>
+    </div>
+  }
+
   renderShoesOrder = () => {
     return (
-      <Collapse defaultActiveKey={['']}>
-        <Panel header="订单详情" key="1" ref="table">
-          <GridBorder border="2" width="100%">
-            <GridRow>
-              <GridCol width={2.5}>款号</GridCol>
-              <GridCol width={5.5}>sdfas</GridCol>
-              <GridCol rowSpan="7" width={16} colSpan="4">的</GridCol>
-            </GridRow>
-            <GridRow>
-              <GridCol>皮料</GridCol>
-              <GridCol>sdfas</GridCol>
-            </GridRow>
-            <GridRow>
-              <GridCol>颜色</GridCol>
-              <GridCol>sdfas</GridCol>
-            </GridRow>
-            <GridRow>
-              <GridCol>底号</GridCol>
-              <GridCol>sdfas</GridCol>
-            </GridRow>
-            <GridRow>
-              <GridCol>底边色</GridCol>
-              <GridCol>sdfas</GridCol>
-            </GridRow>
-            <GridRow>
-              <GridCol>底板色</GridCol>
-              <GridCol>sdfas</GridCol>
-            </GridRow>
-            <GridRow>
-              <GridCol>贴底</GridCol>
-              <GridCol>sdfas</GridCol>
-            </GridRow>
-            <GridRow>
-              <GridCol width={2.5}>沿条</GridCol>
-              <GridCol width={5.5}>sdfas</GridCol>
-              <GridCol width={2.5}>尺码</GridCol>
-              <GridCol width={5.5}>sdfas</GridCol>
-              <GridCol width={2.5}>样板</GridCol>
-              <GridCol>sdfas</GridCol>
-            </GridRow>
-            <GridRow>
-              <GridCol>贴楦</GridCol>
-              <GridCol colSpan="5">sdfas</GridCol>
-            </GridRow>
-            <GridRow>
-              <GridCol>贴法</GridCol>
-              <GridCol colSpan="5">sdfas</GridCol>
-            </GridRow>
-            <GridRow>
-              <GridCol>特殊要求</GridCol>
-              <GridCol colSpan="5">sdfas</GridCol>
-            </GridRow>
-          </GridBorder>
-
-          <Button onClick={()=>{
-            function myPrint(obj){
-                //打开一个新窗口newWindow
-                var newWindow=window.open("打印窗口","_blank");
-                //要打印的div的内容
-                var docStr = obj.innerHTML;
-                var body = window.document.head;
-                //打印内容写入newWindow文档
-
-                var html = window.document;
-                for(let item of window.document.head.childNodes) {
-                  newWindow.document.head.childNodes.push(item);
-                }
-                newWindow.document.write(docStr);
-                //关闭文档
-                // newWindow.document.close();
-                //调用打印机
-                newWindow.print();
-                //关闭newWindow页面
-                // newWindow.close();
+      <GridBorder border="2" width="100%">
+        <tbody>
+          <GridRow>
+            <GridCol width={2.5}>款号</GridCol>
+            <GridCol width={5.5}>{this.props.profile.NID}</GridCol>
+            <GridCol rowSpan="7" width={16} colSpan="4" style={{textAlign:'center'}}>
+            {
+              this.props.goodsProfile && this.props.goodsProfile.pics.length > 0?
+                <img 
+                  src={config.GetServerAddress() + '/file/'+this.props.goodsProfile.pics[0]} alt="" 
+                  style={{width:'100%'}}/> 
+              : null
             }
-
-            myPrint(ReactDOM.findDOMNode(this.refs.table));
-
-          }}>打印</Button>
-        </Panel>
-      </Collapse>
+            </GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>皮料</GridCol>
+            <GridCol>{this.props.profile.s_material && this.props.profile.s_material.name || ""}</GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>颜色</GridCol>
+            <GridCol>{this.props.profile.s_out_color && this.props.profile.s_out_color.name || ""}</GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>底号</GridCol>
+            <GridCol>{this.props.profile.s_di_hao || ""}</GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>底边色</GridCol>
+            <GridCol>{this.props.profile.s_bottom_side_color && this.props.profile.s_bottom_side_color.name || ""}</GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>底板色</GridCol>
+            <GridCol>{this.props.profile.s_bottom_color && this.props.profile.s_bottom_color.name || ""}</GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>贴底</GridCol>
+            <GridCol>{this.props.profile.s_tie_di && this.props.profile.s_tie_di.name || ""}</GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol width={2.5}>沿条</GridCol>
+            <GridCol width={5.5}>{this.props.profile.s_yan_tiao || ""}</GridCol>
+            <GridCol width={2.5}>尺码</GridCol>
+            <GridCol width={5.5}>{this.props.profile.s_foot_size || ""}</GridCol>
+            <GridCol width={2.5}>样板</GridCol>
+            <GridCol>{this.props.profile.s_yang_ban || ""}</GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>贴楦</GridCol>
+            <GridCol colSpan="5">{this.props.profile.s_tie_xuan || ""}</GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>贴法</GridCol>
+            <GridCol colSpan="5">{this.props.profile.s_tie_fa || ""}</GridCol>
+          </GridRow>
+          {
+            this.state.currentStep > 3 ?
+            <GridRow>
+              <GridCol>试脚鞋汇总</GridCol>
+              <GridCol colSpan="5">{this.props.profile.s_feedback || ""}</GridCol>
+            </GridRow>
+            : null
+          }
+          <GridRow>
+            <GridCol>特殊要求</GridCol>
+            <GridCol colSpan="3">{this.props.profile.special_needs || ""}</GridCol>
+            <GridCol colSpan="2">
+              {
+                this.props.profile.special_needs_pics && this.props.profile.special_needs_pics.map(item=>this.renderPicItem(item))
+              }
+            </GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>拍照信息</GridCol>
+            <GridCol colSpan="5">{this.renderPics()}</GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>加急天数</GridCol>
+            <GridCol colSpan="2">{this.props.profile.urgent && this.props.profile.urgent.day||0} 天</GridCol>
+            <GridCol>特殊定制</GridCol>
+            <GridCol colSpan="2">{this.renderCustoms()}</GridCol>
+          </GridRow>
+        </tbody>
+      </GridBorder>
     )
   }
 
@@ -528,20 +554,15 @@ class OrderShoesProfile extends Component {
     return (
       <div>
         {
-          this.renderShoes()
-        }
-        {
-          this.renderFooter()
-        }
-        {
-          this.renderPics()
-        }
-        {
-          this.renderCustoms()
+          this.renderGoods()
         }
         {
           this.props.canOperate ?
           <Row style={{textAlign:'center', paddingTop:20, paddingBottom:20}}>
+            <Button type="primary" onClick={()=>{
+                common.print(ReactDOM.findDOMNode(this.refs.table));
+            }}>打印</Button>
+            <span> </span>
             <Button type="primary" onClick={()=>{
               this.props.onOpenReview()
             }}>审核</Button>
@@ -632,7 +653,8 @@ export default connect(
     guideList:state.shop.shopGuideList,
     customerList:state.customer.customerList,
     lastCustomerOrderInfo:state.customer.lastCustomerOrderInfo,
-    tryFeedbackList:state.sales.tryFeedbackList
+    tryFeedbackList:state.sales.tryFeedbackList,
+    goodsProfile:state.sales.goodsProfile
   }),
   (dispatch) => {
     return bindActionCreators({

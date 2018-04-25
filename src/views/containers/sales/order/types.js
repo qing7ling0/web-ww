@@ -360,6 +360,22 @@ const getOrderShoesOptions = function(target) {
   ];
 }
 
+const getOrderShoesExtraOptions = function(target) {
+  return [
+    {
+      index:0, title:'鞋子信息', options:[
+        {type:'input', name:'s_di_hao', label:'底号', itemOptions:{labelLeft:true}, options:{}, rule:{required:false}}, 
+        {type:'input', name:'s_yan_tiao', label:'沿条', itemOptions:{labelLeft:true}, options:{}, rule:{required:false}}, 
+        {type:'input', name:'s_yang_ban', label:'样板', itemOptions:{labelLeft:true}, options:{}, rule:{required:false}}, 
+        {type:'input', name:'s_tie_xuan', label:'贴楦', itemOptions:{labelLeft:true}, options:{}, rule:{required:false}}, 
+        {type:'input', name:'s_tie_fa', label:'贴法', itemOptions:{labelLeft:true}, options:{}, rule:{required:false}}, 
+        {type:'input', name:'mark', label:'备注', itemOptions:{labelLeft:true}, options:{}, rule:{required:false}}, 
+        {type:'input', name:'s_feedback', label:'s_feedback', itemOptions:{labelLeft:true}, options:{}, rule:{required:false}}
+      ]
+    } 
+  ];
+}
+
 // 皮带
 const getOrderBeltListColumns = function(target) {
   let options = getOrderBaseListColumns(target);
@@ -912,6 +928,7 @@ export const ORDER_TYPES = [
     listOptions:getOrderListColumns,
     addOptions:getOrderAddOptions,
     editOptions:getOrderEditOptions,
+    extraOptions:getOrderShoesExtraOptions
   },
   {
     key:BASE_CONSTANTS.E_ORDER_TYPE.BELT,
