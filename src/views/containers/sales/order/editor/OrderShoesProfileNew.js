@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React,  { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { connect } from 'react-redux'
 import {bindActionCreators} from 'redux'
 import moment from 'moment'
@@ -440,7 +441,7 @@ class OrderShoesProfile extends Component {
   renderShoesOrder = () => {
     return (
       <Collapse defaultActiveKey={['']}>
-        <Panel header="订单详情" key="1">
+        <Panel header="订单详情" key="1" ref="table">
           <GridBorder border="2" width="100%">
             <GridRow>
               <GridCol width={2.5}>款号</GridCol>
@@ -492,6 +493,32 @@ class OrderShoesProfile extends Component {
               <GridCol colSpan="5">sdfas</GridCol>
             </GridRow>
           </GridBorder>
+
+          <Button onClick={()=>{
+            function myPrint(obj){
+                //打开一个新窗口newWindow
+                var newWindow=window.open("打印窗口","_blank");
+                //要打印的div的内容
+                var docStr = obj.innerHTML;
+                var body = window.document.head;
+                //打印内容写入newWindow文档
+
+                var html = window.document;
+                for(let item of window.document.head.childNodes) {
+                  newWindow.document.head.childNodes.push(item);
+                }
+                newWindow.document.write(docStr);
+                //关闭文档
+                // newWindow.document.close();
+                //调用打印机
+                newWindow.print();
+                //关闭newWindow页面
+                // newWindow.close();
+            }
+
+            myPrint(ReactDOM.findDOMNode(this.refs.table));
+
+          }}>打印</Button>
         </Panel>
       </Collapse>
     )
