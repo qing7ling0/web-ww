@@ -98,6 +98,9 @@ class OrderGoodsAddModal extends Component {
     
     this.props.reqGetGoodsBaseDatas();
     this.onGoodsAdd = null;
+    if (this.state.currentOrderType) {
+      this.onReqOrderGoodsList(this.state.currentOrderType);
+    }
   }
 
   renderHeader = () => {

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { connect } from 'react-redux'
 import {bindActionCreators} from 'redux'
 import moment from 'moment'
@@ -276,7 +277,7 @@ class OrderBeltProfile extends Component {
       }
     }
     return (
-      <Card title="拍照信息" bordered={false} type="inner" >
+      <Card title="" bordered={false} type="inner" >
         {
           list && list.length > 0 && list[0].length > 0 ?
           list.map((pics, index) => {
@@ -460,9 +461,7 @@ class OrderBeltProfile extends Component {
           </GridRow>
           <GridRow>
             <GridCol>加急天数</GridCol>
-            <GridCol colSpan="2">{this.props.profile.urgent && this.props.profile.urgent.day||0} 天</GridCol>
-            <GridCol>特殊定制</GridCol>
-            <GridCol colSpan="2">{this.renderCustoms()}</GridCol>
+            <GridCol colSpan="5">{this.props.profile.urgent && this.props.profile.urgent.day||0} 天</GridCol>
           </GridRow>
         </tbody>
       </GridBorder>
@@ -478,6 +477,10 @@ class OrderBeltProfile extends Component {
         {
           this.props.canOperate ?
           <Row style={{textAlign:'center', paddingTop:20, paddingBottom:20}}>
+            <Button type="primary" onClick={()=>{
+                common.print(ReactDOM.findDOMNode(this.refs.table));
+            }}>打印</Button>
+            <span> </span>
             <Button type="primary" onClick={()=>{
               this.props.onOpenReview()
             }}>审核</Button>

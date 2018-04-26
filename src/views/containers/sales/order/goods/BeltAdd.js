@@ -72,7 +72,8 @@ class BeltAdd extends Component {
       pics:[],
       goodsReviewSure:false,
       customReviewSure:false,
-      photoReviewSure:false
+      photoReviewSure:false,
+      fileList: [],
     }
   }
 
@@ -196,7 +197,50 @@ class BeltAdd extends Component {
         </Row>
       </GoodsCard>
     )
+  }  
+  
+  // 特殊要求
+  renderSpecialNeeds = () => {
+    let specialNeedsOptionItem = {type:'textarea', name:'special_needs', label:'特殊要求', itemOptions:{labelLeft:false}, options:{}, rule:{required:false}};
+    if (this.props.data && this.props.data.special_needs) {
+      specialNeedsOptionItem.decoratorOptions.initialValue = this.props.data.special_needs;
+    }
+
+    let {fileList} = this.state;
+
+    const uploadButton = (
+      <div>
+        <Icon type="plus" />
+        <div className="ant-upload-text">点击上传</div>
+      </div>
+    );
+
+    return(
+      <GoodsCard title="特殊要求" bordered={false} bodyStyle={{padding:0}} >
+        <Row style={{padding:"16px"}}>
+          <Col span={12}>
+            <FormItemComponent key={specialNeedsOptionItem.name} options={specialNeedsOptionItem} form={this.props.form} />
+          </Col>
+          <Col span={12}>
+            <Upload
+              name="order"
+              accept="image/*"
+              listType="picture-card"
+              action={config.GetServerAddress() + '/upload'}
+              // onChange={({file, fileList})=>this.onUploadPicChange(index, file)}
+              withCredentials={true}
+              fileList={fileList}
+              onPreview={this.handlePreview}
+              onChange={this.handleChange}
+            >
+              {fileList.length >= 10 ? null : uploadButton}
+            </Upload>
+          </Col>
+        </Row>
+      </GoodsCard>
+    )
   }
+  handleChange = ({ fileList }) => this.setState({ fileList })
 
   render() {
     this.options = this.props.orderType.addOptions(this);
@@ -253,6 +297,9 @@ class BeltAdd extends Component {
           }
           {
             this.renderPics()
+          }
+          {
+            this.renderSpecialNeeds()
           }
           <Row>
             <Col><span style={{float:'right'}}>{customExtra}</span><ContentTitle>加急</ContentTitle></Col>
