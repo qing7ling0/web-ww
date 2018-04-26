@@ -5,6 +5,7 @@ import {
   Modal,
   Form
 } from 'antd'
+const confirm = Modal.confirm;
 
 import {
   NormalForm
@@ -104,16 +105,37 @@ class BaseFormModal extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        if (this.props.onSubmit) {
-          let suc = this.props.onSubmit(err, values);
-          this.setState({confirmLoading:suc});
-        } else {
+    if (this.props.confirmMessage) {
+      confirm({
+        title: this.props.confirmMessage,
+        content: '',
+        onOk:() => {
+          this.props.form.validateFieldsAndScroll((err, values) => {
+            if (!err) {
+              if (this.props.onSubmit) {
+                let suc = this.props.onSubmit(err, values);
+                this.setState({confirmLoading:suc});
+              } else {
+      
+              }
+            }
+          });
+        },
+        onCancel: () => {
+        },
+      });
+    } else {
+      this.props.form.validateFieldsAndScroll((err, values) => {
+        if (!err) {
+          if (this.props.onSubmit) {
+            let suc = this.props.onSubmit(err, values);
+            this.setState({confirmLoading:suc});
+          } else {
 
+          }
         }
-      }
-    });
+      });
+    }
   }
 }
 

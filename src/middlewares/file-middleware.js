@@ -40,10 +40,13 @@ module.exports.fileSend = async function(ctx, next) {
       // let p = file.path.replace('uploads\\', '');
       let p =file.path;
       // console.log('fileSend id' + p)"Content-Disposition", "attachment;filename=" + fileName
-      ctx.response.header.ContentDisposition = "attachment;filename=" + file.name;
-      ctx.response.header.ContentTransferEncoding = "binary";
-      ctx.response.ContentType = "application/octet-stream";
-      return await send(ctx, p);
+      // ctx.response.headers.ContentDisposition = "attachment;filename=" + file.name;
+      // ctx.response.header.ContentTransferEncoding = "binary";
+      // ctx.response.ContentType = "image/*";
+      ctx.set('Content-Disposition', "attachment;filename=" + file.name)
+      ctx.set('Content-Type', "image/*")
+      return await send(ctx, p, {setHeaders:(res)=>{
+      }});
     }
   }
 }

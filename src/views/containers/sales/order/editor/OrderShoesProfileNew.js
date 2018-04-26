@@ -571,11 +571,9 @@ class OrderShoesProfile extends Component {
                 common.print(ReactDOM.findDOMNode(this.refs.table));
             }}>打印</Button>
             <span> </span>
-            <Popconfirm title="请确定信息是否正确，确定后继续！" onConfirm={()=>{
+            <Button type="primary" onClick={()=>{
               this.props.onOpenReview()
-            }} okText="确定" cancelText="取消">
-              <Button type="primary">审核</Button>
-            </Popconfirm>
+            }}>审核</Button>
           </Row>
           :null
         }

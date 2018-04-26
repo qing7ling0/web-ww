@@ -19,6 +19,8 @@ import {
   Row,Col
 } from 'antd'
 
+const confirm = Modal.confirm;
+
 const FormItem = Form.Item;
 const Option = Select.Option;
 const RadioButton = Radio.Button;
@@ -319,6 +321,7 @@ class OrderGoodsReviewModal extends Component {
           result={this.props.result}
           renderBody={this.renderBody}
           onSubmit={this.onSubmit}
+          confirmMessage={"请确认订单信息，确定后继续！"}
           onCancel={this.onCancel}
           modalOptions={{width:'60%'}}
           actionType={ActionTypes.ORDER_REVIEW}

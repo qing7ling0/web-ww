@@ -53,9 +53,6 @@ import {
   NextContainer,
   OrderSuccessContainer,
   OrderSuccessTitle,
-  GridBorder,
-  GridCol,
-  GridRow
 } from '../styled'
 
 import * as graphqlTypes from '../../../../modules/graphqlTypes'
@@ -359,121 +356,17 @@ class OrderBeltProfile extends Component {
     )
   }
 
-  renderGoods = () => {
-    return (<div ref="table" style={{width:"100%"}}>
-      {this.renderBeltOrder()}
-    </div>)
-  }
-
-  renderDetail = () => {
-    return (
-      <div>
-        <Collapse defaultActiveKey={['']}>
-          <Panel header="订单详情" key="1">
-            {this.renderGoods()}
-            <div style={{width:"100%", textAlign:"center", padding:"10px"}}>
-              <Button type="primary" onClick={()=>{
-                common.print(ReactDOM.findDOMNode(this.refs.table));
-              }}>打印</Button>
-            </div>
-          </Panel>
-        </Collapse>
-        {
-          this.state.currentStep > 1 ?
-          this.renderFeedbackList()
-          : null
-        }
-        {
-          this.state.currentStep > 3 ?
-          this.renderTransform()
-          : null
-        }
-      </div>
-    )
-  }
-
-  renderPicItem = (imgId) => {
-    let url = config.GetServerAddress() + '/file/'+imgId;
-    return <Col key={imgId} span={12}>
-      <Card.Grid style={{width:"100%"}}>
-        <img src={url} alt="" style={{width:'100%'}}/>
-        <a href={url} >下载</a>
-      </Card.Grid>
-    </Col>
-  }
-
-  renderBeltOrder = () => {
-    return (
-      <GridBorder border="2" width="100%">
-        <tbody>
-          <GridRow>
-            <GridCol width={2.5}>款号</GridCol>
-            <GridCol width={5.5}>{this.props.profile.NID}</GridCol>
-            <GridCol rowSpan="7" width={16} colSpan="4" style={{textAlign:'center'}}>
-            {
-              this.props.goodsProfile && this.props.goodsProfile.pics.length > 0?
-                <img 
-                  src={config.GetServerAddress() + '/file/'+this.props.goodsProfile.pics[0]} alt="" 
-                  style={{width:'100%'}}/> 
-              : null
-            }
-            </GridCol>
-          </GridRow>
-          <GridRow>
-            <GridCol>皮料</GridCol>
-            <GridCol>{this.props.profile.b_material && this.props.profile.b_material.name || ""}</GridCol>
-          </GridRow>
-          <GridRow>
-            <GridCol>颜色</GridCol>
-            <GridCol>{this.props.profile.b_color && this.props.profile.b_color.name || ""}</GridCol>
-          </GridRow>
-          <GridRow>
-            <GridCol>测量数据A</GridCol>
-            <GridCol>{this.props.profile.b_A || ""}</GridCol>
-          </GridRow>
-          <GridRow>
-            <GridCol>测量数据B</GridCol>
-            <GridCol>{this.props.profile.b_B || ""}</GridCol>
-          </GridRow>
-          <GridRow>
-            <GridCol>测量数据C</GridCol>
-            <GridCol>{this.props.profile.b_C || ""}</GridCol>
-          </GridRow>
-          <GridRow>
-            <GridCol>测量数据D</GridCol>
-            <GridCol>{this.props.profile.b_D || ""}</GridCol>
-          </GridRow>
-          <GridRow>
-            <GridCol>特殊要求</GridCol>
-            <GridCol colSpan="3">{this.props.profile.special_needs || ""}</GridCol>
-            <GridCol colSpan="2">
-              <Card>
-                {
-                  this.props.profile.special_needs_pics && this.props.profile.special_needs_pics.map(item=>this.renderPicItem(item))
-                }
-              </Card>
-            </GridCol>
-          </GridRow>
-          <GridRow>
-            <GridCol>拍照信息</GridCol>
-            <GridCol colSpan="5">{this.renderPics()}</GridCol>
-          </GridRow>
-          <GridRow>
-            <GridCol>加急天数</GridCol>
-            <GridCol colSpan="2">{this.props.profile.urgent && this.props.profile.urgent.day||0} 天</GridCol>
-            <GridCol>特殊定制</GridCol>
-            <GridCol colSpan="2">{this.renderCustoms()}</GridCol>
-          </GridRow>
-        </tbody>
-      </GridBorder>
-    )
-  }
-
   renderReviewStep = () => {
     return (
       <div>
         {
-          this.renderGoods()
+          this.renderBelt()
+        }
+        {
+          this.renderPics()
+        }
+        {
+          this.renderUrgent()
         }
         {
           this.props.canOperate ?

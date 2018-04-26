@@ -125,7 +125,7 @@ const goodsBaseFields = {
   put_date: {type:GraphQLString, decription:'上架时间'},
   put: {type:GraphQLBoolean, decription:'是否上架'},
   sex: {type:GraphQLString, decription:'男女'},
-  price: {type:GraphQLInt, decription:'价格'}
+  price: {type:GraphQLFloat, decription:'价格'}
 };
 const goodsFields = {
   ...goodsBaseFields,
