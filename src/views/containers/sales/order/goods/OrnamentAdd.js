@@ -72,7 +72,8 @@ class OrnamentAdd extends Component {
       pics:[],
       goodsReviewSure:false,
       customReviewSure:false,
-      photoReviewSure:false
+      photoReviewSure:false,
+      fileList: [],
     }
   }
 
@@ -92,11 +93,11 @@ class OrnamentAdd extends Component {
 
   renderReviewBtn = (isReview, sure, onChange) => {
     let cardExtra = null;
-    if (isReview) {
-      cardExtra = (
-        <Switch checkedChildren="已审核" unCheckedChildren="未审核" checked={sure} onChange={onChange} />
-      )
-    }
+    // if (isReview) {
+    //   cardExtra = (
+    //     <Switch checkedChildren="已审核" unCheckedChildren="未审核" checked={sure} onChange={onChange} />
+    //   )
+    // }
     return cardExtra;
   }
 
@@ -196,6 +197,50 @@ class OrnamentAdd extends Component {
     )
   }
 
+  // 特殊要求
+  renderSpecialNeeds = () => {
+    let specialNeedsOptionItem = {type:'textarea', name:'special_needs', label:'特殊要求', itemOptions:{labelLeft:false}, options:{}, rule:{required:false}};
+    if (this.props.data && this.props.data.special_needs) {
+      specialNeedsOptionItem.decoratorOptions.initialValue = this.props.data.special_needs;
+    }
+
+    let {fileList} = this.state;
+
+    const uploadButton = (
+      <div>
+        <Icon type="plus" />
+        <div className="ant-upload-text">点击上传</div>
+      </div>
+    );
+
+    return(
+      <GoodsCard title="特殊要求" bordered={false} bodyStyle={{padding:0}} >
+        <Row style={{padding:"16px"}}>
+          <Col span={12}>
+            <FormItemComponent key={specialNeedsOptionItem.name} options={specialNeedsOptionItem} form={this.props.form} />
+          </Col>
+          <Col span={12}>
+            <Upload
+              name="order"
+              accept="image/*"
+              listType="picture-card"
+              action={config.GetServerAddress() + '/upload'}
+              // onChange={({file, fileList})=>this.onUploadPicChange(index, file)}
+              withCredentials={true}
+              fileList={fileList}
+              onPreview={this.handlePreview}
+              onChange={this.handleChange}
+            >
+              {fileList.length >= 10 ? null : uploadButton}
+            </Upload>
+          </Col>
+        </Row>
+      </GoodsCard>
+    )
+  }
+  handleChange = ({ fileList }) => this.setState({ fileList })
+
+
   render() {
     this.options = this.props.orderType.addOptions(this);
     let ornamentAddSize = {};
@@ -237,6 +282,9 @@ class OrnamentAdd extends Component {
           {
             this.renderPics()
           }
+          {
+            this.renderSpecialNeeds()
+          }
           <GoodsCard title="加急" bordered={false}  bodyStyle={{padding:0}} extra={customExtra}>
             <Row>
               <FormItemComponent key={urgentOptionItem.name} options={urgentOptionItem} form={this.props.form} />
@@ -272,12 +320,12 @@ class OrnamentAdd extends Component {
   }
 
   onAdd = () => {
-    if (this.props.isReview) {
-      if (!this.state.goodsReviewSure || !this.state.customReviewSure || !this.state.photoReviewSure) {
-        message.error('还有部分信息未审核，请审核！')
-        return;
-      }
-    }
+    // if (this.props.isReview) {
+    //   if (!this.state.goodsReviewSure || !this.state.customReviewSure || !this.state.photoReviewSure) {
+    //     message.error('还有部分信息未审核，请审核！')
+    //     return;
+    //   }
+    // }
 
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
@@ -293,6 +341,16 @@ class OrnamentAdd extends Component {
             })
             ornamentAddInfo.pics = pics;
           }
+          let needs_pics = [];
+          if (this.state.fileList) {
+            needs_pics = this.state.fileList.map(file=>{
+              if (file.response && file.response.data.files && file.response.data.files.length > 0) {
+                return file.response.data.files[0];
+              }
+              return null;
+            }).filter(item=>item);
+          }
+          ornamentAddInfo.special_needs_pics = needs_pics;
 
           this.props.onAddSuccess(ornamentAddInfo);
           return true;

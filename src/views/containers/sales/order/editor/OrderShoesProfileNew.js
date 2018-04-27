@@ -429,16 +429,6 @@ class OrderShoesProfile extends Component {
   renderDetail = () => {
     return (
       <div>
-        <Collapse defaultActiveKey={['']}>
-          <Panel header="订单详情" key="1">
-            {this.renderGoods()}
-            <div style={{width:"100%", textAlign:"center", padding:"10px"}}>
-              <Button type="primary" onClick={()=>{
-                common.print(ReactDOM.findDOMNode(this.refs.table));
-              }}>打印</Button>
-            </div>
-          </Panel>
-        </Collapse>
         {
           this.state.currentStep > 1 ?
           this.renderFeedbackList()
@@ -449,6 +439,16 @@ class OrderShoesProfile extends Component {
           this.renderTransform()
           : null
         }
+        <Collapse defaultActiveKey={['1']}>
+          <Panel header="订单详情" key="1">
+            {this.renderGoods()}
+            <div style={{width:"100%", textAlign:"center", padding:"10px"}}>
+              <Button type="primary" onClick={()=>{
+                common.print(ReactDOM.findDOMNode(this.refs.table));
+              }}>打印</Button>
+            </div>
+          </Panel>
+        </Collapse>
       </div>
     )
   }
@@ -536,7 +536,7 @@ class OrderShoesProfile extends Component {
             <GridCol>特殊要求</GridCol>
             <GridCol colSpan="3">{this.props.profile.special_needs || ""}</GridCol>
             <GridCol colSpan="2">
-              <Card>
+              <Card bordered={false}>
                 {
                   this.props.profile.special_needs_pics && this.props.profile.special_needs_pics.map(item=>this.renderPicItem(item))
                 }

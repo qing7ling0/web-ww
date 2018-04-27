@@ -277,7 +277,7 @@ class OrderBeltProfile extends Component {
       }
     }
     return (
-      <Card title="" bordered={false} type="inner" >
+      <Card title="" bordered={false} type="inner" bodyStyle={{padding:0}} >
         {
           list && list.length > 0 && list[0].length > 0 ?
           list.map((pics, index) => {
@@ -361,46 +361,28 @@ class OrderBeltProfile extends Component {
   }
 
   renderGoods = () => {
+    let goodsCom = null;
+    switch(this.props.orderKey) {
+      case constants.BASE_CONSTANTS.E_ORDER_TYPE.BELT:
+      goodsCom = this.renderBeltOrder();
+      break;
+      case constants.BASE_CONSTANTS.E_ORDER_TYPE.WATCH_STRAP:
+      goodsCom = this.renderWatchStrapOrder();
+      break;
+      case constants.BASE_CONSTANTS.E_ORDER_TYPE.MAINTAIN:
+      goodsCom = this.renderMaintainOrder();
+      break;
+      case constants.BASE_CONSTANTS.E_ORDER_TYPE.ORNAMENT:
+      goodsCom = this.renderOrnamentOrder();
+      break;
+      case constants.BASE_CONSTANTS.E_ORDER_TYPE.RECHARGE:
+      goodsCom = this.renderRechargeOrder();
+      break;
+
+    }
     return (<div ref="table" style={{width:"100%"}}>
-      {this.renderBeltOrder()}
+      {goodsCom}
     </div>)
-  }
-
-  renderDetail = () => {
-    return (
-      <div>
-        <Collapse defaultActiveKey={['']}>
-          <Panel header="订单详情" key="1">
-            {this.renderGoods()}
-            <div style={{width:"100%", textAlign:"center", padding:"10px"}}>
-              <Button type="primary" onClick={()=>{
-                common.print(ReactDOM.findDOMNode(this.refs.table));
-              }}>打印</Button>
-            </div>
-          </Panel>
-        </Collapse>
-        {
-          this.state.currentStep > 1 ?
-          this.renderFeedbackList()
-          : null
-        }
-        {
-          this.state.currentStep > 3 ?
-          this.renderTransform()
-          : null
-        }
-      </div>
-    )
-  }
-
-  renderPicItem = (imgId) => {
-    let url = config.GetServerAddress() + '/file/'+imgId;
-    return <Col key={imgId} span={12}>
-      <Card.Grid style={{width:"100%"}}>
-        <img src={url} alt="" style={{width:'100%'}}/>
-        <a href={url} >下载</a>
-      </Card.Grid>
-    </Col>
   }
 
   renderBeltOrder = () => {
@@ -410,7 +392,7 @@ class OrderBeltProfile extends Component {
           <GridRow>
             <GridCol width={2.5}>款号</GridCol>
             <GridCol width={5.5}>{this.props.profile.NID}</GridCol>
-            <GridCol rowSpan="7" width={16} colSpan="4" style={{textAlign:'center'}}>
+            <GridCol rowSpan="7" width={16} colSpan="1" style={{textAlign:'center'}}>
             {
               this.props.goodsProfile && this.props.goodsProfile.pics.length > 0?
                 <img 
@@ -446,9 +428,90 @@ class OrderBeltProfile extends Component {
           </GridRow>
           <GridRow>
             <GridCol>特殊要求</GridCol>
-            <GridCol colSpan="3">{this.props.profile.special_needs || ""}</GridCol>
-            <GridCol colSpan="2">
-              <Card>
+            <GridCol colSpan="1">{this.props.profile.special_needs || ""}</GridCol>
+            <GridCol colSpan="1">
+              <Card bordered={false}>
+                {
+                  this.props.profile.special_needs_pics && this.props.profile.special_needs_pics.map(item=>this.renderPicItem(item))
+                }
+              </Card>
+            </GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>拍照信息</GridCol>
+            <GridCol colSpan="2">{this.renderPics()}</GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>加急天数</GridCol>
+            <GridCol colSpan="2">{this.props.profile.urgent && this.props.profile.urgent.day||0} 天</GridCol>
+          </GridRow>
+        </tbody>
+      </GridBorder>
+    )
+  }
+  
+  renderWatchStrapOrder = () => {
+    return (
+      <GridBorder border="2" width="100%">
+        <tbody>
+          <GridRow>
+            <GridCol width={2.5}>款号</GridCol>
+            <GridCol width={5.5}>{this.props.profile.NID}</GridCol>
+            <GridCol width={2.5}>材质</GridCol>
+            <GridCol width={5.5}>{this.props.profile.ws_material && this.props.profile.ws_material.name || ""}</GridCol>
+            <GridCol width={2.5}>颜色</GridCol>
+            <GridCol>{this.props.profile.ws_color && this.props.profile.ws_color.name || ""}</GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>款式</GridCol>
+            <GridCol>{this.props.profile.ws_style && this.props.profile.ws_style.name || ""}</GridCol>
+            <GridCol rowSpan="9" width={16} colSpan="4" style={{textAlign:'center'}}>
+              {
+                this.props.goodsProfile && this.props.goodsProfile.pics.length > 0?
+                  <img 
+                    src={config.GetServerAddress() + '/file/'+this.props.goodsProfile.pics[0]} alt="" 
+                    style={{width:'100%'}}/> 
+                : null
+              }
+            </GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>测量数据A</GridCol>
+            <GridCol>{this.props.profile.ws_A || ""}</GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>测量数据B</GridCol>
+            <GridCol>{this.props.profile.ws_B || ""}</GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>测量数据C</GridCol>
+            <GridCol>{this.props.profile.ws_C || ""}</GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>测量数据D</GridCol>
+            <GridCol>{this.props.profile.ws_D || ""}</GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>测量数据E</GridCol>
+            <GridCol>{this.props.profile.ws_E || ""}</GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>测量数据F</GridCol>
+            <GridCol>{this.props.profile.ws_F || ""}</GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>测量数据G</GridCol>
+            <GridCol>{this.props.profile.ws_G || ""}</GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>手表品牌</GridCol>
+            <GridCol>{this.props.profile.ws_watch_brand || ""}</GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>特殊要求</GridCol>
+            <GridCol colSpan="2">{this.props.profile.special_needs || ""}</GridCol>
+            <GridCol colSpan="3">
+              <Card bordered={false}>
                 {
                   this.props.profile.special_needs_pics && this.props.profile.special_needs_pics.map(item=>this.renderPicItem(item))
                 }
@@ -466,6 +529,158 @@ class OrderBeltProfile extends Component {
         </tbody>
       </GridBorder>
     )
+  }
+  
+  renderMaintainOrder = () => {
+    return (
+      <GridBorder border="2" width="100%">
+        <tbody>
+          <GridRow>
+            <GridCol width={2.5}>款号</GridCol>
+            <GridCol width={5.5}>{this.props.profile.NID}</GridCol>
+            <GridCol width={2.5}>内容</GridCol>
+            <GridCol width={5.5}>{this.props.profile.m_name}</GridCol>
+            <GridCol width={2.5}>颜色</GridCol>
+            <GridCol>{this.props.profile.m_color || ""}</GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>护理时间</GridCol>
+            <GridCol>{this.props.profile.m_time || ""}</GridCol>
+            <GridCol>样品</GridCol>
+            <GridCol>{this.props.profile.m_demo || ""}</GridCol>
+            <GridCol>是否水洗</GridCol>
+            <GridCol>{this.props.profile.m_wash?"是":"否"}</GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>特殊要求</GridCol>
+            <GridCol colSpan="2">{this.props.profile.special_needs || ""}</GridCol>
+            <GridCol colSpan="3">
+              <Card bordered={false}>
+                {
+                  this.props.profile.special_needs_pics && this.props.profile.special_needs_pics.map(item=>this.renderPicItem(item))
+                }
+              </Card>
+            </GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>拍照信息</GridCol>
+            <GridCol colSpan="5">{this.renderPics()}</GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>加急天数</GridCol>
+            <GridCol colSpan="5">{this.props.profile.urgent && this.props.profile.urgent.day||0} 天</GridCol>
+          </GridRow>
+        </tbody>
+      </GridBorder>
+    )
+  }
+  
+  renderOrnamentOrder = () => {
+    return (
+      <GridBorder border="2" width="100%">
+        <tbody>
+          <GridRow>
+            <GridCol width={2.5}>款号</GridCol>
+            <GridCol width={5.5}>{this.props.profile.NID}</GridCol>
+            <GridCol rowSpan="2" width={16} colSpan="1" style={{textAlign:'center'}}>
+            {
+              this.props.goodsProfile && this.props.goodsProfile.pics.length > 0?
+                <img 
+                  src={config.GetServerAddress() + '/file/'+this.props.goodsProfile.pics[0]} alt="" 
+                  style={{width:'100%'}}/> 
+              : null
+            }
+            </GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>名称</GridCol>
+            <GridCol>{this.props.profile.o_name || ""}</GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>特殊要求</GridCol>
+            <GridCol colSpan="1">{this.props.profile.special_needs || ""}</GridCol>
+            <GridCol colSpan="1">
+              <Card bordered={false}>
+                {
+                  this.props.profile.special_needs_pics && this.props.profile.special_needs_pics.map(item=>this.renderPicItem(item))
+                }
+              </Card>
+            </GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>拍照信息</GridCol>
+            <GridCol colSpan="2">{this.renderPics()}</GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>加急天数</GridCol>
+            <GridCol colSpan="2">{this.props.profile.urgent && this.props.profile.urgent.day||0} 天</GridCol>
+          </GridRow>
+        </tbody>
+      </GridBorder>
+    )
+  }
+  
+  renderRechargeOrder = () => {
+    return (
+      <GridBorder border="2" width="100%">
+        <tbody>
+          <GridRow>
+            <GridCol width={2.5}>充值金额</GridCol>
+            <GridCol width={5.5}>{this.props.profile.r_amount || "0"}</GridCol>
+            <GridCol rowSpan="2" width={16} colSpan="1" style={{textAlign:'center'}}>
+              {
+                this.props.goodsProfile && this.props.goodsProfile.pics.length > 0?
+                  <img 
+                    src={config.GetServerAddress() + '/file/'+this.props.goodsProfile.pics[0]} alt="" 
+                    style={{width:'100%'}}/> 
+                : null
+              }
+            </GridCol>
+          </GridRow>
+          <GridRow>
+            <GridCol>奖励金额</GridCol>
+            <GridCol>{this.props.profile.r_reward || "0"}</GridCol>
+          </GridRow>
+        </tbody>
+      </GridBorder>
+    )
+  }
+
+  renderDetail = () => {
+    return (
+      <div>
+        <Collapse defaultActiveKey={['1']}>
+          <Panel header="订单详情" key="1">
+            {this.renderGoods()}
+            <div style={{width:"100%", textAlign:"center", padding:"10px"}}>
+              <Button type="primary" onClick={()=>{
+                common.print(ReactDOM.findDOMNode(this.refs.table));
+              }}>打印</Button>
+            </div>
+          </Panel>
+        </Collapse>
+        {
+          this.state.currentStep > 1 ?
+          this.renderFeedbackList()
+          : null
+        }
+        {
+          this.state.currentStep > 3 ?
+          this.renderTransform()
+          : null
+        }
+      </div>
+    )
+  }
+
+  renderPicItem = (imgId) => {
+    let url = config.GetServerAddress() + '/file/'+imgId;
+    return <Col key={imgId} span={11}>
+      <Card.Grid style={{width:"100%"}}>
+        <img src={url} alt="" style={{width:'100%'}}/>
+        <a href={url} >下载</a>
+      </Card.Grid>
+    </Col>
   }
 
   renderReviewStep = () => {
@@ -580,7 +795,8 @@ export default connect(
     guideList:state.shop.shopGuideList,
     customerList:state.customer.customerList,
     lastCustomerOrderInfo:state.customer.lastCustomerOrderInfo,
-    tryFeedbackList:state.sales.tryFeedbackList
+    tryFeedbackList:state.sales.tryFeedbackList,
+    goodsProfile:state.sales.goodsProfile
   }),
   (dispatch) => {
     return bindActionCreators({

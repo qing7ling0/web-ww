@@ -95,11 +95,11 @@ class BeltAdd extends Component {
 
   renderReviewBtn = (isReview, sure, onChange) => {
     let cardExtra = null;
-    if (isReview) {
-      cardExtra = (
-        <Switch checkedChildren="已审核" unCheckedChildren="未审核" checked={sure} onChange={onChange} />
-      )
-    }
+    // if (isReview) {
+    //   cardExtra = (
+    //     <Switch checkedChildren="已审核" unCheckedChildren="未审核" checked={sure} onChange={onChange} />
+    //   )
+    // }
     return cardExtra;
   }
 
@@ -335,12 +335,12 @@ class BeltAdd extends Component {
   }
 
   onAdd = () => {
-    if (this.props.isReview) {
-      if (!this.state.goodsReviewSure || !this.state.customReviewSure || !this.state.photoReviewSure) {
-        message.error('还有部分信息未审核，请审核！')
-        return;
-      }
-    }
+    // if (this.props.isReview) {
+    //   if (!this.state.goodsReviewSure || !this.state.customReviewSure || !this.state.photoReviewSure) {
+    //     message.error('还有部分信息未审核，请审核！')
+    //     return;
+    //   }
+    // }
 
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
@@ -366,6 +366,16 @@ class BeltAdd extends Component {
             })
             beltInfo.pics = pics;
           }
+          let needs_pics = [];
+          if (this.state.fileList) {
+            needs_pics = this.state.fileList.map(file=>{
+              if (file.response && file.response.data.files && file.response.data.files.length > 0) {
+                return file.response.data.files[0];
+              }
+              return null;
+            }).filter(item=>item);
+          }
+          beltInfo.special_needs_pics = needs_pics;
 
           this.props.onAddSuccess(beltInfo);
           return true;

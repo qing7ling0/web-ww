@@ -250,7 +250,7 @@ class ShoesAdd extends Component {
     const uploadButton = (
       <div>
         <Icon type="plus" />
-        <div className="ant-upload-text">Upload</div>
+        <div className="ant-upload-text">点击上传</div>
       </div>
     );
 
