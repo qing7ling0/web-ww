@@ -83,7 +83,7 @@ const getVipOrderListOptions = function(target) {
     { title: '样板', dataIndex: 's_yang_ban', key: 's_yang_ban', className:"table-column-left", render:(value, record)=>target.renderItem(record, "s_yang_ban", value, false, target.state.isEditor[record._id])},
     { title: '贴楦', dataIndex: 's_tie_xuan', key: 's_tie_xuan', className:"table-column-left", render:(value, record)=>target.renderItem(record, "s_tie_xuan", value, false, target.state.isEditor[record._id])},
     { title: '贴法', dataIndex: 's_tie_fa', key: 's_tie_fa', className:"table-column-left", render:(value, record)=>target.renderItem(record, "s_tie_fa", value, false, target.state.isEditor[record._id])},
-    { title: '备注', dataIndex: 's_mark', key: 's_mark', width:220, className:"table-column-left", render:(value, record)=>target.renderItem(record, "s_mark", value, true, target.state.isEditor[record._id])},
+    { title: '备注', dataIndex: 'remark', key: 'remark', width:220, className:"table-column-left", render:(value, record)=>target.renderItem(record, "s_mark", value, true, target.state.isEditor[record._id])},
     { title: '试脚鞋汇总', dataIndex: 's_feedback', key: 's_feedback', width:220, className:"table-column-left", render:(value, record)=>target.renderItem(record, "s_feedback", value, true, target.state.isEditor[record._id])},
   ]
   options.push({

@@ -47,6 +47,7 @@ export const listToSelectOptions = (list, valueFormat, labelFormat) => {
 export const getOrderBaseListColumns = function(target) {
   return [
     { title: '订单号', dataIndex: 'sub_order_id', key: 'sub_order_id'},
+    { title: '下单时间', dataIndex: 'create_time', key: 'create_time', render:(item)=>item&&(moment(item).format("YYYY-MM-DD HH:mm:ss") || "")},
     { title: '货号', dataIndex: 'NID', key: 'NID'},
     { title: '状态', dataIndex: 'state', key: 'state', render:(item) => {
       let type = commonUtils.getOrderStatus(item);
