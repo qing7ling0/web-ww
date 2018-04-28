@@ -10,6 +10,8 @@ import {
 } from 'graphql';
 import * as types from './types';
 import {commonData} from '../../data/index';
+import {appPlatformModel} from '../../models/index'
+import { ApiError, ApiErrorNames } from '../../error/api-errors'
 
 const commonFields = require('../common/common-fields')
 const commonUtils = require('../../utils/common-utils')
@@ -65,5 +67,41 @@ export const commonDataModify = {
     }
 
     return 1;
+  }
+}
+
+export const appLastVersion = {
+  type: types.appVersionType,
+  args: {
+    platform: {type: GraphQLInt},
+    version: {type:GraphQLInt}
+  },
+  async resolve (ctx, params, options) {
+    if (params.version === null || params.version === undefined || isNaN(params.version)) {
+      throw new ApiError(ApiErrorNames.GET_FAIL);
+    }
+
+    let list = await appPlatformModel.find({playform:params.platform, enable:true, version:{$gt:params.version}});
+
+    let force = false;
+    let willUpdateItem = null;
+    for(let item of list) {
+      if (willUpdateItem === null) {
+        willUpdateItem = item;
+      } else {
+        if (item.version > willUpdateItem.version) {
+          willUpdateItem = item;
+        }
+      }
+      if (item.force) {
+        force = true;
+      }
+    }
+
+    if (willUpdateItem) {
+      willUpdateItem.force = force;
+    }
+
+    return willUpdateItem;
   }
 }

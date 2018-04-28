@@ -159,3 +159,13 @@ export const commonInputType = new GraphQLInputObjectType({
     ...commonTypeFields,
   }
 });
+
+export const appVersionType = new GraphQLObjectType({
+  name: 'appVersionType',
+  fields: {
+    _id: { type: GraphQLString },
+    version:{type: GraphQLInt, decription:'版本号'},
+    update_url:{type: GraphQLString, decription:'下载链接'},
+    force:{type:GraphQLBoolean, decription:'是否强制更新'}
+  }
+});

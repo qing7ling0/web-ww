@@ -141,3 +141,14 @@ module.exports.NIDModel = mongoose.model('NID', new Schema({
 },{
   timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
 }));
+
+
+module.exports.appPlatformModel = mongoose.model('app-platform', new Schema({
+  version: {type:Number, description:'版本共9位，001001001 表示1.1.1'},
+  platform: {type:Number, description:'平台IOS/Android'},
+  forced:{type:Boolean, description:'是否强制更新'},
+  update_url: {type:String, description:'更新地址'},
+  enable: {type:String, description:'是否可用'}
+},{
+  timestamps: { createdAt: 'create_time', updatedAt: 'editor_time' }
+}));

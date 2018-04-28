@@ -376,3 +376,21 @@ module.exports.E_GUIDE_MESSAGE_TYPE_DATAS = [
   {value:E_GUIDE_MESSAGE_TYPE.BAN, label:'个人'},
   {value:E_GUIDE_MESSAGE_TYPE.JIA, label:'店铺'}
 ]
+
+
+// 消息类型
+const E_MESSAGE_TYPE = {
+  ORDER_TRACK:1, // 订单追踪
+  MAINTAIN:2, // 护理
+  LEAVE:3, // 请假
+  ALLOT:4, // 调拨
+  CUSTOMER_BIRTHDAY:5, //会员生日
+}
+module.exports.E_MESSAGE_TYPE = E_MESSAGE_TYPE;
+module.exports.MESSAGE_TYPE_DATAS = [
+  {value:E_MESSAGE_TYPE.ORDER_TRACK, label:'订单追踪提示'},
+  {value:E_MESSAGE_TYPE.MAINTAIN, label:'售后提示'},
+  {value:E_MESSAGE_TYPE.LEAVE, label:'管理提示'},
+  {value:E_MESSAGE_TYPE.ALLOT, label:'调拨提示'},
+  {value:E_MESSAGE_TYPE.CUSTOMER_BIRTHDAY, label:'生日提示'},
+]
