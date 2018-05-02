@@ -175,7 +175,8 @@ export const customerReportBaseType = `{totalCount, monthCount, yearCount, notBu
 export const customerShopReportType = `{guide ${userType}, shop${shopType}, totalCount, monthCount, yearCount, notBuyCount}`
 
 export const customerReportVipType = `{_id, name, sex, phone, s_foot_size, s_left_length, s_left_fuWei, s_left_zhiWei, s_right_length, s_right_fuWei, s_right_zhiWei}`
-export const customerReportVipFootOrderType = `{_id, create_time, sub_order_id, NID, s_xuan_hao_name, shop_name, s_yang_ban, s_tie_xuan, s_tie_fa, s_mark, s_feedback}`
+
+export const appVersionType = `{_id, create_time, version, platform, forced, enable, update_url}`
 
 export const pageListType = (itemType) =>{
   return`{page {page,pageSize,total} list ${itemType}}`

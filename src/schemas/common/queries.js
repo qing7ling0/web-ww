@@ -17,6 +17,8 @@ const commonFields = require('../common/common-fields')
 const commonUtils = require('../../utils/common-utils')
 const schemasUtils = require('../../utils/schemas-utils')
 
+export const appVersionList = schemasUtils.createDefaultListQuery('appVersionList', types.appVersionType, appPlatformModel);
+
 export const menus = {
 	type: new GraphQLList(types.menu),
 	async resolve (ctx, params, options) {

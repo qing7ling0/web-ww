@@ -39,6 +39,7 @@ module.exports.MENU_IDS = {
   system:               9, // 系统管理
   systemSetting:        901, // 系统设置
   systemAdmin:          902, // 管理员账号管理
+  appAdmin:             903, // app管理
 
   activity:10, // 活动
   activityRecharge:     1001, // 充值奖励
@@ -393,4 +394,15 @@ module.exports.MESSAGE_TYPE_DATAS = [
   {value:E_MESSAGE_TYPE.LEAVE, label:'管理提示'},
   {value:E_MESSAGE_TYPE.ALLOT, label:'调拨提示'},
   {value:E_MESSAGE_TYPE.CUSTOMER_BIRTHDAY, label:'生日提示'},
+]
+
+// 平台
+const E_PLATFORM_TYPE = {
+  IOS:1,
+  ANDROID:2,
+}
+module.exports.E_PLATFORM_TYPE = E_PLATFORM_TYPE;
+module.exports.PLATFORM_TYPE_DATAS = [
+  {value:E_PLATFORM_TYPE.IOS, label:'IOS'},
+  {value:E_PLATFORM_TYPE.ANDROID, label:'Android'}
 ]

@@ -3,6 +3,7 @@ import {HashRouter,Route, Redirect} from 'react-router-dom'
 
 import SettingContainer from './SettingContainer'
 import AdminsContainer from './admin/AdminsContainer'
+import AppContainer from './app/AppContainer'
 
 import * as config from '../../constants/Config'
 import * as constants from '../../constants/Constants'
@@ -20,6 +21,12 @@ export default [
     path={common.findRouterById(config.Routers, constants.MENU_IDS.systemSetting).url} 
     exact={true} strict={true}
     component={SettingContainer}
+  />),
+  (<Route 
+    key={constants.MENU_IDS.appAdmin} 
+    path={common.findRouterById(config.Routers, constants.MENU_IDS.appAdmin).url} 
+    exact={true} strict={true}
+    component={AppContainer}
   />),
   (<Redirect 
     key={constants.MENU_IDS.system} 

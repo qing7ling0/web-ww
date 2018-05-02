@@ -165,7 +165,22 @@ export const appVersionType = new GraphQLObjectType({
   fields: {
     _id: { type: GraphQLString },
     version:{type: GraphQLInt, decription:'版本号'},
+    platform:{type: GraphQLInt, decription:'平台'},
     update_url:{type: GraphQLString, decription:'下载链接'},
-    force:{type:GraphQLBoolean, decription:'是否强制更新'}
+    forced:{type:GraphQLBoolean, decription:'是否强制更新'},
+    enable:{type:GraphQLBoolean, decription:'是否发布'},
+    ...commonFields.defaultCreateFields,
+  }
+});
+
+export const appVersionInputType = new GraphQLInputObjectType({
+  name: 'appVersionInputType',
+  fields: {
+    version:{type: GraphQLInt, decription:'版本号'},
+    platform:{type: GraphQLInt, decription:'平台'},
+    update_url:{type: GraphQLString, decription:'下载链接'},
+    forced:{type:GraphQLBoolean, decription:'是否强制更新'},
+    enable:{type:GraphQLBoolean, decription:'是否发布'},
+    ...commonFields.defaultCreateFields,
   }
 });

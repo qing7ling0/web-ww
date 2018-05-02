@@ -14,7 +14,7 @@ import {
   commonModel
 } from '../../models'
 import { ApiError, ApiErrorNames } from '../../error/api-errors'
-import { goodsModel, materialModel } from '../../models/sales';
+import { goodsModel, materialModel, appPlatformModel } from '../../models/index';
 
 
 
@@ -23,6 +23,8 @@ const commonFields = require('../common/common-fields')
 const schemasUtils = require('../../utils/schemas-utils')
 const utils = require('../../utils/utils')
 
+const appVersion = schemasUtils.createDefaultMutaion('appVersion', types.appVersionType, types.appVersionInputType, appPlatformModel);
+export default {...appVersion};
 export const menuAdd = {
   type: types.menu,
   args: {

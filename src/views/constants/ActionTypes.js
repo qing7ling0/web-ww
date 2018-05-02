@@ -5,10 +5,15 @@ export const LOGIN                = 'LOGIN';
 export const LOGOUT               = 'LOGOUT';
 export const SELECT_NAV           = 'SELECT_NAV';
 
-export const USER_LIST_GET       = 'USER_LIST_GET';
-export const USER_ACCOUNT_ADD    = 'USER_ACCOUNT_ADD';
-export const USER_ACCOUNT_DELETE = 'USER_ACCOUNT_DELETE';
-export const USER_ACCOUNT_UPDATE = 'USER_ACCOUNT_UPDATE';
+export const USER_LIST_GET        = 'USER_LIST_GET';
+export const USER_ACCOUNT_ADD     = 'USER_ACCOUNT_ADD';
+export const USER_ACCOUNT_DELETE  = 'USER_ACCOUNT_DELETE';
+export const USER_ACCOUNT_UPDATE  = 'USER_ACCOUNT_UPDATE';
+
+export const APP_VERSION_LIST_GET = 'APP_VERSION_LIST_GET';
+export const APP_VERSION_ADD      = 'APP_VERSION_ADD';
+export const APP_VERSION_DELETE   = 'APP_VERSION_DELETE';
+export const APP_VERSION_UPDATE   = 'APP_VERSION_UPDATE';
 
 export const SHOP_LIST_GET        = 'SHOP_LIST_GET';
 export const SHOP_ADD             = 'SHOP_ADD';

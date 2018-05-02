@@ -73,7 +73,8 @@ module.exports.Menus = [
     icon: 'setting',
     subMenus: [
       // {id:MENU_IDS.systemSetting, name:'设置'},
-      {id:MENU_IDS.systemAdmin, name:'管理员账号'}
+      {id:MENU_IDS.systemAdmin, name:'管理员账号'},
+      {id:MENU_IDS.appAdmin, name:'App版本管理', superAdmin: true},
     ]
   },
 ]
@@ -116,6 +117,7 @@ module.exports.Routers = [
   { id:MENU_IDS.system, url: '/home/system', name:'系统管理' },
   { id:MENU_IDS.systemSetting, name:'设置', url: '/home/system/setting' },
   { id:MENU_IDS.systemAdmin, name:'管理员账号', url: '/home/system/admins' },
+  { id:MENU_IDS.appAdmin, name:'App版本管理', url: '/home/system/app' },
 
   { id:MENU_IDS.activity, url: '/home/activity', name:'活动管理' },
   { id:MENU_IDS.activityRecharge, name:'充值奖励', url: '/home/activity/recharge' },
@@ -349,6 +351,10 @@ module.exports.Powers = [
   },
   { 
     id:MENU_IDS.systemAdmin, 
+    powers:[]
+  },
+  { 
+    id:MENU_IDS.appAdmin, 
     powers:[]
   }
 ]

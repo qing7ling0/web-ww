@@ -5,12 +5,17 @@ import { States } from '../../base/modules/ReduxState'
 import results from './results'
 import baseUtils from '../../base/utils/utils'
 import * as constants from '../constants/Constants'
+import * as common from '../modules/common'
 
 const LOADING_ACTIONS = [
   ActionTypes.USER_ACCOUNT_ADD,
   ActionTypes.USER_ACCOUNT_DELETE,
   ActionTypes.USER_ACCOUNT_UPDATE,
-  ActionTypes.USER_LIST_GET
+  ActionTypes.USER_LIST_GET,
+  ActionTypes.APP_VERSION_ADD,
+  ActionTypes.APP_VERSION_DELETE,
+  ActionTypes.APP_VERSION_UPDATE,
+  ActionTypes.APP_VERSION_LIST_GET
 ];
 
 const initialState = {
@@ -19,6 +24,9 @@ const initialState = {
   userList: [],
   userListPage: {page:0,pageSize:constants.DEFAULT_PAGE_SIZE,total:0},
   userDeleteIDS: [],
+  appVersionList: [],
+  appVersionListPage: {page:0,pageSize:constants.DEFAULT_PAGE_SIZE,total:0},
+  appVersionRemove: [],
 };
 
 function createState(state, resState, values) {
@@ -59,6 +67,13 @@ function doActions(state, action) {
 
     default:
       break;
+  }
+  if (action.type && LOADING_ACTIONS.indexOf(action.type) !== -1) {
+    if (action.state === States.Fulfilled && result.code === 0) {
+      let list = common.getDefaultListResponse(data);
+      let res = list || data || [];
+      return createState(state, resState, {...res});
+    }
   }
   return createState(state, resState);
 }

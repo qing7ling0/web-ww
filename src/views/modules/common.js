@@ -105,9 +105,10 @@ export const listToSelectOptions = (list, valueFormat, labelFormat) => {
 }
 
 export const getDefaultListResponse = (result) => {
-  let list = {};
+  let list = null;
   for(let key in result) {
     if (key.indexOf('List') !== -1) {
+      if (!list) list = {};
       list[key] = result[key].list;
       list[key+'Page'] = result[key].page;
     }

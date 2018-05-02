@@ -24,7 +24,15 @@ class CommonData {
         item.subMenus.forEach(sub=>{
           let power = commonUtils.getPower(user, sub.id);
           if (power.view) {
-            subList.push(sub);
+            if (sub.superAdmin) {
+              console.log('sub ' + sub.name)
+              if (power.superAdmin) {
+                console.log('sub222 ' + sub.name)
+                subList.push(sub);
+              }
+            } else {
+              subList.push(sub);
+            }
           }
         })
         if (subList.length > 0) {
