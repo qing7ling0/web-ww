@@ -64,7 +64,8 @@ module.exports.Menus = [
     icon: 'activity',
     subMenus: [
       {id:MENU_IDS.activityRecharge, name:'充值奖励'},
-      {id:MENU_IDS.activityVIP, name:'VIP等级'}
+      {id:MENU_IDS.activityVIP, name:'VIP等级'},
+      {id:MENU_IDS.activityDiscount, name:'折扣活动'}
     ]
   },
   {
@@ -122,6 +123,7 @@ module.exports.Routers = [
   { id:MENU_IDS.activity, url: '/home/activity', name:'活动管理' },
   { id:MENU_IDS.activityRecharge, name:'充值奖励', url: '/home/activity/recharge' },
   { id:MENU_IDS.activityVIP, name:'VIP等级管理', url: '/home/activity/vip' },
+  { id:MENU_IDS.activityDiscount, name:'折扣活动', url: '/home/activity/discount' },
 ]
 
 module.exports.Powers = [
@@ -342,7 +344,13 @@ module.exports.Powers = [
       { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
     ]
   },
-
+  { 
+    id:MENU_IDS.activityDiscount, 
+    powers:[
+      { id:POWER_TYPES.MANAGER_NORMAL, power:{view:true} },
+      { id:POWER_TYPES.MANAGER_SENIOR, power:{view:true, add:true, edit:true} },
+    ]
+  },
   { 
     id:MENU_IDS.systemSetting, 
     powers:[

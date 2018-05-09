@@ -44,6 +44,7 @@ module.exports.MENU_IDS = {
   activity:10, // 活动
   activityRecharge:     1001, // 充值奖励
   activityVIP:          1002, // vip等级
+  activityDiscount:     1003, // 折扣活动
 }
 
 module.exports.POWER_TYPES = {
@@ -232,6 +233,7 @@ module.exports.COMMON_DATA_TYPES = {
   CUSTOMER_TAGS:'20', // 客户标签
   SHOP_REGION:'21', // 店铺区域
   CUSTOMER_ANALYSE_CONFIG:'22', // 会员分析图表
+  ACTIVITY_DISCOUNT:'23', // 折扣活动
 }
 
 // 试脚鞋反馈状态
@@ -405,4 +407,16 @@ module.exports.E_PLATFORM_TYPE = E_PLATFORM_TYPE;
 module.exports.PLATFORM_TYPE_DATAS = [
   {value:E_PLATFORM_TYPE.IOS, label:'IOS'},
   {value:E_PLATFORM_TYPE.ANDROID, label:'Android'}
+]
+
+
+// 折扣活动类型
+const E_ACTIVITY_DISCOUNT_TYPE = {
+  DISCOUNT:1, // 折扣
+  CASH:2, // 现金
+}
+module.exports.E_ACTIVITY_DISCOUNT_TYPE = E_ACTIVITY_DISCOUNT_TYPE;
+module.exports.ACTIVITY_DISCOUNT_TYPE_DATAS = [
+  {value:E_ACTIVITY_DISCOUNT_TYPE.DISCOUNT, label:'折扣'},
+  {value:E_ACTIVITY_DISCOUNT_TYPE.CASH, label:'现金'}
 ]

@@ -193,6 +193,14 @@ const customMaterialSchema = new Schema({
   NID: {type:String, decription:'编号'},
 })
 
+const activityDiscountSchema = new Schema({
+  _id: {type:String, decription:'ID'},
+  name:{type:String, description:'名称'},
+  discount_type:{type:Number, description:'折扣类型'},
+  discount: {type:Number, description:'折扣值'},
+  enabled: {type:Boolean, description:'是否可用'}
+})
+
 const orderCustomSchema = new Schema({
   _id: {type:String, decription:'ID'},
   name: {type:String, decription:'名称'},
@@ -357,6 +365,7 @@ const orderFields = {
   discount_price:{type:Number, default:0, decription:'实际优惠了多少'},
   is_recharge:{type:Boolean, default:false, decription:'是否是充值订单'},
   signature_pic:{type:String, decription:'签名图片'},
+  activity_discount: {type:activityDiscountSchema, decription:'折扣选择'},
   ...baseFields
 }
 const orderSchema = new Schema({

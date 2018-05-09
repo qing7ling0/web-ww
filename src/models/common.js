@@ -108,6 +108,14 @@ const customerAnalyseFields = {
   color_css: {type:Number, description:'css颜色', default:0xffff000},
 }
 
+// 会员分析柱状图颜色
+const activityDiscountFields = {
+  name:{type:String, description:'名称'},
+  discount_type:{type:Number, description:'折扣类型'},
+  discount: {type:Number, description:'折扣值'},
+  enabled: {type:Boolean, description:'是否可用'}
+}
+
 const commonFields = {
   ...commonBaseFields,
   ...colorFields,
@@ -125,6 +133,7 @@ const commonFields = {
   ...VIPFields,
   ...regionFields,
   ...customerAnalyseFields,
+  ...activityDiscountFields,
   ...baseFields
 }
 

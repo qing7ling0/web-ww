@@ -543,9 +543,24 @@ class SalesData {
   }
 
   // 支付支付金额
-  async pay(customer, payInfo) {
-    let discount = !payInfo.select_store_card ? payInfo.discount : 1;
-    payInfo.real_pay_price = Math.round((payInfo.undiscount_mount + discount * payInfo.discount_mount)*10)/10;
+  async pay(customer, payInfo, activityDiscount) {
+    let discount = 1;
+    let disMount = 0;
+
+    if (!payInfo.select_store_card) {
+      if (activityDiscount) {
+        if (activityDiscount.discount_type === constants.E_ACTIVITY_DISCOUNT_TYPE.CASH) {
+          disMount = Math.max(0, activityDiscount.discount);
+        } else {
+          discount = activityDiscount.discount/10;
+        }
+      } else {
+        discount = payInfo.discount/10;
+      }
+      discount = Math.max(0, Math.min(1, discount));
+    }
+    
+    payInfo.real_pay_price = payInfo.undiscount_mount + Math.max(0, Math.round((discount * payInfo.discount_mount)*10)/10 - disMount);
     payInfo.discount_price = payInfo.discount_mount+payInfo.undiscount_mount - payInfo.real_pay_price;
     
     if (!payInfo.select_store_card) return payInfo; // 只有选择从充值卡中支付才去计算
@@ -575,6 +590,27 @@ class SalesData {
       if (!subOrders || !subOrders.length || subOrders.length < 1) {
         // 必须有自订单
         throw new ApiError(ApiErrorNames.ADD_FAIL, '下单失败,没有下单的产品!');
+      }
+
+      
+      // 折扣选择
+      let activityDiscount = null;
+      if (doc.activity_discount) {
+        activityDiscount = await commonModel.findById(doc.activity_discount);
+        if (!activityDiscount){
+          // 必须有自订单
+          throw new ApiError(ApiErrorNames.ADD_FAIL, '下单失败,当前折扣不存在!');
+        }if (activityDiscount && !activityDiscount.enabled){
+          // 必须有自订单
+          throw new ApiError(ApiErrorNames.ADD_FAIL, '下单失败,当前折扣不可用!');
+        }
+
+        doc.activity_discount = {}
+        doc.activity_discount._id = activityDiscount._id;
+        doc.activity_discount.name = activityDiscount.name;
+        doc.activity_discount.discount_type = activityDiscount.discount_type;
+        doc.activity_discount.discount = activityDiscount.discount;
+        doc.activity_discount.enabled = activityDiscount.enabled;
       }
 
       let payInfo = {
@@ -644,7 +680,7 @@ class SalesData {
       if (vipLevel > -1 && !payInfo.select_store_card && !isRecharge) {
         for(let lv of vipLevelList) {
           if (lv.level === vipLevel) {
-            payInfo.discount = lv.discount / 10;
+            payInfo.discount = lv.discount;
             break;
           }
         }
@@ -652,7 +688,7 @@ class SalesData {
 
       // 开始计算支付，主要是从储值卡中扣除
       // console.log(payInfo)
-      await this.pay(customerInfo, payInfo);
+      await this.pay(customerInfo, payInfo, activityDiscount);
       doc.system_price = payInfo.discount_mount + payInfo.undiscount_mount;
       doc.real_pay_price = payInfo.real_pay_price;
       doc.discount_price = payInfo.discount_price;

@@ -110,6 +110,7 @@ export const genGaoType = `{_id, NID, name, editor_name, editor_time}`
 export const watchStrapStyleType = `{_id, NID, name, editor_name, editor_time}`
 export const shoesTieBianType = `{_id, NID, name, editor_name, editor_time}`
 export const footType = `{_id, type, size, length, zhiWei, fuWei}`
+export const activityDiscountType = `{_id, name, discount_type, discount, enabled}`
 
 const goodsBaseType =`_id, NID, name, goods, put_date, put, sex, price,type { _id, name }, style { _id, name }, season { _id, name }, pics,editor_name,editor_time`
 const goodsShoesType = `s_material{_id,name, maintain_cycle}, s_gui_ge, s_xuan_hao{_id,name}, s_gen_gao{_id,name}, s_tie_di{_id,name}, s_color_palette{_id,name}, s_out_color{_id,name}, s_in_color{_id,name}, s_bottom_color{_id,name}, s_bottom_side_color{_id,name}`

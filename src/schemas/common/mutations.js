@@ -24,8 +24,8 @@ const schemasUtils = require('../../utils/schemas-utils')
 const utils = require('../../utils/utils')
 
 const appVersion = schemasUtils.createDefaultMutaion('appVersion', types.appVersionType, types.appVersionInputType, appPlatformModel);
-export default {...appVersion};
-export const menuAdd = {
+
+const menuAdd = {
   type: types.menu,
   args: {
     info: {
@@ -37,7 +37,7 @@ export const menuAdd = {
   }
 };
 
-export const commonAdd = {
+const commonAdd = {
   type: types.commonType,
   args: {
     doc: {
@@ -57,7 +57,7 @@ export const commonAdd = {
     }
   }
 };
-export const commonRemove = {
+const commonRemove = {
   type: new GraphQLList(GraphQLString),
   args: {
     ids: {type: new GraphQLList(GraphQLString)}
@@ -77,7 +77,7 @@ export const commonRemove = {
     return null;
   }
 }
-export const commonUpdate = {
+const commonUpdate = {
   type: commonFields.operateResultType,
   args: {
     doc: {type: types.commonInputType},
@@ -96,3 +96,5 @@ export const commonUpdate = {
     return await commonData.updateCommon(params.conditions, params.doc);
   }
 }
+
+export default {...appVersion, commonAdd, commonUpdate, commonRemove};

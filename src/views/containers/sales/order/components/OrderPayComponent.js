@@ -67,6 +67,7 @@ class OrderPayComponent extends Component {
       selectShoes:{}, // 当前选择的鞋子
       submitOrdering:false,
       pay_type:'0',
+      discount_select:'0'
     }
     this.payInfo ={
       customPrice:0,
@@ -87,6 +88,12 @@ class OrderPayComponent extends Component {
 
   componentDidMount() {
     this.calcPayMount();
+    
+    let con = {
+      type:constants.BASE_CONSTANTS.COMMON_DATA_TYPES.ACTIVITY_DISCOUNT,
+      enabled:true,
+    };
+    this.props.reqGetSalesBaseList("discountList:commonList", graphqlTypes.activityDiscountType, con);
   }
 
   componentWillReceiveProps(nextProps){
@@ -137,10 +144,13 @@ class OrderPayComponent extends Component {
   render() {
     this.calcPayMount();
     let payInfo = this.payInfo;
-    let priceText = `${payInfo.price}`;
-    if (payInfo.discount < 1) {
-      priceText += `x${payInfo.discount}`
-    }
+    let priceText = `${payInfo.realPrice}`;
+    // if (payInfo.discount < 1) {
+    //   priceText += `x${payInfo.discount}`
+    // }
+    // if (payInfo.activity_discount_cash) {
+    //   priceText += `-${payInfo.activity_discount_cash}`
+    // }
     if (payInfo.customPrice) {
       priceText += `+${payInfo.customPrice.toFixed(2)}`;
     }
@@ -151,6 +161,10 @@ class OrderPayComponent extends Component {
       let payPrice = payInfo.urgentPrice + payInfo.realPrice+payInfo.customPrice;
       priceText += `=${new Number(payPrice).toFixed(2)}`
     }
+
+    let discountList = [{value:'0', label:'无'}];
+    let _list = this.props.discountList || [];
+    discountList = discountList.concat(_list.map((item)=>({value:item._id, label:item.name})));
 
     return (
       <div>
@@ -181,6 +195,16 @@ class OrderPayComponent extends Component {
                     }}>
                       {
                         constants.BASE_CONSTANTS.PAY_TYPE.map((item, index) => {
+                          return <Option key={item.value}>{item.label}</Option>
+                        })
+                      }
+                    </Select>
+                    <span> </span>
+                    <Select defaultValue={this.state.discount_select} style={{width:150}} onChange={(value)=>{
+                      this.setState({discount_select:value});
+                    }}>
+                      {
+                        discountList.map((item, index) => {
                           return <Option key={item.value}>{item.label}</Option>
                         })
                       }
@@ -226,7 +250,7 @@ class OrderPayComponent extends Component {
     payInfo.realPrice = 0;
     payInfo.customPrice = 0;
     payInfo.urgentPrice = 0;
-    payInfo.discountPrice = 0;
+    payInfo.undiscount_price = 0;
 
     let price = 0;
     for(let good of this.props.goods) {
@@ -243,6 +267,7 @@ class OrderPayComponent extends Component {
     }
 
     let discount = 1;
+    let dismount = 0;
     if (!this.state.select_store_card) {
       let list = this.props.sales.vipLevelList || [];
       let cusVipLv = this.props.customer.vip_level || 1;
@@ -252,9 +277,31 @@ class OrderPayComponent extends Component {
           break;
         }
       }
+
+      if (this.state.discount_select) {
+        let activity_discount = null;
+        if (this.props.discountList) {
+          for(let item of this.props.discountList) {
+            if (item._id === this.state.discount_select) {
+              activity_discount = item;
+              break;
+            }
+          }
+        }
+
+        if (activity_discount) {
+          if (activity_discount.discount_type === constants.BASE_CONSTANTS.E_ACTIVITY_DISCOUNT_TYPE.CASH) {
+            dismount = activity_discount.discount;
+            discount = 1;
+          } else {
+            discount = activity_discount.discount / 10;
+          }
+        }
+      }
     }
     payInfo.discount = discount;
-    payInfo.realPrice = (payInfo.price * discount);
+    payInfo.realPrice = Math.max(0, Math.round((payInfo.price * discount)) - dismount);
+    payInfo.activity_discount_cash = dismount;
     payInfo.discountPrice = (payInfo.price - payInfo.realPrice);
   }
 
@@ -267,6 +314,21 @@ class OrderPayComponent extends Component {
     order.pay_type = this.state.pay_type;
     order.store_card_selected = this.state.select_store_card;
     order.cash_ticket_NID = ''; // 代金券
+    if (!this.state.select_store_card && this.state.discount_select ) {
+        let activity_discount = null;
+        if (this.props.discountList) {
+          for(let item of this.props.discountList) {
+            if (item._id === this.state.discount_select) {
+              activity_discount = item;
+              break;
+            }
+          }
+        }
+
+        if (activity_discount) {
+          order.activity_discount = activity_discount._id;
+        }
+    }
 
     let subOrders = [];
     for(let good of this.props.goods) {
@@ -292,6 +354,7 @@ export default connect(
     loading:state.sales.loading,
     result:state.sales.result,
     sales:state.sales,
+    discountList:state.sales.discountList
   }),
   (dispatch) => {
     return bindActionCreators({
@@ -299,6 +362,7 @@ export default connect(
       reqAddOrder: Actions.addOrder,
       reqGetGoodsList: Actions.getGoodsList,
       reqGetGoodsBaseDatas: Actions.getGoodsBaseDatas,
+      reqGetSalesBaseList: Actions.getSalesBaseList,
       reqLastCustomerOrderInfo: Actions.lastCustomerOrderInfo
     }, dispatch);
   }

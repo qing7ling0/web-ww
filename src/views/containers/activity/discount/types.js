@@ -35,11 +35,16 @@ const listToSelectOptions = (list, valueFormat, labelFormat) => {
   })
 }
 
-// 充值
+// discount
 const getListOptions = function(target) {
   let options = [
-    { title: '充值金额', dataIndex: 'mount', key: 'mount', className:"table-column-left", render:(text)=>text+' RMB'},
-    { title: '赠送金额', dataIndex: 'reward', key: 'reward', className:"table-column-left", render:(text)=>text+' RMB'},
+    { title: '名称', dataIndex: 'name', key: 'name', className:"table-column-left"},
+    { title: '类型', dataIndex: 'discount_type', key: 'discount_type', className:"table-column-left", render: (item) => {
+      let info = commonUtils.getValueByList(constants.BASE_CONSTANTS.ACTIVITY_DISCOUNT_TYPE_DATAS, item);
+      return info ? info.label : '无';
+    }},
+    { title: '折扣', dataIndex: 'discount', key: 'discount', className:"table-column-left", render:(text)=>text},
+    { title: '是否可用', dataIndex: 'enabled', key: 'enabled', render:item=>item?("是"):(<span style={{color:'red'}}>否</span>)},
   ]
 
   if (target.canOperate()) {
@@ -49,8 +54,8 @@ const getListOptions = function(target) {
           <div>
             <OpeateBtn type="primary" shape="circle" icon="delete" onClick={(e)=>{
               e.stopPropagation();
-              target.onDelete([record._id])} 
-            }/>
+              target.onDelete([record._id])}
+            } />
             <OpeateBtn type="primary" shape="circle" icon="edit" onClick={(e)=>{
               e.stopPropagation();
               target.onEditClick(record);
@@ -65,8 +70,10 @@ const getListOptions = function(target) {
 }
 const getAddOptions = function(target) {
   return [
-    {type:'number', name:'mount', step:1, label:'充值金额', itemOptions:{hasFeedback:true}, options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, rule:{required:true}},
-    {type:'number', name:'reward', step:1, label:'赠送金额', itemOptions:{hasFeedback:true}, options:{formatter:(value) => `${value}RMB`, parser:value => value.replace('RMB', '')}, rule:{required:true}},
+    {type:'input', name:'name', label:'名称', itemOptions:{hasFeedback:true}, options:{}, rule:{required:true}},
+    {type:'select', name:'discount_type', label:'类型', selectItems:constants.BASE_CONSTANTS.ACTIVITY_DISCOUNT_TYPE_DATAS, options:{defaultActiveFirstOption:true}, rule:{required:true}},
+    {type:'number', name:'discount', label:'折扣', itemOptions:{hasFeedback:true}, options:{}, rule:{required:true}},
+    {type:'switch', name:'enabled', label:'是否可用', decoratorOptions:{valuePropName:"checked"}, rule:{required:true}},  
   ];
 }
 const getEditOptions = function(target) {
@@ -76,9 +83,9 @@ const getEditOptions = function(target) {
 
 export const TYPES = [
   {
-    key:BASE_CONSTANTS.COMMON_DATA_TYPES.RECHARGE_REWARD,
-    tag:'commonList', listTag:'rechargeList:commonList', label:'充值奖励', 
-    graphqlType:graphqlTypes.rechargeType,
+    key:BASE_CONSTANTS.COMMON_DATA_TYPES.ACTIVITY_DISCOUNT,
+    tag:'commonList', listTag:'discountList:commonList', label:'折扣活动', 
+    graphqlType:graphqlTypes.activityDiscountType,
     listOptions:getListOptions,
     addOptions:getAddOptions,
     editOptions:getEditOptions,

@@ -24,13 +24,13 @@ import Actions from '../../../actions'
 import BaseListComponent from '../../common/BaseListComponent'
 import * as common from '../../../modules/common'
 import * as constants from '../../../constants/Constants'
-import VipAddModal from './VipAddModal'
-import VipEditModal from './VipEditModal'
+import DiscountAddModal from './DiscountAddModal'
+import DiscountEditModal from './DiscountEditModal'
 import { commonUtils } from '../../../modules/common';
 import {TYPES} from './types'
 import utils from '../../../../utils/utils'
 
-class VipListContainer extends Component {
+class DiscountListContainer extends Component {
   // 构造函数，在创建组件的时候调用一次
   constructor(props) {
     super(props);
@@ -66,7 +66,7 @@ class VipListContainer extends Component {
         columns={this.options} 
         dataSource={list} 
         loading={this.props.loading}
-        onRowClick={this.onRowClick}
+        // onRowClick={this.onRowClick}
         onBtnAddClicked={()=>{this.setState({addVisible:true});}}
         onGetList={(pageInfo)=>{
           this.onReqList();
@@ -83,7 +83,7 @@ class VipListContainer extends Component {
         addVisible={this.state.addVisible}
         editVisible={this.state.editVisible}
         addNode={
-          <VipAddModal 
+          <DiscountAddModal 
             title={`添加${this.commonType.label}`} 
             commonType={this.commonType} 
             visible={this.state.addVisible}
@@ -92,7 +92,7 @@ class VipListContainer extends Component {
             afterClose={()=>this.setState({addVisible:false})}/> 
         }
         editNode={
-          <VipEditModal 
+          <DiscountEditModal 
             title={`编辑${this.commonType.label}`} 
             data={this.state.editData} 
             commonType={this.commonType} 
@@ -188,9 +188,8 @@ class VipListContainer extends Component {
     // if (!this.canOperate()) return;
     // this.setState({editVisible:true, editData:record});
   }
-
   canOperate = () => {
-    this.power = commonUtils.getPower(this.props.user, constants.MENU_IDS.activityVIP)
+    this.power = commonUtils.getPower(this.props.user, constants.MENU_IDS.activityDiscount)
     return this.power && this.power.canOperate;
   }
 }
@@ -210,4 +209,4 @@ export default connect(
       reqUpdateSalesBase: Actions.updateSalesBase,
     }, dispatch);
   }
-)(VipListContainer);
+)(DiscountListContainer);

@@ -122,6 +122,14 @@ const customerAnalyseFields = {
   color_css: {type:GraphQLInt, description:'css颜色'},
 }
 
+// 折扣活动
+const activityDiscountFields = {
+  name:{type:GraphQLString, description:'名称'},
+  discount_type:{type:GraphQLInt, description:'折扣类型'},
+  discount: {type:GraphQLFloat, description:'折扣值'},
+  enabled: {type:GraphQLBoolean, description:'是否可用'}
+}
+
 const commonTypeFields = {
   ...commonBaseFields,
   ...colorFields,
@@ -135,6 +143,7 @@ const commonTypeFields = {
   ...watchStrapStyleFields,
   ...rechargeRewardFields,
   ...customerAnalyseFields,
+  ...activityDiscountFields,
   ...VIPFields
 }
 

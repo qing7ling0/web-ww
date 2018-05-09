@@ -3,6 +3,7 @@ import {HashRouter, Route, Redirect} from 'react-router-dom'
 
 import RechargeContainer from './recharge/index'
 import VIPContainer from './vip/index'
+import DiscountContainer from './discount/index'
 
 import * as config from '../../constants/Config'
 import * as constants from '../../constants/Constants'
@@ -20,6 +21,12 @@ export default [
     path={common.findRouterById(config.Routers, constants.MENU_IDS.activityVIP).url} 
     strict={true}
     component={VIPContainer}
+  />),
+  (<Route 
+    key={constants.MENU_IDS.activityDiscount} 
+    path={common.findRouterById(config.Routers, constants.MENU_IDS.activityDiscount).url} 
+    strict={true}
+    component={DiscountContainer}
   />),
   (<Redirect 
     key={constants.MENU_IDS.activity} 

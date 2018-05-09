@@ -179,10 +179,16 @@ class RechargeListContainer extends Component {
     }
   }
 
-  onRowClick = (record, index, event) => {
+  onEditClick = (record) => {
     if (!this.canOperate()) return;
     this.setState({editVisible:true, editData:record});
   }
+
+  onRowClick = (record, index, event) => {
+    // if (!this.canOperate()) return;
+    // this.setState({editVisible:true, editData:record});
+  }
+
   canOperate = () => {
     this.power = commonUtils.getPower(this.props.user, constants.MENU_IDS.salesItemsBase)
     return this.power && this.power.canOperate;

@@ -116,6 +116,16 @@ const orderBaseCommonInputType = new GraphQLInputObjectType({
     ...orderBaseCommonFields
   }
 });
+const activityDiscountType = new GraphQLObjectType({
+  name: 'activityDiscountType',
+  fields: {
+    _id: {type:GraphQLString, decription:'ID'},
+    name:{type:GraphQLString, description:'名称'},
+    discount_type:{type:GraphQLInt, description:'折扣类型'},
+    discount: {type:GraphQLFloat, description:'折扣值'},
+    enabled: {type:GraphQLBoolean, description:'是否可用'}
+  }
+});
 
 const goodsBaseFields = {
   _id: {type:GraphQLString},
@@ -642,6 +652,7 @@ export const orderType = new GraphQLObjectType({
     real_pay_price:{type:GraphQLFloat, decription:'实际支付价格'},
     discount_price:{type:GraphQLFloat, decription:'实际优惠了多少'},
     sub_orders:{type:new GraphQLList(GraphQLString)},
+    activity_discount: {type:activityDiscountType, decription:'折扣选择'},
     ...commonFields.defaultCreateFields
   }
 });
@@ -658,6 +669,7 @@ export const orderInputType = new GraphQLInputObjectType({
   name: 'orderInputType',
   fields: {
     ...orderBaseFields,
+    activity_discount: {type:GraphQLString, decription:'折扣选择'},
     sub_orders:{type:new GraphQLList(subOrderInputType)},
   }
 });
